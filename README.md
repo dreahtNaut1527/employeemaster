@@ -33,15 +33,17 @@
 * http://asd_sql:8700/api/company/designation/(company shortname)
 
 
-# Insert / Update / Delete
+# Insert / Update
 
 **variable format for single data**
 
 
 ```
  let body = {
-    procedureName: (sqlProcedureName),
-    values: ['data1', 'data2', 'data3', . . .]
+    procedureName: 'ProcPostEmployee',
+    values: [CompanyCode,EmployeeCode,AgencyCode,EmployeeName,NickName,DepartmentCode,SectionCode,TeamCode,DesignationCode,
+            ContractStatus,ContractHiredDate,RegularHiredDate,RetiredDate,Gender,DateBirth,
+            CreatedDate,DeletedDate,UpdatedDate,UpdatedBy]
 }
 ```
 
@@ -51,12 +53,17 @@
 
 ```
  let body = {
-    procedureName: (sqlProcedureName),
+    procedureName: 'ProcPostEmployee',
     values: [
-        ['data1', 'data2', 'data3', . . .],
-        ['data1', 'data2', 'data3', . . .],
-        ['data1', 'data2', 'data3', . . .],
-        ['data1', 'da. . .]
+        [CompanyCode,EmployeeCode,AgencyCode,EmployeeName,NickName,DepartmentCode,SectionCode,TeamCode,DesignationCode,
+            ContractStatus,ContractHiredDate,RegularHiredDate,RetiredDate,Gender,DateBirth,
+            CreatedDate,DeletedDate,UpdatedDate,UpdatedBy],
+        [CompanyCode,EmployeeCode,AgencyCode,EmployeeName,NickName,DepartmentCode,SectionCode,TeamCode,DesignationCode,
+            ContractStatus,ContractHiredDate,RegularHiredDate,RetiredDate,Gender,DateBirth,
+            CreatedDate,DeletedDate,UpdatedDate,UpdatedBy],
+        [CompanyCode,EmployeeCode,AgencyCode,EmployeeName,NickName,DepartmentCode,SectionCode,TeamCode,DesignationCode,
+            ContractStatus,ContractHiredDate,RegularHiredDate,RetiredDate,Gender,DateBirth,
+            CreatedDate,DeletedDate,UpdatedDate,UpdatedBy], . . . .
     ]
 }
 ```
@@ -68,10 +75,15 @@ functionName() {
     let body = {
         procedureName: 'sqlProcedureName',
         values: [
-            ['data1', 'data2', 'data3', . . .],
-            ['data1', 'data2', 'data3', . . .],
-            ['data1', 'data2', 'data3', . . .],
-            ['data1', 'da. . .]
+            [CompanyCode,EmployeeCode,AgencyCode,EmployeeName,NickName,DepartmentCode,SectionCode,TeamCode,DesignationCode,
+                ContractStatus,ContractHiredDate,RegularHiredDate,RetiredDate,Gender,DateBirth,
+                CreatedDate,DeletedDate,UpdatedDate,UpdatedBy],
+            [CompanyCode,EmployeeCode,AgencyCode,EmployeeName,NickName,DepartmentCode,SectionCode,TeamCode,DesignationCode,
+                ContractStatus,ContractHiredDate,RegularHiredDate,RetiredDate,Gender,DateBirth,
+                CreatedDate,DeletedDate,UpdatedDate,UpdatedBy],
+            [CompanyCode,EmployeeCode,AgencyCode,EmployeeName,NickName,DepartmentCode,SectionCode,TeamCode,DesignationCode,
+                ContractStatus,ContractHiredDate,RegularHiredDate,RetiredDate,Gender,DateBirth,
+                CreatedDate,DeletedDate,UpdatedDate,UpdatedBy], . . . .
         ]
     }
     axios.post("http://asd_sql:8700/api/postemployee", {data: JSON.stringify(body)}).then(res => {
@@ -80,6 +92,10 @@ functionName() {
 }
 
 ```
+
+# Delete
+
+**variable format for single data**
 
 
 # Progamming Language
