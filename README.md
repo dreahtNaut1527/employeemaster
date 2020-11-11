@@ -34,6 +34,8 @@
 
 
 # Insert / Update / Delete
+*parameter format*
+
 **Visit Here:**
    * http://asd_sql:8700/api/company*
 
