@@ -73,7 +73,7 @@
 ```
 functionName() { 
     let body = {
-        procedureName: 'sqlProcedureName',
+        procedureName: 'ProcPostEmployee',
         values: [
             [CompanyCode,EmployeeCode,AgencyCode,EmployeeName,NickName,DepartmentCode,SectionCode,TeamCode,DesignationCode,
                 ContractStatus,ContractHiredDate,RegularHiredDate,RetiredDate,Gender,DateBirth,
@@ -95,8 +95,19 @@ functionName() {
 
 # Delete
 
-**variable format for single data**
+**function format**
+```
+functionName() { 
+    let body = {
+        procedureName: 'ProcDeleteEmployee',
+        values: ['Employee Code']
+    }
+    axios.put("http://asd_sql:8700/api/deleteemployee", {data: JSON.stringify(body)}).then(res => {
+        console.log(res.status)
+    })
+}
 
+```
 
 # Progamming Language
 **Node JS**
