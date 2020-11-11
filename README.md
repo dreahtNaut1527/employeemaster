@@ -35,7 +35,7 @@
 
 # Insert / Update / Delete
 
-*arguments format single data*
+**arguments format single data**
 
 
 ```
@@ -46,7 +46,7 @@
 ```
 
 
-*argumanets format multiple data*
+**argumanets format multiple data**
 
 
 ```
