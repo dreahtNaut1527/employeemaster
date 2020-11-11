@@ -40,7 +40,7 @@
 
 ```
  let body = {
-    procedureName: (sqlProcedureName),
+    procedureName: 'ProcPostEmployee',
     values: ['data1', 'data2', 'data3', . . .]
 }
 ```
@@ -51,7 +51,7 @@
 
 ```
  let body = {
-    procedureName: (sqlProcedureName),
+    procedureName: 'ProcPostEmployee',
     values: [
         ['data1', 'data2', 'data3', . . .],
         ['data1', 'data2', 'data3', . . .],
@@ -66,7 +66,7 @@
 ```
 functionName() { 
     let body = {
-        procedureName: 'sqlProcedureName',
+        procedureName: 'ProcPostEmployee',
         values: [
             ['data1', 'data2', 'data3', . . .],
             ['data1', 'data2', 'data3', . . .],
