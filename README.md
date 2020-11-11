@@ -37,15 +37,15 @@
 
 > argumanets format single data
 
-` let body = {
+ let body = {
     procedureName: (sqlProcedureName),
     values: ['data1', 'data2', 'data3', . . .]
-}`
+}
 
 > argumanets format multiple data*
 
 
-`  let body = {
+ let body = {
     procedureName: (sqlProcedureName),
     values: [
         ['data1', 'data2', 'data3', . . .],
@@ -53,7 +53,7 @@
         ['data1', 'data2', 'data3', . . .],
         ['data1', 'da. . .]
     ]
-}`
+}
 
 **function format**
 > 
