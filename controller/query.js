@@ -34,7 +34,7 @@ router.get('/employeeinfo/:code', (req, res) => {
              }
              config.close()
          })
-     })
+     })   
  })
 
 router.get('/employees/:company', (req, res) => {
@@ -42,7 +42,7 @@ router.get('/employees/:company', (req, res) => {
      let sql = `SELECT * FROM EmployeeInformationView WHERE lower(ShortName) = lower('${company}')`
      config.connect().then(() => {
           const request = new mssql.Request(config)
-          request.query(sql, (err, results) => {
+          request.query(sql, (err, results) => {  
                if(err) {
                     res.send(err)
                } else {
@@ -68,7 +68,7 @@ router.get('/employees/:compname/:department', (req, res) => {
                }
                config.close()
           })
-     })
+     })   
 })
 
 router.get('/employees/:compname/:department/:section', (req, res) => {
@@ -177,5 +177,61 @@ router.get('/company/designation/:compname', (req, res) => {
           })
      })
 })
+
+// =====================================================================
+// ===================== Insert / Update Query (MSSQL)==================
+// =====================================================================
+router.post('/postemployee', (req, res) => {
+     let data = JSON.parse(req.body.data)
+     let values = data.values
+     let sql = `EXECUTE ${data.procedureName}`
+
+     // Loop through values
+     if (!Array.isArray(values[0])) {
+          values = Array(data.values)
+     }
+     values.forEach(rec => {
+          // console.log(`${sql} '${rec.join("','").replace(/''/g, null)}'`)
+          config.connect().then(() => {
+               const request = new mssql.Request(config)
+               request.query(`${sql} '${rec.join("','").replace(/''/g, null)}'`, err => {
+                    if(err) {
+                         res.send(err)
+                    } else {
+                         res.end()
+                    }
+                    config.close()   
+               })
+          })
+     })
+})
+
+// =====================================================================
+// ======================= Delete Query (MSSQL)=========================
+// =====================================================================
+router.put('/deleteemployee', (req, res) => {
+     let data = JSON.parse(req.body.data)
+     let values = data.values
+     let sql = `EXECUTE ${data.procedureName}`
+
+     // Loop through values
+     if (!Array.isArray(values[0])) {
+          values = Array(data.values)
+     }
+     values.forEach(rec => {
+          config.connect().then(() => {
+               const request = new mssql.Request(config)
+               request.query(`${sql} '${rec.join("','").replace(/''/g, null)}'`, err => {
+                    if(err) {
+                         res.send(err)
+                    } else {
+                         res.end()
+                    }
+                    config.close()   
+               })
+          })
+     })
+})
+
  
-module.exports = router
+module.exports = router       

@@ -8,7 +8,7 @@ const query = require('./controller/query')
 dotenv.config()
 
 const app = express()
-const port = process.env.PORT
+const port = process.env.PORT || 8700
 
 app.use(cors())
 app.use(bodyparser.urlencoded({ extended: false }))
