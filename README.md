@@ -41,7 +41,10 @@
 ```
  let body = {
     procedureName: 'ProcPostEmployee',
-    values: ['data1', 'data2', 'data3', . . .]
+    values: [CompanyCode,EmployeeCode,AgencyCode,EmployeeName,NickName,DepartmentCode,SectionCode,
+            TeamCode,DesignationCode,ContractStatus,ContractHiredDate,RegularHiredDate,
+            RetiredDate,Gender,DateBirth,CreatedDate,DeletedDate,UpdatedDate,UpdatedBy
+        ]
 }
 ```
 
@@ -53,10 +56,16 @@
  let body = {
     procedureName: 'ProcPostEmployee',
     values: [
-        ['data1', 'data2', 'data3', . . .],
-        ['data1', 'data2', 'data3', . . .],
-        ['data1', 'data2', 'data3', . . .],
-        ['data1', 'da. . .]
+        [CompanyCode,EmployeeCode,AgencyCode,EmployeeName,NickName,DepartmentCode,SectionCode,
+            TeamCode,DesignationCode,ContractStatus,ContractHiredDate,RegularHiredDate,
+            RetiredDate,Gender,DateBirth,CreatedDate,DeletedDate,UpdatedDate,UpdatedBy],
+        [CompanyCode,EmployeeCode,AgencyCode,EmployeeName,NickName,DepartmentCode,SectionCode,
+            TeamCode,DesignationCode,ContractStatus,ContractHiredDate,RegularHiredDate,
+            RetiredDate,Gender,DateBirth,CreatedDate,DeletedDate,UpdatedDate,UpdatedBy],
+        [CompanyCode,EmployeeCode,AgencyCode,EmployeeName,NickName,DepartmentCode,SectionCode,
+            TeamCode,DesignationCode,ContractStatus,ContractHiredDate,RegularHiredDate,
+            RetiredDate,Gender,DateBirth,CreatedDate,DeletedDate,UpdatedDate,UpdatedBy],
+        . . .
     ]
 }
 ```
