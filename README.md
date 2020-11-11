@@ -35,7 +35,7 @@
 
 # Insert / Update / Delete
 
-**argumanets format single data**
+*arguments format single data*
 
 
 ```
@@ -63,7 +63,23 @@
 
 
 **function format**
-> 
+```
+functionName() { 
+    let body = {
+        procedureName: (sqlProcedureName),
+        values: [
+            ['data1', 'data2', 'data3', . . .],
+            ['data1', 'data2', 'data3', . . .],
+            ['data1', 'data2', 'data3', . . .],
+            ['data1', 'da. . .]
+        ]
+    }
+    axios.post("http://asd_sql:8700/api/postemployee", {{data: JSON.stringify(body)}).then(res => {
+        console.log(res.status)
+    })
+}
+
+```
 
 
 # Progamming Language
