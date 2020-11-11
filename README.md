@@ -34,10 +34,28 @@
 
 
 # Insert / Update / Delete
-*parameter format*
+*argumanets format single data*
 
-**Visit Here:**
-   * http://asd_sql:8700/api/company*
+>  let body = {
+    procedureName: (sqlProcedureName),
+    values: ['data1', 'data2', 'data3', . . .]
+}
+
+*argumanets format multiple data*
+
+
+>  let body = {
+    procedureName: (sqlProcedureName),
+    values: [
+        ['data1', 'data2', 'data3', . . .],
+        ['data1', 'data2', 'data3', . . .],
+        ['data1', 'data2', 'data3', . . .],
+        ['data1', 'da. . .]
+    ]
+}
+
+**function format**
+> 
 
 
 # Progamming Language
