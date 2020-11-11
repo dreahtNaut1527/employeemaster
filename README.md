@@ -33,15 +33,27 @@
 * http://asd_sql:8700/api/company/designation/(company shortname)
 
 
+<<<<<<< HEAD
 # Insert / Update / Delete
+=======
+# Insert / Update
+>>>>>>> 5e9d54a256bdddc2a1d00f8ff1eeb9ac70e1cd6a
 
 **variable format for single data**
 
 
 ```
  let body = {
+<<<<<<< HEAD
     procedureName: (sqlProcedureName),
     values: ['data1', 'data2', 'data3', . . .]
+=======
+    procedureName: 'ProcPostEmployee',
+    values: [CompanyCode,EmployeeCode,AgencyCode,EmployeeName,NickName,DepartmentCode,SectionCode,
+            TeamCode,DesignationCode,ContractStatus,ContractHiredDate,RegularHiredDate,
+            RetiredDate,Gender,DateBirth,CreatedDate,DeletedDate,UpdatedDate,UpdatedBy
+        ]
+>>>>>>> 5e9d54a256bdddc2a1d00f8ff1eeb9ac70e1cd6a
 }
 ```
 
@@ -51,27 +63,60 @@
 
 ```
  let body = {
+<<<<<<< HEAD
     procedureName: (sqlProcedureName),
     values: [
         ['data1', 'data2', 'data3', . . .],
         ['data1', 'data2', 'data3', . . .],
         ['data1', 'data2', 'data3', . . .],
         ['data1', 'da. . .]
+=======
+    procedureName: 'ProcPostEmployee',
+    values: [
+        [CompanyCode,EmployeeCode,AgencyCode,EmployeeName,NickName,DepartmentCode,SectionCode,
+            TeamCode,DesignationCode,ContractStatus,ContractHiredDate,RegularHiredDate,
+            RetiredDate,Gender,DateBirth,CreatedDate,DeletedDate,UpdatedDate,UpdatedBy],
+        [CompanyCode,EmployeeCode,AgencyCode,EmployeeName,NickName,DepartmentCode,SectionCode,
+            TeamCode,DesignationCode,ContractStatus,ContractHiredDate,RegularHiredDate,
+            RetiredDate,Gender,DateBirth,CreatedDate,DeletedDate,UpdatedDate,UpdatedBy],
+        [CompanyCode,EmployeeCode,AgencyCode,EmployeeName,NickName,DepartmentCode,SectionCode,
+            TeamCode,DesignationCode,ContractStatus,ContractHiredDate,RegularHiredDate,
+            RetiredDate,Gender,DateBirth,CreatedDate,DeletedDate,UpdatedDate,UpdatedBy],
+        . . .
+>>>>>>> 5e9d54a256bdddc2a1d00f8ff1eeb9ac70e1cd6a
     ]
 }
 ```
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5e9d54a256bdddc2a1d00f8ff1eeb9ac70e1cd6a
 **function format**
 ```
 functionName() { 
     let body = {
+<<<<<<< HEAD
         procedureName: 'sqlProcedureName',
         values: [
             ['data1', 'data2', 'data3', . . .],
             ['data1', 'data2', 'data3', . . .],
             ['data1', 'data2', 'data3', . . .],
             ['data1', 'da. . .]
+=======
+        procedureName: 'ProcPostEmployee',
+        values: [
+            [CompanyCode,EmployeeCode,AgencyCode,EmployeeName,NickName,DepartmentCode,SectionCode,
+                TeamCode,DesignationCode,ContractStatus,ContractHiredDate,RegularHiredDate,
+                RetiredDate,Gender,DateBirth,CreatedDate,DeletedDate,UpdatedDate,UpdatedBy],
+            [CompanyCode,EmployeeCode,AgencyCode,EmployeeName,NickName,DepartmentCode,SectionCode,
+                TeamCode,DesignationCode,ContractStatus,ContractHiredDate,RegularHiredDate,
+                RetiredDate,Gender,DateBirth,CreatedDate,DeletedDate,UpdatedDate,UpdatedBy],
+            [CompanyCode,EmployeeCode,AgencyCode,EmployeeName,NickName,DepartmentCode,SectionCode,
+                TeamCode,DesignationCode,ContractStatus,ContractHiredDate,RegularHiredDate,
+                RetiredDate,Gender,DateBirth,CreatedDate,DeletedDate,UpdatedDate,UpdatedBy],
+            . . .
+>>>>>>> 5e9d54a256bdddc2a1d00f8ff1eeb9ac70e1cd6a
         ]
     }
     axios.post("http://asd_sql:8700/api/postemployee", {data: JSON.stringify(body)}).then(res => {
@@ -81,6 +126,24 @@ functionName() {
 
 ```
 
+<<<<<<< HEAD
+=======
+# Delete
+**function format**
+```
+functionName() { 
+    let body = {
+        procedureName: 'ProcDeleteEmployee',
+        values: [EmployeeCode]
+    }
+    axios.put("http://asd_sql:8700/api/deleteemployee", {data: JSON.stringify(body)}).then(res => {
+        console.log(res.status)
+    })
+}
+
+```
+
+>>>>>>> 5e9d54a256bdddc2a1d00f8ff1eeb9ac70e1cd6a
 
 # Progamming Language
 **Node JS**
