@@ -6,8 +6,7 @@
 * http://asd_sql:8700/api/company
 
 **Get Employee Information:**
-http://asd_sql:8700/api/employeeinfo/(employee code)
-* http://asd_sql:8700/api/employeeinfo/16761
+* http://asd_sql:8700/api/employeeinfo/(employee code)
 
 **Get list of employee from specific company:**
 * http://asd_sql:8700/api/employees/(company shortname)
@@ -22,7 +21,7 @@ http://asd_sql:8700/api/employeeinfo/(employee code)
 * http://asd_sql:8700/api/employees/(company shortname)/(department name)/(section name)/(team name)
 
 **Get list of department from specific company:**
-http://asd_sql:8700/api/company/department/(company shortname)
+* http://asd_sql:8700/api/company/department/(company shortname)
 
 **Get list of department and section from a certain company:**
 * http://asd_sql:8700/api/company/department/section/(company shortname)
