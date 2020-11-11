@@ -33,7 +33,7 @@
 * http://asd_sql:8700/api/company/designation/(company shortname)
 
 
-# Insert / Update / Delete
+# Insert / Update
 
 **variable format for single data**
 
