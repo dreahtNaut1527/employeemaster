@@ -70,20 +70,40 @@
 }
 ```
 
-
 **function format**
 ```
 functionName() { 
     let body = {
         procedureName: 'ProcPostEmployee',
         values: [
-            ['data1', 'data2', 'data3', . . .],
-            ['data1', 'data2', 'data3', . . .],
-            ['data1', 'data2', 'data3', . . .],
-            ['data1', 'da. . .]
+            [CompanyCode,EmployeeCode,AgencyCode,EmployeeName,NickName,DepartmentCode,SectionCode,
+                TeamCode,DesignationCode,ContractStatus,ContractHiredDate,RegularHiredDate,
+                RetiredDate,Gender,DateBirth,CreatedDate,DeletedDate,UpdatedDate,UpdatedBy],
+            [CompanyCode,EmployeeCode,AgencyCode,EmployeeName,NickName,DepartmentCode,SectionCode,
+                TeamCode,DesignationCode,ContractStatus,ContractHiredDate,RegularHiredDate,
+                RetiredDate,Gender,DateBirth,CreatedDate,DeletedDate,UpdatedDate,UpdatedBy],
+            [CompanyCode,EmployeeCode,AgencyCode,EmployeeName,NickName,DepartmentCode,SectionCode,
+                TeamCode,DesignationCode,ContractStatus,ContractHiredDate,RegularHiredDate,
+                RetiredDate,Gender,DateBirth,CreatedDate,DeletedDate,UpdatedDate,UpdatedBy],
+            . . .
         ]
     }
     axios.post("http://asd_sql:8700/api/postemployee", {data: JSON.stringify(body)}).then(res => {
+        console.log(res.status)
+    })
+}
+
+```
+
+# Delete
+**function format**
+```
+functionName() { 
+    let body = {
+        procedureName: 'ProcDeleteEmployee',
+        values: [EmployeeCode]
+    }
+    axios.delete("http://asd_sql:8700/api/deleteemployee", {data: JSON.stringify(body)}).then(res => {
         console.log(res.status)
     })
 }
