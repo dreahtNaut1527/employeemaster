@@ -66,7 +66,7 @@
 ```
 functionName() { 
     let body = {
-        procedureName: (sqlProcedureName),
+        procedureName: 'sqlProcedureName',
         values: [
             ['data1', 'data2', 'data3', . . .],
             ['data1', 'data2', 'data3', . . .],
@@ -83,12 +83,8 @@ functionName() {
 
 
 # Progamming Language
-**Front End:** *Vue*
-**Back End:** *PHP*
-
-
-# Reference
-
-*http://asd_sql:8700/api/company
+**Node JS**
+*visit site*
+* https://nodejs.org/
 
 
