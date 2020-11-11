@@ -2,20 +2,35 @@
 
 # Select Data
 
-**Target/Objective:** *Centralized Employee Information for HRD Group where DH can update*
+**Get lists of companies:** 
+* http://asd_sql:8700/api/company*
 
-**Requester:** *Initiated by our Department*
+**Get Employee Information:**
+* http://asd_sql:8700/api/employeeinfo/(employee code)*
 
-**Approved by:** *Ms.Judy Antiporda.*
+**Get list of employee from specific company:**
+* http://asd_sql:8700/api/employees/(company shortname)*
 
-**Users:** *HRD Group of Company.*
+**Get list of employee from specific company and department:**
+* http://asd_sql:8700/api/employees/(company shortname)/(department name)*
 
-**Started:** *September 2020*
+**Get list of employee from specific company, department and section:**
+* http://asd_sql:8700/api/employees/(company shortname)/(department name)/(section name)*
 
-**Status:** *Development Stage, Testing Stage*
+**Get list of employee from specific company, department, section and team:**
+* http://asd_sql:8700/api/employees/(company shortname)/(department name)/(section name)/(team name)*
 
+**Get list of department from specific company:**
+http://asd_sql:8700/api/company/department/(company shortname)
 
-**Released Date:** *N/A*
+**Get list of department and section from a certain company:**
+* http://asd_sql:8700/api/company/department/section/(company shortname)*
+
+**Get list of department, section and team from a certain company:**
+* http://asd_sql:8700/api/company/department/section/team/(company shortname)*
+
+**Get list of position from certain company:**
+* http://asd_sql:8700/api/company/designation/(company shortname)*
 
 
 # Insert / Update / Delete
