@@ -7,7 +7,7 @@
 
 **Get Employee Information:**
 **http://asd_sql:8700/api/employeeinfo/(employee code)**
-*e.g* * (http://asd_sql:8700/api/employeeinfo/16761)
+* http://asd_sql:8700/api/employeeinfo/16761
 
 **Get list of employee from specific company:**
 * http://asd_sql:8700/api/employees/(company shortname)
