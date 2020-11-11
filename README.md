@@ -35,7 +35,8 @@
 
 # Insert / Update / Delete
 
-*argumanets format single data*
+**argumanets format single data**
+
 
 ```
  let body = {
@@ -48,6 +49,7 @@
 *argumanets format multiple data*
 
 
+```
  let body = {
     procedureName: (sqlProcedureName),
     values: [
@@ -57,6 +59,8 @@
         ['data1', 'da. . .]
     ]
 }
+```
+
 
 **function format**
 > 
