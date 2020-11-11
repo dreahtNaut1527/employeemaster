@@ -103,7 +103,7 @@ functionName() {
         procedureName: 'ProcDeleteEmployee',
         values: [EmployeeCode]
     }
-    axios.delete("http://asd_sql:8700/api/deleteemployee", {data: JSON.stringify(body)}).then(res => {
+    axios.put("http://asd_sql:8700/api/deleteemployee", {data: JSON.stringify(body)}).then(res => {
         console.log(res.status)
     })
 }
