@@ -74,7 +74,7 @@ functionName() {
             ['data1', 'da. . .]
         ]
     }
-    axios.post("http://asd_sql:8700/api/postemployee", {{data: JSON.stringify(body)}).then(res => {
+    axios.post("http://asd_sql:8700/api/postemployee", {data: JSON.stringify(body)}).then(res => {
         console.log(res.status)
     })
 }
