@@ -232,6 +232,5 @@ router.put('/deleteemployee', (req, res) => {
           })
      })
 })
-
  
 module.exports = router       
