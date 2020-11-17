@@ -59,20 +59,10 @@
                </v-bottom-navigation>
           </v-navigation-drawer>
           <v-app-bar
-<<<<<<< HEAD
                app
           >
                <v-app-bar-nav-icon @click="navDrawerHide(null)"></v-app-bar-nav-icon>
-               <v-toolbar-title v-if="userInfo.UserLevel < 9">{{ user.DepartmentName }} Department</v-toolbar-title>
-=======
-               color="white" 
-               flat
-               app
-          >
-               <v-app-bar-nav-icon @click="navDrawerHide(null)"></v-app-bar-nav-icon>
-               <v-toolbar-title v-if="userInfo.UserLevel < 9">{{ user.DeptDesc }} Department</v-toolbar-title>
->>>>>>> 8559198239804058af14de5af1e009f588ad2926
-               <v-toolbar-title v-else>ASD Team</v-toolbar-title>
+               <v-toolbar-title v-if="userInfo.UserLevel < 9">{{ user.DepartmentName }} Department</v-toolbar-title>               <v-toolbar-title v-else>ASD Team</v-toolbar-title>
                <v-spacer></v-spacer>
                <v-text-field
                     class="mt-4 mr-3"
