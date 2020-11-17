@@ -178,6 +178,7 @@ router.get('/company/designation/:compname', (req, res) => {
      })
 })
 
+<<<<<<< HEAD
 router.post('/getaccount', (req, res) => {
      let data = JSON.parse(req.body.data)
      let values = data.values
@@ -203,6 +204,8 @@ router.post('/getaccount', (req, res) => {
      })
 })
 
+=======
+>>>>>>> 8559198239804058af14de5af1e009f588ad2926
 // =====================================================================
 // ===================== Insert / Update Query (MSSQL)==================
 // =====================================================================

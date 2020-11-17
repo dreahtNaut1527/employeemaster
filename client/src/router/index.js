@@ -11,6 +11,7 @@ const routes = [
     component: () => import('@/views/login'),
   },
   {
+<<<<<<< HEAD
     path: '/dashboard',
     name: 'dashboard',
     component: () => import('@/views/dashboard'),
@@ -21,6 +22,8 @@ const routes = [
     component: () => import('@/views/profile'),
   },
   {
+=======
+>>>>>>> 8559198239804058af14de5af1e009f588ad2926
     path: '*',
     name: 'error',
     component: () => import('@/views/error'),

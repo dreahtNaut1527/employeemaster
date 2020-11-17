@@ -10,7 +10,11 @@
                          <v-list-item-avatar
                               size="112"
                          >
+<<<<<<< HEAD
                               <img v-if="userInfo.UserLevel < 9" :src="`http://asd_sql:8080/photos/${user.EmployeeCode}.jpg`" alt="nopic.jpg">
+=======
+                              <img v-if="userInfo.UserLevel < 9" :src="`http://asd_sql:8080/photos/${user.EmplCode}.jpg`" alt="nopic.jpg">
+>>>>>>> 8559198239804058af14de5af1e009f588ad2926
                               <img v-else :src="`http://asd_sql:8080/photos/nopic.jpg`" alt="nopic.jpg">
                          </v-list-item-avatar>
                          <v-list-item-title>{{ user.EmpName }}</v-list-item-title>
@@ -55,10 +59,19 @@
                </v-bottom-navigation>
           </v-navigation-drawer>
           <v-app-bar
+<<<<<<< HEAD
                app
           >
                <v-app-bar-nav-icon @click="navDrawerHide(null)"></v-app-bar-nav-icon>
                <v-toolbar-title v-if="userInfo.UserLevel < 9">{{ user.DepartmentName }} Department</v-toolbar-title>
+=======
+               color="white" 
+               flat
+               app
+          >
+               <v-app-bar-nav-icon @click="navDrawerHide(null)"></v-app-bar-nav-icon>
+               <v-toolbar-title v-if="userInfo.UserLevel < 9">{{ user.DeptDesc }} Department</v-toolbar-title>
+>>>>>>> 8559198239804058af14de5af1e009f588ad2926
                <v-toolbar-title v-else>ASD Team</v-toolbar-title>
                <v-spacer></v-spacer>
                <v-text-field
