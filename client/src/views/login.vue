@@ -1,5 +1,6 @@
 <template>
      <v-main>
+          <v-alert v-model="alert" color="error" transition="scroll-y-transition" dismissible dark tile>{{alertText}}</v-alert>
           <v-container class="fill-height">
                <v-row align="center" justify="center">
                     <v-col cols="12" md="4">
@@ -25,7 +26,7 @@
                                              type="password"
                                              outlined
                                              rounded
-                                             :disabled="employeeDetails.UserLevel == 0"
+                                             v-show="hidePassword"
                                         ></v-text-field>
                                    </v-form>
                                    <!-- <v-checkbox
@@ -49,8 +50,11 @@ import store from '@/store'
 export default {
      data() {
           return {
+               alert: false,
                valid: false,
                remember: false,
+               hidePassword: true,
+               alertText: '',
                username: '',
                password: '',
                employeeDetails: ''
@@ -62,6 +66,7 @@ export default {
      },
      methods: {
           getUserInfo() {
+               this.alert = false
                let body = {
                     procedureName: 'ProcGetUserAccount',
                     values: [this.username]
@@ -69,11 +74,20 @@ export default {
                if (this.username) {     
                     this.axios.post(`${this.api}/getaccount`, {data: JSON.stringify(body)}).then(res => {
                          this.employeeDetails = res.data[0]
-                         console.log(res.data)
+                         if (!this.employeeDetails) { 
+                              this.alert = !this.alert
+                              this.alertText = 'User not found.'
+                         } else {
+                              this.hidePassword = this.employeeDetails.UserLevel == 9 ? true : false
+                         }
                     })
+               } else {
+                    this.alert = !this.alert
+                    this.alertText = 'Please input username'
                }
           },
           loggedIn() {
+               this.alert = false
                switch(this.employeeDetails.UserLevel) {
                     case 0:   
                          store.commit('CHANGE_USER_INFO', this.employeeDetails)
@@ -85,6 +99,9 @@ export default {
                               store.commit('CHANGE_USER_INFO', this.employeeDetails)
                               store.commit('CHANGE_USER_LOGGING', true)
                               this.$router.push('/dashboard')
+                         } else {
+                              this.alert = !this.alert
+                              this.alertText = 'Password Incorrect!'
                          }
                          break;
                }
