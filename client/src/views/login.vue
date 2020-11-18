@@ -66,10 +66,12 @@ export default {
                     procedureName: 'ProcGetUserAccount',
                     values: [this.username]
                }
-               this.axios.post(`${this.api}/getaccount`, {data: JSON.stringify(body)}).then(res => {
-                    this.employeeDetails = res.data[0]
-                    console.log(res.data)
-               })
+               if (this.username) {     
+                    this.axios.post(`${this.api}/getaccount`, {data: JSON.stringify(body)}).then(res => {
+                         this.employeeDetails = res.data[0]
+                         console.log(res.data)
+                    })
+               }
           },
           loggedIn() {
                switch(this.employeeDetails.UserLevel) {
