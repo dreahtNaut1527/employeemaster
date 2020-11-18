@@ -90,38 +90,13 @@ export default {
                dark: false,
                icon: 'mdi-weather-night',
                search: '',
-               navDrawerList: [
-                    {
-                         title: 'Dashboard',
-                         icon: 'mdi-home',
-                         items: [{text: 'Home', to: '/dashboard'}],
-                         active: true   
-                    },
-                    {
-                         title: 'Master',
-                         icon: 'mdi-account',
-                         items: [
-                              {text: 'Employees', to: '/employees'},
-                              {text: 'Departments', to: '/department'},
-                              {text: 'Sections', to: '/section'},
-                              {text: 'Team', to: '/team'},
-                              {text: 'Department - Section', to: '/divsec'},
-                              {text: 'Transfer Employees', to: '/transfer'},
-                         ],
-                         active: false   
-                    },
-                    {
-                         title: 'Maintenance',
-                         icon: 'mdi-cog',
-                         items: [{text: 'User Accounts', to: '/accounts'}],
-                         active: false   
-                    },
-               ]
+               navDrawerList: []
           }
      },
      created() {
           this.dark = store.state.darkMode
           this.user = store.state.userInfo
+          this.getUserLevel()
      },
      methods: {
           getSearchData() {
@@ -137,6 +112,49 @@ export default {
                store.commit('CHANGE_THEME', false)
                store.commit('CHANGE_USER_LOGGING', false)
                this.$router.push('/')
+          },
+          getUserLevel() {
+               switch (store.state.userInfo.UserLevel) {
+                    case 0:
+                         this.navDrawerList = [
+                              {
+                                   title: 'Employee',
+                                   icon: 'mdi-account',
+                                   items: [{text: 'Profile', to: '/profile'}],
+                                   active: true   
+                              }
+                         ]
+                         break;
+                    default:
+                         this.navDrawerList = [
+                         {
+                              title: 'Dashboard',
+                              icon: 'mdi-home',
+                              items: [{text: 'Home', to: '/dashboard'}],
+                              active: true   
+                         },
+                         {
+                              title: 'Master',
+                              icon: 'mdi-account',
+                              items: [
+                                   {text: 'Employees', to: '/employees'},
+                                   {text: 'Departments', to: '/department'},
+                                   {text: 'Sections', to: '/section'},
+                                   {text: 'Team', to: '/team'},
+                                   {text: 'Department - Section', to: '/divsec'},
+                                   {text: 'Transfer Employees', to: '/transfer'},
+                              ],
+                              active: false   
+                         },
+                         {
+                              title: 'Maintenance',
+                              icon: 'mdi-cog',
+                              items: [{text: 'User Accounts', to: '/accounts'}],
+                              active: false   
+                         }
+                    ]
+                         break;
+               }
           },
           navDrawerHide(path) {
                if(!store.state.navDrawerVal) {

@@ -17,7 +17,7 @@ const routes = [
   },
   {
     path: '/employees',
-    name: 'profile',
+    name: 'employees',
     component: () => import('@/views/employees'),
   },
   {

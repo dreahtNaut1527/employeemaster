@@ -12,7 +12,7 @@
                                    <v-form>
                                         <v-text-field
                                              v-model="username"
-                                             placeholder="Username"
+                                             placeholder="Employee Code"
                                              append-icon="mdi-account"
                                              outlined
                                              rounded
