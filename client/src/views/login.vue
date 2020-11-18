@@ -28,10 +28,10 @@
                                              :disabled="employeeDetails.UserLevel == 0"
                                         ></v-text-field>
                                    </v-form>
-                                        <v-checkbox
-                                             v-model="remember"
-                                             label="Remember Me"
-                                        ></v-checkbox>
+                                   <!-- <v-checkbox
+                                        v-model="remember"
+                                        label="Remember Me"
+                                   ></v-checkbox> -->
                                    <v-card-actions>
                                         <v-btn @click="loggedIn()" color="primary" block>Login</v-btn>
                                    </v-card-actions>
@@ -75,7 +75,7 @@ export default {
           },
           loggedIn() {
                switch(this.employeeDetails.UserLevel) {
-                    case 0:
+                    case 0:   
                          store.commit('CHANGE_USER_INFO', this.employeeDetails)
                          store.commit('CHANGE_USER_LOGGING', true)
                          this.$router.push('/profile')
