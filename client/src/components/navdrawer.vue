@@ -6,15 +6,15 @@
           >    
                <v-list-item>
                     <v-list-item-content class="ma-2 text-center">
-                         <!-- <v-list-item-title class="headline">Production Employee</v-list-item-title> -->
                          <v-list-item-avatar
                               size="112"
                          >
                               <img v-if="userInfo.UserLevel < 9" :src="`http://asd_sql:8080/photos/${user.EmployeeCode}.jpg`" alt="nopic.jpg">
                               <img v-else :src="`http://asd_sql:8080/photos/nopic.jpg`" alt="nopic.jpg">
                          </v-list-item-avatar>
-                         <v-list-item-title>{{ user.EmpName }}</v-list-item-title>
-                         <v-list-item-subtitle>{{ user.EmplCode }}</v-list-item-subtitle>
+                         <v-list-item-title class="headline">{{ user.EmployeeCode }}</v-list-item-title>
+                         <v-list-item-subtitle>{{ user.EmployeeName }}</v-list-item-subtitle>
+                         <v-list-item-subtitle>{{ user.DesignationName }}</v-list-item-subtitle>
                     </v-list-item-content>
                </v-list-item>
                <v-divider></v-divider>
@@ -96,13 +96,32 @@ export default {
                          icon: 'mdi-home',
                          items: [{text: 'Home', to: '/dashboard'}],
                          active: true   
-                    }
+                    },
+                    {
+                         title: 'Master',
+                         icon: 'mdi-account',
+                         items: [
+                              {text: 'Employees', to: '/employees'},
+                              {text: 'Departments', to: '/department'},
+                              {text: 'Sections', to: '/section'},
+                              {text: 'Team', to: '/team'},
+                              {text: 'Department - Section', to: '/divsec'},
+                              {text: 'Transfer Employees', to: '/transfer'},
+                         ],
+                         active: false   
+                    },
+                    {
+                         title: 'Maintenance',
+                         icon: 'mdi-cog',
+                         items: [{text: 'User Accounts', to: '/accounts'}],
+                         active: false   
+                    },
                ]
           }
      },
      created() {
-          this.user = store.state.userInfo
           this.dark = store.state.darkMode
+          this.user = store.state.userInfo
      },
      methods: {
           getSearchData() {

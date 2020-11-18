@@ -16,6 +16,41 @@ const routes = [
     component: () => import('@/views/dashboard'),
   },
   {
+    path: '/employees',
+    name: 'profile',
+    component: () => import('@/views/employees'),
+  },
+  {
+    path: '/department',
+    name: 'department',
+    component: () => import('@/views/department'),
+  },
+  {
+    path: '/section',
+    name: 'section',
+    component: () => import('@/views/section'),
+  },
+  {
+    path: '/team',
+    name: 'team',
+    component: () => import('@/views/team'),
+  },
+  {
+    path: '/divsec',
+    name: 'divsec',
+    component: () => import('@/views/divsec'),
+  },
+  {
+    path: '/transfer',
+    name: 'transfer',
+    component: () => import('@/views/transfer'),
+  },
+  {
+    path: '/accounts',
+    name: 'accounts',
+    component: () => import('@/views/accounts'),
+  },
+  {
     path: '/profile',
     name: 'profile',
     component: () => import('@/views/profile'),
