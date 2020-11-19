@@ -206,7 +206,7 @@ router.post('/getaccount', (req, res) => {
 // =====================================================================
 // ===================== Insert / Update Query (MSSQL)==================
 // =====================================================================
-router.post('/postemployee', (req, res) => {
+router.post('/execute', (req, res) => {
      let data = JSON.parse(req.body.data)
      let values = data.values
      let sql = `EXECUTE ${data.procedureName}`

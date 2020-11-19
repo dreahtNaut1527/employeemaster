@@ -9,8 +9,8 @@
                          <v-list-item-avatar
                               size="112"
                          >
-                              <img v-if="userInfo.UserLevel < 9" :src="`http://asd_sql:8080/photos/${user.EmployeeCode}.jpg`" alt="nopic.jpg">
-                              <img v-else :src="`http://asd_sql:8080/photos/nopic.jpg`" alt="nopic.jpg">
+                              <img :src="`http://asd_sql:8080/photos/${user.EmployeeCode}.jpg`" alt="nopic.jpg">
+                              <!-- <img v-else :src="`http://asd_sql:8080/photos/nopic.jpg`" alt="nopic.jpg"> -->
                          </v-list-item-avatar>
                          <v-list-item-title class="headline">{{ user.EmployeeCode }}</v-list-item-title>
                          <v-list-item-subtitle>{{ user.EmployeeName }}</v-list-item-subtitle>
@@ -34,7 +34,7 @@
                               v-for="child in item.items"
                               @click="navDrawerHide(child.to)"
                               :key="child.text"
-                              link
+                              link 
                          >
                               <v-list-item-content>
                                    <v-list-item-subtitle>{{child.text}}</v-list-item-subtitle>
@@ -61,13 +61,13 @@
                <v-toolbar-title v-if="userInfo.UserLevel < 9">{{ user.DepartmentName }} Department</v-toolbar-title>               <v-toolbar-title v-else>ASD Team</v-toolbar-title>
                <v-spacer></v-spacer>
                <v-text-field
-                    class="mt-4 mr-3"
-                    v-model="search"
-                    append-icon="mdi-magnify"
+                    class="mt-4 mr-3" 
+                    v-model="search"    
+                    append-icon="mdi-magnify"     
                     placeholder="Search"
                     @keyup="getSearchData()"
                ></v-text-field>
-               <v-btn icon>
+               <v-btn icon>        
                     <v-icon small>mdi-bell</v-icon>
                     <v-badge
                          color="error"
