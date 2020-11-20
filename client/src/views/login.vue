@@ -27,15 +27,16 @@
                                              outlined
                                              rounded
                                              v-show="hidePassword"
+                                             @keydown.enter="loggedIn()"
                                         ></v-text-field>
-                                   </v-form>
                                    <!-- <v-checkbox
                                         v-model="remember"
                                         label="Remember Me"
                                    ></v-checkbox> -->
-                                   <v-card-actions>
-                                        <v-btn @click="loggedIn()" color="primary" block>Login</v-btn>
-                                   </v-card-actions>
+                                        <v-card-actions>
+                                             <v-btn @click="loggedIn()" color="primary" block>Login</v-btn>
+                                        </v-card-actions>
+                                   </v-form>
                               </v-card-text>
                          </v-card>
                     </v-col>
@@ -105,8 +106,7 @@ export default {
                          }
                          break;
                }
-          }
-          
+          }        
      }
 }
 </script>
