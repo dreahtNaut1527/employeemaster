@@ -19,7 +19,6 @@
                     </v-list-item>
                     <v-divider class="mx-3"></v-divider>
                     <v-card-title>Employee Information</v-card-title>
-                    {{information}}
                     <v-card-text>
                          <v-row align="center" justify="center">
                               <v-col cols="12" md="2">
@@ -56,38 +55,68 @@
                               </v-col>
                          </v-row>
                          <v-row align="center" justify="center">
-                              <v-col cols="12" md="4">
-                                   <v-autocomplete
-                                        v-model="information.DepartmentCode"
-                                        :items="departmentList"
-                                        item-text="DepartmentName"
-                                        item-value="DepartmentCode"
-                                        label="Department"
-                                        outlined
-                                        dense
-                                   ></v-autocomplete>
+                              <v-col cols="12" md="6">
+                                   <v-row align="center" justify="center">
+                                        <v-col cols="12" md="12">
+                                             <v-autocomplete
+                                                  v-model="information.DepartmentCode"
+                                                  :items="departmentList"
+                                                  item-text="DepartmentName"
+                                                  item-value="DepartmentCode"
+                                                  label="Department"
+                                                  outlined
+                                                  dense
+                                             ></v-autocomplete>
+                                        </v-col>
+                                        <v-col cols="12" md="12">
+                                             <v-autocomplete
+                                                  v-model="information.SectionCode"
+                                                  :items="sectionList"
+                                                  item-text="SectionName"
+                                                  item-value="SectionCode"
+                                                  label="Section"
+                                                  outlined
+                                                  dense
+                                             ></v-autocomplete>
+                                        </v-col>
+                                        <v-col cols="12" md="12">
+                                             <v-autocomplete
+                                                  v-model="information.TeamCode"
+                                                  :items="teamList"
+                                                  item-text="TeamName"
+                                                  item-value="TeamCode"
+                                                  label="Team"
+                                                  outlined
+                                                  dense
+                                             ></v-autocomplete>
+                                        </v-col>
+                                   </v-row>
                               </v-col>
-                              <v-col cols="12" md="4">
-                                   <v-autocomplete
-                                        v-model="information.SectionCode"
-                                        :items="sectionList"
-                                        item-text="SectionName"
-                                        item-value="SectionCode"
-                                        label="Section"
-                                        outlined
-                                        dense
-                                   ></v-autocomplete>
-                              </v-col>
-                              <v-col cols="12" md="4">
-                                   <v-autocomplete
-                                        v-model="information.TeamCode"
-                                        :items="teamList"
-                                        item-text="TeamName"
-                                        item-value="TeamCode"
-                                        label="Team"
-                                        outlined
-                                        dense
-                                   ></v-autocomplete>
+                              <v-col cols="12" md="6">
+                                   <v-row align="center" justify="center">
+                                        <v-col cols="12" md="12">
+                                             <v-autocomplete
+                                                  v-model="information.DesignationCode"
+                                                  :items="departmentList"
+                                                  item-text="DepartmentName"
+                                                  item-value="DepartmentCode"
+                                                  label="Department"
+                                                  outlined
+                                                  dense
+                                             ></v-autocomplete>
+                                        </v-col>
+                                        <v-col cols="12" md="12">
+                                             <v-autocomplete
+                                                  v-model="information.SectionCode"
+                                                  :items="sectionList"
+                                                  item-text="SectionName"
+                                                  item-value="SectionCode"
+                                                  label="Section"
+                                                  outlined
+                                                  dense
+                                             ></v-autocomplete>
+                                        </v-col>
+                                   </v-row>
                               </v-col>
                          </v-row>
                     </v-card-text>
@@ -142,6 +171,8 @@ export default {
                departmentList: [],
                sectionList: [],
                teamList: [],
+               designationList: [],
+               positionList: [],
                genderOption: [
                     {label: 'Male', value: 'M'},
                     {label: 'Female', value: 'F'}
@@ -157,6 +188,8 @@ export default {
           this.loadDepartments()
           this.loadSections()
           this.loadTeams()
+          this.loadDesignations()
+          this.loadPositions()
      },
      methods: {
           loadInformation() {
@@ -179,6 +212,12 @@ export default {
                this.axios.get(`${this.api}/company/department/section/team/${this.userInfo.ShortName}`).then(res => {
                     this.teamList = res.data
                })
+          },
+          loadDesignations() {
+
+          },
+          loadPositions() {
+               
           }
      }
 }
