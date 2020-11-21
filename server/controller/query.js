@@ -180,6 +180,22 @@ router.get('/company/designation/:compname', (req, res) => {
      })
 })
 
+router.get('/company/position/:compname', (req, res) => {
+     let compname = req.params.compname
+     let sql = `SELECT * FROM PositionView WHERE lower(ShortName) = lower('${compname}')`
+     config.connect().then(() => {
+          const request = new mssql.Request(config)
+          request.query(sql, (err, results) => {
+               if(err) {
+                    res.send(err)
+               } else {
+                    res.send(results.recordset)
+               }
+               config.close()
+          })
+     })
+})
+
 router.post('/getaccount', (req, res) => {
      let data = JSON.parse(req.body.data)
      let values = data.values
@@ -190,7 +206,6 @@ router.post('/getaccount', (req, res) => {
           values = Array(data.values)
      }
      values.forEach(rec => {
-          // console.log(`${sql} '${rec.join("','").replace(/''/g, null)}'`)
           config.connect().then(() => {
                const request = new mssql.Request(config)
                request.query(`${sql} '${rec.join("','").replace(/''/g, null)}'`, (err, results) => {
@@ -218,7 +233,6 @@ router.post('/execute', (req, res) => {
           values = Array(data.values)
      }
      values.forEach(rec => {
-          // console.log(`${sql} '${rec.join("','").replace(/''/g, null)}'`)
           config.connect().then(() => {
                const request = new mssql.Request(config)
                request.query(`${sql} '${rec.join("','").replace(/''/g, null)}'`, err => {

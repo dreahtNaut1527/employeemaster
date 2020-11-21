@@ -133,7 +133,7 @@ export default {
                               active: true   
                          },
                          {
-                              title: 'Master',
+                              title: 'Main Data',
                               icon: 'mdi-account',
                               items: [
                                    {text: 'Employees', to: '/employees'},

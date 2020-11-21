@@ -29,10 +29,6 @@
                                              v-show="hidePassword"
                                              @keydown.enter="loggedIn()"
                                         ></v-text-field>
-                                   <!-- <v-checkbox
-                                        v-model="remember"
-                                        label="Remember Me"
-                                   ></v-checkbox> -->
                                         <v-card-actions>
                                              <v-btn @click="loggedIn()" color="primary" block>Login</v-btn>
                                         </v-card-actions>

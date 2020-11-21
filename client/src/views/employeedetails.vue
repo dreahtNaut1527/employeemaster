@@ -13,7 +13,8 @@ export default {
           return {
                breadCrumbsItems: [
                     {text: 'Main Data', disabled: false, href: '/employees'},
-                    {text: 'Employees', disabled: true, href: '/employees'}
+                    {text: 'Employees', disabled: false, href: '/employees'},
+                    {text: 'Details', disabled: true, href: '/employees'}
                ]
           }
      }
