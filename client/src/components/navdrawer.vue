@@ -6,11 +6,8 @@
           >    
                <v-list-item>
                     <v-list-item-content class="ma-2 text-center">
-                         <v-list-item-avatar
-                              size="112"
-                         >
+                         <v-list-item-avatar size="112">
                               <img :src="`http://asd_sql:8080/photos/${user.EmployeeCode}.jpg`" alt="nopic.jpg">
-                              <!-- <img v-else :src="`http://asd_sql:8080/photos/nopic.jpg`" alt="nopic.jpg"> -->
                          </v-list-item-avatar>
                          <v-list-item-title class="headline">{{ user.EmployeeCode }}</v-list-item-title>
                          <v-list-item-subtitle>{{ user.EmployeeName }}</v-list-item-subtitle>
@@ -18,7 +15,7 @@
                     </v-list-item-content>
                </v-list-item>
                <v-divider></v-divider>
-               <v-list dense>
+               <v-list shaped dense>
                     <v-list-group
                          v-for="(item, i) in navDrawerList" :key="i"
                          v-model="item.active"
@@ -88,6 +85,7 @@ export default {
           return {
                user: '',
                dark: false,
+               overlay: false,
                icon: 'mdi-weather-night',
                search: '',
                navDrawerList: []
@@ -111,6 +109,7 @@ export default {
                store.commit('CHANGE_USER_INFO', {})
                store.commit('CHANGE_THEME', false)
                store.commit('CHANGE_USER_LOGGING', false)
+               store.commit('CHANGE_NAVDRAWER', false)
                this.$router.push('/')
           },
           getUserLevel() {
@@ -134,7 +133,7 @@ export default {
                               active: true   
                          },
                          {
-                              title: 'Master',
+                              title: 'Main Data',
                               icon: 'mdi-account',
                               items: [
                                    {text: 'Employees', to: '/employees'},
@@ -149,7 +148,10 @@ export default {
                          {
                               title: 'Maintenance',
                               icon: 'mdi-cog',
-                              items: [{text: 'User Accounts', to: '/accounts'}],
+                              items: [
+                                   {text: 'User Accounts', to: '/accounts'},
+                                   {text: 'Profile', to: '/profile'}
+                              ],
                               active: false   
                          }
                     ]
