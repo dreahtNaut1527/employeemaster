@@ -33,7 +33,7 @@
                                              ></datePicker>
                                         </v-card-text>
                                    </v-col>
-                                   <v-col v-if="userInfo.UserLevel == 9" cols="12" md="4" class="mb-n10">
+                                   <v-col v-if="userInfo.UserLevel == 9" cols="12" md="3" class="mb-n10">
                                         <v-card-text>
                                              <v-autocomplete
                                                   v-model="department"
@@ -66,6 +66,17 @@
                                              ></v-autocomplete>
                                         </v-card-text>
                                    </v-col>
+                                   <v-col cols="12" md="1" class="mb-n10">
+                                        <v-card-text>
+                                             <v-autocomplete
+                                                  v-model="options"
+                                                  :items="optionList"
+                                                  clearable
+                                                  outlined
+                                                  dense
+                                             ></v-autocomplete>
+                                        </v-card-text>
+                                   </v-col>
                               </v-row>
                               <v-data-table
                                    :headers="headers"
@@ -78,6 +89,17 @@
                                    @page-count="pageCount = $event"
                                    hide-default-footer
                               >
+                                   <template v-slot:item="props">
+                                        <tr :style="props.item.TIMEIN == null ? 'background-color: #b71c1c; color: #ffffff;' : ''">
+                                             <td>{{props.item.EMPLCODE}}</td>
+                                             <td>{{props.item.EMPNAME}}</td>
+                                             <td>{{props.item.DEPTDESC}}</td>
+                                             <td>{{props.item.SECTIONDESC}}</td>
+                                             <td>{{props.item.TEAMDESC}}</td>
+                                             <td>{{props.item.TIMEIN}}</td>
+                                             <td>{{props.item.TIMEOUT}}</td>
+                                        </tr>
+                                   </template>
                               </v-data-table>
                               <v-pagination
                                    v-model="page"
@@ -103,10 +125,16 @@ export default {
                department: '',
                section: '',
                team: '',
+               options: '',
                pageCount: 0,
                page: 1,
                logtime: [],
                logtimeDate: this.moment().format('YYYY-MM-DD'),
+               optionList: [
+                    {text: 'All', value: 0}
+                    {text: 'Present', value: 0},
+                    {text: 'Absent', value: 0},
+               ],
                headers: [
                     {text: 'Code', value: 'EMPLCODE'},
                     {text: 'Name', value: 'EMPNAME'},
@@ -200,4 +228,4 @@ export default {
           datePicker
      }
 }
-</script>
+</scri
