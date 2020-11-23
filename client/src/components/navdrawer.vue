@@ -29,10 +29,11 @@
                          </template>
                          <v-list-item
                               v-for="child in item.items"
-                              @click="navDrawerHide(child.to)"
+                              :to="child.to"
                               :key="child.text"
                               link 
                          >
+                              <!-- @click="navDrawerHide(child.to)" -->
                               <v-list-item-content>
                                    <v-list-item-subtitle>{{child.text}}</v-list-item-subtitle>
                               </v-list-item-content>

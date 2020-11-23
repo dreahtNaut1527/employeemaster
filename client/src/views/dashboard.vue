@@ -6,15 +6,17 @@
                     <v-col v-for="(item, i) in summaries" :key="i" cols="12" md="3">
                          <v-card :color="item.color" :dark="i != 1">
                               <v-toolbar flat color="transparent">
-                                   <v-toolbar-title>{{item.text}}</v-toolbar-title>
+                                   <v-toolbar-title v-if="i == 0" class="text-lg-h4">{{filterData.length}}</v-toolbar-title>
+                                   <v-toolbar-title v-if="i == 1" class="text-lg-h4">{{getTotalPresent.length}}</v-toolbar-title>
+                                   <v-toolbar-title v-if="i == 2" class="text-lg-h4">{{getTotalAbsent.length}}</v-toolbar-title>
+                                   <v-toolbar-title v-if="i == 3" class="text-lg-h4">
+                                        {{filterData.length == 0 ? '0' : ((getTotalPresent.length / filterData.length) * 100).toFixed(2) }}
+                                   </v-toolbar-title>
                                    <v-spacer></v-spacer>
                                    <v-icon x-large>{{item.icon}}</v-icon>
                               </v-toolbar>
-                              <v-divider class="mx-3"></v-divider>
-                              <v-card-text v-if="i == 0">Total Records: {{logtime.length}}</v-card-text>
-                              <v-card-text v-if="i == 1">Total Records: {{getTotalPresent.length}}</v-card-text>
-                              <v-card-text v-if="i == 2">Total Records: {{getTotalAbsent.length}}</v-card-text>
-                              <v-card-text v-if="i == 3">Total Records: {{getTotalPresent.length / logtime.length}}</v-card-text>
+                              <!-- <v-divider class="mx-3"></v-divider> -->
+                              <v-card-text>{{item.text}}</v-card-text>
                          </v-card>
                     </v-col>
                </v-row>
@@ -31,10 +33,43 @@
                                              ></datePicker>
                                         </v-card-text>
                                    </v-col>
+                                   <v-col v-if="userInfo.UserLevel == 9" cols="12" md="4" class="mb-n10">
+                                        <v-card-text>
+                                             <v-autocomplete
+                                                  v-model="department"
+                                                  :items="departmentList"
+                                                  clearable
+                                                  outlined
+                                                  dense
+                                             ></v-autocomplete>
+                                        </v-card-text>
+                                   </v-col>
+                                   <v-col cols="12" md="3" class="mb-n10">
+                                        <v-card-text>
+                                             <v-autocomplete
+                                                  v-model="section"
+                                                  :items="sectionList"
+                                                  clearable
+                                                  outlined
+                                                  dense
+                                             ></v-autocomplete>
+                                        </v-card-text>
+                                   </v-col>
+                                   <v-col cols="12" md="3" class="mb-n10">
+                                        <v-card-text>
+                                             <v-autocomplete
+                                                  v-model="team"
+                                                  :items="teamList"
+                                                  clearable
+                                                  outlined
+                                                  dense
+                                             ></v-autocomplete>
+                                        </v-card-text>
+                                   </v-col>
                               </v-row>
                               <v-data-table
                                    :headers="headers"
-                                   :items="logtime"
+                                   :items="filterData"
                                    :loading="loading"
                                    :search="employeeCode"
                                    :items-per-page="8"
@@ -65,6 +100,9 @@ export default {
                loading: true,
                dateDialog: false,
                employeeCode: '',
+               department: '',
+               section: '',
+               team: '',
                pageCount: 0,
                page: 1,
                logtime: [],
@@ -82,7 +120,7 @@ export default {
                     {text: 'Total Employees', value: 0, icon: 'mdi-account-group', color: 'primary'},
                     {text: 'Total Present', value: 0, icon: 'mdi-account-multiple-check', color: 'warning'},
                     {text: 'Total Absent', value: 0, icon: 'mdi-account-remove', color: 'error'},
-                    {text: 'Total Manpower', value: 0, icon: 'mdi-account-hard-hat', color: 'success'}
+                    {text: 'Percentage', value: 0, icon: 'mdi-percent', color: 'success'}
                ]
           }
      },
@@ -90,15 +128,49 @@ export default {
           this.loadLogtime()
      },
      computed: {
+          filterData() {
+               return this.logtime.filter(rec => {
+                    return (
+                         rec.DEPTDESC.includes(this.department || '') &&
+                         rec.SECTIONDESC.includes(this.section || '') &&
+                         rec.TEAMDESC.includes(this.team || '')
+                    )
+               })
+          },
           getTotalPresent() {
                return this.logtime.filter(rec => {
-                    return rec.TIMEIN != null 
+                    return (
+                         rec.TIMEIN != null &&
+                         rec.DEPTDESC.includes(this.department || '') &&
+                         rec.SECTIONDESC.includes(this.section || '') &&
+                         rec.TEAMDESC.includes(this.team || '')
+                    ) 
                })
           },
           getTotalAbsent() {
                return this.logtime.filter(rec => {
-                    return rec.TIMEIN == null
+                    return (
+                         rec.TIMEIN == null && 
+                         rec.DEPTDESC.includes(this.department || '') &&
+                         rec.SECTIONDESC.includes(this.section || '') &&
+                         rec.TEAMDESC.includes(this.team || '')
+                    )
                })
+          },
+          departmentList() {
+               return this.logtime.map(rec => {
+                    return rec.DEPTDESC
+               }).sort()
+          },
+          sectionList() {
+               return this.logtime.map(rec => {
+                    return rec.SECTIONDESC
+               }).sort()
+          },
+          teamList() {
+               return this.filterData.map(rec => {
+                    return rec.TEAMDESC
+               }).sort()
           }
      },
      methods: {
