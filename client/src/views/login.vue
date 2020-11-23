@@ -75,7 +75,7 @@ export default {
                               this.alert = !this.alert
                               this.alertText = 'User not found.'
                          } else {
-                              this.hidePassword = this.employeeDetails.UserLevel == 9 ? true : false
+                              this.hidePassword = this.employeeDetails.UserLevel > 0 ? true : false
                          }
                     })
                } else {

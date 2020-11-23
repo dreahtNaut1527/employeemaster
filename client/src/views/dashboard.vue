@@ -14,7 +14,7 @@
                               <v-card-text v-if="i == 0">Total Records: {{logtime.length}}</v-card-text>
                               <v-card-text v-if="i == 1">Total Records: {{getTotalPresent.length}}</v-card-text>
                               <v-card-text v-if="i == 2">Total Records: {{getTotalAbsent.length}}</v-card-text>
-                              <v-card-text v-if="i == 3">Total Records: {{logtime.length - getTotalAbsent.length}}</v-card-text>
+                              <v-card-text v-if="i == 3">Total Records: {{getTotalPresent.length / logtime.length}}</v-card-text>
                          </v-card>
                     </v-col>
                </v-row>
@@ -105,11 +105,15 @@ export default {
           loadLogtime() {
                let body = {
                     logdate: this.moment(this.logtimeDate).format('MMDDYY'),
-                    server: `HRIS${this.userInfo.ShortName}`
+                    server: `HRIS${this.userInfo.ShortName}`,
+                    deptcode: this.userInfo.UserLevel == 9 ? '' : this.userInfo.DepartmentCode
                }
                this.axios.post('http://asd_sql:8080/server/api/logtime.php', body).then(res => {
-                    this.logtime = res.data
-                    console.log(res)
+                    if(Array.isArray(res.data)) {
+                         this.logtime = res.data
+                    } else {
+                         this.logtime = []
+                    }
                     this.loading = !this.loading
                })
           }
