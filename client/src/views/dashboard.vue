@@ -55,7 +55,7 @@
                                              ></v-autocomplete>
                                         </v-card-text>
                                    </v-col>
-                                   <v-col cols="12" md="3" class="mb-n10">
+                                   <v-col cols="12" md="2" class="mb-n10">
                                         <v-card-text>
                                              <v-autocomplete
                                                   v-model="team"
@@ -66,11 +66,13 @@
                                              ></v-autocomplete>
                                         </v-card-text>
                                    </v-col>
-                                   <v-col cols="12" md="1" class="mb-n10">
+                                   <v-col cols="12" md="2" class="mb-n10">
                                         <v-card-text>
                                              <v-autocomplete
                                                   v-model="options"
                                                   :items="optionList"
+                                                  item-text="text"
+                                                  item-value="value"
                                                   clearable
                                                   outlined
                                                   dense
@@ -90,7 +92,7 @@
                                    hide-default-footer
                               >
                                    <template v-slot:item="props">
-                                        <tr :style="props.item.TIMEIN == null ? 'background-color: #b71c1c; color: #ffffff;' : ''">
+                                        <tr :style="props.item.TIMEIN == null ? 'color: #b71c1c;' : ''">
                                              <td>{{props.item.EMPLCODE}}</td>
                                              <td>{{props.item.EMPNAME}}</td>
                                              <td>{{props.item.DEPTDESC}}</td>
@@ -125,15 +127,15 @@ export default {
                department: '',
                section: '',
                team: '',
-               options: '',
                pageCount: 0,
                page: 1,
+               options: {text: 'All', value: 0},
                logtime: [],
                logtimeDate: this.moment().format('YYYY-MM-DD'),
                optionList: [
-                    {text: 'All', value: 0}
-                    {text: 'Present', value: 0},
-                    {text: 'Absent', value: 0},
+                    {text: 'All', value: 0},
+                    {text: 'Present', value: 1},
+                    {text: 'Absent', value: 2},
                ],
                headers: [
                     {text: 'Code', value: 'EMPLCODE'},
@@ -228,4 +230,4 @@ export default {
           datePicker
      }
 }
-</scri
+</script>
