@@ -124,6 +124,32 @@ export default {
                               }
                          ]
                          break;
+                    case 1: 
+                         this.navDrawerList = [
+                              {
+                                   title: 'Dashboard',
+                                   icon: 'mdi-home',
+                                   items: [
+                                        {text: 'Home', to: '/dashboard'},
+                                        {text: 'Profile', to: '/profile'}
+                                   ],
+                                   active: true   
+                              },
+                              {
+                                   title: 'Main Data',
+                                   icon: 'mdi-account',
+                                   items: [
+                                        {text: 'Employees', to: '/employees'},
+                                        {text: 'Departments', to: '/department'},
+                                        {text: 'Sections', to: '/section'},
+                                        {text: 'Team', to: '/team'},
+                                        {text: 'Department - Section', to: '/divsec'},
+                                        {text: 'Transfer Employees', to: '/transfer'},
+                                   ],
+                                   active: false   
+                              }
+                         ]
+                         break;
                     default:
                          this.navDrawerList = [
                          {
