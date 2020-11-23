@@ -1,9 +1,9 @@
 <template>
      <v-main>
           <v-breadcrumbs :items="breadCrumbsItems" divider="/"></v-breadcrumbs>
-          <v-containder>
+          <v-container>
                <!-- Your Code Here -->
-          </v-containder>
+          </v-container>
      </v-main>
 </template>
 
