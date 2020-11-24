@@ -17,6 +17,7 @@
                                    {{`${information.EmployeeName} (${information.EmployeeCode})`}}
                               </v-list-item-title>
                               <v-list-item-subtitle>{{information.DesignationName}}</v-list-item-subtitle>
+                              <v-list-item-subtitle>{{information.WorkEmailAddress}}</v-list-item-subtitle>
                          </v-list-item-content>
                     </v-list-item>
                     <v-divider class="mx-3"></v-divider>
@@ -227,7 +228,7 @@
                                                   <v-text-field
                                                        v-model="information.Phone"
                                                        append-icon="mdi-phone"
-                                                       label="Phone"
+                                                       label="Telephone"
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -300,6 +301,79 @@
                                         </v-row>
                                    </v-card-text>
                               </v-tab-item>
+                              <v-tab-item value="4">
+                                   <v-card-text>
+                                        <v-row align="center" justify="center" dense>
+                                             <v-col cols="12" md="6">
+                                                  <v-text-field
+                                                       v-model="information.CPUNumber"
+                                                       append-icon="mdi-desktop-classic"
+                                                       label="CPU Number"
+                                                       outlined
+                                                       dense
+                                                  ></v-text-field>
+                                             </v-col>
+                                             <v-col cols="12" md="6">
+                                                  <v-text-field
+                                                       v-model="information.IPAddress"
+                                                       append-icon="mdi-ip"
+                                                       label="IP Address"
+                                                       outlined
+                                                       dense
+                                                  ></v-text-field>
+                                             </v-col>
+                                             <v-col cols="12" md="6">
+                                                  <v-text-field
+                                                       v-model="information.CompUserName"
+                                                       append-icon="mdi-account"
+                                                       label="Computer Username"
+                                                       outlined
+                                                       dense
+                                                  ></v-text-field>
+                                             </v-col>
+                                             <v-col cols="12" md="6">
+                                                  <v-text-field
+                                                       v-model="information.CompPassword"
+                                                       append-icon="mdi-lock"
+                                                       label="Computer Password"
+                                                       type="password"
+                                                       outlined
+                                                       dense
+                                                  ></v-text-field>
+                                             </v-col>
+                                             <v-col cols="12" md="12">
+                                                  <v-autocomplete
+                                                       v-model="information.OperatingSystem"
+                                                       :items="operatingSystem"
+                                                       item-text="OperatingSystem"
+                                                       item-value="OperatingSystem"
+                                                       label="Operating System"
+                                                       clearable
+                                                       outlined
+                                                       dense
+                                                  ></v-autocomplete>
+                                             </v-col>
+                                             <v-col cols="12" md="6">
+                                                  <v-text-field
+                                                       v-model="information.WorkEmailAddress"
+                                                       append-icon="mdi-email"
+                                                       label="Work Email Address"
+                                                       outlined
+                                                       dense
+                                                  ></v-text-field>
+                                             </v-col>
+                                             <v-col cols="12" md="6">
+                                                  <v-text-field
+                                                       v-model="information.WorkLocation"
+                                                       append-icon="mdi-map-marker"
+                                                       label="Work Location"
+                                                       outlined
+                                                       dense
+                                                  ></v-text-field>
+                                             </v-col>
+                                        </v-row>
+                                   </v-card-text>
+                              </v-tab-item>
                          </v-tabs-items>
                          <v-card-actions>
                               <v-spacer></v-spacer>
@@ -342,6 +416,7 @@ export default {
                educationList: [],
                breadCrumbsItems: [],
                shiftList: [],
+               operatingSystem: [],
                saveOptions: {
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
@@ -354,7 +429,8 @@ export default {
                tabsHeader: [
                     {label: 'Employee Information', icon:'mdi-account', value: 1},
                     {label: 'Other Information', icon:'mdi-card-bulleted', value: 2},
-                    {label: 'Contact Person', icon:'mdi-card-account-details', value: 3}
+                    {label: 'Contact Person', icon:'mdi-card-account-details', value: 3},
+                    {label: 'Work Information', icon:'mdi-briefcase', value: 4}
                ],
                marStatus: [
                     {label: 'Single', value: 'S'},
@@ -366,6 +442,7 @@ export default {
      },
      created() {
           this.loadInformation()
+          this.loadOperatingSystem()
      },
      methods: {
           loadInformation() {
@@ -427,6 +504,12 @@ export default {
                     this.shiftList = res.data
                })
           },
+          loadOperatingSystem() {
+               this.axios.get(`${this.api}/os`).then(res => {
+                    this.operatingSystem = res.data
+                    console.log(this.operatingSystem)
+               })
+          },
           saveRecord() {
                this.swal.fire(this.saveOptions).then(result => {
                     if(result.isConfirmed) {
@@ -465,12 +548,18 @@ export default {
                                         this.information.ContractHiredDate  ,
                                         this.information.RegularHiredDate  ,
                                         this.information.RetiredDate  ,
+                                        this.information.CPUNumber,
+                                        this.information.IPAddress,
+                                        this.information.CompUserName,
+                                        this.information.CompPassword,
+                                        this.information.OperatingSystem,
+                                        this.information.WorkEmailAddress,
+                                        this.information.WorkLocation,
                                         this.moment().format('YYYY-MM-DD')  ,
                                         this.moment().format('YYYY-MM-DD')  ,
                                         this.userInfo.EmployeeCode  
                               ]
                          }
-                         console.log(body)
                          this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)}).then(res => {
                               console.log(res.data)
                               this.swal.fire('Hooray!','Changes has been saved', 'success')
