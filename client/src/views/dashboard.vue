@@ -214,6 +214,7 @@ export default {
                     server: `HRIS${this.userInfo.ShortName}`,
                     deptcode: this.userInfo.UserLevel == 9 ? '' : this.userInfo.DepartmentCode
                }
+               console.log(body)
                this.axios.post('http://asd_sql:8080/server/api/logtime.php', body).then(res => {
                     if(Array.isArray(res.data)) {
                          this.logtime = res.data
