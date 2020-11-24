@@ -92,7 +92,7 @@ export default {
                          this.$router.push('/profile')
                          break;
                     default:
-                         if(this.password === this.employeeDetails.Password) {
+                         if(this.md5(this.password) == this.employeeDetails.Password) {
                               store.commit('CHANGE_USER_INFO', this.employeeDetails)
                               store.commit('CHANGE_USER_LOGGING', true)
                               this.$router.push('/dashboard')

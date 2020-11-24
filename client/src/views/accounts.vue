@@ -47,7 +47,7 @@
                               <v-btn @click="editRecord(item)" icon>
                                    <v-icon>mdi-pencil</v-icon>
                               </v-btn>
-                              <v-btn @click="editRecord(item)" icon>
+                              <v-btn @click="deleteRecord(item)" icon>
                                    <v-icon>mdi-delete</v-icon>
                               </v-btn>
                          </template>
@@ -110,7 +110,7 @@
                                         </v-col>
                                         <v-col cols="12" md="6">
                                              <v-text-field
-                                                  v-model="editedAccount.Password"
+                                                  v-model="newPassword"
                                                   append-icon="mdi-lock"
                                                   label="Password"
                                                   type="password"
@@ -180,22 +180,22 @@ export default {
                page: 1,
                editMode: 0,
                search: '',
+               newPassword: '',
                confirmedPassword: '',
                accounts: [],
                passwordRules: [
-               v => !!v || 'Password is required',
-               v => (v == this.editedAccount.Password) || 'Password do not match',
+                    v => !!v || 'Password is required',
+                    v => (v == this.newPassword) || 'Password do not match'
                ],
                editedAccount: {
                     EmployeeCode: '',
                     Username: '',
                     Fullname: '',
-                    Password: '',
                     IPAddr: '',
                     UserLevel: 0
                },
                companies: [],
-               userLevel: [0, 1, 2],
+               userLevel: [0, 1, 2, 9],
                saveOptions: {
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
@@ -208,7 +208,7 @@ export default {
                headers: [
                     {text: 'Code', value: 'EmployeeCode'},
                     {text: 'Name', value: 'Fullname'},
-                    {text: 'Username', value: 'Username'},
+                    {text: 'Username', value: 'Username'},  
                     {text: 'IP Address', value: 'IPAddr'},
                     {text: 'Level', value: 'UserLevel'},
                     {text: 'Status', value: 'Status'},
@@ -237,9 +237,10 @@ export default {
      },
      methods: {
           loadAccounts() {
+               this.loading = true
                this.axios.get(`${this.api}/usercontrol`).then(res => {
                     this.accounts = res.data
-                    this.loading = !this.loading
+                    this.loading = false
                })
           },
           getEmployeeFullname() {
@@ -261,6 +262,7 @@ export default {
                     this.editedAccount = Object.assign({}, data[0])
                     this.loadName = false
                }
+               this.disabled = false
           },
           saveRecord() {
                if(this.$refs.form.validate()) {
@@ -272,7 +274,7 @@ export default {
                                         this.editedAccount.EmployeeCode,
                                         this.editedAccount.Username,
                                         this.editedAccount.Fullname,
-                                        this.md5(this.editedAccount.Password),
+                                        this.md5(this.newPassword),
                                         this.editedAccount.IPAddr,
                                         this.editedAccount.UserLevel,
                                         this.moment().format('YYYY-MM-DD'),
@@ -281,9 +283,7 @@ export default {
                                         1
                                    ]
                               }
-                              this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)}).then(res => {
-                                   console.log(res.data)
-                              })
+                              this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
                               this.swal.fire('Hooray!','Changes has been saved', 'success')
                               this.discardRecord()
                          } else if(result.isDenied) {
@@ -296,23 +296,54 @@ export default {
           editRecord(val) {
                this.editedAccount = Object.assign({}, val)
                this.dialog = true
+               this.disabled = false
                this.editMode = 1
-               console.log(this.editedAccount)
           },
-          deleteRecord() {
-
+          deleteRecord(val) {
+               this.swal.fire({
+                    title: 'Are you sure?',
+                    text: val.Status == 1 ? "This account wil set to Inactive." : "This wil restore the account.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: val.Status == 1 ? 'Yes, delete it!' : 'Yes, restore it!',
+                    denyButtonText: 'Cancel'
+               }).then(result => {
+                    console.log(result)
+                    if(result.isConfirmed) {
+                         let body = {
+                              procedureName: 'ProcUserControl',
+                              values: [
+                                   val.EmployeeCode,
+                                   val.Username,
+                                   val.Fullname,
+                                   this.md5(this.newPassword),
+                                   val.IPAddr,
+                                   val.UserLevel,
+                                   this.moment().format('YYYY-MM-DD'),
+                                   this.moment().format('YYYY-MM-DD'),
+                                   this.userInfo.EmployeeCode,
+                                   0
+                              ]
+                         }
+                         this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
+                         this.swal.fire('Confirmed!','Changes has been saved', 'success')
+                         this.discardRecord()
+                    }
+               })
           },
           discardRecord() {
                this.editedAccount = {
                     EmployeeCode: '',
                     Username: '',
                     Fullname: '',
-                    Password: '',
                     IPAddr: '',
                     UserLevel: 0,
                }
+               this.loadAccounts()
+               this.newPassword = ''
                this.confirmedPassword = ''
                this.dialog = false
+               this.disabled = false
                this.editMode = 0
                this.$refs.form.resetValidation()
           }
