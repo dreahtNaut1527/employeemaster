@@ -122,7 +122,7 @@ export default {
                this.axios.get(`${this.api}/company/department/section/${this.userInfo.ShortName}`).then(res => {
                     this.secList = res.data
                      this.loadTeams()
-                    // this.loadShifts()
+                     this.loadShifts()
                })
           },
           loadTeams() {
