@@ -2,35 +2,35 @@
      <v-main>
           <v-breadcrumbs :items="breadCrumbsItems" divider="/"></v-breadcrumbs>
           <v-container>
-               <v-row align="left" justify="left" dense>
+               <v-row  dense>
                     <v-col cols="12" md="3">
                          <v-autocomplete
-                              v-model="Company"
-                              label="Company"
+                              v-model="department"
+                              :items="departmentList"
+                              placeholder="Department"
+                              clearable
                               outlined
                               dense
                          ></v-autocomplete>
-                    </v-col>
-                    <v-col cols="12" md="3">
-                         <v-autocomplete
-                              v-model="Department"
-                              label="Department"
-                              outlined
-                              dense
-                         ></v-autocomplete>
+                          <!-- item-text="DepartmentName"
+                              item-value="DepartmentName" -->
                     </v-col>
                      <v-col cols="12" md="3">
                          <v-autocomplete
-                              v-model="Section"
-                              label="Section"
+                              v-model="section"
+                              :items="sectionList"
+                              placeholder="Section"
+                              clearable
                               outlined
                               dense
                          ></v-autocomplete>
                     </v-col>
                     <v-col cols="12" md="3">
                          <v-autocomplete
-                              v-model="Team"
-                              label="Team"
+                              v-model="team"
+                              :items="teamList"
+                              placeholder="Team"
+                              clearable
                               outlined
                               dense
                          ></v-autocomplete>
@@ -38,26 +38,8 @@
                     </v-col>
                     <v-col cols="12" md="3">
                          <v-text-field
-                              v-model="Code"
-                              label="Code"
-                              outlined
-                              dense
-                         ></v-text-field>
-                         
-                    </v-col>
-                     <v-col cols="12" md="3">
-                         <v-text-field
-                              v-model="LastName"
-                              label="LastName"
-                              outlined
-                              dense
-                         ></v-text-field>
-                         
-                    </v-col>
-                     <v-col cols="12" md="3">
-                         <v-text-field
-                              v-model="FirstName"
-                              label="FirstName"
+                              v-model="search"
+                              placeholder="Name, Code . . "
                               outlined
                               dense
                          ></v-text-field>
@@ -76,6 +58,16 @@
 export default {
      data() {
           return {
+               department: '',
+               section: '',
+               team: '',
+               search: '',
+               deptList: [],
+               secList: [],
+               teamLists: [],
+               // departmentList: '',
+               // sectionList: '',
+               // teamList: '',
                breadCrumbsItems: [
                     {text: 'Main Data', disabled: false, href: '/employees'},
                     {text: 'Employees', disabled: true, href: '/employees'}
@@ -94,6 +86,51 @@ export default {
                ]
           }
 
+     },
+     created() {
+          this.loadDepartments()
+          this.loadSections()
+          this.loadTeams()
+     },
+     computed:{
+          departmentList() {
+               return this.deptList.map(rec => {
+                    return rec.DepartmentName
+               }).sort()
+          },
+          sectionList() {
+               return this.secList.map(rec => {
+                    return rec.SectionName
+               }).sort()
+          },
+          teamList() {
+               return this.teamLists.map(rec => {
+                    return rec.TeamName
+               }).sort()
+          },
+       
+
+     },
+     methods:{
+           loadDepartments() {
+               this.axios.get(`${this.api}/company/department/${this.userInfo.ShortName}`).then(res => {
+                    this.deptList = res.data
+                    this.loadSections()
+               })
+          },
+           loadSections() {
+               this.axios.get(`${this.api}/company/department/section/${this.userInfo.ShortName}`).then(res => {
+                    this.secList = res.data
+                     this.loadTeams()
+                    // this.loadShifts()
+               })
+          },
+          loadTeams() {
+               this.axios.get(`${this.api}/company/department/section/team/${this.userInfo.ShortName}`).then(res => {
+                    this.teamLists = res.data
+                    // this.loadDesignations()
+               })
+          },
      }
 }
 </script>
