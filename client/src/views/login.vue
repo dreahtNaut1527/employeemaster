@@ -92,13 +92,18 @@ export default {
                          this.$router.push('/profile')
                          break;
                     default:
-                         if(this.md5(this.password) == this.employeeDetails.Password) {
-                              store.commit('CHANGE_USER_INFO', this.employeeDetails)
-                              store.commit('CHANGE_USER_LOGGING', true)
-                              this.$router.push('/dashboard')
+                         if(this.employeeDetails.Status == 1) {
+                              if(this.md5(this.password) == this.employeeDetails.Password) {
+                                   store.commit('CHANGE_USER_INFO', this.employeeDetails)
+                                   store.commit('CHANGE_USER_LOGGING', true)
+                                   this.$router.push('/dashboard')
+                              } else {
+                                   this.alert = !this.alert
+                                   this.alertText = 'Password Incorrect!'
+                              }
                          } else {
                               this.alert = !this.alert
-                              this.alertText = 'Password Incorrect!'
+                              this.alertText = 'Account has been deactivate.'
                          }
                          break;
                }
