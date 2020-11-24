@@ -23,6 +23,8 @@
                <v-row>
                     <v-col>
                          <v-card>  
+                              <v-card-title>Employee Logtime</v-card-title>
+                              <v-divider></v-divider>
                               <v-row dense>
                                    <v-col cols="12" md="2" class="mb-n10">
                                         <v-card-text>
@@ -38,6 +40,7 @@
                                              <v-autocomplete
                                                   v-model="department"
                                                   :items="departmentList"
+                                                  placeholder="Department"
                                                   clearable
                                                   outlined
                                                   dense
@@ -49,6 +52,7 @@
                                              <v-autocomplete
                                                   v-model="section"
                                                   :items="sectionList"
+                                                  placeholder="Section"
                                                   clearable
                                                   outlined
                                                   dense
@@ -60,32 +64,32 @@
                                              <v-autocomplete
                                                   v-model="team"
                                                   :items="teamList"
+                                                  placeholder="Team"
                                                   clearable
                                                   outlined
                                                   dense
                                              ></v-autocomplete>
                                         </v-card-text>
                                    </v-col>
-                                   <v-col cols="12" md="2" class="mb-n10">
+                                   <!-- <v-col cols="12" md="2" class="mb-n10">
                                         <v-card-text>
                                              <v-autocomplete
                                                   v-model="options"
                                                   :items="optionList"
                                                   item-text="text"
                                                   item-value="value"
-                                                  clearable
                                                   outlined
                                                   dense
                                              ></v-autocomplete>
                                         </v-card-text>
-                                   </v-col>
+                                   </v-col> -->
                               </v-row>
                               <v-data-table
                                    :headers="headers"
                                    :items="filterData"
                                    :loading="loading"
                                    :search="employeeCode"
-                                   :items-per-page="8"
+                                   :items-per-page="6"
                                    :page.sync="page"
                                    loading-text="Loading Data. . .Please Wait"
                                    @page-count="pageCount = $event"
@@ -129,8 +133,8 @@ export default {
                team: '',
                pageCount: 0,
                page: 1,
-               options: {text: 'All', value: 0},
                logtime: [],
+               options: {text: 'All', value: 0},
                logtimeDate: this.moment().format('YYYY-MM-DD'),
                optionList: [
                     {text: 'All', value: 0},
@@ -163,7 +167,7 @@ export default {
                     return (
                          rec.DEPTDESC.includes(this.department || '') &&
                          rec.SECTIONDESC.includes(this.section || '') &&
-                         rec.TEAMDESC.includes(this.team || '')
+                         rec.TEAMDESC.includes(this.team || '')                         
                     )
                })
           },

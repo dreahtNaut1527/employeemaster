@@ -228,6 +228,35 @@ router.get('/shift/:compname', (req, res) => {
      })
 })
 
+router.get('/os', (req, res) => {
+     config.connect().then(() => {
+         const request = new mssql.Request(config)
+         request.query(`SELECT * FROM OperatingSystemView 
+                         ORDER BY Companies.CompanyCode, UserControl.EmployeeCode`, (err, results) => {
+             if(err) {
+                 res.send(err)
+             } else {
+                 res.send(results.recordset)
+             }
+             config.close()
+         })
+     })
+ })
+
+ router.get('/usercontrol', (req, res) => {
+      config.connect().then(() => {
+          const request = new mssql.Request(config)
+          request.query(`SELECT * FROM UserControlView`, (err, results) => {
+              if(err) {
+                  res.send(err)
+              } else {
+                  res.send(results.recordset)
+              }
+              config.close()
+          })
+      })
+  })
+
 router.post('/getaccount', (req, res) => {
      let data = JSON.parse(req.body.data)
      let values = data.values
@@ -251,6 +280,7 @@ router.post('/getaccount', (req, res) => {
           })
      })
 })
+
 
 // =====================================================================
 // ===================== Insert / Update Query (MSSQL)==================
