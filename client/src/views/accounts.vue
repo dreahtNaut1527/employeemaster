@@ -32,7 +32,6 @@
                          :items="filterData"
                          :loading="loading"
                          :search="search"
-                         :items-per-page="6"
                          :page.sync="page"
                          loading-text="Loading Data. . .Please Wait"
                          @page-count="pageCount = $event"
