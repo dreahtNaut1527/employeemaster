@@ -15,14 +15,6 @@
                                              dense
                                         ></v-select>
                                    </v-col>
-                                   <v-col cols="12" md="4">
-                                        <v-text-field
-                                             v-model="search"
-                                             placeholder="Name, Code . . "
-                                             outlined
-                                             dense
-                                        ></v-text-field>
-                                   </v-col>
                               <v-spacer></v-spacer>
                               <v-btn @click="dialog = !dialog" color="primary"><v-icon left>mdi-plus</v-icon>New</v-btn>
                               </v-row>
@@ -31,7 +23,7 @@
                          :headers="headers" 
                          :items="filterData"
                          :loading="loading"
-                         :search="search"
+                         :search="searchData"
                          :page.sync="page"
                          loading-text="Loading Data. . .Please Wait"
                          @page-count="pageCount = $event"
@@ -178,7 +170,6 @@ export default {
                pageCount: 0,
                page: 1,
                editMode: 0,
-               search: '',
                newPassword: '',
                confirmedPassword: '',
                accounts: [],

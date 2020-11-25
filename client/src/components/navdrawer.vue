@@ -65,13 +65,7 @@
                     placeholder="Search"
                     @keyup="getSearchData()"
                ></v-text-field>
-               <v-btn icon>        
-                    <v-icon small>mdi-bell</v-icon>
-                    <v-badge
-                         color="error"
-                         content="10"
-                    ></v-badge>
-               </v-btn>
+               <notifications />    
                <v-btn @click="logout()" icon>
                     <v-icon small>mdi-logout</v-icon>
                </v-btn>
@@ -80,7 +74,9 @@
 </template>
 
 <script>
+import notifications from '@/components/notifications'
 import store from '@/store'
+
 export default {
      data() {
           return {
@@ -204,6 +200,9 @@ export default {
           dark() {
                this.changeTheme()
           }
+     },
+     components: {
+          notifications
      }
 }
 </script>

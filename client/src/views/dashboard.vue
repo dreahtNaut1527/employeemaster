@@ -15,7 +15,6 @@
                                    <v-spacer></v-spacer>
                                    <v-icon x-large>{{item.icon}}</v-icon>
                               </v-toolbar>
-                              <!-- <v-divider class="mx-3"></v-divider> -->
                               <v-card-text>{{item.text}}</v-card-text>
                          </v-card>
                     </v-col>
@@ -25,18 +24,16 @@
                          <v-card>  
                               <v-card-title>Employee Logtime</v-card-title>
                               <v-divider></v-divider>
-                              <v-row dense>
-                                   <v-col cols="12" md="2" class="mb-n10">
-                                        <v-card-text>
+                              <v-card-text>
+                                   <v-row class="mb-n10" dense>
+                                        <v-col cols="12" md="2">
                                              <datePicker
                                                   :menu="dateDialog"
                                                   dateLabel="Logtime Date"
                                                   :dateValue.sync="logtimeDate"
                                              ></datePicker>
-                                        </v-card-text>
-                                   </v-col>
-                                   <v-col v-if="userInfo.UserLevel == 9" cols="12" md="3" class="mb-n10">
-                                        <v-card-text>
+                                        </v-col>
+                                        <v-col v-if="userInfo.UserLevel == 9" cols="12" md="3">
                                              <v-autocomplete
                                                   v-model="department"
                                                   :items="departmentList"
@@ -45,10 +42,8 @@
                                                   outlined
                                                   dense
                                              ></v-autocomplete>
-                                        </v-card-text>
-                                   </v-col>
-                                   <v-col cols="12" md="3" class="mb-n10">
-                                        <v-card-text>
+                                        </v-col>
+                                        <v-col cols="12" md="3">
                                              <v-autocomplete
                                                   v-model="section"
                                                   :items="sectionList"
@@ -57,10 +52,8 @@
                                                   outlined
                                                   dense
                                              ></v-autocomplete>
-                                        </v-card-text>
-                                   </v-col>
-                                   <v-col cols="12" md="2" class="mb-n10">
-                                        <v-card-text>
+                                        </v-col>
+                                        <v-col cols="12" md="2">
                                              <v-autocomplete
                                                   v-model="team"
                                                   :items="teamList"
@@ -69,27 +62,25 @@
                                                   outlined
                                                   dense
                                              ></v-autocomplete>
-                                        </v-card-text>
-                                   </v-col>
-                                   <!-- <v-col cols="12" md="2" class="mb-n10">
-                                        <v-card-text>
-                                             <v-autocomplete
-                                                  v-model="options"
-                                                  :items="optionList"
-                                                  item-text="text"
-                                                  item-value="value"
-                                                  outlined
-                                                  dense
-                                             ></v-autocomplete>
-                                        </v-card-text>
-                                   </v-col> -->
-                              </v-row>
+                                        </v-col>
+                                        <!-- <v-col cols="12" md="2" class="mb-n10">
+                                                  <v-autocomplete
+                                                       v-model="options"
+                                                       :items="optionList"
+                                                       item-text="text"
+                                                       item-value="value"
+                                                       outlined
+                                                       dense
+                                                  ></v-autocomplete>
+                                        </v-col> -->
+                                   </v-row>
+                              </v-card-text>
                               <v-data-table
                                    :headers="headers"
                                    :items="filterData"
                                    :loading="loading"
-                                   :search="employeeCode"
-                                   :items-per-page="6"
+                                   :search="searchData"
+                                   :items-per-page="7"
                                    :page.sync="page"
                                    loading-text="Loading Data. . .Please Wait"
                                    @page-count="pageCount = $event"
@@ -127,20 +118,13 @@ export default {
           return {
                loading: true,
                dateDialog: false,
-               employeeCode: '',
                department: '',
                section: '',
                team: '',
                pageCount: 0,
                page: 1,
                logtime: [],
-               options: {text: 'All', value: 0},
                logtimeDate: this.moment().format('YYYY-MM-DD'),
-               optionList: [
-                    {text: 'All', value: 0},
-                    {text: 'Present', value: 1},
-                    {text: 'Absent', value: 2},
-               ],
                headers: [
                     {text: 'Code', value: 'EMPLCODE'},
                     {text: 'Name', value: 'EMPNAME'},
