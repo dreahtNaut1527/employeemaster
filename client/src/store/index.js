@@ -10,7 +10,8 @@ export default new Vuex.Store({
     isLoggedIn: false,
     darkMode: false,
     searchData: '',
-    navDrawerVal: false
+    navDrawerVal: false,
+    emplcode: ''
   },
   plugins: [
     createPersistedState() 
@@ -30,7 +31,10 @@ export default new Vuex.Store({
     },
     CHANGE_NAVDRAWER: (state, data) => {
       state.navDrawerVal = data
-    }
+    },
+    CHANGE_EMPLCODE: (state, data) => {
+      state.emplcode = data
+    },
   },
   actions: {
 

@@ -12,7 +12,8 @@ const plugins = {
                          'isLoggedIn', 
                          'darkMode', 
                          'searchData',
-                         'navDrawerVal'
+                         'navDrawerVal',
+                         'emplcode'
                     ])
                },
                methods: {
@@ -21,7 +22,8 @@ const plugins = {
                          'CHANGE_USER_LOGGING', 
                          'CHANGE_THEME', 
                          'CHANGE_SEARCHING',
-                         'CHANGE_NAVDRAWER'
+                         'CHANGE_NAVDRAWER',
+                         'CHANGE_EMPLCODE'
                     ])
                }
           })
