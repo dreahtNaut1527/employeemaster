@@ -173,6 +173,7 @@ export default {
                newPassword: '',
                confirmedPassword: '',
                accounts: [],
+               notifications: [],
                passwordRules: [
                     v => !!v || 'Password is required',
                     v => (v == this.newPassword) || 'Password do not match'
@@ -212,6 +213,12 @@ export default {
      },
      created() {
           this.loadAccounts()
+     },
+     sockets: {
+          notifications(data) {
+               console.log(data)
+               this.loadAccounts()
+          }
      },
      computed: {
           filterData() {
@@ -317,6 +324,7 @@ export default {
                          }
                          this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
                          this.swal.fire('Confirmed!','Changes has been saved', 'success')
+                         this.recordLogging('Deleted!')
                          this.discardRecord()
                     }
                })
@@ -336,7 +344,26 @@ export default {
                this.disabled = false
                this.editMode = 0
                this.$refs.form.resetValidation()
-          }
+          },
+          recordLogging(details) {
+               let body = {
+                    procedureName: 'ProcUserLogging',
+                    values: [
+                              this.$socket.id, 
+                              this.userInfo.EmployeeCode,
+                              `User: ${this.userInfo.EmployeeCode} ${details}`,
+                              this.moment().format('YYYY-MM-DD hh:mm:ss'),
+                              this.moment().format('YYYY-MM-DD hh:mm:ss'),
+                              this.userInfo.EmployeeCode,
+                         ]
+               }
+               this.notifications.push({
+                    id: this.$socket.id,
+                    user: this.userInfo.EmployeeCode
+               })
+               this.$socket.emit('notifications', this.notifications)
+               this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
+          }  
      }
 }
 </script>

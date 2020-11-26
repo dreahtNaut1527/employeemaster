@@ -132,7 +132,7 @@ export default {
                     id: this.$socket.id,
                     user: this.userInfo.EmployeeCode
                })
-               this.$socket.emit('loggedIn', this.onLineUsers)
+               // this.$socket.emit('loggedIn', this.onLineUsers)
                this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
           }  
      }

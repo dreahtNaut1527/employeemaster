@@ -9,7 +9,7 @@
      >
           <template v-slot:activator="{ on, attrs }">
                <v-btn 
-                    @click="menuDialog = !menuDialog" 
+                    @click="this.closeLogging()" 
                     v-bind="attrs"
                     v-on="on"
                     icon>    
@@ -17,13 +17,13 @@
                     <v-badge
                          v-if="notifications.length"
                          color="error"
-                         :title="notifications.length"
+                         :content="notifications.length"
                     ></v-badge>
                </v-btn>
           </template>
           <v-card>
                <v-list>
-                    <v-list-item v-for="(item, i) in onLineUsers" :key="i">
+                    <v-list-item v-for="(item, i) in notificationList" :key="i">
                          <v-list-item-content>
                               {{item}}
                          </v-list-item-content>
@@ -38,8 +38,7 @@ export default {
      data() {
           return {
                menuDialog: false,
-               onLineUsers: []
-
+               notificationList: []
           }
      },
      created() {
@@ -48,17 +47,39 @@ export default {
      sockets: {
           loggedIn(data) {
                this.onLineUsers = data
+          },
+          notifications(data) {
+               console.log(data)
           }
      },
      computed: {
           notifications() {
-               return this.onLineUsers.filter(rec => {
+               return this.notificationList.filter(rec => {
                     return rec
                })
           }
      },
      methods: {
-
+          loadLogging() {
+               this.axios.get(`${this.api}/logging`).then(res => {
+                    this.notificationList = res.data
+               })
+          },
+          closeLogging() {
+               this.menuDialog = !this.menuDialog
+               let body = {
+                    procedureName: 'ProcUserLogging',
+                    values: [
+                              this.$socket.id, 
+                              this.userInfo.EmployeeCode,
+                              `User: ${this.userInfo.EmployeeCode} logged in`,
+                              this.moment().format('YYYY-MM-DD hh:mm:ss'),
+                              this.moment().format('YYYY-MM-DD hh:mm:ss'),
+                              this.userInfo.EmployeeCode,
+                         ]
+               }
+               this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
+          }
      }
 }
 </script>

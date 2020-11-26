@@ -39,9 +39,9 @@ socketio.on('connection', (socket) => {
         socketio.emit('loggedIn', data)
     })
 
-    //call function for retrieving data
-    socket.on('chatMessage', (data) => {
-        socketio.emit('chatMessage', data)
+    //Notifications
+    socket.on('notifications', (data) => {
+        socketio.emit('notifications', data)
     })
 })
 

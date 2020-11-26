@@ -257,6 +257,25 @@ router.get('/os', (req, res) => {
       })
   })
 
+router.get('/logging', (req, res) => {
+     config.connect().then(() => {
+         const request = new mssql.Request(config)
+         request.query(`SELECT Logging.SocketId, 
+                               Logging.EmployeeCode, 
+                               EmployeeInformationView.EmployeeName, Logging.Details FROM Logging
+                         INNER JOIN EmployeeInformationView 
+                         ON EmployeeInformationView.EmployeeCode = Logging.EmployeeCode
+                         WHERE Logging.IsRead IS NULL`, (err, results) => {
+             if(err) {
+                 res.send(err)
+             } else {
+                 res.send(results.recordset)
+             }
+             config.close()
+         })
+     })
+ })
+
 router.post('/getaccount', (req, res) => {
      let data = JSON.parse(req.body.data)
      let values = data.values
@@ -280,6 +299,7 @@ router.post('/getaccount', (req, res) => {
           })
      })
 })
+
 
 
 // =====================================================================
