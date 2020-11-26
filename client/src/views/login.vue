@@ -54,12 +54,18 @@ export default {
                alertText: '',
                username: '',
                password: '',
-               employeeDetails: ''
+               employeeDetails: '',
+               onLineUsers: []
           }
      },
      created() {
           store.commit('CHANGE_USER_INFO', {})
           store.commit('CHANGE_USER_LOGGING', false)
+     },
+     sockets: {
+          loggedIn(data) {
+               this.onLineUsers = data
+          }
      },
      methods: {
           getUserInfo() {
@@ -89,6 +95,7 @@ export default {
                     case 0:   
                          store.commit('CHANGE_USER_INFO', this.employeeDetails)
                          store.commit('CHANGE_USER_LOGGING', true)
+                         this.recordLogging()
                          this.$router.push('/profile')
                          break;
                     default:
@@ -96,6 +103,7 @@ export default {
                               if(this.md5(this.password) == this.employeeDetails.Password) {
                                    store.commit('CHANGE_USER_INFO', this.employeeDetails)
                                    store.commit('CHANGE_USER_LOGGING', true)
+                                   this.recordLogging()
                                    this.$router.push('/dashboard')
                               } else {
                                    this.alert = !this.alert
@@ -107,7 +115,26 @@ export default {
                          }
                          break;
                }
-          }        
+          },
+          recordLogging() {
+               let body = {
+                    procedureName: 'ProcUserLogging',
+                    values: [
+                              this.$socket.id, 
+                              this.userInfo.EmployeeCode,
+                              `User: ${this.userInfo.EmployeeCode} logged in`,
+                              this.moment().format('YYYY-MM-DD hh:mm:ss'),
+                              this.moment().format('YYYY-MM-DD hh:mm:ss'),
+                              this.userInfo.EmployeeCode,
+                         ]
+               }
+               this.onLineUsers.push({
+                    id: this.$socket.id,
+                    user: this.userInfo.EmployeeCode
+               })
+               this.$socket.emit('loggedIn', this.onLineUsers)
+               this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
+          }  
      }
 }
 </script>

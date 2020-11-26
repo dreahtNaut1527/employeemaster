@@ -15,16 +15,17 @@
                     icon>    
                     <v-icon small>mdi-bell</v-icon>
                     <v-badge
+                         v-if="notifications.length"
                          color="error"
-                         content="10"
+                         :title="notifications.length"
                     ></v-badge>
                </v-btn>
           </template>
           <v-card>
                <v-list>
-                    <v-list-item v-for="n in 3" :key="n">
+                    <v-list-item v-for="(item, i) in onLineUsers" :key="i">
                          <v-list-item-content>
-                              {{n}}
+                              {{item}}
                          </v-list-item-content>
                     </v-list-item>
                </v-list>
@@ -36,8 +37,28 @@
 export default {
      data() {
           return {
-               menuDialog: false
+               menuDialog: false,
+               onLineUsers: []
+
           }
+     },
+     created() {
+          
+     },
+     sockets: {
+          loggedIn(data) {
+               this.onLineUsers = data
+          }
+     },
+     computed: {
+          notifications() {
+               return this.onLineUsers.filter(rec => {
+                    return rec
+               })
+          }
+     },
+     methods: {
+
      }
 }
 </script>

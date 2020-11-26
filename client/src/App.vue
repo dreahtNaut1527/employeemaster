@@ -12,7 +12,7 @@ import navfooter from './components/navfooter'
 export default {
      data() {
           return {
-
+               
           }
      },
      components: {

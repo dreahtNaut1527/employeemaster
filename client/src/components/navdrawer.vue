@@ -83,15 +83,34 @@ export default {
                user: '',
                dark: false,
                overlay: false,
+               isConnected: false,
                icon: 'mdi-weather-night',
                search: '',
-               navDrawerList: []
+               socketId: '',
+               navDrawerList: [],
+               onLineUsers: []
           }
      },
      created() {
           this.dark = store.state.darkMode
           this.user = store.state.userInfo
           this.getUserLevel()
+          this.socketId = this.$socket.id
+     },
+     sockets: {
+          connect() {
+               // Fired when the socket connects.
+               this.isConnected = true;
+               console.log("server connected");
+          },
+
+          disconnect() {
+               this.isConnected = false;
+               console.log("server disconnected");
+          },
+          loggedIn(data) {
+               this.onLineUsers = data
+          }
      },
      methods: {
           getSearchData() {
@@ -107,6 +126,7 @@ export default {
                store.commit('CHANGE_THEME', false)
                store.commit('CHANGE_USER_LOGGING', false)
                store.commit('CHANGE_NAVDRAWER', false)
+               this.setOffline()
                this.$router.push('/')
           },
           getUserLevel() {
@@ -194,6 +214,16 @@ export default {
                          }
                     })
                }
+          },
+          setOffline() {
+               let index = this.onLineUsers.findIndex(rec => {
+                    console.log(rec.id)
+                    if(rec.id == this.socketId) {
+                         return true
+                    }
+               })
+               this.onLineUsers.splice(index, 1)
+               this.$socket.emit('loggedIn', this.onLineUsers)
           }
      },
      watch: {
