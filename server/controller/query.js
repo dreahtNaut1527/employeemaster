@@ -8,7 +8,7 @@ const router = express.Router()
 // =====================================================================
 // ======================= Select Query (MSSQL)=========================
 // =====================================================================
-router.get('/company', (req, res) => {
+router.get('/companies', (req, res) => {
      config.connect().then(() => {
          const request = new mssql.Request(config)
          request.query(`SELECT ShortName FROM Companies`, (err, results) => {
@@ -264,8 +264,7 @@ router.get('/logging', (req, res) => {
                                Logging.EmployeeCode, 
                                EmployeeInformationView.EmployeeName, Logging.Details FROM Logging
                          INNER JOIN EmployeeInformationView 
-                         ON EmployeeInformationView.EmployeeCode = Logging.EmployeeCode
-                         WHERE Logging.IsRead IS NULL`, (err, results) => {
+                         ON EmployeeInformationView.EmployeeCode = Logging.EmployeeCode`, (err, results) => {
              if(err) {
                  res.send(err)
              } else {

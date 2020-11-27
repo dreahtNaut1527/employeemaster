@@ -39,7 +39,8 @@
                                    <v-icon>mdi-pencil</v-icon>
                               </v-btn>
                               <v-btn @click="deleteRecord(item)" icon>
-                                   <v-icon>mdi-delete</v-icon>
+                                   <v-icon v-if="item.Status == 1">mdi-delete</v-icon>
+                                   <v-icon v-else>mdi-restore</v-icon>
                               </v-btn>
                          </template>
                     </v-data-table>
@@ -215,9 +216,10 @@ export default {
           this.loadAccounts()
      },
      sockets: {
-          notifications(data) {
-               console.log(data)
-               this.loadAccounts()
+          notifications() {
+               setTimeout(() => {
+                    this.loadAccounts()
+               }, 1500);
           }
      },
      computed: {
@@ -235,6 +237,7 @@ export default {
      methods: {
           loadAccounts() {
                this.loading = true
+               this.accounts = []
                this.axios.get(`${this.api}/usercontrol`).then(res => {
                     this.accounts = res.data
                     this.loading = false
@@ -280,9 +283,11 @@ export default {
                                         1
                                    ]
                               }
-                              this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
-                              this.swal.fire('Hooray!','Changes has been saved', 'success')
-                              this.discardRecord()
+                              this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)}).then(() => {
+                                   this.swal.fire('Hooray!','Changes has been saved', 'success')
+                                   this.recordLogging(`updated an account`)
+                                   this.discardRecord()
+                              })
                          } else if(result.isDenied) {
                               this.discardRecord()
                               this.swal.fire('Oh no!', 'Changes are not saved', 'info')
@@ -291,7 +296,7 @@ export default {
                }
           },
           editRecord(val) {
-               this.editedAccount = Object.assign({}, val)
+               this.editedAccount = val
                this.dialog = true
                this.disabled = false
                this.editMode = 1
@@ -305,7 +310,6 @@ export default {
                     confirmButtonText: val.Status == 1 ? 'Yes, delete it!' : 'Yes, restore it!',
                     denyButtonText: 'Cancel'
                }).then(result => {
-                    console.log(result)
                     if(result.isConfirmed) {
                          let body = {
                               procedureName: 'ProcUserControl',
@@ -322,10 +326,11 @@ export default {
                                    0
                               ]
                          }
-                         this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
-                         this.swal.fire('Confirmed!','Changes has been saved', 'success')
-                         this.recordLogging('Deleted!')
-                         this.discardRecord()
+                         this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)}).then(() => {
+                              this.swal.fire('Confirmed!','Changes has been saved', 'success')
+                              this.recordLogging(`updated an account`)
+                              this.discardRecord()
+                         })
                     }
                })
           },
@@ -337,13 +342,14 @@ export default {
                     IPAddr: '',
                     UserLevel: 0,
                }
-               this.loadAccounts()
+               if(this.dialog) {
+                    this.$refs.form.resetValidation()
+               }
                this.newPassword = ''
                this.confirmedPassword = ''
                this.dialog = false
                this.disabled = false
                this.editMode = 0
-               this.$refs.form.resetValidation()
           },
           recordLogging(details) {
                let body = {
@@ -358,11 +364,12 @@ export default {
                          ]
                }
                this.notifications.push({
-                    id: this.$socket.id,
-                    user: this.userInfo.EmployeeCode
+                         id: this.$socket.id
                })
                this.$socket.emit('notifications', this.notifications)
-               this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
+               this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)}).then(res => {
+                    console.log(res.data)
+               })
           }  
      }
 }

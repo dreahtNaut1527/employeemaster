@@ -62,11 +62,6 @@ export default {
           store.commit('CHANGE_USER_INFO', {})
           store.commit('CHANGE_USER_LOGGING', false)
      },
-     sockets: {
-          loggedIn(data) {
-               this.onLineUsers = data
-          }
-     },
      methods: {
           getUserInfo() {
                this.alert = false
@@ -103,7 +98,7 @@ export default {
                               if(this.md5(this.password) == this.employeeDetails.Password) {
                                    store.commit('CHANGE_USER_INFO', this.employeeDetails)
                                    store.commit('CHANGE_USER_LOGGING', true)
-                                   this.recordLogging()
+                                   // this.recordLogging()
                                    this.$router.push('/dashboard')
                               } else {
                                    this.alert = !this.alert

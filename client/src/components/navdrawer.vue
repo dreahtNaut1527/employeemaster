@@ -70,15 +70,6 @@
                     <v-icon small>mdi-logout</v-icon>
                </v-btn>
           </v-app-bar>
-          <v-snackbar
-               v-model="snackBar"
-               transition="scroll-x-reverse-transition"
-               :timeout="2000"
-               bottom
-               right
-          >
-               hello
-          </v-snackbar>
      </div>    
 </template>
 
@@ -93,7 +84,6 @@ export default {
                dark: false,
                overlay: false,
                isConnected: false,
-               snackBar: false,
                icon: 'mdi-weather-night',
                search: '',
                socketId: '',
@@ -120,10 +110,6 @@ export default {
           },
           loggedIn(data) {
                this.onLineUsers = data
-          },
-          notifications(data) {
-               console.log(data)
-               this.snackBar = !this.snackBar
           }
      },
      methods: {

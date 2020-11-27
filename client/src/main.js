@@ -12,7 +12,9 @@ import store from './store'
 import vuetify from './plugins/vuetify'
 import mixins from './plugins/mixins'
 
-export const SocketInstance = socketio('http://asd_sql:8700');
+// export const SocketInstance = socketio('http://asd_sql:8700');
+
+export const SocketInstance = socketio('http://localhost:8700');
 
 // Vue Config 
 Vue.config.productionTip = false
