@@ -85,7 +85,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped> 
      .v-list{
           height: 220px;
           overflow-y:auto
