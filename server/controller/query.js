@@ -231,8 +231,7 @@ router.get('/shift/:compname', (req, res) => {
 router.get('/os', (req, res) => {
      config.connect().then(() => {
          const request = new mssql.Request(config)
-         request.query(`SELECT * FROM OperatingSystemView 
-                         ORDER BY Companies.CompanyCode, UserControl.EmployeeCode`, (err, results) => {
+         request.query(`SELECT * FROM OperatingSystemView`, (err, results) => {
              if(err) {
                  res.send(err)
              } else {

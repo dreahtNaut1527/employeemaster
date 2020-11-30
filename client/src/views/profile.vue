@@ -25,7 +25,7 @@
                          <v-tabs v-model="tab" centered icons-and-text grow>
                               <v-tabs-slider></v-tabs-slider>
                               <v-tab v-for="(item, i) in tabsHeader" :key="i" :href="`#${item.value}`">
-                                   {{item.label}} <v-icon left>{{item.icon}}</v-icon>
+                                   {{item.label}} <v-icon :color="item.color" left>{{item.icon}}</v-icon>
                               </v-tab>
                          </v-tabs>
                          <v-tabs-items v-model="tab">
@@ -371,6 +371,15 @@
                                                        dense
                                                   ></v-text-field>
                                              </v-col>
+                                             <v-col cols="12" md="12">
+                                                  <v-text-field
+                                                       v-model="information.StaffCode"
+                                                       append-icon="mdi-account-hard-hat"
+                                                       label="Staff Code"
+                                                       outlined
+                                                       dense
+                                                  ></v-text-field>
+                                             </v-col>
                                         </v-row>
                                    </v-card-text>
                               </v-tab-item>
@@ -427,10 +436,10 @@ export default {
                     denyButtonText: `Don't Save`
                },
                tabsHeader: [
-                    {label: 'Employee Information', icon:'mdi-account', value: 1},
-                    {label: 'Other Information', icon:'mdi-card-bulleted', value: 2},
-                    {label: 'Contact Person', icon:'mdi-card-account-details', value: 3},
-                    {label: 'Work Information', icon:'mdi-briefcase', value: 4}
+                    {label: 'Employee Information', icon:'mdi-account', value: 1, color: 'primary'},
+                    {label: 'Other Information', icon:'mdi-card-bulleted', value: 2, color: 'warning'},
+                    {label: 'Contact Person', icon:'mdi-card-account-details', value: 3, color: 'error'},
+                    {label: 'Work Information', icon:'mdi-briefcase', value: 4, color: 'success'}
                ],
                marStatus: [
                     {label: 'Single', value: 'S'},
@@ -442,7 +451,11 @@ export default {
      },
      created() {
           this.loadInformation()
-          this.loadOperatingSystem()
+     },
+     sockets: {
+          connect() {
+               this.loadInformation()
+          }
      },
      methods: {
           loadInformation() {
@@ -497,6 +510,7 @@ export default {
           loadEducations() {
                this.axios.get(`${this.api}/education`).then(res => {
                     this.educationList = res.data
+                    this.loadOperatingSystem()
                })
           },
           loadShifts() {
@@ -507,7 +521,6 @@ export default {
           loadOperatingSystem() {
                this.axios.get(`${this.api}/os`).then(res => {
                     this.operatingSystem = res.data
-                    console.log(this.operatingSystem)
                })
           },
           saveRecord() {

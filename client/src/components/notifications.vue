@@ -58,9 +58,9 @@ export default {
           loggedIn(data) {
                this.onLineUsers = data
           },
-          notifications() {
-               this.loadLogging()
-          }
+          // notifications() {
+          //      this.loadLogging()
+          // }
      },
      computed: {
           notifications() {
