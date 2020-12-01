@@ -4,6 +4,7 @@ const bodyparser = require('body-parser')
 const dotenv = require('dotenv')
 const helmet = require('helmet')
 const query = require('./controller/query')
+const pes = require('./controller/pes.query')
 
 dotenv.config()
 
@@ -24,7 +25,7 @@ const server = app.listen(port, () => {
     })
     const socketio = require('socket.io')(server, {
         cors: {
-            origin: "http://localhost:1000", // process.env.URL
+            origin: ["http://localhost:1000", "http://localhost:4001"], // process.env.URL
             methods: ["GET", "POST"]
     }
 })
@@ -45,4 +46,5 @@ socketio.on('connection', (socket) => {
     })
 })
 
-app.use('/api',query)
+app.use('/api', query)
+app.use('/pes', pes)
