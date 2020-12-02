@@ -8,6 +8,21 @@ const router = express.Router()
 // =====================================================================
 // ======================= Select Query (MSSQL)=========================
 // =====================================================================
+router.get('/dayofflist', (req, res) => {
+     let company = req.params.company
+     config.connect().then(() => {
+         const request = new mssql.Request(config)
+         request.query(`SELECT * FROM DayOffList`, (err, results) => {
+             if(err) {
+                 res.send(err)
+             } else {
+                 res.send(results.recordset)
+             }
+             config.close()
+         })
+     })
+ })
+
 router.get('/dayoff/:company', (req, res) => {
      let company = req.params.company
      config.connect().then(() => {
@@ -22,6 +37,24 @@ router.get('/dayoff/:company', (req, res) => {
          })
      })
  })
+
+ router.get('/dayoff/:company/:department', (req, res) => {
+      let company = req.params.company
+      let department = req.params.department
+      config.connect().then(() => {
+          const request = new mssql.Request(config)
+          request.query(`SELECT * FROM DayOffView 
+                         WHERE lower(ShortName) = lower('${company}')
+                         AND lower(DepartmentName) = lower('${department}')`, (err, results) => {
+              if(err) {
+                  res.send(err)
+              } else {
+                  res.send(results.recordset)
+              }
+              config.close()
+          })
+      })
+  })
 
 // =====================================================================
 // ====================== Execute Procedure (MSSQL)=====================

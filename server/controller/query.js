@@ -274,6 +274,24 @@ router.get('/logging', (req, res) => {
      })
  })
 
+ router.post('/shifts/:company', (req, res) => {
+      let company = req.params.company
+      let data = JSON.parse(req.body.data)
+      config.connect().then(() => {
+          const request = new mssql.Request(config)
+          request.query(`SELECT * FROM ShiftView 
+                         WHERE lower(ShortName) = lower('${company}')
+                         AND ShiftID NOT IN(${data})`, (err, results) => {
+              if(err) {
+                  res.send(err)
+              } else {
+                  res.send(results.recordset)
+              }
+              config.close()
+          })
+      })
+  })
+
 router.post('/getaccount', (req, res) => {
      let data = JSON.parse(req.body.data)
      let values = data.values
