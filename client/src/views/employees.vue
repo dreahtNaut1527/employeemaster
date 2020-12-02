@@ -3,7 +3,8 @@
           <v-breadcrumbs :items="breadCrumbsItems" divider="/"></v-breadcrumbs>
           <v-container>
                <v-row  dense>
-                    <v-col cols="12" md="3">
+                    <v-col v-if="userInfo.UserLevel == 9" cols="12" md="3">
+                        
                          <v-autocomplete
                               v-model="department"
                               :items="departmentList"
@@ -71,6 +72,7 @@ import store from '@/store'
 export default {
      data() {
           return {
+               
                department: '',
                section: '',
                team: '',
@@ -113,13 +115,19 @@ export default {
                     return rec.DepartmentName
                }).sort()
           },
-          sectionList() {
-               return this.secList.map(rec => {
-                    return rec.SectionName
+          sectionList() { 
+               return this.secList.filter(rec => {
+                    // return rec.SectionName
+                    console.log(this.userInfo.DepartmentName)
+                    
+                    return (
+                         rec.DepartmentName.includes(this.userInfo.DepartmentName || ''))
                }).sort()
+        
+               
           },
           teamdata() {
-               return this.teamList.filter(rec => {
+               return this.teamList.map(rec => {
                     return rec.TeamName
                }).sort()
           },
@@ -137,6 +145,7 @@ export default {
      },
      methods:{
            loadDepartments() {
+             
                this.axios.get(`${this.api}/company/department/${this.userInfo.ShortName}`).then(res => {
                     this.deptList = res.data
                     this.loadSections()
