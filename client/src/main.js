@@ -12,9 +12,10 @@ import store from './store'
 import vuetify from './plugins/vuetify'
 import mixins from './plugins/mixins'
 
-// export const SocketInstance = socketio('http://asd_sql:8700');
+const url = process.env.VUE_APP_LOCAL_SERVER
+// const url = process.env.VUE_APP_SERVER
 
-export const SocketInstance = socketio('http://ADMINSQL1:8700');
+export const SocketInstance = socketio(url);
 
 // Vue Config 
 Vue.config.productionTip = false

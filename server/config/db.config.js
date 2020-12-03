@@ -8,7 +8,7 @@ const connect = function() {
         user: process.env.USER,
         password: process.env.PASS,
         server: process.env.SERVER,
-        database: process.env.DATABASE,
+        database: process.env.GRP_DATABASE,
         options: {
             encrypt: false,
             enableArithAbort: true
