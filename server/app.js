@@ -16,30 +16,24 @@ app.use(bodyparser.urlencoded({ extended: false }))
 app.use(bodyparser.json())
 app.use(helmet())
 
-// app.listen(port, () => {
-//     console.log(`Server running at ${port}`)
-// })
-
 const server = app.listen(port, () => {
         console.log(`Server running at ${port}`)
     })
-    const socketio = require('socket.io')(server, {
-        cors: {
-            origin: [
-                "http://localhost:1000", 
-                "http://localhost:2000"
-            ], // process.env.URL
-            methods: ["GET", "POST"]
+    
+const socketio = require('socket.io')(server, {
+    cors: {
+        origin: [
+            process.env.URL, 
+            process.env.PES_URL
+        ], 
+        methods: ["GET", "POST"]
     }
 })
 
-// const users = []
 socketio.on('connection', (socket) => {
-    // console.log(socket.id)
 
     //User Logged In
     socket.on('loggedIn', (data) => {
-        // users.push(data)
         socketio.emit('loggedIn', data)
     })
 
