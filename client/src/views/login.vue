@@ -27,10 +27,10 @@
                                              outlined
                                              rounded
                                              v-show="hidePassword"
-                                             @keydown.enter="loggedIn()"
+                                             @keydown.enter="checkUserRights()"
                                         ></v-text-field>
                                         <v-card-actions>
-                                             <v-btn @click="loggedIn()" color="primary" block>Login</v-btn>
+                                             <v-btn @click="checkUserRights()" color="primary" block>Login</v-btn>
                                         </v-card-actions>
                                    </v-form>
                               </v-card-text>
@@ -49,7 +49,7 @@
                               {{dialogText}}
                          </v-card-text>
                          <v-card-actions>
-                              <v-btn @click="clientLogIn()" :color="dialogColor" block dark>close</v-btn>
+                              <v-btn @click="userLoggedIn()" :color="dialogColor" block dark>close</v-btn>
                          </v-card-actions>
                     </v-card-text>
                </v-card>
@@ -109,62 +109,27 @@ export default {
                     this.alertText = 'Please input username'
                }
           },
-          loggedIn() {
-               this.alert = false
-               switch(this.employeeDetails.UserLevel) {
-                    case 0:  
-                         if(this.employeeDetails.IPAddress == "" || this.employeeDetails.IPAddress == null) {
-                              this.dialog = true
-                              this.dialogTitle = 'Welcome new user'
-                              this.dialogText = `Please update your information`
-                              this.dialogIcon = 'mdi-information'
-                              this.dialogColor = 'info'
-                         } else if(this.employeeDetails.IPAddress != this.myIpAddress.IPADDRESS) {
-                              this.dialog = true
-                              this.dialogTitle = 'Warning'
-                              this.dialogText = `Your using someone else device. Please login to your account`
-                              this.dialogIcon = 'mdi-alert'
-                              this.dialogColor = 'error'
-                         } else {
-                              this.clientLogIn()
-                         }
-                    break;
-                    default:
-                         if(this.employeeDetails.Status == 1) {
-                              
-                              if(this.employeeDetails.IPAddress == "" || this.employeeDetails.IPAddress == null) {
-                                   this.dialog = true
-                                   this.dialogTitle = 'Welcome new user'
-                                   this.dialogText = `Please update your information`
-                                   this.dialogIcon = 'mdi-information'
-                                   this.dialogColor = 'info'
-                              } else if(this.employeeDetails.IPAddress != this.myIpAddress.IPADDRESS) {
-                                   this.dialog = true
-                                   this.dialogTitle = 'Warning'
-                                   this.dialogText = `Your using someone else device. Please login to your account`
-                                   this.dialogIcon = 'mdi-alert'
-                                   this.dialogColor = 'error'
-                              } else {
-                                   if(this.md5(this.password) == this.employeeDetails.Password) {
-                                        store.commit('CHANGE_USER_INFO', this.employeeDetails)
-                                        store.commit('CHANGE_USER_LOGGING', true)
-                                        this.$router.push('/dashboard')
-                                   } else {
-                                        this.alert = !this.alert
-                                        this.alertText = 'Password Incorrect!'
-                                   }
-                              }
-                         } else {
-                              this.alert = !this.alert
-                              this.alertText = 'Account has been deactivate.'
-                         }
-                         break;
+          checkUserRights() {
+               if(this.employeeDetails.IPAddress == "" || this.employeeDetails.IPAddress == null) {
+                    this.dialog = true
+                    this.dialogTitle = 'Welcome new user'
+                    this.dialogText = `Please update your information`
+                    this.dialogIcon = 'mdi-information'
+                    this.dialogColor = 'info'
+               } else if(this.employeeDetails.IPAddress != this.myIpAddress.IPADDRESS) {
+                    this.dialog = true
+                    this.dialogTitle = 'Warning'
+                    this.dialogText = `Your using someone else device. Please login to your account`
+                    this.dialogIcon = 'mdi-alert'
+                    this.dialogColor = 'error'
+               } else {
+                    this.userLoggedIn()
                }
           },
-          clientLogIn() {
+          userLoggedIn() {
                switch (this.employeeDetails.UserLevel) {
-                    case 0:
-                         if(this.employeeDetails.IPAddress == this.myIpAddress.IPADDRESS) {
+                    case 0: // staff account
+                         if(this.employeeDetails.IPAddress == null || this.employeeDetails.IPAddress == this.myIpAddress.IPADDRESS) {
                               store.commit('CHANGE_USER_INFO', this.employeeDetails)
                               store.commit('CHANGE_USER_LOGGING', true)
                               this.$router.push('/profile')
@@ -172,15 +137,15 @@ export default {
                               this.dialog = false
                          }
                          break;
+               
                     default:
                          if(this.employeeDetails.Status == 1) {
-                              if(this.md5(this.password) == this.employeeDetails.Password) {
+                              if(this.employeeDetails.IPAddress == null || this.employeeDetails.IPAddress == this.myIpAddress.IPADDRESS) {
                                    store.commit('CHANGE_USER_INFO', this.employeeDetails)
                                    store.commit('CHANGE_USER_LOGGING', true)
                                    this.$router.push('/dashboard')
                               } else {
-                                   this.alert = !this.alert
-                                   this.alertText = 'Password Incorrect!'
+                                   this.dialog = false
                               }
                          } else {
                               this.alert = !this.alert
