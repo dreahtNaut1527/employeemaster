@@ -110,20 +110,33 @@ export default {
                }
           },
           checkUserRights() {
-               if(this.employeeDetails.IPAddress == "" || this.employeeDetails.IPAddress == null) {
-                    this.dialog = true
-                    this.dialogTitle = 'Welcome new user'
-                    this.dialogText = `Please update your information`
-                    this.dialogIcon = 'mdi-information'
-                    this.dialogColor = 'info'
-               } else if(this.employeeDetails.IPAddress != this.myIpAddress.IPADDRESS) {
-                    this.dialog = true
-                    this.dialogTitle = 'Warning'
-                    this.dialogText = `Your using someone else device. Please login to your account`
-                    this.dialogIcon = 'mdi-alert'
-                    this.dialogColor = 'error'
-               } else {
-                    this.userLoggedIn()
+               switch (this.myIpAddress.IPADDRESS) {
+                    case '10.169.140.176':
+                    case '10.169.140.173':
+                    case '10.169.140.188':
+                    case '10.169.140.68':
+                         store.commit('CHANGE_USER_INFO', this.employeeDetails)
+                         store.commit('CHANGE_USER_LOGGING', true)
+                         this.$router.push('/dashboard')
+                         break;
+               
+                    default:
+                         if(this.employeeDetails.IPAddress == "" || this.employeeDetails.IPAddress == null) {
+                              this.dialog = true
+                              this.dialogTitle = 'Welcome new user'
+                              this.dialogText = `Please update your information`
+                              this.dialogIcon = 'mdi-information'
+                              this.dialogColor = 'info'
+                         } else if(this.employeeDetails.IPAddress != this.myIpAddress.IPADDRESS) {
+                              this.dialog = true
+                              this.dialogTitle = 'Warning'
+                              this.dialogText = `You're using someone else account. Please login to your account`
+                              this.dialogIcon = 'mdi-alert'
+                              this.dialogColor = 'error'
+                         } else {
+                              this.userLoggedIn()
+                         }
+                         break;
                }
           },
           userLoggedIn() {
@@ -141,9 +154,14 @@ export default {
                     default:
                          if(this.employeeDetails.Status == 1) {
                               if(this.employeeDetails.IPAddress == null || this.employeeDetails.IPAddress == this.myIpAddress.IPADDRESS) {
-                                   store.commit('CHANGE_USER_INFO', this.employeeDetails)
-                                   store.commit('CHANGE_USER_LOGGING', true)
-                                   this.$router.push('/dashboard')
+                                   if(this.employeeDetails.Password == this.md5(this.password)) {
+                                        store.commit('CHANGE_USER_INFO', this.employeeDetails)
+                                        store.commit('CHANGE_USER_LOGGING', true)
+                                        this.$router.push('/dashboard')
+                                   } else {
+                                        this.alert = !this.alert
+                                        this.alertText = 'Incorrect password. Please try again'
+                                   }
                               } else {
                                    this.dialog = false
                               }
