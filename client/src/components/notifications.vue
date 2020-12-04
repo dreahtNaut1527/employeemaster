@@ -27,7 +27,7 @@
                     <v-toolbar-title>Notifications</v-toolbar-title>
                </v-toolbar>
                <v-list dense>
-                    <v-subheader>Today</v-subheader>
+                    <!-- <v-subheader>Today</v-subheader>
                     <v-list-item v-for="(item, i) in notificationList" :key="i">
                          <v-list-item-avatar>
                               <v-img :src="`http://asd_sql:8080/photos/${item.EmployeeCode}.jpg`"></v-img>
@@ -35,6 +35,13 @@
                          <v-list-item-content>
                               <v-list-item-title>{{item.EmployeeName}}</v-list-item-title>
                               <v-list-item-subtitle>{{item.Details}}</v-list-item-subtitle>
+                         </v-list-item-content>
+                    </v-list-item> -->
+                    <v-subheader>Today</v-subheader>
+                    <v-list-item v-for="(item, i) in notificationList" :key="i">
+                         <v-list-item-content>
+                              <v-list-item-title>{{item.title}}</v-list-item-title>
+                              <v-list-item-subtitle>{{item.message}}</v-list-item-subtitle>
                          </v-list-item-content>
                     </v-list-item>
                </v-list>
@@ -55,12 +62,13 @@ export default {
           
      },
      sockets: {
-          loggedIn(data) {
-               this.onLineUsers = data
+          connect() {
+               console.log('connected na tayo')
           },
-          // notifications() {
-          //      this.loadLogging()
-          // }
+          showNotifications(data) {
+               this.notificationList.push(data)
+               this.totalNotifs = this.notificationList.length
+          }
      },
      computed: {
           notifications() {
@@ -70,16 +78,11 @@ export default {
           }
      },
      methods: {
-          loadLogging() {
-               this.axios.get(`${this.api}/logging`).then(res => {
-                    this.notificationList = res.data
-                    this.totalNotifs = this.notificationList.length
-               })
-          },
-          closeLogging() {
-               this.menuDialog = !this.menuDialog
+          
+     },
+     watch: {
+          menuDialog() {
                this.totalNotifs = 0
-               // this.$socket.emit('notifications', this.notifications)
           }
      }
 }

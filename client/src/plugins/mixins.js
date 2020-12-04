@@ -4,7 +4,8 @@ const plugins = {
      install(Vue) {
           Vue.mixin({
                data: () => ({
-                    api: process.env.VUE_APP_URL
+                    api: process.env.VUE_APP_URL,
+                    asd_sql: process.env.VUE_APP_ASD_SQL
                }),
                computed: {
                     ...mapState([

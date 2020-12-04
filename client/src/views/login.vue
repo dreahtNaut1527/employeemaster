@@ -38,15 +38,33 @@
                     </v-col>
                </v-row>
           </v-container>
+          <v-dialog v-model="dialog" width="400" persistent>
+               <v-card class="rounded-lg" light>
+                    <v-toolbar :color="dialogColor" flat>
+                         <v-icon x-large dark>mdi-information</v-icon>
+                    </v-toolbar>
+                    <v-card-text class="text-center">
+                         <v-card-text>
+                              <v-card-text class="headline">{{dialogTitle}}</v-card-text>
+                              {{dialogText}}
+                         </v-card-text>
+                         <v-card-actions>
+                              <v-btn @click="clientLogIn()" :color="dialogColor" block dark>close</v-btn>
+                         </v-card-actions>
+                    </v-card-text>
+               </v-card>
+          </v-dialog>
      </v-main>
 </template>
 
 
 <script>
 import store from '@/store'
+
 export default {
      data() {
           return {
+               dialog: false,
                alert: false,
                valid: false,
                remember: false,
@@ -54,13 +72,20 @@ export default {
                alertText: '',
                username: '',
                password: '',
+               dialogTitle: '',
+               dialogText: '',
+               dialogIcon: '',
+               dialogColor: '',
                employeeDetails: '',
-               onLineUsers: []
+               myIpAddress: {}
           }
      },
      created() {
           store.commit('CHANGE_USER_INFO', {})
           store.commit('CHANGE_USER_LOGGING', false)
+          this.axios.get(`${this.asd_sql}/getclientip.php`).then(res => {
+               this.myIpAddress = res.data
+          })
      },
      methods: {
           getUserInfo() {
@@ -87,18 +112,71 @@ export default {
           loggedIn() {
                this.alert = false
                switch(this.employeeDetails.UserLevel) {
-                    case 0:   
-                         store.commit('CHANGE_USER_INFO', this.employeeDetails)
-                         store.commit('CHANGE_USER_LOGGING', true)
-                         this.recordLogging()
-                         this.$router.push('/profile')
+                    case 0:  
+                         if(this.employeeDetails.IPAddress == "" || this.employeeDetails.IPAddress == null) {
+                              this.dialog = true
+                              this.dialogTitle = 'Welcome new user'
+                              this.dialogText = `Please update your information`
+                              this.dialogIcon = 'mdi-information'
+                              this.dialogColor = 'info'
+                         } else if(this.employeeDetails.IPAddress != this.myIpAddress.IPADDRESS) {
+                              this.dialog = true
+                              this.dialogTitle = 'Warning'
+                              this.dialogText = `Your using someone else device. Please login to your account`
+                              this.dialogIcon = 'mdi-alert'
+                              this.dialogColor = 'error'
+                         } else {
+                              this.clientLogIn()
+                         }
+                    break;
+                    default:
+                         if(this.employeeDetails.Status == 1) {
+                              
+                              if(this.employeeDetails.IPAddress == "" || this.employeeDetails.IPAddress == null) {
+                                   this.dialog = true
+                                   this.dialogTitle = 'Welcome new user'
+                                   this.dialogText = `Please update your information`
+                                   this.dialogIcon = 'mdi-information'
+                                   this.dialogColor = 'info'
+                              } else if(this.employeeDetails.IPAddress != this.myIpAddress.IPADDRESS) {
+                                   this.dialog = true
+                                   this.dialogTitle = 'Warning'
+                                   this.dialogText = `Your using someone else device. Please login to your account`
+                                   this.dialogIcon = 'mdi-alert'
+                                   this.dialogColor = 'error'
+                              } else {
+                                   if(this.md5(this.password) == this.employeeDetails.Password) {
+                                        store.commit('CHANGE_USER_INFO', this.employeeDetails)
+                                        store.commit('CHANGE_USER_LOGGING', true)
+                                        this.$router.push('/dashboard')
+                                   } else {
+                                        this.alert = !this.alert
+                                        this.alertText = 'Password Incorrect!'
+                                   }
+                              }
+                         } else {
+                              this.alert = !this.alert
+                              this.alertText = 'Account has been deactivate.'
+                         }
+                         break;
+               }
+          },
+          clientLogIn() {
+               switch (this.employeeDetails.UserLevel) {
+                    case 0:
+                         if(this.employeeDetails.IPAddress == this.myIpAddress.IPADDRESS) {
+                              store.commit('CHANGE_USER_INFO', this.employeeDetails)
+                              store.commit('CHANGE_USER_LOGGING', true)
+                              this.$router.push('/profile')
+                         } else {
+                              this.dialog = false
+                         }
                          break;
                     default:
                          if(this.employeeDetails.Status == 1) {
                               if(this.md5(this.password) == this.employeeDetails.Password) {
                                    store.commit('CHANGE_USER_INFO', this.employeeDetails)
                                    store.commit('CHANGE_USER_LOGGING', true)
-                                   // this.recordLogging()
                                    this.$router.push('/dashboard')
                               } else {
                                    this.alert = !this.alert
@@ -110,26 +188,7 @@ export default {
                          }
                          break;
                }
-          },
-          recordLogging() {
-               let body = {
-                    procedureName: 'ProcUserLogging',
-                    values: [
-                              this.$socket.id, 
-                              this.userInfo.EmployeeCode,
-                              `User: ${this.userInfo.EmployeeCode} logged in`,
-                              this.moment().format('YYYY-MM-DD hh:mm:ss'),
-                              this.moment().format('YYYY-MM-DD hh:mm:ss'),
-                              this.userInfo.EmployeeCode,
-                         ]
-               }
-               this.onLineUsers.push({
-                    id: this.$socket.id,
-                    user: this.userInfo.EmployeeCode
-               })
-               // this.$socket.emit('loggedIn', this.onLineUsers)
-               this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
-          }  
+          }
      }
 }
 </script>

@@ -174,7 +174,6 @@ export default {
                newPassword: '',
                confirmedPassword: '',
                accounts: [],
-               notifications: [],
                passwordRules: [
                     v => !!v || 'Password is required',
                     v => (v == this.newPassword) || 'Password do not match'
@@ -216,7 +215,7 @@ export default {
           this.loadAccounts()
      },
      sockets: {
-          notifications() {
+          showNotifications() {
                setTimeout(() => {
                     this.loadAccounts()
                }, 1500);
@@ -285,7 +284,6 @@ export default {
                               }
                               this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)}).then(() => {
                                    this.swal.fire('Hooray!','Changes has been saved', 'success')
-                                   this.recordLogging(`updated an account`)
                                    this.discardRecord()
                               })
                          } else if(result.isDenied) {
@@ -328,7 +326,6 @@ export default {
                          }
                          this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)}).then(() => {
                               this.swal.fire('Confirmed!','Changes has been saved', 'success')
-                              this.recordLogging(`updated an account`)
                               this.discardRecord()
                          })
                     }
@@ -350,28 +347,16 @@ export default {
                this.dialog = false
                this.disabled = false
                this.editMode = 0
+               this.setNotifications('Updated Accounts', `User: ${this.userInfo.EmployeeCode} has updated an account`)
           },
-          recordLogging(details) {
-               // let body = {
-               //      procedureName: 'ProcUserLogging',
-               //      values: [
-               //                this.$socket.id, 
-               //                this.userInfo.EmployeeCode,
-               //                `User: ${this.userInfo.EmployeeCode} ${details}`,
-               //                this.moment().format('YYYY-MM-DD hh:mm:ss'),
-               //                this.moment().format('YYYY-MM-DD hh:mm:ss'),
-               //                this.userInfo.EmployeeCode,
-               //           ]
-               // }
-               this.notifications.push({
-                         id: this.$socket.id,
-                         details: details
-               })
-               this.$socket.emit('notifications', this.notifications)
-               // this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)}).then(res => {
-               //      console.log(res.data)
-               // })
-          }  
+          setNotifications(title, message) {
+               let data = {
+                    socket: this.$socket.id,
+                    title: title,
+                    message: message
+               }
+               this.$socket.emit('newNotifications', data)
+          }
      }
 }
 </script>
