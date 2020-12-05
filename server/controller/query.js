@@ -2,7 +2,6 @@ const express = require('express')
 const mssql = require('mssql')
 const config = require('../config/db.config')()
 
-
 const router = express.Router()
 
 // =====================================================================

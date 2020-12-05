@@ -18,7 +18,18 @@
                                              outlined
                                              rounded
                                              @blur="getUserInfo()"
-                                        ></v-text-field>
+                                        >
+                                             <template v-slot:append>
+                                                  <v-fade-transition leave-absolute>
+                                                       <v-progress-circular
+                                                            v-if="loading"
+                                                            size="24"
+                                                            color="info"
+                                                            indeterminate
+                                                       ></v-progress-circular>
+                                                  </v-fade-transition>
+                                             </template>
+                                        </v-text-field>
                                         <v-text-field
                                              v-model="password"
                                              placeholder="Password"
@@ -30,7 +41,7 @@
                                              @keydown.enter="checkUserRights()"
                                         ></v-text-field>
                                         <v-card-actions>
-                                             <v-btn @click="checkUserRights()" color="primary" block>Login</v-btn>
+                                             <v-btn @click="checkUserRights()" color="primary" :disabled="loading == true" block>Login</v-btn>
                                         </v-card-actions>
                                    </v-form>
                               </v-card-text>
@@ -68,6 +79,7 @@ export default {
                alert: false,
                valid: false,
                remember: false,
+               loading:false,
                hidePassword: true,
                alertText: '',
                username: '',
@@ -90,12 +102,14 @@ export default {
      methods: {
           getUserInfo() {
                this.alert = false
+               this.loading = true 
                let body = {
                     procedureName: 'ProcGetUserAccount',
                     values: [this.username]
                }
                if (this.username) {     
                     this.axios.post(`${this.api}/getaccount`, {data: JSON.stringify(body)}).then(res => {
+                         this.loading = false
                          this.employeeDetails = res.data[0]
                          if (!this.employeeDetails) { 
                               this.alert = !this.alert
@@ -107,6 +121,7 @@ export default {
                } else {
                     this.alert = !this.alert
                     this.alertText = 'Please input username'
+                    this.loading = false 
                }
           },
           checkUserRights() {
