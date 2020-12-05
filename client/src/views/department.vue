@@ -61,7 +61,7 @@
                     </v-container>
                     <v-card-actions>
                          <v-spacer></v-spacer>
-                         <v-btn color="primary">Save</v-btn>
+                         <v-btn @click="saveRecord()" color="primary">Save</v-btn>
                          <v-btn @click="clearVariables()" text>Cancel</v-btn>
                     </v-card-actions>
                </v-card>
