@@ -121,15 +121,6 @@ export default {
                     this.loading = false
                })
           },
-          setNotifications() {
-               let data = {
-                    socket: this.$socket.id,
-                    title: 'This is title',
-                    message: 'This message has a very long text.',
-                    isRead: 0
-               }
-               this.$socket.emit('newNotifications', data)
-          },
           saveRecord() {
                if(this.$refs.form.validate()) {
                     this.swal.fire(this.saveOptions).then(result => {
@@ -148,10 +139,11 @@ export default {
                               }
                               this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)}).then(() => {
                                    this.swal.fire('Hooray!','Changes has been saved', 'success')
-                                   this.discardRecord()
+                                   this.setNotifications('Updated a record', `User: ${this.userInfo.EmployeeName} deleted a record`)
+                                   this.clearVariables()
                               })
                          } else if(result.isDenied) {
-                              this.discardRecord()
+                              this.clearVariables()
                               this.swal.fire('Oh no!', 'Changes are not saved', 'info')
                          }
                     })
@@ -169,10 +161,10 @@ export default {
           deleteRecord(val) {
                this.swal.fire({
                     title: 'Are you sure?',
-                    text: val.Status == 1 ? "This data wil not be used is any records." : "This wil restore the data.",
+                    text: val.DeletedDate == null ? "This data wil not be used in any records." : "This wil restore the data.",
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonText: val.Status == 1 ? 'Yes, delete it!' : 'Yes, restore it!',
+                    confirmButtonText: val.DeletedDate == null  ? 'Yes, delete it!' : 'Yes, restore it!',
                     denyButtonText: 'Cancel'
                }).then(result => {
                     if(result.isConfirmed) {
@@ -190,7 +182,8 @@ export default {
                          }
                          this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)}).then(() => {
                               this.swal.fire('Confirmed!','Changes has been saved', 'success')
-                              this.discardRecord()
+                              this.setNotifications('Deleted a record', `User: ${this.userInfo.EmployeeName} deleted a record`)
+                              this.clearVariables()
                          })
                     }
                })
@@ -207,6 +200,14 @@ export default {
                },
                this.dialog = false
                this.editMode = 0
+          },
+          setNotifications(title, message) {
+               let data = {
+                    socket: this.$socket.id,
+                    title: title,
+                    message: message
+               }
+               this.$socket.emit('newNotifications', data)
           }
      }
 }

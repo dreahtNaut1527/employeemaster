@@ -106,12 +106,17 @@
                          </v-card>
                     </v-col>
                </v-row>
+               <v-card>
+                    <v-card-title>Total Summary of Sections</v-card-title>
+                    <barGraph></barGraph>
+               </v-card>
           </v-container>
      </v-main>
 </template>
 
 <script>
 import datePicker from '@/components/datepicker'
+import barGraph from '@/components/bargraph'
 
 export default {
      data() {
@@ -215,7 +220,8 @@ export default {
           }
      },
      components: {
-          datePicker
+          datePicker,
+          barGraph
      }
 }
 </script>

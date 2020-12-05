@@ -112,12 +112,47 @@ router.get('/employees/:compname/:department/:section/:team', (req, res) => {
      })
 })
 
-
 router.get('/company/department/:compname', (req, res) => {
      let compname = req.params.compname
      let sql = `SELECT * FROM DepartmentView 
                     WHERE lower(ShortName) = lower('${compname}')
                     ORDER BY DepartmentName`
+     config.connect().then(() => {
+          const request = new mssql.Request(config)
+          request.query(sql, (err, results) => {
+               if(err) {
+                    res.send(err)
+               } else {
+                    res.send(results.recordset)
+               }
+               config.close()
+          })
+     })
+})
+
+router.get('/company/section/:compname', (req, res) => {
+     let compname = req.params.compname
+     let sql = `SELECT * FROM SectionView 
+                    WHERE lower(ShortName) = lower('${compname}')
+                    ORDER BY SectionName`
+     config.connect().then(() => {
+          const request = new mssql.Request(config)
+          request.query(sql, (err, results) => {
+               if(err) {
+                    res.send(err)
+               } else {
+                    res.send(results.recordset)
+               }
+               config.close()
+          })
+     })
+})
+
+router.get('/company/team/:compname', (req, res) => {
+     let compname = req.params.compname
+     let sql = `SELECT * FROM TeamView 
+                    WHERE lower(ShortName) = lower('${compname}')
+                    ORDER BY TeamName`
      config.connect().then(() => {
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {
