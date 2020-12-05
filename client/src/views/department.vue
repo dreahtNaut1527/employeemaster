@@ -9,7 +9,7 @@
                                    <v-card-text class="pa-0 headline">Departments</v-card-text>
                               </v-col>
                          <v-spacer></v-spacer>
-                         <v-btn @click="dialog = !dialog" color="primary"><v-icon left>mdi-plus</v-icon>New</v-btn>
+                         <v-btn @click="newRecord()" color="primary"><v-icon left>mdi-plus</v-icon>New</v-btn>
                          </v-row>
                     </v-card-title>
                     <v-data-table
@@ -48,16 +48,7 @@
                     <v-container>
                               <v-form ref="form" v-model="valid" lazy-validation>
                                    <v-row align="center" justify="center" dense>
-                                        <v-col cols="12" md="2">
-                                             <v-text-field
-                                                  v-model="editDepartment.DepartmentCode"
-                                                  label="Code"
-                                                  type="number"
-                                                  outlined
-                                                  dense
-                                             ></v-text-field>
-                                        </v-col>
-                                        <v-col cols="12" md="10">
+                                        <v-col cols="12" md="12">
                                              <v-text-field
                                                   v-model="editDepartment.DepartmentName"
                                                   label="Department"
@@ -166,13 +157,43 @@ export default {
                     })
                }
           },
+          newRecord() {
+               this.dialog = true
+               this.editDepartment.CompanyCode = this.userInfo.CompanyCode
+          },
           editRecord(val) {
                this.editDepartment = val
                this.dialog = true
                this.editMode = 1
           },
           deleteRecord(val) {
-               console.log(val)
+               this.swal.fire({
+                    title: 'Are you sure?',
+                    text: val.Status == 1 ? "This data wil not be used is any records." : "This wil restore the data.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: val.Status == 1 ? 'Yes, delete it!' : 'Yes, restore it!',
+                    denyButtonText: 'Cancel'
+               }).then(result => {
+                    if(result.isConfirmed) {
+                         let body = {
+                              procedureName: 'ProcDepartment',
+                              values: [
+                                   this.editDepartment.CompanyCode,
+                                   this.editDepartment.DepartmentCode,
+                                   this.editDepartment.DepartmentName,
+                                   this.editDepartment.CreatedDate,
+                                   this.editDepartment.UpdatedDate,
+                                   this.userInfo.EmployeeCode,
+                                   1
+                              ]
+                         }
+                         this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)}).then(() => {
+                              this.swal.fire('Confirmed!','Changes has been saved', 'success')
+                              this.discardRecord()
+                         })
+                    }
+               })
           },
           clearVariables() {
                this.editDepartment = {
