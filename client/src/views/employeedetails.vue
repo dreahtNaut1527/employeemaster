@@ -8,6 +8,8 @@
                               <v-img :src="`http://asd_sql:8080/photos/${emplcode}.jpg`"></v-img>
                          </v-avatar>
                     </v-col>
+                     
+
                      <v-list-item class="mt-1">
                          <v-list-item-content>
                               <v-list-item-title>
@@ -155,7 +157,6 @@
                                                   <v-text-field
                                                        v-model="information.NickName"
                                                        label="Nick Name"
-                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -171,7 +172,6 @@
                                                   <v-text-field
                                                        v-model="ageValue"
                                                        label="Age"
-                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -180,7 +180,6 @@
                                                   <v-text-field
                                                        v-model="genderValue"
                                                        label="Gender"
-                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -192,7 +191,6 @@
                                                        item-text="label"
                                                        item-value="value"
                                                        label="Marital Status"
-                                                       readonly
                                                        clearable
                                                        outlined
                                                        dense
@@ -203,7 +201,6 @@
                                                        v-model="information.NoOfChildren"
                                                        label="No of Children"
                                                        type="number"
-                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -213,7 +210,6 @@
                                                        v-model="information.School"
                                                        label="School"
                                                        outlined
-                                                       readonly
                                                        dense
                                                   ></v-text-field>
                                              </v-col>
@@ -224,7 +220,6 @@
                                                        item-text="EducDesc"
                                                        item-value="EducCode"
                                                        label="Educational Attainment"
-                                                       readonly
                                                        clearable
                                                        outlined
                                                        dense
@@ -235,7 +230,6 @@
                                                        v-model="information.Phone"
                                                        append-icon="mdi-phone"
                                                        label="Telephone"
-                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -245,7 +239,6 @@
                                                        v-model="information.Cellphone"
                                                        append-icon="mdi-cellphone"
                                                        label="Cellphone"
-                                                       readonly
                                                        hint="0000-000-0000"
                                                        outlined
                                                        dense
@@ -255,7 +248,6 @@
                                                   <v-textarea
                                                        v-model="information.PresentAddress"
                                                        label="Present Address"
-                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-textarea>
@@ -264,7 +256,6 @@
                                                   <v-textarea
                                                        v-model="information.PermanentAddress"
                                                        label="Permanent Address"
-                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-textarea>
@@ -278,8 +269,7 @@
                                              <v-col cols="12" md="12">
                                                   <v-text-field
                                                        v-model="information.ConPerson"
-                                                       label="Contact Person"
-                                                       readonly
+                                                       label="Contact Person"                                                     
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -288,7 +278,6 @@
                                                   <v-text-field
                                                        v-model="information.ConRelationship"
                                                        label="Relationship"
-                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -297,7 +286,6 @@
                                                   <v-textarea
                                                        v-model="information.ConAddress"
                                                        label="Contact Address"
-                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-textarea>
@@ -355,7 +343,7 @@
                                                        dense
                                                   ></v-text-field>
                                              </v-col>
-                                             <v-col cols="12" md="12">
+                                             <v-col cols="12" md="6">
                                                   <v-autocomplete
                                                        v-model="information.OperatingSystem"
                                                        :items="operatingSystem"
@@ -385,15 +373,37 @@
                                                        dense
                                                   ></v-text-field>
                                              </v-col>
+                                              <v-col cols="12" md="6">
+                                                  <v-text-field
+                                                       v-model="information.StaffCode"
+                                                       label="Staff Code"
+                                                       outlined
+                                                       dense
+                                                  ></v-text-field>
+                                             </v-col>
                                         </v-row>
                                    </v-card-text>
                               </v-tab-item>
                          </v-tabs-items>
                     </v-card-text>
+                         <v-card-actions>
+                              <v-spacer></v-spacer>
+                              <v-btn color="primary" @click="saveRecord()">
+                                   <v-icon left>mdi-content-save</v-icon>Save
+                              </v-btn>
+                              <v-btn @click="loadInformation()" text>
+                                   <v-icon left>mdi-delete</v-icon>Cancel
+                              </v-btn>
+                         </v-card-actions>
                </v-card>
-
-               <!-- Your Code Here -->
+              
           </v-container>
+          <!-- <v-overlay :value="overlay">
+               <v-progress-circular
+                    :size="100"
+                    indeterminate
+               ></v-progress-circular>
+          </v-overlay> -->
      </v-main>
 </template>
 
@@ -417,6 +427,15 @@ export default {
                educationList: [],
                shiftList: [],
                operatingSystem: [],
+               saveOptions: {
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: 'Save',
+                    denyButtonText: `Don't Save`
+               },
                breadCrumbsItems: [
                     {text: 'Main Data', disabled: false, href: '/employees'},
                     {text: 'Employees', disabled: false, href: '/employees'},
@@ -439,8 +458,13 @@ export default {
      },
       created() {
           this.loadInformation()
-          this.loadOperatingSystem()
          
+         
+     },
+      sockets: {
+          connect() {
+               this.loadInformation()
+          }
      },
      methods:{
            loadInformation() {
@@ -485,6 +509,7 @@ export default {
           loadEducations() {
                this.axios.get(`${this.api}/education`).then(res => {
                     this.educationList = res.data
+                    this.loadOperatingSystem()
                })
           },
           loadShifts() {
@@ -498,6 +523,67 @@ export default {
                     console.log(this.operatingSystem)
                })
           },
+             saveRecord() {
+               this.swal.fire(this.saveOptions).then(result => {
+                    if(result.isConfirmed) {
+                         let body = {
+                              procedureName: 'ProcPostEmployee',
+                              values: [	
+                                        this.information.CompanyCode  ,
+                                        this.information.EmployeeCode  ,
+                                        this.information.AgencyCode  ,
+                                        this.information.LastName  ,
+                                        this.information.FirstName  ,
+                                        this.information.MiddleName,
+                                        this.information.NickName  ,
+                                        this.information.Gender  ,
+                                        this.information.DateBirth  ,
+                                        this.information.MarStatus  ,
+                                        this.information.NoOfChildren  ,
+                                        this.information.EducCode  ,
+                                        this.information.Phone  ,
+                                        this.information.Cellphone  ,
+                                        this.information.PresentAddress  ,
+                                        this.information.PermanentAddress  ,
+                                        this.information.Course  ,
+                                        this.information.School  ,
+                                        this.information.ConPerson  ,
+                                        this.information.ConRelationship  ,
+                                        this.information.ConAddress  ,
+                                        this.information.ConNumber  ,
+                                        this.information.ShiftID  ,
+                                        this.information.DepartmentCode  ,
+                                        this.information.SectionCode  ,
+                                        this.information.TeamCode  ,
+                                        this.information.PositionCode  ,
+                                        this.information.DesignationCode  ,
+                                        this.information.ContractStatus  ,
+                                        this.information.ContractHiredDate  ,
+                                        this.information.RegularHiredDate  ,
+                                        this.information.RetiredDate  ,
+                                        this.information.CPUNumber,
+                                        this.information.IPAddress,
+                                        this.information.CompUserName,
+                                        this.information.CompPassword,
+                                        this.information.OperatingSystem,
+                                        this.information.WorkEmailAddress,
+                                        this.information.WorkLocation,
+                                        this.information.StaffCode,
+                                        this.moment().format('YYYY-MM-DD')  ,
+                                        this.moment().format('YYYY-MM-DD')  ,
+                                        this.userInfo.EmployeeCode  
+                              ]
+                         }
+                         this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)}).then(res => {
+                              console.log(res.data)
+                              this.swal.fire('Hooray!','Changes has been saved', 'success')
+                              this.loadInformation()
+                         })
+                    } else if(result.isDenied) {
+                         this.swal.fire('Oh no!', 'Changes are not saved', 'info')
+                    }
+               })
+          }
          
 
      },
@@ -514,7 +600,9 @@ export default {
           dateBirth(val) {
                this.information.DateBirth = val
                this.ageValue = this.moment().diff(val, 'years')
-          }
+          },
+         
+
      },
      components: {
           datePicker

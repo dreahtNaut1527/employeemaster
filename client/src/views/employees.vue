@@ -13,8 +13,6 @@
                               outlined
                               dense
                          ></v-autocomplete>
-                          <!-- item-text="DepartmentName"
-                              item-value="DepartmentName" -->
                     </v-col>
                      <v-col cols="12" md="3">
                          <v-autocomplete
@@ -29,13 +27,12 @@
                     <v-col cols="12" md="3">
                          <v-autocomplete
                               v-model="team"
-                              :items="teamdata"
+                              :items="teamList"
                               placeholder="Team"
                               clearable
                               outlined
                               dense
                          ></v-autocomplete>
-                         
                     </v-col>
                     <v-col cols="12" md="3">
                          <v-text-field
@@ -49,7 +46,8 @@
                </v-row>
                <v-data-table 
                :headers="headers"
-               :items="getempInfos">
+               :items="filterData"
+               :search="search">
                <template v-slot:item.actions="{ item }">
                               <v-btn @click="viewRecord(item.EmployeeCode)" icon>
                                  
@@ -60,9 +58,10 @@
                               </v-btn>
                               
                </template>
-               
+
                </v-data-table>
                <!-- Your Code Here -->
+
           </v-container>
      </v-main>
 </template>
@@ -77,9 +76,10 @@ export default {
                section: '',
                team: '',
                search: '',
-               deptList: [],
-               secList: [],
-               teamList: [],
+        
+               // deptList: [],
+               // secList: [],
+               // teamList: [],
                // departmentList: '',
                // sectionList: '',
                // teamList: '',
@@ -105,69 +105,49 @@ export default {
      },
      created() {
           this.loadEmpinfo()
-          this.loadDepartments()
+          // this.loadDepartments()
           store.commit('CHANGE_EMPLCODE', {})
           
      },
      computed:{
-          departmentList() {
-               return this.deptList.map(rec => {
-                    return rec.DepartmentName
-               }).sort()
-          },
-          sectionList() { 
-               return this.secList.filter(rec => {
-                    // return rec.SectionName
-                    console.log(this.userInfo.DepartmentName)
-                    
-                    return (
-                         rec.DepartmentName.includes(this.userInfo.DepartmentName || ''))
-               }).sort()
-        
-               
-          },
-          teamdata() {
-               return this.teamList.map(rec => {
-                    return rec.TeamName
-               }).sort()
-          },
           filterData() {
                return this.getempInfos.filter(rec => {
                     return (
+                         rec.LastName.includes(this.search) ||
+                         rec.FirstName.includes(this.search) ||
+                         rec.EmployeeCode.includes(this.search || '') &&
                          rec.DepartmentName.includes(this.department || '') &&
                          rec.SectionName.includes(this.section || '') &&
                          rec.TeamName.includes(this.team || '')                         
                     )
                })
           },
-       
+          departmentList() {
+               return this.getempInfos.map(rec => {
+                    return rec.DepartmentName
+                   
+               }).sort()
+          },
+          sectionList() { 
+               return this.getempInfos.map(rec => {
+                    return rec.SectionName   
+               }).sort()
+      
+          },
+          teamList() {
+               return this.filterData.map(rec => {
+                    return rec.TeamName
+               }).sort()
+          },
+          
 
      },
      methods:{
-           loadDepartments() {
-             
-               this.axios.get(`${this.api}/company/department/${this.userInfo.ShortName}`).then(res => {
-                    this.deptList = res.data
-                    this.loadSections()
-               })
-          },
-           loadSections() {
-               this.axios.get(`${this.api}/company/department/section/${this.userInfo.ShortName}`).then(res => {
-                    this.secList = res.data
-                     this.loadTeams()
-                    //  this.loadShifts()
-               })
-          },
-          loadTeams() {
-               this.axios.get(`${this.api}/company/department/section/team/${this.userInfo.ShortName}`).then(res => {
-                    this.teamList = res.data
-                    // this.loadDesignations()
-               })
-          },
+          
 
           loadEmpinfo(){
                this.axios.get(`${this.api}/employees/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}`).then(res => {
-                    console.log("RES DATA", res.data);
+                    // console.log("RES DATA", res.data);
                     this.getempInfos = res.data
                     // this.loadDesignations()
                })     
@@ -179,13 +159,13 @@ export default {
                // this.editedAccount = Object.assign({}, val)
                // this.dialog = true
                // this.disabled = false
-               // this.editMode = 1
+           
           },
            viewRecord(val) {
                // alert(val)
                store.commit('CHANGE_EMPLCODE', val)
                location.replace('/employeedetails')
-              
+             
                // this.editedAccount = Object.assign({}, item)
                // this.dialog = true
                // this.disabled = false
