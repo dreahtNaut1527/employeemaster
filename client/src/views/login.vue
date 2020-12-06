@@ -108,7 +108,7 @@ export default {
                     values: [this.username]
                }
                if (this.username) {     
-                    this.axios.post(`${this.api}/getaccount`, {data: JSON.stringify(body)}).then(res => {
+                    this.axios.post(`${this.api}/executeselect`, {data: JSON.stringify(body)}).then(res => {
                          this.loading = false
                          this.employeeDetails = res.data[0]
                          if (!this.employeeDetails) { 

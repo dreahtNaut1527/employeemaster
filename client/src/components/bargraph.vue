@@ -6,19 +6,7 @@ export default {
      // props: ['chartLabels', 'chartDatas', 'chartText'],
      data () {
           return {
-               chartData: {
-                    labels: [],
-                    datasets: [
-                         {
-                              label: 'Male',
-                              data: [],
-                              fill: false,
-                              borderColor: 'primary',
-                              backgroundColor: '#2554FF',
-                              borderWidth: 1
-                         }
-                    ]
-               },
+               chartData: {},
                options: {
                     scales: {
                          yAxes: [{
@@ -40,7 +28,9 @@ export default {
                     },
                     responsive: true,
                     maintainAspectRatio: false
-               }
+               },
+               summaryLabel: [],
+               summaryData: []
           }
      },
      created() {
@@ -58,8 +48,22 @@ export default {
                          this.userInfo.DepartmentCode
                     ]
                }
-               this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)}).then(res => {
-                    this.chartData.labels = Object.keys(res.data)
+               this.axios.post(`${this.api}/executeselect`, {data: JSON.stringify(body)}).then(res => {
+                    this.summaryLabel = Object.keys(res.data[0])
+                    this.summaryData = Object.values(res.data[0])
+                    this.chartData = {
+                         labels: this.summaryLabel,
+                         datasets: [
+                              {
+                                   label: 'Male',
+                                   data: this.summaryData,
+                                   fill: false,
+                                   borderColor: 'primary',
+                                   backgroundColor: '#2554FF',
+                                   borderWidth: 1
+                              }
+                         ]
+                    }
                })
           }
      }

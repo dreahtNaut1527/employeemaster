@@ -326,7 +326,7 @@ router.get('/logging', (req, res) => {
       })
   })
 
-router.post('/getaccount', (req, res) => {
+router.post('/executeselect', (req, res) => {
      let data = JSON.parse(req.body.data)
      let values = data.values
      let sql = `EXECUTE ${data.procedureName}`
@@ -359,6 +359,7 @@ router.post('/execute', (req, res) => {
      let data = JSON.parse(req.body.data)
      let values = data.values
      let sql = `EXECUTE ${data.procedureName}`
+
 
      // Loop through values
      if (!Array.isArray(values[0])) {
