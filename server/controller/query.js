@@ -368,6 +368,7 @@ router.post('/execute', (req, res) => {
      values.forEach(rec => {
           config.connect().then(() => {
                const request = new mssql.Request(config)
+               // console.log(`${sql} '${rec.join("','").replace(/''/g, null)}'`)
                request.query(`${sql} '${rec.join("','").replace(/''/g, null)}'`, err => {
                     if(err) {
                          res.send(err)

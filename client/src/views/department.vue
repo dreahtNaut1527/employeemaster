@@ -178,13 +178,13 @@ export default {
                          let body = {
                               procedureName: 'ProcDepartment',
                               values: [
-                                   this.editDepartment.CompanyCode,
-                                   this.editDepartment.DepartmentCode,
-                                   this.editDepartment.DepartmentName,
-                                   this.editDepartment.CreatedDate,
-                                   this.editDepartment.UpdatedDate,
+                                   val.CompanyCode,
+                                   val.DepartmentCode,
+                                   val.DepartmentName,
+                                   val.CreatedDate,
+                                   val.UpdatedDate,
                                    this.userInfo.EmployeeCode,
-                                   1
+                                   0
                               ]
                          }
                          this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)}).then(() => {
@@ -193,7 +193,7 @@ export default {
                               this.clearVariables()
                          })
                     }
-               })
+               }) 
           },
           clearVariables() {
                this.editDepartment = {
