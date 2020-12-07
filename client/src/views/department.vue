@@ -22,14 +22,21 @@
                          @page-count="pageCount = $event"
                          hide-default-footer
                     >
-                         <template v-slot:item.actions="{ item }">
-                              <v-btn @click="editRecord(item)" icon>
-                                   <v-icon>mdi-pencil</v-icon>
-                              </v-btn>
-                              <v-btn @click="deleteRecord(item)" icon>
-                                   <v-icon v-if="item.DeletedDate == null">mdi-delete</v-icon>
-                                   <v-icon v-else>mdi-restore</v-icon>
-                              </v-btn>
+                         <template v-slot:item="props">
+                              <tr :style="props.item.DeletedDate != null ? 'color: #b71c1c;' : ''">
+                                   <td>{{props.item.DepartmentName}}</td>
+                                   <td>{{props.item.CreatedDate}}</td>
+                                   <td>{{props.item.UpdatedDate}}</td>
+                                   <td>
+                                        <v-btn @click="editRecord(props.item)" icon>
+                                             <v-icon>mdi-pencil</v-icon>
+                                        </v-btn>
+                                        <v-btn @click="deleteRecord(props.item)" icon>
+                                             <v-icon v-if="props.item.DeletedDate == null">mdi-delete</v-icon>
+                                             <v-icon v-else>mdi-restore</v-icon>
+                                        </v-btn>
+                                   </td>
+                              </tr>
                          </template>
                     </v-data-table>
                     <v-pagination
@@ -39,8 +46,7 @@
                     ></v-pagination>
                </v-card>
           </v-container>
-          <v-dialog v-model="dialog" width="500" persistent
-          >
+          <v-dialog v-model="dialog" width="500" persistent>
                <v-card>
                     <v-toolbar color="primary" dark flat>
                          <v-toolbar-title>{{editMode == 1 ? 'Edit Record' : 'New Record'}}</v-toolbar-title>
@@ -146,7 +152,7 @@ export default {
                               }
                               this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)}).then(() => {
                                    this.swal.fire('Hooray!','Changes has been saved', 'success')
-                                   this.setNotifications('Updated a record', `User: ${this.userInfo.EmployeeName} deleted a record`)
+                                   this.setNotifications('Updated a record', `User: ${this.userInfo.EmployeeName} updated a record`)
                                    this.clearVariables()
                               })
                          } else if(result.isDenied) {
@@ -207,7 +213,6 @@ export default {
                },
                this.dialog = false
                this.editMode = 0
-               this.setNotifications('Updated Accounts', `User: ${this.userInfo.EmployeeCode} has updated an account`)
           }
      }
 }

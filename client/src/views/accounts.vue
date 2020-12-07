@@ -53,8 +53,9 @@
           </v-container>
           <v-dialog v-model="dialog" width="500" persistent>
                <v-card>
-                    <v-card-title>{{editMode == 0 ? 'New' : 'Edit'}} Account</v-card-title>
-                    <v-divider></v-divider>
+                    <v-toolbar color="primary" dark flat>
+                         <v-toolbar-title>{{editMode == 1 ? 'Edit Record' : 'New Record'}}</v-toolbar-title>
+                    </v-toolbar>
                     <v-container>
                          <v-form v-model="valid" ref="form" lazy-validation>
                               <v-card-text>
@@ -284,6 +285,7 @@ export default {
                               }
                               this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)}).then(() => {
                                    this.swal.fire('Hooray!','Changes has been saved', 'success')
+                                   this.setNotifications('Updated a record', `User: ${this.userInfo.EmployeeName} updated a record`)
                                    this.clearVariables()
                               })
                          } else if(result.isDenied) {
@@ -326,6 +328,7 @@ export default {
                          }
                          this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)}).then(() => {
                               this.swal.fire('Confirmed!','Changes has been saved', 'success')
+                              this.setNotifications('Updated a record', `User: ${this.userInfo.EmployeeName} deleted a record`)
                               this.clearVariables()
                          })
                     }
