@@ -34,20 +34,12 @@
                               dense
                          ></v-autocomplete>
                     </v-col>
-                    <v-col cols="12" md="3">
-                         <v-text-field
-                              v-model="search"
-                              placeholder="Name, Code . . "
-                              outlined
-                              dense
-                         ></v-text-field>
-                         
-                    </v-col>
+                    
                </v-row>
                <v-data-table 
                :headers="headers"
                :items="filterData"
-               :search="search">
+               :search="searchData">
                <template v-slot:item.actions="{ item }">
                               <v-btn @click="viewRecord(item.EmployeeCode)" icon>
                                  
@@ -75,7 +67,7 @@ export default {
                department: '',
                section: '',
                team: '',
-               search: '',
+              
         
                // deptList: [],
                // secList: [],
@@ -107,15 +99,13 @@ export default {
           this.loadEmpinfo()
           // this.loadDepartments()
           store.commit('CHANGE_EMPLCODE', {})
+          store.commit('CHANGE_EMP_EDIT')
           
      },
      computed:{
           filterData() {
                return this.getempInfos.filter(rec => {
                     return (
-                         rec.LastName.includes(this.search) ||
-                         rec.FirstName.includes(this.search) ||
-                         rec.EmployeeCode.includes(this.search || '') &&
                          rec.DepartmentName.includes(this.department || '') &&
                          rec.SectionName.includes(this.section || '') &&
                          rec.TeamName.includes(this.team || '')                         
@@ -155,6 +145,7 @@ export default {
           editRecord(val) {
                //  alert(val)
                store.commit('CHANGE_EMPLCODE', val)
+               store.commit('CHANGE_EMP_EDIT', true)
                location.replace('/employeedetails')
                // this.editedAccount = Object.assign({}, val)
                // this.dialog = true
@@ -164,6 +155,7 @@ export default {
            viewRecord(val) {
                // alert(val)
                store.commit('CHANGE_EMPLCODE', val)
+               store.commit('CHANGE_EMP_EDIT', false)
                location.replace('/employeedetails')
              
                // this.editedAccount = Object.assign({}, item)

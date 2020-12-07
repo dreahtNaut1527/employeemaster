@@ -40,7 +40,7 @@
                                                        dense
                                                   ></v-text-field>
                                              </v-col>
-                                             <v-col cols="12" md="5">
+                                             <v-col cols="12" md="4">
                                                   <v-text-field
                                                        v-model="information.FirstName"
                                                        label="First Name"
@@ -49,7 +49,7 @@
                                                        dense
                                                   ></v-text-field>
                                              </v-col>
-                                             <v-col cols="12" md="3">
+                                             <v-col cols="12" md="4">
                                                   <v-text-field
                                                        v-model="information.MiddleName"
                                                        label="Middle Name"
@@ -72,7 +72,7 @@
                                                        dense
                                                   ></v-autocomplete>
                                              </v-col>
-                                             <v-col cols="12" md="5">
+                                             <v-col cols="12" md="4">
                                                   <v-autocomplete
                                                        v-model="information.SectionCode"
                                                        :items="sectionList"
@@ -84,7 +84,7 @@
                                                        dense
                                                   ></v-autocomplete>
                                              </v-col>
-                                             <v-col cols="12" md="3">
+                                             <v-col cols="12" md="4">
                                                   <v-autocomplete
                                                        v-model="information.TeamCode"
                                                        :items="teamList"
@@ -105,7 +105,7 @@
                                                        dense
                                                   ></v-text-field>
                                              </v-col>
-                                             <v-col cols="12" md="5">
+                                             <v-col cols="12" md="4">
                                                   <v-text-field
                                                        v-model="information.PositionName"
                                                        label="Position"
@@ -114,7 +114,7 @@
                                                        dense
                                                   ></v-text-field>
                                              </v-col>
-                                              <v-col cols="12" md="3">
+                                              <v-col cols="12" md="4">
                                                   <v-autocomplete
                                                        v-model="information.ShiftID"
                                                        :items="shiftList"
@@ -136,7 +136,7 @@
                                                        dense
                                                   ></v-text-field>
                                              </v-col>
-                                             <v-col cols="12" md="5">
+                                             <v-col cols="12" md="4">
                                                   <v-text-field
                                                        v-model="information.RetiredDate"
                                                        label="Date Resigned"
@@ -386,7 +386,7 @@
                               </v-tab-item>
                          </v-tabs-items>
                     </v-card-text>
-                         <v-card-actions>
+                         <v-card-actions v-if="this.isEmpEdit == true">
                               <v-spacer></v-spacer>
                               <v-btn color="primary" @click="saveRecord()">
                                    <v-icon left>mdi-content-save</v-icon>Save
@@ -458,6 +458,7 @@ export default {
      },
       created() {
           this.loadInformation()
+        
          
          
      },
@@ -523,44 +524,45 @@ export default {
                     console.log(this.operatingSystem)
                })
           },
-             saveRecord() {
+          saveRecord() {
                this.swal.fire(this.saveOptions).then(result => {
                     if(result.isConfirmed) {
                          let body = {
                               procedureName: 'ProcPostEmployee',
                               values: [	
-                                        this.information.CompanyCode  ,
-                                        this.information.EmployeeCode  ,
-                                        this.information.AgencyCode  ,
-                                        this.information.LastName  ,
-                                        this.information.FirstName  ,
+                                        this.information.CompanyCode,
+                                        this.information.EmployeeCode,
+                                        this.information.AgencyCode,
+                                        this.information.LastName,
+                                        this.information.FirstName,
                                         this.information.MiddleName,
-                                        this.information.NickName  ,
-                                        this.information.Gender  ,
-                                        this.information.DateBirth  ,
-                                        this.information.MarStatus  ,
-                                        this.information.NoOfChildren  ,
-                                        this.information.EducCode  ,
-                                        this.information.Phone  ,
-                                        this.information.Cellphone  ,
-                                        this.information.PresentAddress  ,
-                                        this.information.PermanentAddress  ,
-                                        this.information.Course  ,
-                                        this.information.School  ,
-                                        this.information.ConPerson  ,
-                                        this.information.ConRelationship  ,
-                                        this.information.ConAddress  ,
-                                        this.information.ConNumber  ,
-                                        this.information.ShiftID  ,
-                                        this.information.DepartmentCode  ,
-                                        this.information.SectionCode  ,
-                                        this.information.TeamCode  ,
-                                        this.information.PositionCode  ,
-                                        this.information.DesignationCode  ,
-                                        this.information.ContractStatus  ,
-                                        this.information.ContractHiredDate  ,
-                                        this.information.RegularHiredDate  ,
-                                        this.information.RetiredDate  ,
+                                        this.information.NickName,
+                                        this.information.Gender,
+                                        this.information.DateBirth,
+                                        this.information.MarStatus,
+                                        this.information.NoOfChildren,
+                                        this.information.EducCode,
+                                        this.information.Phone,
+                                        this.information.Cellphone,
+                                        this.information.PresentAddress,
+                                        this.information.PermanentAddress,
+                                        this.information.Course,
+                                        this.information.School,
+                                        this.information.ConPerson,
+                                        this.information.ConRelationship,
+                                        this.information.ConAddress,
+                                        this.information.ConNumber,
+                                        this.information.ShiftID,
+                                        this.information.DepartmentCode,
+                                        this.information.SectionCode,
+                                        this.information.TeamCode,
+                                        this.information.PositionCode,
+                                        this.information.DesignationCode,
+                                        this.information.ContractStatus,
+                                        this.information.ContractHiredDate,
+                                        this.information.RegularHiredDate,
+                                        this.information.RetiredDate,
+                                        this.information.StaffCode,
                                         this.information.CPUNumber,
                                         this.information.IPAddress,
                                         this.information.CompUserName,
@@ -568,10 +570,9 @@ export default {
                                         this.information.OperatingSystem,
                                         this.information.WorkEmailAddress,
                                         this.information.WorkLocation,
-                                        this.information.StaffCode,
                                         this.moment().format('YYYY-MM-DD')  ,
                                         this.moment().format('YYYY-MM-DD')  ,
-                                        this.userInfo.EmployeeCode  
+                                        this.userInfo.EmployeeCode 
                               ]
                          }
                          this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)}).then(res => {

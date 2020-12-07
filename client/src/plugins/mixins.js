@@ -14,7 +14,8 @@ const plugins = {
                          'darkMode', 
                          'searchData',
                          'navDrawerVal',
-                         'emplcode'
+                         'emplcode',
+                         'isEmpEdit'
                     ])
                },
                methods: {
@@ -24,7 +25,8 @@ const plugins = {
                          'CHANGE_THEME', 
                          'CHANGE_SEARCHING',
                          'CHANGE_NAVDRAWER',
-                         'CHANGE_EMPLCODE'
+                         'CHANGE_EMPLCODE',
+                         'CHANGE_EMP_EDIT'
                     ]),
                     setNotifications(title, message) {
                          let data = {

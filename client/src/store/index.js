@@ -11,7 +11,8 @@ export default new Vuex.Store({
     darkMode: false,
     searchData: '',
     navDrawerVal: false,
-    emplcode: ''
+    emplcode: '',
+    isEmpEdit:false
   },
   plugins: [
     createPersistedState() 
@@ -34,6 +35,9 @@ export default new Vuex.Store({
     },
     CHANGE_EMPLCODE: (state, data) => {
       state.emplcode = data
+    },
+    CHANGE_EMP_EDIT: (state, data) => {
+      state.isEmpEdit = data
     },
   },
   actions: {
