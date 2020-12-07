@@ -24,7 +24,10 @@
                          >
                               <template v-slot:item.actions="{ item }">
                                    <v-btn icon @click="editRecord(item)"><v-icon >mdi-pencil</v-icon></v-btn>
-                                   <v-btn icon><v-icon>mdi-delete</v-icon></v-btn>
+                                   <v-btn icon @click="deleteRecord(item)">
+                                        <v-icon v-if="item.DeletedDate==null">mdi-delete</v-icon>
+                                        <v-icon v-else>mdi-restore</v-icon>     
+                                   </v-btn>
                               </template>
                          </v-data-table>
                          <v-pagination
@@ -109,7 +112,7 @@ export default {
      methods:{
          loadsections(){
               this.loading=true
-              this.axios.get(`${this.api}/company/department/section/${this.userInfo.ShortName}`).then(res=>{
+              this.axios.get(`${this.api}/company/section/${this.userInfo.ShortName}`).then(res=>{
                    this.sections=res.data
                    this.loading=false
               })
@@ -142,6 +145,7 @@ export default {
                              this.axios.post(`${this.api}/execute`,{data:JSON.stringify(body)}).then(()=>{
                                    this.swal.fire('Hooray!','Changes has been saved', 'success')
                                    this.clearVariables()
+                                   
                              })
                          }else if(result.isDenied) {
                               this.clearVariables()
@@ -150,19 +154,47 @@ export default {
                    })
               }
          },
-         deleteRecord(){
-
+         deleteRecord(val){
+              this.swal.fire({
+                    title: 'Are you sure?',
+                    text: val.DeletedDate == null ? "This data wil not be used in any records." : "This wil restore the data.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: val.DeletedDate == null  ? 'Yes, delete it!' : 'Yes, restore it!',
+                    denyButtonText: 'Cancel'
+              }).then(result=>{
+                   if (result.isConfirmed){
+                      let body = {
+                                  procedureName:"ProcSection",
+                                  values:[
+                                       val.CompanyCode,
+                                       val.SectionCode,
+                                       val.SectionName,
+                                       val.CreatedDate,
+                                       val.UpdatedDate,                                      
+                                       this.userInfo.EmployeeCode,
+                                       0
+                                  ]
+                      }
+                         this.axios.post(`${this.api}/execute`,{data:JSON.stringify(body)}).then(()=>{
+                              this.swal.fire('Confirmed!','Changes has been saved', 'success')
+                              this.setNotifications('Deleted a record', `User: ${this.userInfo.EmployeeName} deleted a record`)
+                              this.clearVariables()
+                         })
+                   }
+              })
          },
          clearVariables(){
                this.editSection={
                     CompanyCode: '',
                     SectionCode: '00',
-                    DepartmentName: '',
+                    SectionName: '',
                     CreatedDate: this.moment().format('YYYY-MM-DD hh:mm:ss'),
                     UpdatedDate: this.moment().format('YYYY-MM-DD hh:mm:ss'),
                     UpdatedUserId: '',
                     Option: 1
                }
+          this.loadsections()
           this.dialog=false
           this.editmode=0
          }
