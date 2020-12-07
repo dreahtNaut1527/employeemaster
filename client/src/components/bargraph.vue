@@ -29,15 +29,13 @@ export default {
                     responsive: true,
                     maintainAspectRatio: false
                },
+               summaryRecords: [],
                summaryLabel: [],
                summaryData: []
           }
      },
      created() {
           this.loadStatusSection()
-     },
-     mounted () {
-          this.renderChart(this.chartData, this.options)
      },
      methods: {
           loadStatusSection() {
@@ -49,21 +47,30 @@ export default {
                     ]
                }
                this.axios.post(`${this.api}/executeselect`, {data: JSON.stringify(body)}).then(res => {
-                    this.summaryLabel = Object.keys(res.data[0])
-                    this.summaryData = Object.values(res.data[0])
+                    this.summaryRecords = res.data
+                    this.summaryLabel = Object.keys(this.summaryRecords[1])
                     this.chartData = {
-                         labels: this.summaryLabel,
+                         labels: this.summaryLabel.slice(1),
                          datasets: [
                               {
-                                   label: 'Male',
-                                   data: this.summaryData,
+                                   label: 'Casual',
+                                   data: Object.values(this.summaryRecords[0]).slice(1),
                                    fill: false,
-                                   borderColor: 'primary',
-                                   backgroundColor: '#2554FF',
+                                   borderColor: '#1976d2',
+                                   backgroundColor: '#1976d2',
+                                   borderWidth: 1
+                              },
+                              {
+                                   label: 'Regular',
+                                   data: Object.values(this.summaryRecords[1]).slice(1),
+                                   fill: false,
+                                   borderColor: '#4caf50',
+                                   backgroundColor: '#4caf50',
                                    borderWidth: 1
                               }
                          ]
                     }
+                    this.renderChart(this.chartData, this.options)
                })
           }
      }

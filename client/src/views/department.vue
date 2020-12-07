@@ -113,6 +113,13 @@ export default {
      created() {
           this.loadDepartments()
      },
+     sockets: {
+          showNotifications() {
+               setTimeout(() => {
+                    this.loadDepartments()
+               }, 1500);
+          }
+     },
      methods: {
           loadDepartments() {
                this.loading = true
@@ -200,14 +207,7 @@ export default {
                },
                this.dialog = false
                this.editMode = 0
-          },
-          setNotifications(title, message) {
-               let data = {
-                    socket: this.$socket.id,
-                    title: title,
-                    message: message
-               }
-               this.$socket.emit('newNotifications', data)
+               this.setNotifications('Updated Accounts', `User: ${this.userInfo.EmployeeCode} has updated an account`)
           }
      }
 }

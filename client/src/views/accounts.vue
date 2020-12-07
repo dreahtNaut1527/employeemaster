@@ -150,7 +150,7 @@
                          <v-btn @click="saveRecord()" color="primary" :disabled="disabled">
                               <v-icon left>mdi-content-save</v-icon>Save
                          </v-btn>
-                         <v-btn @click="discardRecord()" text>
+                         <v-btn @click="clearVariables()" text>
                               <v-icon left>mdi-delete</v-icon>Discard
                          </v-btn>
                     </v-card-actions>
@@ -284,20 +284,20 @@ export default {
                               }
                               this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)}).then(() => {
                                    this.swal.fire('Hooray!','Changes has been saved', 'success')
-                                   this.discardRecord()
+                                   this.clearVariables()
                               })
                          } else if(result.isDenied) {
-                              this.discardRecord()
+                              this.clearVariables()
                               this.swal.fire('Oh no!', 'Changes are not saved', 'info')
                          }
                     })
                }
           },
           editRecord(val) {
+               this.editMode = 1
                this.editedAccount = val
                this.dialog = true
                this.disabled = false
-               this.editMode = 1
           },
           deleteRecord(val) {
                this.swal.fire({
@@ -326,12 +326,12 @@ export default {
                          }
                          this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)}).then(() => {
                               this.swal.fire('Confirmed!','Changes has been saved', 'success')
-                              this.discardRecord()
+                              this.clearVariables()
                          })
                     }
                })
           },
-          discardRecord() {
+          clearVariables() {
                this.editedAccount = {
                     EmployeeCode: '',
                     Username: '',
@@ -347,15 +347,6 @@ export default {
                this.dialog = false
                this.disabled = false
                this.editMode = 0
-               this.setNotifications('Updated Accounts', `User: ${this.userInfo.EmployeeCode} has updated an account`)
-          },
-          setNotifications(title, message) {
-               let data = {
-                    socket: this.$socket.id,
-                    title: title,
-                    message: message
-               }
-               this.$socket.emit('newNotifications', data)
           }
      }
 }

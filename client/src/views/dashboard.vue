@@ -106,10 +106,14 @@
                          </v-card>
                     </v-col>
                </v-row>
-               <v-card>
-                    <v-card-title>Total Summary of Sections</v-card-title>
-                    <barGraph></barGraph>
-               </v-card>
+               <v-row dense>
+                    <v-col cols="12" md="12">
+                         <v-card>
+                              <v-card-title>Total Summary of Sections</v-card-title>
+                              <barGraph></barGraph>
+                         </v-card>
+                    </v-col>
+               </v-row>
           </v-container>
      </v-main>
 </template>
@@ -203,7 +207,7 @@ export default {
                     server: `HRIS${this.userInfo.ShortName.toLowerCase()}`,
                     deptcode: this.userInfo.UserLevel == 9 ? '' : this.userInfo.DepartmentCode
                }
-               this.axios.post('http://asd_sql:8080/server/api/logtime.php', body).then(res => {
+               this.axios.post(`${this.asd_sql}/logtime.php`, body).then(res => {
                     if(Array.isArray(res.data)) {
                          this.logtime = res.data
                     } else {

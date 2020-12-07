@@ -25,7 +25,15 @@ const plugins = {
                          'CHANGE_SEARCHING',
                          'CHANGE_NAVDRAWER',
                          'CHANGE_EMPLCODE'
-                    ])
+                    ]),
+                    setNotifications(title, message) {
+                         let data = {
+                              socket: this.$socket.id,
+                              title: title,
+                              message: message
+                         }
+                         this.$socket.emit('newNotifications', data)
+                    }
                }
           })
      }
