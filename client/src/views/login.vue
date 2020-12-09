@@ -43,6 +43,9 @@
                                         <v-card-actions>
                                              <v-btn @click="checkUserRights()" color="primary" :disabled="loading == true" block>Login</v-btn>
                                         </v-card-actions>
+                                        <v-card-text class="text-center">
+                                             Don't have any account? <v-btn color="primary" x-small text>Sign Up</v-btn>
+                                        </v-card-text>
                                    </v-form>
                               </v-card-text>
                          </v-card>

@@ -326,6 +326,24 @@ router.get('/logging', (req, res) => {
       })
   })
 
+
+  router.get('/navDrawer', (req, res) => {
+       config.connect().then(() => {
+           const request = new mssql.Request(config)
+           request.query(`SELECT Projects.ProjectName, ProjectProcess.ProjectProcessName, ProjectProcess.PagePath, Projects.IsActive 
+                           FROM ProjectProcess INNER JOIN Projects ON ProjectProcess.ProjectCode = Projects.ProjectCode`, (err, results) => {
+               if(err) {
+                   res.send(err)
+               } else {
+                   res.send(results.recordset)
+               }
+               config.close()
+           })
+       })
+   })
+  
+  
+
 router.post('/executeselect', (req, res) => {
      let data = JSON.parse(req.body.data)
      let values = data.values
@@ -407,5 +425,6 @@ router.put('/deleteemployee', (req, res) => {
           })
      })
 })
- 
+
+
 module.exports = router       
