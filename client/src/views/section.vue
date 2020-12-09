@@ -6,7 +6,7 @@
                          <v-card-title>                                   
                               <v-row dense>
                                    <v-col cols="12" md="4">
-                                        <v-card-text class="pa-0 headline">Section</v-card-text>
+                                        <v-card-text class="pa-0 headline">Sections</v-card-text>
                                    </v-col>
                                    <v-spacer></v-spacer>
                                    <v-btn @click="newRecord()" color="primary"><v-icon left>mdi-plus</v-icon>New</v-btn>
@@ -22,13 +22,22 @@
                               @page-count="pageCount = $event"
                                hide-default-footer
                          >
-                              <template v-slot:item.actions="{ item }">
-                                   <v-btn icon @click="editRecord(item)"><v-icon >mdi-pencil</v-icon></v-btn>
-                                   <v-btn icon @click="deleteRecord(item)">
-                                        <v-icon v-if="item.DeletedDate==null">mdi-delete</v-icon>
-                                        <v-icon v-else>mdi-restore</v-icon>     
-                                   </v-btn>
-                              </template>
+                         <template v-slot:item="props">
+                              <tr :style="props.item.DeletedDate != null ? 'color: #b71c1c;' : ''">
+                                   <td>{{props.item.SectionName}}</td>
+                                   <td>{{props.item.CreatedDate}}</td>
+                                   <td>{{props.item.UpdatedDate}}</td>
+                                   <td>
+                                        <v-btn @click="editRecord(props.item)" icon>
+                                             <v-icon>mdi-pencil</v-icon>
+                                        </v-btn>
+                                        <v-btn @click="deleteRecord(props.item)" icon>
+                                             <v-icon v-if="props.item.DeletedDate == null">mdi-delete</v-icon>
+                                             <v-icon v-else>mdi-restore</v-icon>
+                                        </v-btn>
+                                   </td>
+                              </tr>
+                         </template>
                          </v-data-table>
                          <v-pagination
                               v-model="page"
@@ -46,7 +55,7 @@
                                         <v-col cols="12" md="12">
                                              <v-text-field
                                                   v-model="editSection.SectionName"
-                                                  label="Section"
+                                                  label="Section Name"
                                                   outlined
                                                   dense
                                              ></v-text-field>
@@ -123,6 +132,7 @@ export default {
               this.editmode=1
          },
          newRecord(){
+              this.loadsections()
               this.dialog=true
               this.editSection.CompanyCode=this.userInfo.CompanyCode
          },
@@ -169,7 +179,7 @@ export default {
                                   values:[
                                        val.CompanyCode,
                                        val.SectionCode,
-                                       val.SectionName,
+                                       val.SectionNameName,
                                        val.CreatedDate,
                                        val.UpdatedDate,                                      
                                        this.userInfo.EmployeeCode,

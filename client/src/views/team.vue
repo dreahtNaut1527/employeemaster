@@ -22,16 +22,22 @@
                               @page-count="pageCount = $event"
                                hide-default-footer
                          >
-                              <template v-slot:item.actions="{ item}">
-                                   <v-btn 
-                                        icon @click="editRecord(item)"     
-                                        ><v-icon >mdi-pencil</v-icon>
-                                   </v-btn>   
-                                   <v-btn icon @click="deleteRecord(item)">
-                                        <v-icon v-if="item.DeletedDate==null">mdi-delete</v-icon>
-                                        <v-icon v-else>mdi-restore</v-icon>     
-                                   </v-btn>
-                              </template>
+                         <template v-slot:item="props">
+                              <tr :style="props.item.DeletedDate != null ? 'color: #b71c1c;' : ''">
+                                   <td>{{props.item.TeamName}}</td>
+                                   <td>{{props.item.CreatedDate}}</td>
+                                   <td>{{props.item.UpdatedDate}}</td>
+                                   <td>
+                                        <v-btn @click="editRecord(props.item)" icon>
+                                             <v-icon>mdi-pencil</v-icon>
+                                        </v-btn>
+                                        <v-btn @click="deleteRecord(props.item)" icon>
+                                             <v-icon v-if="props.item.DeletedDate == null">mdi-delete</v-icon>
+                                             <v-icon v-else>mdi-restore</v-icon>
+                                        </v-btn>
+                                   </td>
+                              </tr>
+                         </template>
                          </v-data-table>
                          <v-pagination
                               v-model="page"
