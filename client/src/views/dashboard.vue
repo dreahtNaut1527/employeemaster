@@ -119,6 +119,7 @@
 </template>
 
 <script>
+import store from '@/store'
 import datePicker from '@/components/datepicker'
 import barGraph from '@/components/bargraph'
 
@@ -155,8 +156,12 @@ export default {
           this.loadLogtime()
      },
      sockets: {
+          connect() {
+               store.commit('CHANGE_CONNECTION', true)
+          },
           disconnect() {
                this.$router.push('*')
+               store.commit('CHANGE_CONNECTION', false)
           }
      },
      computed: {

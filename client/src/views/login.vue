@@ -108,6 +108,7 @@ export default {
           }
      },
      created() {
+          store.commit('CHANGE_CONNECTION', true)
           store.commit('CHANGE_USER_INFO', {})
           store.commit('CHANGE_USER_LOGGING', false)
           this.axios.get(`${this.asd_sql}/getclientip.php`).then(res => {
@@ -115,10 +116,14 @@ export default {
           })
      },
      sockets: {
+          connect() {
+               store.commit('CHANGE_CONNECTION', true)
+          },
           disconnect() {
                this.alert = !this.alert
                this.alertText = 'Could not connect to server. Please try again'
                this.loading = true 
+               store.commit('CHANGE_CONNECTION', false)
           }
      },
      methods: {

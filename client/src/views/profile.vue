@@ -406,7 +406,9 @@
 </template>
 
 <script>
+import store from '@/store'
 import datePicker from '@/components/datepicker'
+
 export default {
      data() {
           return {
@@ -453,8 +455,18 @@ export default {
           this.loadInformation()
      },
      sockets: {
+          showNotifications() {
+               setTimeout(() => {
+                    this.loadInformation()
+               }, 1500);
+          },
           connect() {
                this.loadInformation()
+               store.commit('CHANGE_CONNECTION', true)
+          },
+          disconnect() {
+               this.$router.push('*')
+               store.commit('CHANGE_CONNECTION', false)
           }
      },
      methods: {

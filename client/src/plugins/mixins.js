@@ -16,7 +16,7 @@ const plugins = {
                          'navDrawerVal',
                          'emplcode',
                          'isEmpEdit',
-                         'isConnected'
+                         'isConnect'
                     ])
                },
                methods: {

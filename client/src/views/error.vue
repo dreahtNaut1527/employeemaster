@@ -17,6 +17,8 @@
 </template>
 
 <script>
+import store from '@/store'
+
 export default {
      data() {
           return {
@@ -25,6 +27,7 @@ export default {
      },
      sockets: {
           connect() {
+               store.commit('CHANGE_CONNECTION', true)
                if(this.userInfo.UserLevel == 0) {
                     this.$router.push('/profile')
                } else {
