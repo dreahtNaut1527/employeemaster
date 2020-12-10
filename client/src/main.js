@@ -17,6 +17,9 @@ const url = process.env.VUE_APP_LOCAL_SERVER
 
 export const SocketInstance = socketio(url);
 
+console.log(VueSocketIO)
+
+
 // Vue Config 
 Vue.config.productionTip = false
 

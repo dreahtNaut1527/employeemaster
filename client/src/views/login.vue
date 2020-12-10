@@ -3,10 +3,12 @@
           <v-alert v-model="alert" color="error" transition="scroll-y-transition" dismissible dark tile>{{alertText}}</v-alert>
           <v-container class="fill-height">
                <v-row align="center" justify="center">
-                    <v-col cols="12" md="4">
+                    <v-col cols="12" md="5">
                          <v-card elevation="7">
                               <v-card-text class="text-center subheading">
-                                   <v-card-text class="text-center headline">Login to your account</v-card-text>
+                                   <v-card-text>
+                                        <v-card-text class="text-center headline">Sign in to Employee Master</v-card-text>
+                                   </v-card-text>
                                    <v-avatar class="mb-6" color="primary" size="95">
                                         <v-icon x-large dark>mdi-account</v-icon>
                                    </v-avatar>
@@ -44,7 +46,15 @@
                                              <v-btn @click="checkUserRights()" color="primary" :disabled="loading == true" block>Login</v-btn>
                                         </v-card-actions>
                                         <v-card-text class="text-center">
-                                             Don't have any account? <v-btn color="primary" x-small text>Sign Up</v-btn>
+                                             Don't have any account? 
+                                             <v-btn 
+                                                  @click="signUpDialog = !signUpDialog" 
+                                                  color="primary" 
+                                                  x-small 
+                                                  text
+                                             >
+                                                  Sign Up
+                                             </v-btn>
                                         </v-card-text>
                                    </v-form>
                               </v-card-text>
@@ -68,12 +78,14 @@
                     </v-card-text>
                </v-card>
           </v-dialog>
+          <signUp :signUpDialog="signUpDialog"></signUp>
      </v-main>
 </template>
 
 
 <script>
 import store from '@/store'
+import signUp from '@/components/signup'
 
 export default {
      data() {
@@ -83,6 +95,7 @@ export default {
                valid: false,
                remember: false,
                loading:false,
+               signUpDialog: false,
                hidePassword: true,
                alertText: '',
                username: '',
@@ -190,6 +203,9 @@ export default {
                          break;
                }
           }
+     },
+     components: {
+          signUp
      }
 }
 </script>

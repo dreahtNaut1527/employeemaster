@@ -15,6 +15,14 @@ export default {
                
           }
      },
+     sockets: {
+          connect() {
+               console.log('connected na tayo')
+          },
+          disconnect() {
+               console.log('Netweork error')
+          }
+     },
      components: {
           navdrawer,
           navfooter

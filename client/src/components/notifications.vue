@@ -61,9 +61,6 @@ export default {
           
      },
      sockets: {
-          connect() {
-               console.log('connected na tayo')
-          },
           showNotifications(data) {
                this.notificationList.push(data)
                this.totalNotifs = this.notificationList.length
