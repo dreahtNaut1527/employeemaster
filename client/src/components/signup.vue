@@ -9,7 +9,7 @@
           <v-card>
                <v-container class="fill-height">
                     <v-row align="center" justify="center">
-                         <v-col cols="12" md="4">
+                         <v-col cols="12" md="5">
                               <v-card elevation="7">
                                    <v-card-text class="text-center subheading">
                                         <v-card-text class="text-center headline">Create account</v-card-text>
@@ -81,11 +81,13 @@
                                              </v-row>
                                         </v-card-text>
                                    </v-form>
-                                   </v-card-text>
                                    <v-card-actions>
-                                        <v-btn @click="dialog = !dialog">Sign Up</v-btn>
-                                        <v-btn>Sign In</v-btn>
+                                        <v-btn @click="saveRecord()" color="primary" block>Create an account</v-btn>
                                    </v-card-actions>
+                                   <v-card-actions>
+                                        <v-btn @click="clearVariables()" color="primary" block>Log in to your account</v-btn>
+                                   </v-card-actions>
+                                   </v-card-text>
                               </v-card>
                          </v-col>
                     </v-row>
@@ -148,6 +150,7 @@ export default {
                               }
                               this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)}).then(() => {
                                    this.swal.fire('Hooray!','Changes has been saved', 'success')
+                                   this.clearVariables()
                               })
                          } else if(result.isDenied) {
                               this.swal.fire('Oh no!', 'Changes are not saved', 'info')
@@ -156,12 +159,29 @@ export default {
                }
           },
           getEmployeeFullname() {
-               this.loadName = true
-               this.axios.get(`${this.api}/employeeinfo/${this.editedAccount.EmployeeCode}`).then(res => {
+               if(this.editedAccount.EmployeeCode != '') {
+                    this.loadName = true
+                    this.axios.get(`${this.api}/employeeinfo/${this.editedAccount.EmployeeCode}`).then(res => {
+                         this.$refs.form.resetValidation()
+                         this.editedAccount.Fullname = res.data[0].EmployeeName
+                         this.loadName = false
+                    })
+               }
+          },
+          clearVariables() {
+               this.editedAccount = {
+                    EmployeeCode: '',
+                    Username: '',
+                    Fullname: '',
+                    IPAddr: '',
+                    UserLevel: 0,
+               }
+               if(this.dialog) {
                     this.$refs.form.resetValidation()
-                    this.editedAccount.Fullname = res.data[0].EmployeeName
-                    this.loadName = false
-               })
+               }
+               this.newPassword = ''
+               this.confirmedPassword = ''
+               this.dialog = false
           }
      },
      watch: {

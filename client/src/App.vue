@@ -21,6 +21,7 @@ export default {
           },
           disconnect() {
                console.log('Netweork error')
+               this.$router.push('*')
           }
      },
      components: {

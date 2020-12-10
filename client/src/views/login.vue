@@ -39,7 +39,6 @@
                                              type="password"
                                              outlined
                                              rounded
-                                             v-show="hidePassword"
                                              @keydown.enter="checkUserRights()"
                                         ></v-text-field>
                                         <v-card-actions>
@@ -146,9 +145,10 @@ export default {
                     case '10.169.140.173':
                     case '10.169.140.188':
                     case '10.169.140.68':
-                         store.commit('CHANGE_USER_INFO', this.employeeDetails)
-                         store.commit('CHANGE_USER_LOGGING', true)
-                         this.$router.push('/dashboard')
+                         this.userLoggedIn()
+                         // store.commit('CHANGE_USER_INFO', this.employeeDetails)
+                         // store.commit('CHANGE_USER_LOGGING', true)
+                         // this.$router.push('/dashboard')
                          break;
                
                     default:
@@ -171,37 +171,35 @@ export default {
                }
           },
           userLoggedIn() {
-               switch (this.employeeDetails.UserLevel) {
-                    case 0: // staff account
-                         if(this.employeeDetails.IPAddress == null || this.employeeDetails.IPAddress == this.myIpAddress.IPADDRESS) {
+               if(this.employeeDetails.Status == 1) {
+                    if(this.employeeDetails.IPAddress == null || this.employeeDetails.IPAddress == this.myIpAddress.IPADDRESS) {
+                         if(this.employeeDetails.Password == this.md5(this.password)) {
                               store.commit('CHANGE_USER_INFO', this.employeeDetails)
                               store.commit('CHANGE_USER_LOGGING', true)
-                              this.$router.push('/profile')
-                         } else {
-                              this.dialog = false
-                         }
-                         break;
-               
-                    default:
-                         if(this.employeeDetails.Status == 1) {
-                              if(this.employeeDetails.IPAddress == null || this.employeeDetails.IPAddress == this.myIpAddress.IPADDRESS) {
-                                   if(this.employeeDetails.Password == this.md5(this.password)) {
-                                        store.commit('CHANGE_USER_INFO', this.employeeDetails)
-                                        store.commit('CHANGE_USER_LOGGING', true)
-                                        this.$router.push('/dashboard')
-                                   } else {
-                                        this.alert = !this.alert
-                                        this.alertText = 'Incorrect password. Please try again'
-                                   }
+                              if (this.employeeDetails.UserLevel == 0) {
+                                   this.$router.push('/profile')
                               } else {
-                                   this.dialog = false
+                                   this.$router.push('/dashboard')
                               }
                          } else {
                               this.alert = !this.alert
-                              this.alertText = 'Account has been deactivate.'
+                              this.alertText = 'Incorrect password. Please try again'
                          }
-                         break;
+                    } else {
+                         this.dialog = false
+                    }
+               } if(!this.employeeDetails.Status) {
+                    this.alert = !this.alert
+                    this.alertText = 'Account does not exists.'
+               } else {
+                    this.alert = !this.alert
+                    this.alertText = 'Account has been deactivate.'
                }
+               this.clearVariables()
+          },
+          clearVariables() {
+               this.username = ''
+               this.password = ''
           }
      },
      components: {
