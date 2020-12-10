@@ -326,13 +326,14 @@ router.get('/logging', (req, res) => {
       })
   })
 
-
-router.get('/history/:company', (req, res) => {
+router.get('/history/:company/:department', (req, res) => {
      let company = req.params.company
+     let department = req.params.department
      config.connect().then(() => {
                const request = new mssql.Request(config)
                request.query(`SELECT * FROM EmployeeHistoryDataView  
-                         WHERE lower(ShortName) = lower('${company}')`, (err, results) => {
+                         WHERE lower(ShortName) = lower('${company}')
+                         AND lower(DepartmentName) = lower('${department}')`, (err, results) => {
                if(err) {
                     res.send(err)
                } else {
@@ -343,7 +344,7 @@ router.get('/history/:company', (req, res) => {
      })
 })
 
-router.get('/history/:code', (req, res) => {
+router.get('/history/employee/:code', (req, res) => {
      let code = req.params.code
      config.connect().then(() => {
                const request = new mssql.Request(config)
