@@ -146,9 +146,6 @@ export default {
                     case '10.169.140.188':
                     case '10.169.140.68':
                          this.userLoggedIn()
-                         // store.commit('CHANGE_USER_INFO', this.employeeDetails)
-                         // store.commit('CHANGE_USER_LOGGING', true)
-                         // this.$router.push('/dashboard')
                          break;
                
                     default:
