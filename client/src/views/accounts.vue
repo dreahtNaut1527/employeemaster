@@ -220,6 +220,9 @@ export default {
                setTimeout(() => {
                     this.loadAccounts()
                }, 1500);
+          },
+          disconnect() {
+               this.$router.push('*')
           }
      },
      computed: {

@@ -12,14 +12,13 @@ import store from './store'
 import vuetify from './plugins/vuetify'
 import mixins from './plugins/mixins'
 
-const url = process.env.VUE_APP_LOCAL_SERVER
-// const url = process.env.VUE_APP_SERVER
+// const url = process.env.VUE_APP_LOCAL_SERVER
+const url = process.env.VUE_APP_SERVER
 
 export const SocketInstance = socketio(url);
 
 // Vue Config 
 Vue.config.productionTip = false
-
 
 // Vue Prototype
 Vue.prototype.axios = axios

@@ -4,7 +4,7 @@ const plugins = {
      install(Vue) {
           Vue.mixin({
                data: () => ({
-                    api: process.env.VUE_APP_LOCAL_URL,
+                    api: process.env.VUE_APP_URL,
                     asd_sql: process.env.VUE_APP_ASD_SQL
                }),
                computed: {
@@ -15,7 +15,8 @@ const plugins = {
                          'searchData',
                          'navDrawerVal',
                          'emplcode',
-                         'isEmpEdit'
+                         'isEmpEdit',
+                         'isConnected'
                     ])
                },
                methods: {
@@ -26,7 +27,8 @@ const plugins = {
                          'CHANGE_SEARCHING',
                          'CHANGE_NAVDRAWER',
                          'CHANGE_EMPLCODE',
-                         'CHANGE_EMP_EDIT'
+                         'CHANGE_EMP_EDIT',
+                         'CHANGE_CONNECTION'
                     ]),
                     setNotifications(title, message) {
                          let data = {

@@ -12,16 +12,7 @@ import navfooter from './components/navfooter'
 export default {
      data() {
           return {
-               
-          }
-     },
-     sockets: {
-          connect() {
-               console.log('connected na tayo')
-          },
-          disconnect() {
-               console.log('Netweork error')
-               this.$router.push('*')
+               connected: false
           }
      },
      components: {

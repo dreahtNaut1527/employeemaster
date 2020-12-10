@@ -154,6 +154,11 @@ export default {
      created() {
           this.loadLogtime()
      },
+     sockets: {
+          disconnect() {
+               this.$router.push('*')
+          }
+     },
      computed: {
           filterData() {
                return this.logtime.filter(rec => {

@@ -124,6 +124,9 @@ export default {
                setTimeout(() => {
                     this.loadDepartments()
                }, 1500);
+          },
+          disconnect() {
+               this.$router.push('*')
           }
      },
      methods: {

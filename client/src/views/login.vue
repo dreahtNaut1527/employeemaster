@@ -114,6 +114,13 @@ export default {
                this.myIpAddress = res.data
           })
      },
+     sockets: {
+          disconnect() {
+               this.alert = !this.alert
+               this.alertText = 'Could not connect to server. Please try again'
+               this.loading = true 
+          }
+     },
      methods: {
           getUserInfo() {
                this.alert = false

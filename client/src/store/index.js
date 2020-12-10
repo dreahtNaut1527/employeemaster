@@ -12,7 +12,8 @@ export default new Vuex.Store({
     searchData: '',
     navDrawerVal: false,
     emplcode: '',
-    isEmpEdit:false
+    isEmpEdit: false,
+    isConnected: false
   },
   plugins: [
     createPersistedState() 
@@ -39,6 +40,9 @@ export default new Vuex.Store({
     CHANGE_EMP_EDIT: (state, data) => {
       state.isEmpEdit = data
     },
+    CHANGE_CONNECTION: (state, data) => {
+      state.isConnected = data
+    }
   },
   actions: {
 
