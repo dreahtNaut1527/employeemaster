@@ -74,29 +74,36 @@
           <v-dialog v-model="dialog" width="500" persistent>
                <v-card>
                     <v-toolbar color="primary" flat dark>New Record</v-toolbar>
+                    {{editdivsecteam}}
                     <v-container>
                          <v-form ref="form"  lazy-validation>
                               <v-row align="center" justify="center" dense>
                                    <v-col cols="12" md="12">                                 
                                         <v-autocomplete
-                                             v-model="editdivsecteam.DepartmentName"
+                                             v-model="editdivsecteam.DepartmentCode"
                                              :items="departmentlist"
+                                             item-value="DepartmentCode"
+                                             item-text="DepartmentName"
                                              label="Department"    
                                              clearable                                 
                                              outlined
                                              dense
                                         ></v-autocomplete>        
                                         <v-autocomplete 
-                                             v-model="editdivsecteam.SectionName"
+                                             v-model="editdivsecteam.SectionCode"
                                              :items="sectionlist"
+                                             item-value="SectionCode"
+                                             item-text="SectionName"
                                              label="Section"   
                                              clearable    
                                              outlined
                                              dense
                                         ></v-autocomplete>                           
                                         <v-autocomplete 
-                                             v-model="editdivsecteam.TeamName"
+                                             v-model="editdivsecteam.TeamCode"
                                              :items="teamlist"
+                                             item-value="TeamCode"
+                                             item-text="TeamName"
                                              label="Team" 
                                              clearable    
                                              outlined
@@ -124,6 +131,7 @@ export default {
                sectionfilter:"",
                teamfilter:"",
                divsecteam:[],
+               department:[],
                pageCount: 0,
                page: 1,
                headers:[
@@ -144,7 +152,16 @@ export default {
                     UpdatedDate: this.moment().format('YYYY-MM-DD hh:mm:ss'),
                     UpdatedUserId: '',
                     Option: 1
-               }
+               },               
+               saveOptions: {
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: 'Save',
+                    denyButtonText: `Don't Save`
+               },
           }
      },
      computed:{
@@ -173,19 +190,20 @@ export default {
                }).sort()               
           }, 
           departmentlist(){
-               return this.divsecteam.map((rec)=>{
+               return this.filterData.filter((rec)=>{
                     return rec.DepartmentName
-               }).sort()               
+               }).sort()
           },
+
           sectionlist(){
-               return this.divsecteam.map((rec)=>{
-                    return rec.SectionName
+               return this.divsecteam.filter((rec)=>{
+                    return rec.SectionName 
                }).sort()                
           },
           teamlist(){
-               return this.divsecteam.map((rec)=>{
+               return this.divsecteam.filter((rec)=>{
                     return rec.TeamName
-               }).sort()               
+               }).sort()             
           },         
      },
      created(){
@@ -199,7 +217,38 @@ export default {
           },
           newRecord(){
                this.dialog=true
+               this.editdivsecteam.CompanyCode=this.userInfo.CompanyCode
           },
+          saveRecord(){
+              if (this.$refs.form.validate){
+                   this.swal.fire(this.saveOptions).then(result=>{
+                         if(result.isConfirmed){
+                             let body = {
+                                  procedureName:"ProcDivSecteam",
+                                  values:[
+                                       this.editdivsecteam.CompanyCode,
+                                       this.editdivsecteam.DepartmentCode,
+                                       this.editdivsecteam.SectionCode,
+                                       this.editdivsecteam.TeamCode,
+                                       this.editdivsecteam.CreatedDate,
+                                       this.editdivsecteam.UpdatedDate,
+                                       this.userInfo.EmployeeCode,
+                                       1
+                                  ]
+                             }
+                             console.log(body)
+                             this.axios.post(`${this.api}/execute`,{data:JSON.stringify(body)}).then(()=>{
+                                   this.swal.fire('Hooray!','Changes has been saved', 'success')
+                                   this.clearVariables()
+                                   
+                             })
+                         }else if(result.isDenied) {
+                              this.clearVariables()
+                              this.swal.fire('Oh no!', 'Changes are not saved', 'info')
+                         }
+                   })
+              }
+         },
           clearVariables(){
                this.editdivsecteam={
                     CompanyCode: '',

@@ -132,7 +132,7 @@ export default {
               this.editmode=1
          },
          newRecord(){
-              this.loadsections()
+              
               this.dialog=true
               this.editSection.CompanyCode=this.userInfo.CompanyCode
          },
@@ -152,6 +152,7 @@ export default {
                                        1
                                   ]
                              }
+                             console.log(body)
                              this.axios.post(`${this.api}/execute`,{data:JSON.stringify(body)}).then(()=>{
                                    this.swal.fire('Hooray!','Changes has been saved', 'success')
                                    this.clearVariables()
