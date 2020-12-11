@@ -4,7 +4,7 @@ const plugins = {
      install(Vue) {
           Vue.mixin({
                data: () => ({
-                    api: process.env.VUE_APP_URL,
+                    api: process.env.VUE_APP_LOCAL_URL,
                     asd_sql: process.env.VUE_APP_ASD_SQL
                }),
                computed: {
@@ -31,12 +31,16 @@ const plugins = {
                          'CHANGE_CONNECTION'
                     ]),
                     setNotifications(title, message) {
-                         let data = {
-                              socket: this.$socket.id,
-                              title: title,
-                              message: message
+                         let body = {
+                              procedureName: 'ProcPushNotification',
+                              values: [
+                                   this.$socket.id,
+                                   title,
+                                   message
+                              ]
                          }
-                         this.$socket.emit('newNotifications', data)
+                         this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
+                         this.$socket.emit('newNotifications', body)
                     }
                }
           })

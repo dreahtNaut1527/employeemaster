@@ -1,7 +1,6 @@
 <template>
      <v-menu
           v-model="menuDialog"
-           content-class="my-menu"
           :close-on-content-click="false"
           :nudge-width="300"
           offset-y
@@ -25,24 +24,26 @@
                <v-toolbar color="primary" flat dark>
                     <v-toolbar-title>Notifications</v-toolbar-title>
                </v-toolbar>
-               <v-list dense>
-                    <!-- <v-subheader>Today</v-subheader>
-                    <v-list-item v-for="(item, i) in notificationList" :key="i">
-                         <v-list-item-avatar>
-                              <v-img :src="`http://asd_sql:8080/photos/${item.EmployeeCode}.jpg`"></v-img>
-                         </v-list-item-avatar>
-                         <v-list-item-content>
-                              <v-list-item-title>{{item.EmployeeName}}</v-list-item-title>
-                              <v-list-item-subtitle>{{item.Details}}</v-list-item-subtitle>
-                         </v-list-item-content>
-                    </v-list-item> -->
+               <v-list two-line dense>
                     <v-subheader>Today</v-subheader>
-                    <v-list-item v-for="(item, i) in notificationList" :key="i">
-                         <v-list-item-content>
-                              <v-list-item-title>{{item.title}}</v-list-item-title>
-                              <v-list-item-subtitle>{{item.message}}</v-list-item-subtitle>
-                         </v-list-item-content>
-                    </v-list-item>
+                    <v-list-item-group
+                         active-class="pink--text"
+                         multiple
+                    >
+                         <template v-for="(item, i) in notificationList">
+                              <v-list-item :key="i">
+                                   <v-list-item-content>
+                                        <v-list-item-title>{{item.title}}</v-list-item-title>
+                                        <v-list-item-subtitle>{{item.message}}</v-list-item-subtitle>
+                                        <v-list-item-subtitle>{{item.socket}}</v-list-item-subtitle>
+                                   </v-list-item-content>
+                              </v-list-item>
+                              <!-- <v-divider
+                                   v-if="i < notificationList.length - 1"
+                                   :key="i"
+                              ></v-divider> -->
+                         </template>
+                    </v-list-item-group>
                </v-list>
           </v-card>
      </v-menu>
@@ -63,14 +64,6 @@ export default {
      sockets: {
           showNotifications(data) {
                this.notificationList.push(data)
-               this.totalNotifs = this.notificationList.length
-          }
-     },
-     computed: {
-          notifications() {
-               return this.notificationList.filter(rec => {
-                    return rec
-               })
           }
      },
      methods: {
@@ -79,6 +72,14 @@ export default {
      watch: {
           menuDialog() {
                this.totalNotifs = 0
+          },
+          notificationList(val) {
+               // val.forEach(rec => {
+               //      if(rec.Viewed == 0) {
+               //           this.totalNotifs++
+               //      }
+               // })
+               console.log(val)
           }
      }
 }
@@ -88,22 +89,5 @@ export default {
      .v-list{
           height: 220px;
           overflow-y:auto
-     }
-     .my-menu {
-          margin-top: 20px;
-          contain: initial;
-          overflow: visible;
-     }
-     .my-menu::before {
-          position: absolute;
-          content: "";
-          top: 0;
-          right: 13%;
-          transform: translateY(-100%);
-          width: 10px; 
-          height: 13px; 
-          border-left: 10px solid transparent;
-          border-right: 10px solid transparent;
-          border-bottom: 13px solid #1976d2;
      }
 </style>
