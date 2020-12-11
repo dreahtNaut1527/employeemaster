@@ -67,6 +67,7 @@ export default {
           this.loadNotifications()
      },
      sockets: {
+          // get all notifications
           showNotifications() {
                this.loadNotifications()
           }
