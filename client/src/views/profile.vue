@@ -59,40 +59,31 @@
                                         </v-row>
                                         <v-row align="center" justify="center" dense>
                                              <v-col cols="12" md="12">
-                                                  <v-autocomplete
-                                                       v-model="information.DepartmentCode"
-                                                       :items="departmentList"
-                                                       item-text="DepartmentName"
-                                                       item-value="DepartmentCode"
+                                                  <v-text-field
+                                                       v-model="information.DepartmentName"
                                                        label="Department"
                                                        readonly
                                                        outlined
                                                        dense
-                                                  ></v-autocomplete>
+                                                  ></v-text-field>
                                              </v-col>
                                              <v-col cols="12" md="12">
-                                                  <v-autocomplete
-                                                       v-model="information.SectionCode"
-                                                       :items="sectionList"
-                                                       item-text="SectionName"
-                                                       item-value="SectionCode"
+                                                  <v-text-field
+                                                       v-model="information.SectionName"
                                                        label="Section"
                                                        readonly
                                                        outlined
                                                        dense
-                                                  ></v-autocomplete>
+                                                  ></v-text-field>
                                              </v-col>
                                              <v-col cols="12" md="12">
-                                                  <v-autocomplete
-                                                       v-model="information.TeamCode"
-                                                       :items="teamList"
-                                                       item-text="TeamName"
-                                                       item-value="TeamCode"
+                                                  <v-text-field
+                                                       v-model="information.TeamName"
                                                        label="Team"
                                                        readonly
                                                        outlined
                                                        dense
-                                                  ></v-autocomplete>
+                                                  ></v-text-field>
                                              </v-col>
                                              <v-col cols="12" md="12">
                                                   <v-text-field
@@ -133,16 +124,14 @@
                                                   ></v-text-field>
                                              </v-col>
                                              <v-col cols="12" md="12">
-                                                  <v-autocomplete
-                                                       v-model="information.ShiftID"
-                                                       :items="shiftList"
-                                                       item-text="ShiftTime"
-                                                       item-value="ShiftID"
+                                                  <v-text-field
+                                                       v-model="information.ShiftTime"
                                                        label="Shift"
+                                                       append-icon="mdi-clock"
                                                        readonly
                                                        outlined
                                                        dense
-                                                  ></v-autocomplete>
+                                                  ></v-text-field>
                                              </v-col>
                                         </v-row>
                                    </v-card-text>
@@ -476,47 +465,17 @@ export default {
                     this.information = res.data[0]
                     // If variable has no error
                     if(this.information) {
-                         this.overlay = !this.overlay
+                         this.overlay = false
                          this.breadCrumbsItems = [
                               {text: this.userInfo.UserLevel == 0 ? 'Employee' : 'Maintenance', disabled: false, href: '/profile'},
                               {text: 'Profile', disabled: true, href: '/profile'}
                          ]
-                         this.loadDepartments()
+                         this.loadEducations()
+                         this.loadShifts()
                     // catch error goto error page
                     } else {
                          this.$router.push('*')
                     }
-               })
-          },
-          loadDepartments() {
-               this.axios.get(`${this.api}/company/department/${this.userInfo.ShortName}`).then(res => {
-                    this.departmentList = res.data
-                    this.loadSections()
-               })
-          },
-          loadSections() {
-               this.axios.get(`${this.api}/company/department/section/${this.userInfo.ShortName}`).then(res => {
-                    this.sectionList = res.data
-                    this.loadTeams()
-                    this.loadShifts()
-               })
-          },
-          loadTeams() {
-               this.axios.get(`${this.api}/company/department/section/team/${this.userInfo.ShortName}`).then(res => {
-                    this.teamList = res.data
-                    this.loadDesignations()
-               })
-          },
-          loadDesignations() {
-               this.axios.get(`${this.api}/company/designation/${this.userInfo.ShortName}`).then(res => {
-                    this.designationList = res.data
-                    this.loadPositions()
-               })
-          },
-          loadPositions() {
-               this.axios.get(`${this.api}/company/position/${this.userInfo.ShortName}`).then(res => {
-                    this.positionList = res.data
-                    this.loadEducations()
                })
           },
           loadEducations() {

@@ -30,17 +30,17 @@ const plugins = {
                          'CHANGE_EMP_EDIT',
                          'CHANGE_CONNECTION'
                     ]),
-                    setNotifications(title, message) {
+                    setNotifications(code, message) {
                          let body = {
                               procedureName: 'ProcPushNotification',
                               values: [
                                    this.$socket.id,
-                                   title,
+                                   code,
                                    message
                               ]
                          }
                          this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
-                         this.$socket.emit('newNotifications', body)
+                         this.$socket.emit('newNotifications', body.values)
                     }
                }
           })

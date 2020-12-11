@@ -58,6 +58,7 @@
                                              <v-text-field
                                                   v-model="editDepartment.DepartmentName"
                                                   label="Department"
+                                                  :rules="[v => !!v || 'Department is required']"
                                                   outlined
                                                   dense
                                              ></v-text-field>
@@ -161,7 +162,10 @@ export default {
                               }
                               this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)}).then(() => {
                                    this.swal.fire('Hooray!','Changes has been saved', 'success')
-                                   this.setNotifications('Updated a record', `User: ${this.userInfo.EmployeeName} updated a record`)
+                                   this.setNotifications(
+                                        this.userInfo.EmployeeCode, 
+                                        this.editMode == 0 ? 'added a new department' : 'updated an department'
+                                   )
                                    this.clearVariables()
                               })
                          } else if(result.isDenied) {

@@ -294,7 +294,10 @@ export default {
                               }
                               this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)}).then(() => {
                                    this.swal.fire('Hooray!','Changes has been saved', 'success')
-                                   this.setNotifications('Updated a record', `User: ${this.userInfo.EmployeeName} updated a record`)
+                                   this.setNotifications(
+                                        this.userInfo.EmployeeCode, 
+                                        this.editMode == 0 ? 'added a new account' : 'updated an account'
+                                   )
                                    this.clearVariables()
                               })
                          } else if(result.isDenied) {
@@ -337,7 +340,10 @@ export default {
                          }
                          this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)}).then(() => {
                               this.swal.fire('Confirmed!','Changes has been saved', 'success')
-                              this.setNotifications('Updated a record', `User: ${this.userInfo.EmployeeName} deleted a record`)
+                              this.setNotifications(
+                                   this.userInfo.EmployeeCode, 
+                                   val.Status != 1 ? 'restored an account' : `account set to inactive`
+                              )
                               this.clearVariables()
                          })
                     }

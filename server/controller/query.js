@@ -359,6 +359,21 @@ router.get('/history/employee/:code', (req, res) => {
           })
      })
 })
+
+router.get('/notifications', (req, res) => {
+     config.connect().then(() => {
+               const request = new mssql.Request(config)
+               request.query(`SELECT * FROM NotificationView
+                              ORDER BY Viewed, CreatedDate DESC`, (err, results) => {
+               if(err) {
+                    res.send(err)
+               } else {
+                    res.send(results.recordset)
+               }
+               config.close()
+          })
+     })
+})
   
 router.post('/executeselect', (req, res) => {
      let data = JSON.parse(req.body.data)

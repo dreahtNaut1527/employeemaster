@@ -21,27 +21,32 @@
                </v-btn>
           </template>
           <v-card>
-               <v-toolbar color="primary" flat dark>
+               <v-toolbar color="primary" flat dark dense>
                     <v-toolbar-title>Notifications</v-toolbar-title>
                </v-toolbar>
                <v-list two-line dense>
-                    <v-subheader>Today</v-subheader>
                     <v-list-item-group
                          active-class="pink--text"
                          multiple
                     >
                          <template v-for="(item, i) in notificationList">
                               <v-list-item :key="i">
+                                   <v-list-item-avatar>
+                                        <v-img
+                                             :src="`http://asd_sql:8080/photos/${item.EmployeeCode}.jpg`"
+                                        ></v-img>
+                                   </v-list-item-avatar>
                                    <v-list-item-content>
-                                        <v-list-item-title>{{item.title}}</v-list-item-title>
-                                        <v-list-item-subtitle>{{item.message}}</v-list-item-subtitle>
-                                        <v-list-item-subtitle>{{item.socket}}</v-list-item-subtitle>
+                                        <v-list-item-title class="font-weight-bold">{{item.EmployeeName}}</v-list-item-title>
+                                        <v-list-item-subtitle>
+                                             {{item.Details}}:
+                                             <span>{{moment(item.CreatedDate).fromNow()}}</span>
+                                        </v-list-item-subtitle>
                                    </v-list-item-content>
+                                   <v-btn @click="removeNotif(item)" x-small icon>
+                                        <v-icon>mdi-close</v-icon>
+                                   </v-btn>
                               </v-list-item>
-                              <!-- <v-divider
-                                   v-if="i < notificationList.length - 1"
-                                   :key="i"
-                              ></v-divider> -->
                          </template>
                     </v-list-item-group>
                </v-list>
@@ -59,27 +64,36 @@ export default {
           }
      },
      created() {
-          
+          this.loadNotifications()
      },
      sockets: {
-          showNotifications(data) {
-               this.notificationList.push(data)
+          showNotifications() {
+               this.loadNotifications()
           }
      },
      methods: {
-          
+          loadNotifications() {
+               this.axios.get(`${this.api}/notifications`).then(res => {
+                    this.notificationList = res.data
+               })
+          },
+          removeNotif(val) {
+               let index = this.notificationList.findIndex(rec => rec.SeqNo == val.SeqNo)
+               this.notificationList.splice(index, 1)
+          }
      },
      watch: {
           menuDialog() {
                this.totalNotifs = 0
           },
           notificationList(val) {
-               // val.forEach(rec => {
-               //      if(rec.Viewed == 0) {
-               //           this.totalNotifs++
-               //      }
-               // })
-               console.log(val)
+               val.forEach(rec => {
+                    if(rec.EmployeeCode != this.userInfo.EmployeeCode) {
+                         if(!rec.Viewed) {
+                              this.totalNotifs++
+                         }
+                    }
+               })
           }
      }
 }
@@ -87,7 +101,7 @@ export default {
 
 <style scoped> 
      .v-list{
-          height: 220px;
+          height: 230px;
           overflow-y:auto
      }
 </style>
