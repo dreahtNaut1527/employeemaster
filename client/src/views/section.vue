@@ -12,6 +12,7 @@
                                    <v-btn @click="newRecord()" color="primary"><v-icon left>mdi-plus</v-icon>New</v-btn>
                               </v-row>
                          </v-card-title>
+                         <v-divider></v-divider>
                          <v-data-table
                               :headers="headers"
                               :items="sections"
@@ -58,6 +59,7 @@
                                                   label="Section Name"
                                                   outlined
                                                   dense
+                                                  :rules="[v => !!v || 'SectionName is required']"
                                              ></v-text-field>
                                         </v-col>
                                    </v-row>
@@ -65,8 +67,8 @@
                          </v-container>
                          <v-card-actions>
                               <v-spacer></v-spacer>
-                              <v-btn @click="saveRecord()" color="primary">Save</v-btn>
-                              <v-btn @click="clearVariables()" text>Cancel</v-btn>
+                              <v-btn @click="saveRecord()" color="primary"><v-icon>mdi-content-save</v-icon> Save</v-btn>
+                              <v-btn @click="clearVariables()" text><v-icon>mdi-cancel</v-icon> Cancel</v-btn>
                          </v-card-actions>
                     </v-card>
                </v-dialog>               
@@ -137,7 +139,7 @@ export default {
               this.editSection.CompanyCode=this.userInfo.CompanyCode
          },
          saveRecord(){
-              if (this.$refs.form.validate){
+              if (this.$refs.form.validate()){
                    this.swal.fire(this.saveOptions).then(result=>{
                          if(result.isConfirmed){
                              let body = {
@@ -205,6 +207,7 @@ export default {
                     UpdatedUserId: '',
                     Option: 1
                }
+          this.$refs.form.resetValidation()
           this.loadsections()
           this.dialog=false
           this.editmode=0

@@ -3,7 +3,7 @@
           <v-breadcrumbs :items="breadCrumbsItems" divider="/"></v-breadcrumbs>
           <v-container>
               <v-card>
-                    <v-card-title>                                   
+                    <v-card-title >                                   
                          <v-row dense>
                               <v-col cols="12" md="4">
                                    <v-card-text class="pa-0 headline">Department-Section-Team</v-card-text>
@@ -12,6 +12,7 @@
                               <v-btn @click="newRecord()" color="primary"><v-icon left>mdi-plus</v-icon>New</v-btn>
                          </v-row>
                     </v-card-title>
+                    <v-divider></v-divider>
                     <v-card-title>
                          <v-row dense>
                               <v-col cols="4">
@@ -45,13 +46,15 @@
                                    ></v-autocomplete>
                               </v-col>
                          </v-row>
-                    </v-card-title>     
+                    </v-card-title>   
+                    <v-divider></v-divider>  
                     <v-data-table
                          :headers="headers"
                          :items="filterData"
                          :search="searchData"
                          :page.sync="page"
                          loading-text="Loading Data. . .Please Wait"
+                         :loading="loading"
                          @page-count="pageCount = $event"
                               hide-default-footer
                     >
@@ -74,20 +77,20 @@
           <v-dialog v-model="dialog" width="500" persistent>
                <v-card>
                     <v-toolbar color="primary" flat dark>New Record</v-toolbar>
-                    {{editdivsecteam}}
                     <v-container>
                          <v-form ref="form"  lazy-validation>
                               <v-row align="center" justify="center" dense>
                                    <v-col cols="12" md="12">                                 
                                         <v-autocomplete
                                              v-model="editdivsecteam.DepartmentCode"
-                                             :items="departmentlist"
+                                             :items="sectionlist"
                                              item-value="DepartmentCode"
                                              item-text="DepartmentName"
-                                             label="Department"    
-                                             clearable                                 
+                                             label="Department"   
+                                             clearable    
                                              outlined
                                              dense
+                                             :rules="[v => !!v || 'Department is required']"
                                         ></v-autocomplete>        
                                         <v-autocomplete 
                                              v-model="editdivsecteam.SectionCode"
@@ -98,6 +101,7 @@
                                              clearable    
                                              outlined
                                              dense
+                                             :rules="[v => !!v || 'Section is required']"
                                         ></v-autocomplete>                           
                                         <v-autocomplete 
                                              v-model="editdivsecteam.TeamCode"
@@ -108,6 +112,7 @@
                                              clearable    
                                              outlined
                                              dense
+                                             :rules="[v => !!v || 'Team is required']"
                                         ></v-autocomplete>                                   
                                    </v-col>
                               </v-row>
@@ -115,8 +120,8 @@
                     </v-container>
                     <v-card-actions>
                          <v-spacer></v-spacer>    
-                         <v-btn @click="saveRecord()" color="primary">Save</v-btn>
-                         <v-btn @click="clearVariables()" text>Cancel</v-btn>
+                         <v-btn @click="saveRecord()" color="primary"><v-icon>mdi-content-save</v-icon> Save</v-btn>
+                         <v-btn @click="clearVariables()" text> <v-icon>mdi-cancel</v-icon> Cancel</v-btn>
                     </v-card-actions>
                </v-card>
           </v-dialog>
@@ -134,6 +139,7 @@ export default {
                department:[],
                pageCount: 0,
                page: 1,
+               loading:true,
                headers:[
                     {text:"Department",value:"DepartmentName"},
                     {text:"Section",value:"SectionName"},
@@ -145,7 +151,7 @@ export default {
                ],
                editdivsecteam:{
                     CompanyCode: '',
-                    DepartmentCode: '00',
+                    DepartmentCode: '',
                     SectionCode: '',
                     TeamCode: '',
                     CreatedDate: this.moment().format('YYYY-MM-DD hh:mm:ss'),
@@ -190,7 +196,7 @@ export default {
                }).sort()               
           }, 
           departmentlist(){
-               return this.filterData.filter((rec)=>{
+               return this.divsecteam.filter((rec)=>{
                     return rec.DepartmentName
                }).sort()
           },
@@ -211,8 +217,10 @@ export default {
      },
      methods:{
           loaddivsectionteam(){
+               this.loading= true
                this.axios.get(`${this.api}/company/department/section/team/${this.userInfo.ShortName}`).then(res=>{
                     this.divsecteam = res.data
+                    this.loading=false
                })
           },
           newRecord(){
@@ -220,7 +228,7 @@ export default {
                this.editdivsecteam.CompanyCode=this.userInfo.CompanyCode
           },
           saveRecord(){
-              if (this.$refs.form.validate){
+              if (this.$refs.form.validate()){                   
                    this.swal.fire(this.saveOptions).then(result=>{
                          if(result.isConfirmed){
                              let body = {
@@ -252,7 +260,7 @@ export default {
           clearVariables(){
                this.editdivsecteam={
                     CompanyCode: '',
-                    DepartmentCode: '00',
+                    DepartmentCode: '',
                     SectionCode: '',
                     TeamCode: '',
                     CreatedDate: this.moment().format('YYYY-MM-DD hh:mm:ss'),
@@ -260,7 +268,7 @@ export default {
                     UpdatedUserId: '',
                     Option: 1
                }
-
+               this.$refs.form.resetValidation()
                this.loaddivsectionteam()
                this.dialog=false
           }
