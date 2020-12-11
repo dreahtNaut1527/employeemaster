@@ -24,32 +24,31 @@
                <v-toolbar color="primary" flat dark dense>
                     <v-toolbar-title>Notifications</v-toolbar-title>
                </v-toolbar>
-               <v-list two-line dense>
+               <v-list v-if="notificationList.length > 0" two-line dense>
                     <v-list-item-group
                          active-class="pink--text"
                          multiple
                     >
-                         <template v-for="(item, i) in notificationList">
-                              <v-list-item :key="i">
-                                   <v-list-item-avatar>
-                                        <v-img
-                                             :src="`http://asd_sql:8080/photos/${item.EmployeeCode}.jpg`"
-                                        ></v-img>
-                                   </v-list-item-avatar>
-                                   <v-list-item-content>
-                                        <v-list-item-title class="font-weight-bold">{{item.EmployeeName}}</v-list-item-title>
-                                        <v-list-item-subtitle>
-                                             {{item.Details}}:
-                                             <span>{{moment(item.CreatedDate).fromNow()}}</span>
-                                        </v-list-item-subtitle>
-                                   </v-list-item-content>
-                                   <v-btn @click="removeNotif(item)" x-small icon>
-                                        <v-icon>mdi-close</v-icon>
-                                   </v-btn>
-                              </v-list-item>
-                         </template>
+                         <v-list-item  v-for="(item, i) in notificationList" :key="i">
+                              <v-list-item-avatar>
+                                   <v-img
+                                        :src="`http://asd_sql:8080/photos/${item.EmployeeCode}.jpg`"
+                                   ></v-img>
+                              </v-list-item-avatar>
+                              <v-list-item-content>
+                                   <v-list-item-title class="font-weight-bold">{{item.EmployeeName}}</v-list-item-title>
+                                   <v-list-item-subtitle>
+                                        {{item.Details}}:
+                                        <span>{{moment(item.CreatedDate).fromNow()}}</span>
+                                   </v-list-item-subtitle>
+                              </v-list-item-content>
+                              <v-btn @click="removeNotif(item)" x-small icon>
+                                   <v-icon>mdi-close</v-icon>
+                              </v-btn>
+                         </v-list-item>
                     </v-list-item-group>
                </v-list>
+               <v-subheader v-else class="font-weight-thin font-italic">No new notifications</v-subheader>
           </v-card>
      </v-menu>
 </template>
@@ -63,7 +62,7 @@ export default {
                totalNotifs: 0
           }
      },
-     created() {
+     created() {    
           this.loadNotifications()
      },
      sockets: {
@@ -79,15 +78,30 @@ export default {
                })
           },
           removeNotif(val) {
-               let index = this.notificationList.findIndex(rec => rec.SeqNo == val.SeqNo)
-               this.notificationList.splice(index, 1)
+               let body = {
+                    procedureName: 'ProcPushNotification',
+                    values: [
+                         val.SeqNo,
+                         val.SocketId,
+                         val.EmplCode,
+                         val.Details,
+                         0
+                    ]
+               }
+               this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)}).then(() => {
+                    let index = this.notificationList.findIndex(rec => rec.SeqNo == val.SeqNo)
+                    this.notificationList.splice(index, 1)
+                    this.$socket.emit('newNotifications', body.values)
+                    this.totalNotifs--
+               })
           }
      },
      watch: {
-          menuDialog() {
-               this.totalNotifs = 0
-          },
+          // menuDialog() {
+          //      this.totalNotifs = 0
+          // },
           notificationList(val) {
+               this.totalNotifs = 0
                val.forEach(rec => {
                     if(rec.EmployeeCode != this.userInfo.EmployeeCode) {
                          if(!rec.Viewed) {

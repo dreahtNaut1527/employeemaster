@@ -34,9 +34,11 @@ const plugins = {
                          let body = {
                               procedureName: 'ProcPushNotification',
                               values: [
+                                   0,
                                    this.$socket.id,
                                    code,
-                                   message
+                                   message,
+                                   1
                               ]
                          }
                          this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
