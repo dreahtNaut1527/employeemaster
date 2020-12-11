@@ -65,7 +65,7 @@
                     placeholder="Search"
                     @keyup="getSearchData()"
                ></v-text-field>
-               <notifications />    
+               <notifications v-if="userInfo.UserLevel != 0" />    
                <v-btn @click="logout()" icon>
                     <v-icon small>mdi-logout</v-icon>
                </v-btn>

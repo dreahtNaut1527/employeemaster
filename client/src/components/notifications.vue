@@ -97,9 +97,6 @@ export default {
           }
      },
      watch: {
-          // menuDialog() {
-          //      this.totalNotifs = 0
-          // },
           notificationList(val) {
                this.totalNotifs = 0
                val.forEach(rec => {

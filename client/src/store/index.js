@@ -13,7 +13,7 @@ export default new Vuex.Store({
     navDrawerVal: false,
     emplcode: '',
     isEmpEdit: false,
-    isConnect: false
+    isConnect: true
   },
   plugins: [
     createPersistedState() 
