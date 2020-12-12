@@ -61,6 +61,11 @@ const routes = [
     component: () => import('@/views/profile'),
   },
   {
+    path: '/transferemployees',
+    name: 'proftransferemployeesile',
+    component: () => import('@/views/transferemployees'),
+  },
+  {
     path: '*',
     name: 'error',
     component: () => import('@/views/error'),
