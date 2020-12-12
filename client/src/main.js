@@ -12,8 +12,8 @@ import store from './store'
 import vuetify from './plugins/vuetify'
 import mixins from './plugins/mixins'
 
-const url = process.env.VUE_APP_LOCAL_SERVER
-// const url = process.env.VUE_APP_SERVER
+// const url = process.env.VUE_APP_LOCAL_SERVER
+const url = process.env.VUE_APP_SERVER
 
 export const SocketInstance = socketio(url)
 
@@ -40,10 +40,12 @@ new Vue({
      sockets: {
           connect() {
                store.commit('CHANGE_CONNECTION', true)
-               if(this.userInfo.UserLevel == 0) {
-                    this.$router.push('/profile')
-               } else {
-                    this.$router.push('/dashboard')
+               if(store.state.isLoggedIn) {
+                    if(this.userInfo.UserLevel == 0) {
+                         this.$router.push('/profile')
+                    } else {
+                         this.$router.push('/dashboard')
+                    }
                }
           },
           disconnect() {
