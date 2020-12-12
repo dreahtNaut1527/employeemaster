@@ -74,13 +74,18 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if(to.path !== '/' && !store.state.isLoggedIn) {
-    next('/') // Goto Login page
-  } else if(to.path === '/' && store.state.isLoggedIn) {
-    next('/dashboard') // When login success , goto dashboard
-  } else {
-    next()
-  }
+    if(to.path !== '/' && !store.state.isLoggedIn) {
+      next('/') // Goto Login page
+    } else if(to.path === '/' && store.state.isLoggedIn) {
+      // check if network is connected
+      if(store.state.isConnect) {
+          next('/dashboard') // When login success , goto dashboard
+      } else {
+        next('*')
+      }
+    } else {
+      next()
+    }
 })
 
 export default router

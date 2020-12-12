@@ -115,11 +115,16 @@
                     </v-col>
                </v-row>
           </v-container>
+          <v-overlay :value="overlay">
+               <v-progress-circular
+                    :size="100"
+                    indeterminate
+               ></v-progress-circular>
+          </v-overlay>
      </v-main>
 </template>
 
 <script>
-import store from '@/store'
 import datePicker from '@/components/datepicker'
 import barGraph from '@/components/bargraph'
 
@@ -127,6 +132,7 @@ export default {
      data() {
           return {
                loading: true,
+               overlay: true,
                dateDialog: false,
                department: '',
                section: '',
@@ -154,15 +160,6 @@ export default {
      },
      created() {
           this.loadLogtime()
-     },
-     sockets: {
-          connect() {
-               store.commit('CHANGE_CONNECTION', true)
-          },
-          disconnect() {
-               this.$router.push('*')
-               store.commit('CHANGE_CONNECTION', false)
-          }
      },
      computed: {
           filterData() {
@@ -212,6 +209,7 @@ export default {
      },
      methods: {
           loadLogtime() {
+               this.overlay = true
                let body = {
                     logdate: this.moment(this.logtimeDate).format('MMDDYY'),
                     server: `HRIS${this.userInfo.ShortName.toLowerCase()}`,
@@ -223,6 +221,7 @@ export default {
                     } else {
                          this.logtime = []
                     }
+                    this.overlay = false
                     this.loading = !this.loading
                })
           }

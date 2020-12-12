@@ -77,8 +77,6 @@
 </template>
 
 <script>
-import store from '@/store'
-
 export default {
      data() {
           return {
@@ -127,13 +125,6 @@ export default {
                setTimeout(() => {
                     this.loadDepartments()
                }, 1500);
-          },
-          connect() {
-               store.commit('CHANGE_CONNECTION', true)
-          },
-          disconnect() {
-               this.$router.push('*')
-               store.commit('CHANGE_CONNECTION', false)
           }
      },
      methods: {

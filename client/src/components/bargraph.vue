@@ -71,6 +71,10 @@ export default {
                          ]
                     }
                     this.renderChart(this.chartData, this.options)
+               }).catch(err => {
+                    if(err) {
+                         this.$router.push('*')
+                    }
                })
           }
      }

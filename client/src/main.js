@@ -15,7 +15,7 @@ import mixins from './plugins/mixins'
 const url = process.env.VUE_APP_LOCAL_SERVER
 // const url = process.env.VUE_APP_SERVER
 
-export const SocketInstance = socketio(url);
+export const SocketInstance = socketio(url)
 
 // Vue Config 
 Vue.config.productionTip = false
@@ -29,13 +29,27 @@ Vue.prototype.moment = moment
 // Vue Use
 Vue.use(mixins)
 Vue.use(new VueSocketIO({
-  debug: true,
-  connection: SocketInstance
-}));
+     debug: false,
+     connection: SocketInstance
+}))
 
 new Vue({
-  router,
-  store,
-  vuetify,
-  render: h => h(App)
+     router,
+     store,
+     vuetify,
+     sockets: {
+          connect() {
+               store.commit('CHANGE_CONNECTION', true)
+               if(this.userInfo.UserLevel == 0) {
+                    this.$router.push('/profile')
+               } else {
+                    this.$router.push('/dashboard')
+               }
+          },
+          disconnect() {
+               store.commit('CHANGE_CONNECTION', false)
+               this.$router.push('*')
+          }
+     },
+     render: h => h(App)
 }).$mount('#app')
