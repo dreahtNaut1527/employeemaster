@@ -68,8 +68,12 @@
                     </v-container>
                     <v-card-actions>
                          <v-spacer></v-spacer>
-                         <v-btn @click="saveRecord()" color="primary">Save</v-btn>
-                         <v-btn @click="clearVariables()" text>Cancel</v-btn>
+                         <v-btn @click="saveRecord()" color="primary">
+                              <v-icon left>mdi-content-save</v-icon>Save
+                         </v-btn>
+                         <v-btn @click="clearVariables()" text>
+                              <v-icon left>mdi-cancel</v-icon>Cancel
+                         </v-btn>
                     </v-card-actions>
                </v-card>
           </v-dialog>

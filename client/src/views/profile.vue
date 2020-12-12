@@ -379,7 +379,7 @@
                                    <v-icon left>mdi-content-save</v-icon>Save
                               </v-btn>
                               <v-btn @click="loadInformation()" text>
-                                   <v-icon left>mdi-delete</v-icon>Cancel
+                                   <v-icon left>mdi-cancel</v-icon>Cancel
                               </v-btn>
                          </v-card-actions>
                     </v-card-text>
