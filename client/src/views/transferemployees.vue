@@ -9,19 +9,12 @@
                                    <v-card-text class="pa-0 headline">Transfer Employees</v-card-text>
                               </v-col>
                               <v-spacer></v-spacer>
-                              <v-btn color="primary" to="/transferemployees"><v-icon left>mdi-transit-transfer</v-icon>Transfer Employees</v-btn>
+                              <v-btn color="primary"><v-icon left>mdi-transit-transfer</v-icon>Transfer</v-btn>
                          </v-row>
                     </v-card-title>
                     <v-divider></v-divider>
                     <v-card-title>
                          <v-row class="mb-n10" dense>
-                              <v-col cols="12" md="2">
-                                   <datePicker
-                                        :menu="dateDialog"
-                                        dateLabel="Transferred Date"
-                                        :dateValue.sync="transferredDate"
-                                   ></datePicker>
-                              </v-col>
                               <v-col v-if="userInfo.UserLevel == 9" cols="12" md="3">
                                    <v-autocomplete
                                         v-model="department"
@@ -79,14 +72,11 @@
 </template>
 
 <script>
-import datePicker from '@/components/datepicker'
 
 export default {
      data() {
           return {
                history: [],
-               dateDialog: false,
-               transferredDate: this.moment().format('YYYY-MM-DD'),
                department: '',
                section: '',
                team: '',
@@ -114,10 +104,9 @@ export default {
           filterData() {
                return this.history.filter(rec => {
                     return (
-                         this.moment(rec.TransferredDate).format('YYYY-MM-DD') == this.transferredDate &&
-                         (rec.DepartmentName.includes(this.department || '') &&
+                         rec.DepartmentName.includes(this.department || '') &&
                          rec.SectionName.includes(this.section || '') &&
-                         rec.TeamName.includes(this.team || '')      )                   
+                         rec.TeamName.includes(this.team || '')                    
                     )
                })
           },
@@ -139,14 +128,13 @@ export default {
      },
      methods:{
           loadHistory(){
-               this.axios.get(`${this.api}/history/hrd/qa`).then(res => {
+               this.axios.get(`${this.api}/employees/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}`).then(res => {
                     this.history = res.data
                     console.log(res.data)
                })
           }
      },
      components: {
-          datePicker
      }
           
      
