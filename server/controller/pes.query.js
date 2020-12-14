@@ -8,6 +8,21 @@ const router = express.Router()
 // =====================================================================
 // ======================= Select Query (MSSQL)=========================
 // =====================================================================
+router.get('/notifications', (req, res) => {
+     config.connect().then(() => {
+               const request = new mssql.Request(config)
+               request.query(`SELECT * FROM NotificationView
+                              ORDER BY Viewed, CreatedDate DESC`, (err, results) => {
+               if(err) {
+                    res.send(err)
+               } else {
+                    res.send(results.recordset)
+               }
+               config.close()
+          })
+     })
+})
+
 router.get('/dayofflist', (req, res) => {
      let company = req.params.company
      config.connect().then(() => {

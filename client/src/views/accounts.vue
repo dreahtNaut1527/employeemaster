@@ -213,9 +213,6 @@ export default {
           }
      },
      created() {
-          this.$socket.io.on('error', () => {
-               this.$router.push('*')
-          })
           this.loadAccounts()
      },
      sockets: {
