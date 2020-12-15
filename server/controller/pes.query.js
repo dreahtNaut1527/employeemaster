@@ -86,13 +86,13 @@ router.post('/postexecute', (req, res) => {
      values.forEach(rec => {
           config.connect().then(() => {
                const request = new mssql.Request(config)
-               request.query(`${sql} '${rec.join("','").replace(/''/g, null)}'`, err => {
+               request.query(`${sql} '${rec.join("','").replace(/''/g, null)}'`, (err, recordset) => {
                     if(err) {
                          res.send(err)
                     } else {
-                         res.end()
+                         return res.status
                     }
-                    config.close()   
+                    config.close() 
                })
           })
      })   
