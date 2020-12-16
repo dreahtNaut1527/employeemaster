@@ -377,6 +377,22 @@ router.get('/notifications', (req, res) => {
           })
      })
 })
+
+router.get('/basicinfo/:code', (req, res) => {
+     let code = req.params.code
+     config.connect().then(() => {
+               const request = new mssql.Request(config)
+               request.query(`SELECT * FROM EmployeeBasicInfoView  
+                              WHERE EmployeeCode = '${code}'`, (err, results) => {
+               if(err) {
+                    res.send(err)
+               } else {
+                    res.send(results.recordset)
+               }
+               config.close()
+          })
+     })
+})
   
 router.post('/executeselect', (req, res) => {
      let data = JSON.parse(req.body.data)
