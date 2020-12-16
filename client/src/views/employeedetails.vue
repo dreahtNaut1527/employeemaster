@@ -8,7 +8,7 @@
                               <v-img :src="`http://asd_sql:8080/photos/${emplcode}.jpg`"></v-img>
                          </v-avatar>
                     </v-col>
-                     
+                    
 
                      <v-list-item class="mt-1">
                          <v-list-item-content>
@@ -17,7 +17,12 @@
                               </v-list-item-title>
                               <v-list-item-subtitle>{{information.DesignationName}}</v-list-item-subtitle>
                               <!-- <v-list-item-subtitle>{{information.WorkEmailAddress}}</v-list-item-subtitle> -->
+                              
                          </v-list-item-content>
+                         <v-col cols="2">
+                                   <v-btn  @click="loadTransferHist()" color="primary">History</v-btn>
+                         </v-col>
+                    
                     </v-list-item>
                     <v-divider class="mx-3"></v-divider>
                     <v-card-text>
@@ -392,12 +397,26 @@
                                    <v-icon left>mdi-content-save</v-icon>Save
                               </v-btn>
                               <v-btn @click="loadInformation()" text>
-                                   <v-icon left>mdi-delete</v-icon>Cancel
+                                   <v-icon left>mdi-cancel</v-icon>Cancel
                               </v-btn>
                          </v-card-actions>
                </v-card>
               
           </v-container>
+          <v-dialog v-model="dialog" width="800">
+               <v-card>
+                    <v-toolbar color="primary" dark flat>
+                         <v-toolbar-title>Transfer History</v-toolbar-title>
+                    </v-toolbar>
+
+                    <v-data-table
+                    :headers="EmpHistoryHeader"
+                    :items="transferHist"
+                    >    
+                    </v-data-table>
+
+               </v-card>
+          </v-dialog>
           <!-- <v-overlay :value="overlay">
                <v-progress-circular
                     :size="100"
@@ -413,6 +432,7 @@ export default {
      data() {
           return {
                tab: null,
+               dialog:false,
                dateDialog: false,
                overlay: true,
                ageValue: 0,
@@ -422,6 +442,7 @@ export default {
                departmentList: [],
                sectionList: [],
                teamList: [],
+               transferHist: [],
                designationList: [],
                positionList: [],
                educationList: [],
@@ -453,26 +474,52 @@ export default {
                     {label: 'Married', value: 'M'},
                     {label: 'Widowed/Widower', value: 'W'},
                     {label: 'Separated', value: 'C'}
-               ]
+               ],
+                EmpHistoryHeader: [
+                    {text: 'Transferred Date', value: 'TransferredDate'},
+                    {text: 'Department', value: 'DepartmentName'},
+                    {text: 'Section', value: 'SectionName'},
+                    {text: 'Team', value: 'TeamName'}
+               ],
           }
      },
       created() {
           this.loadInformation()
-        
+         
          
          
      },
       sockets: {
           connect() {
                this.loadInformation()
+               
           }
      },
      methods:{
+
+
+
            loadInformation() {
+                
                this.overlay = true
                this.axios.get(`${this.api}/employeeinfo/${this.emplcode}`).then(res => {
                     this.information = res.data[0]
                     this.loadDepartments()
+                   
+                                      
+               })
+          },
+           loadTransferHist() {
+               // alert(this.emplcode)
+               this.dialog=true
+               this.overlay = true
+               // this.axios.get(`${this.api}/history/employee/${this.emplcode}`).then(res => {
+               this.axios.get(`${this.api}/history/employee/${this.emplcode}`).then(res => {   
+               console.log('hist',res.data)
+               this.transferHist = res.data
+                 
+                   
+                   
                    
                })
           },
@@ -521,7 +568,7 @@ export default {
           loadOperatingSystem() {
                this.axios.get(`${this.api}/os`).then(res => {
                     this.operatingSystem = res.data
-                    console.log(this.operatingSystem)
+                    // console.log(this.operatingSystem)
                })
           },
           saveRecord() {

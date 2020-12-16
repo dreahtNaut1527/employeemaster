@@ -39,7 +39,11 @@
                <v-data-table 
                :headers="headers"
                :items="filterData"
-               :search="searchData">
+               :search="searchData"
+               :page.sync="page"
+               @page-count="pageCount = $event"
+               hide-default-footer
+               >
                <template v-slot:item.actions="{ item }">
                               <v-btn @click="viewRecord(item.EmployeeCode)" icon>
                                  
@@ -52,6 +56,11 @@
                </template>
 
                </v-data-table>
+                <v-pagination
+                         v-model="page"
+                         :length="pageCount"
+                         :total-visible="10"
+                    ></v-pagination>
                <!-- Your Code Here -->
 
           </v-container>
@@ -67,6 +76,8 @@ export default {
                department: '',
                section: '',
                team: '',
+               pageCount: 0,
+               page: 1,
               
         
                // deptList: [],
@@ -146,7 +157,8 @@ export default {
                //  alert(val)
                store.commit('CHANGE_EMPLCODE', val)
                store.commit('CHANGE_EMP_EDIT', true)
-               location.replace('/employeedetails')
+                this.$router.push('/employeedetails')
+               // location.replace('/employeedetails')
                // this.editedAccount = Object.assign({}, val)
                // this.dialog = true
                // this.disabled = false
@@ -156,7 +168,8 @@ export default {
                // alert(val)
                store.commit('CHANGE_EMPLCODE', val)
                store.commit('CHANGE_EMP_EDIT', false)
-               location.replace('/employeedetails')
+                this.$router.push('/employeedetails')
+               // location.replace('/employeedetails')
              
                // this.editedAccount = Object.assign({}, item)
                // this.dialog = true

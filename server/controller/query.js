@@ -346,14 +346,17 @@ router.get('/history/:company/:department', (req, res) => {
 
 router.get('/history/employee/:code', (req, res) => {
      let code = req.params.code
+  
      config.connect().then(() => {
                const request = new mssql.Request(config)
                request.query(`SELECT * FROM EmployeeHistoryDataView  
                          WHERE EmployeeCode = '${code}'`, (err, results) => {
                if(err) {
                     res.send(err)
+                    alert(err)
                } else {
                     res.send(results.recordset)
+                    alert(results.recordset)
                }
                config.close()
           })
