@@ -16,12 +16,12 @@
                                         <v-text-field
                                              v-model="username"
                                              placeholder="Username"
-                                             append-icon="mdi-account"
                                              outlined
                                              rounded
                                              @blur="getUserInfo()"
                                         >
                                              <template v-slot:append>
+                                                  <v-icon>mdi-account</v-icon>
                                                   <v-fade-transition leave-absolute>
                                                        <v-progress-circular
                                                             v-if="loading"
