@@ -4,21 +4,22 @@
           <v-container>
                <v-card>
                     <v-card-title>
-                              <v-row dense>
-                                   <v-col cols="12" md="4">
-                                        <v-select
-                                             v-model="companies"
-                                             :items="companyList"
-                                             placeholder="Company"
-                                             clearable
-                                             outlined
-                                             dense
-                                        ></v-select>
-                                   </v-col>
-                              <v-spacer></v-spacer>
-                              <v-btn @click="dialog = !dialog" color="primary"><v-icon left>mdi-plus</v-icon>New</v-btn>
-                              </v-row>
+                         <v-row class="mb-n6" dense>
+                              <v-col cols="12" md="4">
+                                   <v-select
+                                        v-model="companies"
+                                        :items="companyList"
+                                        placeholder="Company"
+                                        clearable
+                                        outlined
+                                        dense
+                                   ></v-select>
+                              </v-col>
+                         <v-spacer></v-spacer>
+                         <v-btn @click="dialog = !dialog" color="primary"><v-icon left>mdi-plus</v-icon>New</v-btn>
+                         </v-row>
                     </v-card-title>
+                    <v-divider></v-divider>
                     <v-data-table 
                          :headers="headers" 
                          :items="filterData"

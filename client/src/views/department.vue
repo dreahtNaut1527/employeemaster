@@ -12,6 +12,7 @@
                          <v-btn @click="newRecord()" color="primary"><v-icon left>mdi-plus</v-icon>New</v-btn>
                          </v-row>
                     </v-card-title>
+                    <v-divider></v-divider>
                     <v-data-table
                          :headers="headers"
                          :items="departments"
