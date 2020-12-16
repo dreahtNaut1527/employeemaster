@@ -14,7 +14,7 @@
                     </v-card-title>
                     <v-divider></v-divider>
                     <v-card-title>
-                         <v-row dense>
+                         <v-row class="mb-n6" dense>
                               <v-col cols="4">
                                    <v-autocomplete
                                    v-model="departmentfilter"
