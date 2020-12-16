@@ -39,10 +39,10 @@
                                              type="password"
                                              outlined
                                              rounded
-                                             @keydown.enter="checkUserRights()"
+                                             @keydown.enter="userLoggedIn()"
                                         ></v-text-field>
                                         <v-card-actions>
-                                             <v-btn @click="checkUserRights()" color="primary" :disabled="loading == true" block>Login</v-btn>
+                                             <v-btn @click="userLoggedIn()" color="primary" :disabled="loading == true" block>Login</v-btn>
                                         </v-card-actions>
                                         <v-card-text class="text-center">
                                              Don't have any account? 
@@ -151,58 +151,54 @@ export default {
                     this.loading = false 
                }
           },
-          checkUserRights() {
-               switch (this.myIpAddress.IPADDRESS) {
-                    case '10.169.140.176':
-                    case '10.169.140.173':
-                    case '10.169.140.188':
-                    case '10.169.140.68':
-                         this.userLoggedIn()
-                         break;
+          // checkUserRights() {
+          //      switch (this.myIpAddress.IPADDRESS) {
+          //           case '10.169.140.176':
+          //           case '10.169.140.173':
+          //           case '10.169.140.188':
+          //           case '10.169.140.68':
+          //                this.userLoggedIn()
+          //                break;
                
-                    default:
-                         if(this.employeeDetails.IPAddress == "" || this.employeeDetails.IPAddress == null) {
-                              this.dialog = true
-                              this.dialogTitle = 'Welcome new user'
-                              this.dialogText = `Please update your information`
-                              this.dialogIcon = 'mdi-information'
-                              this.dialogColor = 'info'
-                         } else if(this.employeeDetails.IPAddress != this.myIpAddress.IPADDRESS) {
-                              this.dialog = true
-                              this.dialogTitle = 'Warning'
-                              this.dialogText = `You're using someone else account. Please login to your account`
-                              this.dialogIcon = 'mdi-alert'
-                              this.dialogColor = 'error'
-                         } else {
-                              this.userLoggedIn()
-                         }
-                         break;
-               }
-          },
+          //           default:
+          //                if(this.employeeDetails.IPAddress == "" || this.employeeDetails.IPAddress == null) {
+          //                     this.dialog = true
+          //                     this.dialogTitle = 'Welcome new user'
+          //                     this.dialogText = `Please update your information`
+          //                     this.dialogIcon = 'mdi-information'
+          //                     this.dialogColor = 'info'
+          //                } else if(this.employeeDetails.IPAddress != this.myIpAddress.IPADDRESS) {
+          //                     this.dialog = true
+          //                     this.dialogTitle = 'Warning'
+          //                     this.dialogText = `You're using someone else account. Please login to your account`
+          //                     this.dialogIcon = 'mdi-alert'
+          //                     this.dialogColor = 'error'
+          //                } else {
+          //                     this.userLoggedIn()
+          //                }
+          //                break;
+          //      }
+          // },
           userLoggedIn() {
                if(this.employeeDetails.Status == 1) {
-                    if(this.employeeDetails.IPAddress == null || this.employeeDetails.IPAddress == this.myIpAddress.IPADDRESS) {
-                         if(this.employeeDetails.Password == this.md5(this.password)) {
-                              store.commit('CHANGE_USER_INFO', this.employeeDetails)
-                              store.commit('CHANGE_USER_LOGGING', true)
-                              if (this.employeeDetails.UserLevel == 0) {
-                                   this.$router.push('/profile')
-                              } else {
-                                   this.$router.push('/dashboard')
-                              }
+                    if(this.employeeDetails.Password == this.md5(this.password)) {
+                         store.commit('CHANGE_USER_INFO', this.employeeDetails)
+                         store.commit('CHANGE_USER_LOGGING', true)
+                         if (this.employeeDetails.UserLevel == 0) {
+                              this.$router.push('/profile')
                          } else {
-                              this.alert = !this.alert
-                              this.alertText = 'Incorrect password. Please try again'
+                              this.$router.push('/dashboard')
                          }
                     } else {
-                         this.dialog = false
+                         this.alert = !this.alert
+                         this.alertText = 'Incorrect password. Please try again'
                     }
-               } if(!this.employeeDetails.Status) {
-                    this.alert = !this.alert
-                    this.alertText = 'Account does not exists.'
-               } else {
+               } if(this.employeeDetails.Status == 0) {
                     this.alert = !this.alert
                     this.alertText = 'Account has been deactivate.'
+               } else {
+                    this.alert = !this.alert
+                    this.alertText = 'Account does not exists.'
                }
                this.clearVariables()
           },

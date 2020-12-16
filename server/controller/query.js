@@ -361,10 +361,14 @@ router.get('/history/:code', (req, res) => {
      })
 })
 
-router.get('/notifications', (req, res) => {
+router.get('/notifications/:company/:code', (req, res) => {
+     let company = req.params.company
+     let code = req.params.code
      config.connect().then(() => {
                const request = new mssql.Request(config)
                request.query(`SELECT * FROM NotificationView
+                              WHERE lower(ShortName) = lower('${company}')
+                              AND EmployeeCode != '${code}'
                               ORDER BY Viewed, CreatedDate DESC`, (err, results) => {
                if(err) {
                     res.send(err)

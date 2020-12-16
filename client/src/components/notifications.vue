@@ -73,7 +73,7 @@ export default {
      },
      methods: {
           loadNotifications() {
-               this.axios.get(`${this.api}/notifications`).then(res => {
+               this.axios.get(`${this.api}/notifications/${this.userInfo.ShortName}/${this.userInfo.EmployeeCode}`).then(res => {
                     this.notificationList = res.data
                })
           },

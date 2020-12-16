@@ -174,6 +174,7 @@ export default {
                page: 1,
                editMode: 0,
                newPassword: '',
+               companies: '',
                confirmedPassword: '',
                accounts: [],
                passwordRules: [
@@ -187,7 +188,6 @@ export default {
                     IPAddr: '',
                     UserLevel: 0
                },
-               companies: [],
                userLevel: [0, 1, 2, 9],
                saveOptions: {
                     title: 'Are you sure?',
@@ -215,6 +215,7 @@ export default {
      },
      created() {
           this.loadAccounts()
+          this.companies = this.userInfo.ShortName
      },
      sockets: {
           showNotifications() {
