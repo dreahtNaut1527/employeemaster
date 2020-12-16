@@ -57,11 +57,12 @@
                     <v-divider></v-divider>
                     <v-card-text>
                          <v-data-table
+                              class="elevation-1"
                               :headers="headers"
                               :items="filterData"
                               :loading="loading"
                               :search="searchData"
-                              :items-per-page="7"
+                              :items-per-page="9"
                               :page.sync="page"
                               loading-text="Loading Data. . .Please Wait"
                               @page-count="pageCount = $event"
