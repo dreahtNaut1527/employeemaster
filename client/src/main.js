@@ -40,13 +40,13 @@ new Vue({
      sockets: {
           connect() {
                store.commit('CHANGE_CONNECTION', true)
-               if(store.state.isLoggedIn) {
-                    if(this.userInfo.UserLevel == 0) {
-                         this.$router.push('/profile')
-                    } else {
-                         this.$router.push('/dashboard')
-                    }
-               }
+               // if(store.state.isLoggedIn) {
+               //      if(this.userInfo.UserLevel == 0) {
+               //           this.$router.push('/profile')
+               //      } else {
+               //           this.$router.push('/dashboard')
+               //      }
+               // }
           },
           disconnect() {
                store.commit('CHANGE_CONNECTION', false)

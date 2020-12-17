@@ -276,19 +276,19 @@ router.get('/os', (req, res) => {
      })
  })
 
- router.get('/usercontrol', (req, res) => {
-      config.connect().then(() => {
-          const request = new mssql.Request(config)
-          request.query(`SELECT * FROM UserControlView`, (err, results) => {
-              if(err) {
-                  res.send(err)
-              } else {
-                  res.send(results.recordset)
-              }
-              config.close()
-          })
-      })
-  })
+router.get('/usercontrol', (req, res) => {
+     config.connect().then(() => {
+     const request = new mssql.Request(config)
+     request.query(`SELECT * FROM UserControlView`, (err, results) => {
+          if(err) {
+               res.send(err)
+          } else {
+               res.send(results.recordset)
+          }
+          config.close()
+     })
+     })
+})
 
 router.get('/logging', (req, res) => {
      config.connect().then(() => {
@@ -308,23 +308,39 @@ router.get('/logging', (req, res) => {
      })
  })
 
- router.post('/shifts/:company', (req, res) => {
-      let company = req.params.company
-      let data = JSON.parse(req.body.data)
-      config.connect().then(() => {
-          const request = new mssql.Request(config)
-          request.query(`SELECT * FROM ShiftView 
-                         WHERE lower(ShortName) = lower('${company}')
-                         AND ShiftID NOT IN(${data})`, (err, results) => {
-              if(err) {
-                  res.send(err)
-              } else {
-                  res.send(results.recordset)
-              }
-              config.close()
+router.post('/shifts/:company', (req, res) => {
+     let company = req.params.company
+     let data = JSON.parse(req.body.data)
+     config.connect().then(() => {
+     const request = new mssql.Request(config)
+     request.query(`SELECT * FROM ShiftView 
+                    WHERE lower(ShortName) = lower('${company}')
+                    AND ShiftID NOT IN(${data})`, (err, results) => {
+          if(err) {
+               res.send(err)
+          } else {
+               res.send(results.recordset)
+          }
+          config.close()
+     })
+     })
+})
+
+router.get('/history/:company', (req, res) => {
+     let company = req.params.company
+     config.connect().then(() => {
+               const request = new mssql.Request(config)
+               request.query(`SELECT * FROM EmployeeHistoryDataView  
+                         WHERE lower(ShortName) = lower('${company}')`, (err, results) => {
+               if(err) {
+                    res.send(err)
+               } else {
+                    res.send(results.recordset)
+               }
+               config.close()
           })
-      })
-  })
+     })
+})
 
 router.get('/history/:company/:department', (req, res) => {
      let company = req.params.company

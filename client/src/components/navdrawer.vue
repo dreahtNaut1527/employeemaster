@@ -6,7 +6,7 @@
           >    
                <v-list-item>
                     <v-list-item-content class="ma-2 text-center">
-                         <v-list-item-avatar size="112">
+                         <v-list-item-avatar size="112">                                        
                               <img :src="`http://asd_sql:8080/photos/${user.EmployeeCode}.jpg`" alt="nopic.jpg">
                          </v-list-item-avatar>
                          <v-list-item-title class="headline">{{ user.EmployeeCode }}</v-list-item-title>
