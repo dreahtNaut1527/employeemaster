@@ -9,12 +9,12 @@
                                    <v-card-text class="pa-0 headline">Transfer Employees</v-card-text>
                               </v-col>
                               <v-spacer></v-spacer>
-                              <v-btn color="primary" @click="transferEmployees()"><v-icon left>mdi-transit-transfer</v-icon>Proceed</v-btn>
+                              <v-btn color="primary" @click="transferEmployees()" :disabled="selected.length <= 0"><v-icon left>mdi-transit-transfer</v-icon>Proceed</v-btn>
                          </v-row>
                     </v-card-title>
                     <v-divider></v-divider>
                     <v-card-title>
-                         <v-row class="mb-n10" dense>
+                         <v-row class="mb-n6" dense>
                               <v-col v-if="userInfo.UserLevel == 9" cols="12" md="3">
                                    <v-autocomplete
                                         v-model="departmentFilter"
@@ -48,58 +48,63 @@
                          </v-row>
                     </v-card-title>
                     <v-divider></v-divider>
-                    <v-card-text>
-                         <v-data-table
-                              class="elevation-1"
-                              :headers="headers"
-                              :items="filterData"
-                              :loading="loading"
-                              :search="searchData"
-                              :items-per-page="9"
-                              :page.sync="page"
-                              :single-select="singleSelect"
-                              item-key="EmployeeCode"
-                              loading-text="Loading Data. . .Please Wait"
-                              @page-count="pageCount = $event"
-                              show-select
-                              hide-default-footer>
-                         </v-data-table>
-                         <v-pagination
-                              v-model="page"
-                              :length="pageCount"
-                              :total-visible="10"
-                         ></v-pagination>
-                    </v-card-text>
+                    <v-data-table
+                         v-model="selected"
+                         :headers="headers"
+                         :items="filterData"
+                         :loading="loading"
+                         :search="searchData"
+                         :items-per-page="9"
+                         :page.sync="page"
+                         :single-select="singleSelect"
+                         item-key="EmployeeCode"
+                         loading-text="Loading Data. . .Please Wait"
+                         @page-count="pageCount = $event"
+                         show-select
+                         hide-default-footer>
+                    </v-data-table>
+                    <v-pagination
+                         v-model="page"
+                         :length="pageCount"
+                         :total-visible="10"
+                    ></v-pagination>
                </v-card>
                <v-dialog v-model="dialog" width="500" persistent>
                     <v-card>
+                         {{transdivsecteam}}
                          <v-toolbar color="primary" dark flat>
                               <v-toolbar-title>Transfer Employees</v-toolbar-title>
                          </v-toolbar>
                          <v-card-text>
                               <v-container>
                                    <v-form ref="form" v-model="valid" lazy-validation>
-                                        <v-row>
-                                             <v-col v-if="userInfo.UserLevel == 9" dense>
+                                        <v-row align="center" justify="center" dense>
+                                             <v-col cols="12" md="12">     
                                                   <v-autocomplete
-                                                       v-model="transferdivsecteam.departmentCode"
+                                                       v-model="transdivsecteam.DepartmentCode"
                                                        :items="departmentList"
+                                                       item-value="DepartmentCode"
+                                                       item-text="DepartmentName"
                                                        placeholder="Department"
                                                        clearable
                                                        outlined
                                                        dense
                                                   ></v-autocomplete>
                                                   <v-autocomplete
-                                                       v-model="transferdivsecteam.sectionCode"
+                                                       v-model="transdivsecteam.SectionCode"
                                                        :items="sectionList"
+                                                       item-value="SectionCode"
+                                                       item-text="SectionName"
                                                        placeholder="Section"
                                                        clearable
                                                        outlined
                                                        dense
                                                   ></v-autocomplete>
                                                   <v-autocomplete
-                                                       v-model="transferdivsecteam.teamCode"
+                                                       v-model="transdivsecteam.TeamCode"
                                                        :items="teamList"
+                                                       item-value="TeamCode"
+                                                       item-text="TeamName"
                                                        placeholder="Team"
                                                        clearable
                                                        outlined
@@ -114,7 +119,7 @@
                                    <v-btn @click="saveRecord()" color="primary">
                                         <v-icon left>mdi-content-save</v-icon>Save
                                    </v-btn>
-                                   <v-btn @click="cancel()" text>
+                                   <v-btn @click="dialog = !dialog" text>
                                         <v-icon left>mdi-cancel</v-icon>Cancel
                                    </v-btn>
                               </v-card-actions>
@@ -131,6 +136,7 @@ export default {
      data() {
           return {
                history: [],
+               selected: [],
                departmentFilter: '',
                sectionFilter: '',
                teamFilter: '',
@@ -143,7 +149,8 @@ export default {
                valid: true,
                breadCrumbsItems: [
                     {text: 'Main Data', disabled: false, href: '/transfer'},
-                    {text: 'Transfer Employee', disabled: true, href: '/transfer'}
+                    {text: 'Transfer Employee', disabled: false, href: '/transferemployees'},
+                    {text: 'Transfer', disabled: true, href: '#'},
                ],
                headers: [
                     {text:'Code',value:'EmployeeCode'},
@@ -152,20 +159,18 @@ export default {
                     {text:'Section',value:'SectionName'},
                     {text:'Team',value:'TeamName'}
                ],
-               transferdivsecteam:{
-                    employeeCode: '',
-                    departmentCode: '',
-                    sectionCode: '',
-                    teamCode: '',
-                    createdDate: this.moment().format('YYYY-MM-DD hh:mm:ss'),
-                    updatedDate: this.moment().format('YYYY-MM-DD hh:mm:ss'),
-                    updatedUserId: this.userInfo
-               }
-
+               transdivsecteam:{
+                    DepartmentCode: '',
+                    SectionCode: '',
+                    TeamCode: '',
+                    CreatedDate: this.moment().format('YYYY-MM-DD hh:mm:ss'),
+                    UpdatedDate: this.moment().format('YYYY-MM-DD hh:mm:ss'),
+                    UpdatedUserId: ''
+               }, 
           }
      },
      created(){
-          this.loadHistory()
+          this.loadEmployees()
      },
      computed: {
           filterData() {
@@ -174,6 +179,21 @@ export default {
                          rec.DepartmentName.includes(this.departmentFilter || '') &&
                          rec.SectionName.includes(this.sectionFilter || '') &&
                          rec.TeamName.includes(this.teamFilter || '')                    
+                    )
+               })
+          },
+          filterSection() {
+               return this.divsecteam.filter(rec => {
+                    return (
+                         rec.DepartmentCode.includes(this.transdivsecteam.DepartmentCode || '')              
+                    )
+               })
+          },
+          filterTeam() {
+               return this.divsecteam.filter(rec => {
+                    return (
+                         rec.DepartmentCode.includes(this.transdivsecteam.DepartmentCode || '') &&
+                         rec.SectionCode.includes(this.transdivsecteam.SectionCode || '')                   
                     )
                })
           },
@@ -193,24 +213,24 @@ export default {
                }).sort()
           },
           departmentList(){
-               return this.divsecteam.map(rec =>{
+               return this.divsecteam.filter(rec =>{
                    return rec.DepartmentName
                }).sort()
           },
           sectionList(){
-               return this.divsecteam.map(rec =>{
+               return this.filterSection.filter(rec =>{
                    return rec.SectionName
                }).sort()
           },
           teamList(){
-               return this.divsecteam.map(rec =>{
-                   return rec.TeamName
+               return this.filterTeam.filter(rec =>{
+                   return rec.TeamName         
                }).sort()
           }
      },
      methods:{
-          loadHistory(){
-               this.axios.get(`${this.api}/employees/${this.userInfo.ShortName}`).then(res => {
+          loadEmployees(){
+               this.axios.get(`${this.api}/employees/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}`).then(res => {
                     this.history = res.data
                     console.log(res.data)
                })
@@ -222,9 +242,37 @@ export default {
                })
           },
           saveRecord(){
+               let data = []
+               let body = {
+                    procedureName: 'ProcPostTransferEmployee',
+                    values: []
+               }
+               this.selected.forEach(rec =>{
+                    data = [
+                         rec.EmployeeCode,
+                         this.transdivsecteam.DepartmentCode,
+                         this.transdivsecteam.SectionCode,
+                         this.transdivsecteam.TeamCode,
+                         this.transdivsecteam.CreatedDate,
+                         this.transdivsecteam.UpdatedDate,
+                         this.userInfo.EmployeeCode
+                    ]
+                    body.values.push(data)
+               })
+               this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
+               this.swal.fire('Saved','', 'success')
+               this.$router.push('/transfer')
                this.dialog = false
           },
-          cancel(){
+          clearVariables(){
+               this.transdivsecteam = {
+                    DepartmentCode: '',
+                    SectionCode: '',
+                    TeamCode: '',
+                    CreatedDate: this.moment().format('YYYY-MM-DD hh:mm:ss'),
+                    UpdatedDate: this.moment().format('YYYY-MM-DD hh:mm:ss'),
+                    UpdatedUserId: ''
+               }
                this.dialog = false
           }
      },

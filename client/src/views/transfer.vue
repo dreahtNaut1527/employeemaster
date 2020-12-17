@@ -9,12 +9,16 @@
                                    <v-card-text class="pa-0 headline">Transfer Employees</v-card-text>
                               </v-col>
                               <v-spacer></v-spacer>
-                              <v-btn color="primary" to="/transferemployees"><v-icon left>mdi-transit-transfer</v-icon>Transfer Employees</v-btn>
+                              <v-btn 
+                                   color="primary" 
+                                   to="/transferemployees">
+                                        <v-icon left>mdi-transit-transfer</v-icon>Transfer Employees
+                              </v-btn>
                          </v-row>
                     </v-card-title>
                     <v-divider></v-divider>
                     <v-card-title>
-                         <v-row class="mb-n10" dense>
+                         <v-row class="mb-n6" dense>
                               <v-col cols="12" md="2">
                                    <datePicker
                                         :menu="dateDialog"
@@ -55,25 +59,22 @@
                          </v-row>
                     </v-card-title>
                     <v-divider></v-divider>
-                    <v-card-text>
-                         <v-data-table
-                              class="elevation-1"
-                              :headers="headers"
-                              :items="filterData"
-                              :loading="loading"
-                              :search="searchData"
-                              :items-per-page="9"
-                              :page.sync="page"
-                              loading-text="Loading Data. . .Please Wait"
-                              @page-count="pageCount = $event"
-                              hide-default-footer>
-                         </v-data-table>
-                         <v-pagination
-                              v-model="page"
-                              :length="pageCount"
-                              :total-visible="10"
-                         ></v-pagination>
-                    </v-card-text>
+                    <v-data-table
+                         :headers="headers"
+                         :items="filterData"
+                         :loading="loading"
+                         :search="searchData"
+                         :items-per-page="9"
+                         :page.sync="page"
+                         loading-text="Loading Data. . .Please Wait"
+                         @page-count="pageCount = $event"
+                         hide-default-footer>
+                    </v-data-table>
+                    <v-pagination
+                         v-model="page"
+                         :length="pageCount"
+                         :total-visible="10"
+                    ></v-pagination>
                </v-card>
           </v-container>
      </v-main>
@@ -140,7 +141,7 @@ export default {
      },
      methods:{
           loadHistory(){
-               this.axios.get(`${this.api}/history/hrd/qa`).then(res => {
+               this.axios.get(`${this.api}/history/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}`).then(res => {
                     this.history = res.data
                     console.log(res.data)
                })
