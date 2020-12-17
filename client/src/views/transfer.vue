@@ -141,7 +141,13 @@ export default {
      },
      methods:{
           loadHistory(){
-               this.axios.get(`${this.api}/history/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}`).then(res => {
+               let url = ''
+               if (this.userInfo.UserLevel == 9){
+                    url = `${this.api}/history/${this.userInfo.ShortName}`
+               }else{
+                    url = `${this.api}/history/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}`
+               }
+               this.axios.get(url).then(res => {
                     this.history = res.data
                     console.log(res.data)
                })
