@@ -442,7 +442,7 @@ router.post('/execute', (req, res) => {
                     if(err) {
                          res.send(err)
                     } else {
-                         res.end()
+                         return res.status
                     }
                     config.close()   
                })
@@ -469,7 +469,7 @@ router.put('/deleteemployee', (req, res) => {
                     if(err) {
                          res.send(err)
                     } else {
-                         res.end()
+                         return res.status
                     }
                     config.close()   
                })
