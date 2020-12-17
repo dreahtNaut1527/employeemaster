@@ -83,7 +83,7 @@
                                    <v-col cols="12" md="12">                                 
                                         <v-autocomplete
                                              v-model="editdivsecteam.DepartmentCode"
-                                             :items="sectionlist"
+                                             :items="departmentlist"
                                              item-value="DepartmentCode"
                                              item-text="DepartmentName"
                                              label="Department"   
