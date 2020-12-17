@@ -4,7 +4,7 @@
           <v-container>
                <v-card class="mx-auto" tile>
                     <v-col cols="12">
-                         <v-avatar size="50">
+                         <v-avatar size="70">
                               <v-img :src="`http://asd_sql:8080/photos/${emplcode}.jpg`"></v-img>
                          </v-avatar>
                     </v-col>
@@ -513,8 +513,8 @@ export default {
                // alert(this.emplcode)
                this.dialog=true
                this.overlay = true
-               // this.axios.get(`${this.api}/history/employee/${this.emplcode}`).then(res => {
-               this.axios.get(`${this.api}/history/employee/${this.emplcode}`).then(res => {   
+              
+               this.axios.get(`${this.api}/history/${this.emplcode}`).then(res => {      
                console.log('hist',res.data)
                this.transferHist = res.data
                  
@@ -644,6 +644,14 @@ export default {
                this.dateBirth = val.DateBirth ? this.moment(val.DateBirth).format('YYYY-MM-DD') : ""
                this.genderValue = val.Gender == 'M' ? 'Male' : 'Female'
                this.ageValue = this.moment().diff(this.dateBirth, 'years')
+          },
+          transferHist() {
+               return this.transferHist.map((rec)=>{
+                    return   rec.TransferredDate = rec.TransferredDate ? this.moment(rec.TransferredDate).format('YYYY-MM-DD') : ""
+               })
+
+               // alert(val.TransferredDate)
+               // val.TransferredDate = val.TransferredDate ? this.moment(val.TransferredDate).format('YYYY-MM-DD') : ""     
           },
           dateBirth(val) {
                this.information.DateBirth = val

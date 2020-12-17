@@ -2,40 +2,43 @@
      <v-main>
           <v-breadcrumbs :items="breadCrumbsItems" divider="/"></v-breadcrumbs>
           <v-container>
-               <v-row  dense>
-                    <v-col v-if="userInfo.UserLevel == 9" cols="12" md="3">
-                        
-                         <v-autocomplete
-                              v-model="department"
-                              :items="departmentList"
-                              placeholder="Department"
-                              clearable
-                              outlined
-                              dense
-                         ></v-autocomplete>
-                    </v-col>
-                     <v-col cols="12" md="3">
-                         <v-autocomplete
-                              v-model="section"
-                              :items="sectionList"
-                              placeholder="Section"
-                              clearable
-                              outlined
-                              dense
-                         ></v-autocomplete>
-                    </v-col>
-                    <v-col cols="12" md="3">
-                         <v-autocomplete
-                              v-model="team"
-                              :items="teamList"
-                              placeholder="Team"
-                              clearable
-                              outlined
-                              dense
-                         ></v-autocomplete>
-                    </v-col>
-                    
-               </v-row>
+               <v-card>
+                    <v-card-title>
+                              <v-row  dense>
+                                   <v-col v-if="userInfo.UserLevel == 9" cols="12" md="3">
+                                   
+                                        <v-autocomplete
+                                             v-model="department"
+                                             :items="departmentList"
+                                             placeholder="Department"
+                                             clearable
+                                             outlined
+                                             dense
+                                        ></v-autocomplete>
+                                   </v-col>
+                                   <v-col cols="12" md="3">
+                                        <v-autocomplete
+                                             v-model="section"
+                                             :items="sectionList"
+                                             placeholder="Section"
+                                             clearable
+                                             outlined
+                                             dense
+                                        ></v-autocomplete>
+                                   </v-col>
+                                   <v-col cols="12" md="3">
+                                        <v-autocomplete
+                                             v-model="team"
+                                             :items="teamList"
+                                             placeholder="Team"
+                                             clearable
+                                             outlined
+                                             dense
+                                        ></v-autocomplete>
+                                   </v-col>
+                                   
+                              </v-row>
+                    </v-card-title>
                <v-data-table 
                :headers="headers"
                :items="filterData"
@@ -62,7 +65,7 @@
                          :total-visible="10"
                     ></v-pagination>
                <!-- Your Code Here -->
-
+               </v-card>
           </v-container>
      </v-main>
 </template>
