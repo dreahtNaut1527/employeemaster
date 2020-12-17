@@ -24,21 +24,37 @@ router.get('/companies', (req, res) => {
 router.get('/employeeinfo/:code', (req, res) => {
      let code = req.params.code
      config.connect().then(() => {
-         const request = new mssql.Request(config)
-         request.query(`SELECT * FROM EmployeeInformationView WHERE EmployeeCode = '${code}'`, (err, results) => {
-             if(err) {
-                 res.send(err)
-             } else {
-                 res.send(results.recordset)
-             }
-             config.close()
-         })
+          const request = new mssql.Request(config)
+          request.query(`SELECT * FROM EmployeeInformationView WHERE EmployeeCode = '${code}'`, (err, results) => {
+               if(err) {
+                    res.send(err)
+               } else {
+                    res.send(results.recordset)
+               }
+               config.close()
+          })
      })   
- })
+})
+
+router.get('/basicinfo/:code', (req, res) => {
+     let code = req.params.code
+     config.connect().then(() => {
+               const request = new mssql.Request(config)
+               request.query(`SELECT * FROM EmployeeBasicInfoView  
+                              WHERE EmployeeCode = '${code}'`, (err, results) => {
+               if(err) {
+                    res.send(err)
+               } else {
+                    res.send(results.recordset)
+               }
+               config.close()
+          })
+     })
+})
 
 router.get('/employees/:company', (req, res) => {
      let company = req.params.company
-     let sql = `SELECT * FROM EmployeeInformationView WHERE lower(ShortName) = lower('${company}')`
+     let sql = `SELECT * FROM EmployeeBasicInfoView WHERE lower(ShortName) = lower('${company}')`
      config.connect().then(() => {
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {  
@@ -55,7 +71,7 @@ router.get('/employees/:company', (req, res) => {
 router.get('/employees/:compname/:department', (req, res) => {
      let compname = req.params.compname
      let department = req.params.department
-     let sql = `SELECT * FROM EmployeeInformationView WHERE lower(ShortName) = lower('${compname}')
+     let sql = `SELECT * FROM EmployeeBasicInfoView WHERE lower(ShortName) = lower('${compname}')
                AND lower(DepartmentName) = lower('${department}')`
      config.connect().then(() => {
           const request = new mssql.Request(config)
@@ -74,7 +90,7 @@ router.get('/employees/:compname/:department/:section', (req, res) => {
      let compname = req.params.compname
      let department = req.params.department
      let section = req.params.section
-     let sql = `SELECT * FROM EmployeeInformationView WHERE lower(ShortName) = lower('${compname}')
+     let sql = `SELECT * FROM EmployeeBasicInfoView WHERE lower(ShortName) = lower('${compname}')
                AND lower(DepartmentName) = lower('${department}')
                AND lower(SectionName) = lower('${section}')`
      config.connect().then(() => {
@@ -95,7 +111,7 @@ router.get('/employees/:compname/:department/:section/:team', (req, res) => {
      let department = req.params.department
      let section = req.params.section
      let team = req.params.team
-     let sql = `SELECT * FROM EmployeeInformationView WHERE lower(ShortName) = lower('${compname}')
+     let sql = `SELECT * FROM EmployeeBasicInfoView WHERE lower(ShortName) = lower('${compname}')
                AND lower(DepartmentName) = lower('${department}')
                AND lower(SectionName) = lower('${section}')
                AND lower(TeamName) = lower('${team}')`
@@ -386,22 +402,6 @@ router.get('/notifications/:company/:code', (req, res) => {
                               WHERE lower(ShortName) = lower('${company}')
                               AND EmployeeCode != '${code}'
                               ORDER BY Viewed, CreatedDate DESC`, (err, results) => {
-               if(err) {
-                    res.send(err)
-               } else {
-                    res.send(results.recordset)
-               }
-               config.close()
-          })
-     })
-})
-
-router.get('/basicinfo/:code', (req, res) => {
-     let code = req.params.code
-     config.connect().then(() => {
-               const request = new mssql.Request(config)
-               request.query(`SELECT * FROM EmployeeBasicInfoView  
-                              WHERE EmployeeCode = '${code}'`, (err, results) => {
                if(err) {
                     res.send(err)
                } else {
