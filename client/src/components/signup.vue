@@ -82,10 +82,14 @@
                                         </v-card-text>
                                    </v-form>
                                    <v-card-actions>
-                                        <v-btn @click="saveRecord()" color="primary" block>Create an account</v-btn>
+                                        <v-btn @click="saveRecord()" color="primary" :disabled="disableButton" block>
+                                             Create an account
+                                        </v-btn>
                                    </v-card-actions>
                                    <v-card-actions>
-                                        <v-btn @click="clearVariables()" color="primary" block>Log in to your account</v-btn>
+                                        <v-btn @click="clearVariables()" color="primary" block>
+                                             Log in to your account
+                                        </v-btn>
                                    </v-card-actions>
                                    </v-card-text>
                               </v-card>
@@ -104,6 +108,7 @@ export default {
                valid: true,
                dialog: false,
                loadName: false,
+               disableButton: false,
                newPassword: '',
                confirmedPassword: '',
                passwordRules: [
@@ -166,7 +171,23 @@ export default {
                          this.editedAccount.Fullname = res.data[0].EmployeeName
                          this.loadName = false
                     })
+                    this.getUserAccount()
                }
+          },
+          getUserAccount() { 
+               let body = {
+                    procedureName: 'ProcGetUserAccount',
+                    values: [this.editedAccount.EmployeeCode]
+               }
+               // if (this.editedAccount.EmployeeCode) {     
+                    this.axios.post(`${this.api}/executeselect`, {data: JSON.stringify(body)}).then(res => {
+                         if(res.data[0].Username != undefined) {
+                              this.disableButton = true
+                         } else {
+                              this.disableButton = false
+                         }
+                    })
+               // } 
           },
           clearVariables() {
                this.editedAccount = {
