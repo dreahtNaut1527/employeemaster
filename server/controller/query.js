@@ -85,6 +85,23 @@ router.get('/employees/:compname/:department', (req, res) => {
           })
      })   
 })
+router.get('/employees/:compname/:department', (req, res) => {
+     let compname = req.params.compname
+     let department = req.params.department
+     let sql = `SELECT * FROM EmployeeBasicInfoView WHERE lower(ShortName) = lower('${compname}')
+               AND lower(DepartmentName) = lower('${department}')`
+     config.connect().then(() => {
+          const request = new mssql.Request(config)
+          request.query(sql, (err, results) => {
+               if(err) {
+                    res.send(err)
+               } else {
+                    res.send(results.recordset)
+               }
+               config.close()
+          })
+     })   
+})
 
 router.get('/employees/:compname/:department/:section', (req, res) => {
      let compname = req.params.compname
@@ -376,7 +393,7 @@ router.get('/history/:company/:department', (req, res) => {
      })
 })
 
-router.get('/history/:code', (req, res) => {
+router.get('/employeehistory/:code', (req, res) => {
      let code = req.params.code
      config.connect().then(() => {
                const request = new mssql.Request(config)
@@ -384,7 +401,6 @@ router.get('/history/:code', (req, res) => {
                          WHERE EmployeeCode = '${code}'`, (err, results) => {
                if(err) {
                     res.send(err)
-                    alert(err)
                } else {
                     res.send(results.recordset)
                }
