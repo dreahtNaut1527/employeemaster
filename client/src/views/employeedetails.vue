@@ -412,8 +412,16 @@
                     <v-data-table
                     :headers="EmpHistoryHeader"
                     :items="transferHist"
+                    :page.sync="page"
+                    @page-count="pageCount = $event"
+                    hide-default-footer
                     >    
                     </v-data-table>
+                     <v-pagination
+                         v-model="page"
+                         :length="pageCount"
+                         :total-visible="10"
+                    ></v-pagination>
 
                </v-card>
           </v-dialog>
@@ -432,6 +440,8 @@ export default {
      data() {
           return {
                tab: null,
+               pageCount: 0,
+               page: 1,
                dialog:false,
                dateDialog: false,
                overlay: true,
@@ -514,7 +524,7 @@ export default {
                this.dialog=true
                this.overlay = true
               
-               this.axios.get(`${this.api}/history/${this.emplcode}`).then(res => {      
+               this.axios.get(`${this.api}/employeehistory/${this.emplcode}`).then(res => {      
                console.log('hist',res.data)
                this.transferHist = res.data
                  
