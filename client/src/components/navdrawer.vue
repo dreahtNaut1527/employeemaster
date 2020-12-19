@@ -56,7 +56,10 @@
                app
           >
                <v-app-bar-nav-icon @click="navDrawerHide(null)"></v-app-bar-nav-icon>
-               <v-toolbar-title v-if="userInfo.UserLevel < 9">{{ user.DepartmentName }} Department</v-toolbar-title>               <v-toolbar-title v-else>ASD Team</v-toolbar-title>
+               <div class="hidden-sm-and-down">
+                    <v-toolbar-title v-if="userInfo.UserLevel < 9">{{ user.DepartmentName }} Department</v-toolbar-title>
+                    <v-toolbar-title v-else>ASD Team</v-toolbar-title>
+               </div>
                <v-spacer></v-spacer>
                <v-text-field
                     class="mt-4 mr-3" 

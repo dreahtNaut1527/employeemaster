@@ -1,6 +1,5 @@
 <template>
      <v-main>
-          <v-alert v-model="alert" color="error" transition="scroll-y-transition" dismissible dark tile>{{alertText}}</v-alert>
           <v-container class="fill-height">
                <v-row align="center" justify="center">
                     <v-col cols="12" md="4">
@@ -77,6 +76,25 @@
                     </v-card-text>
                </v-card>
           </v-dialog>
+          <v-snackbar
+               v-model="alert" 
+               color="error" 
+               :timeout="2000"
+               transition="scroll-x-reverse-transition" 
+               right
+               dark 
+          >
+               {{alertText}}
+               <template v-slot:action="{ attrs }">
+                    <v-btn
+                         v-bind="attrs"
+                         @click="alert = false"
+                         icon
+                    >
+                         <v-icon>mdi-close-circle</v-icon>
+                    </v-btn>
+               </template>
+          </v-snackbar>
           <signUp :signUpDialog="signUpDialog"></signUp>
      </v-main>
 </template>

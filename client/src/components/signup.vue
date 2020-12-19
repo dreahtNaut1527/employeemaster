@@ -190,6 +190,7 @@ export default {
                // } 
           },
           clearVariables() {
+               this.dialog = !this.dialog
                this.editedAccount = {
                     EmployeeCode: '',
                     Username: '',
@@ -202,7 +203,6 @@ export default {
                }
                this.newPassword = ''
                this.confirmedPassword = ''
-               this.dialog = false
           }
      },
      watch: {
