@@ -20,7 +20,7 @@
                                              @blur="getUserInfo()"
                                         >
                                              <template v-slot:append>
-                                                  <v-icon>mdi-account</v-icon>
+                                                  <v-icon v-if="!loading">mdi-account</v-icon>
                                                   <v-fade-transition leave-absolute>
                                                        <v-progress-circular
                                                             v-if="loading"
@@ -198,7 +198,7 @@ export default {
           //      }
           // },
           userLoggedIn() {
-               if(this.employeeDetails.Status == 1) {
+               if(this.employeeDetails.Status == 1 && this.employeeDetails.Status != undefined) {
                     if(this.employeeDetails.Password == this.md5(this.password)) {
                          store.commit('CHANGE_USER_INFO', this.employeeDetails)
                          store.commit('CHANGE_USER_LOGGING', true)
@@ -208,14 +208,14 @@ export default {
                               this.$router.push('/dashboard')
                          }
                     } else {
-                         this.alert = !this.alert
+                         this.alert = true
                          this.alertText = 'Incorrect password. Please try again'
                     }
                } if(this.employeeDetails.Status == 0) {
-                    this.alert = !this.alert
+                    this.alert = true
                     this.alertText = 'Account has been deactivate.'
                } else {
-                    this.alert = !this.alert
+                    this.alert = true
                     this.alertText = 'Account does not exists.'
                }
                this.clearVariables()

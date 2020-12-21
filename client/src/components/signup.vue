@@ -153,10 +153,9 @@ export default {
                                         1
                                    ]
                               }
-                              this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)}).then(() => {
-                                   this.swal.fire('Hooray!','Changes has been saved', 'success')
-                                   this.clearVariables()
-                              })
+                              this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
+                              this.swal.fire('Hooray!','Changes has been saved', 'success')
+                              this.clearVariables()
                          } else if(result.isDenied) {
                               this.swal.fire('Oh no!', 'Changes are not saved', 'info')
                          }
@@ -190,7 +189,6 @@ export default {
                // } 
           },
           clearVariables() {
-               this.dialog = !this.dialog
                this.editedAccount = {
                     EmployeeCode: '',
                     Username: '',
@@ -203,6 +201,7 @@ export default {
                }
                this.newPassword = ''
                this.confirmedPassword = ''
+               this.dialog = false
           }
      },
      watch: {
