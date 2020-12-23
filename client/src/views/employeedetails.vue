@@ -73,7 +73,7 @@
                                                        item-text="DepartmentName"
                                                        item-value="DepartmentCode"
                                                        label="Department"
-                                                       :readonly="this.isEmpEdit == false"
+                                                        readonly
                                                        outlined
                                                        dense
                                                   ></v-autocomplete>
@@ -84,7 +84,7 @@
                                                        :items="sectionList"
                                                        item-text="SectionName"
                                                        item-value="SectionCode"
-                                                       :readonly="this.isEmpEdit == false"
+                                                        readonly
                                                        label="Section"
                                                      
                                                        outlined
@@ -97,7 +97,7 @@
                                                        :items="teamList"
                                                        item-text="TeamName"
                                                        item-value="TeamCode"
-                                                       :readonly="this.isEmpEdit == false"
+                                                       readonly
                                                        label="Team"
                                                       
                                                        outlined
@@ -484,13 +484,6 @@ export default {
                genderValue: '',
                information: '',
                dateBirth: '',
-               // departmentList:[],
-               // sectionList:[],
-               // teamList:[],
-           
-               // DepartmentName:'',
-               // SectionName:'',
-               // TeamName:'',
                transferHist: [],
                divsecteam:[],
                designationList: [],
@@ -583,14 +576,12 @@ export default {
                this.overlay = true
                this.axios.get(`${this.api}/employeeinfo/${this.emplcode}`).then(res => {
                     this.information = res.data[0]
-                    
                     this.loaddivsectionteam() 
-                    // this.loadDepartments()            
+                      
                                       
                })
           },
            loadTransferHist() {
-               // alert(this.emplcode)
                this.dialog=true
                this.overlay = true            
                this.axios.get(`${this.api}/employeehistory/${this.emplcode}`).then(res => {      
@@ -608,28 +599,8 @@ export default {
                       this.loadShifts()
                       this.loadDesignations()
                })
-          },
-         
-          // loadDepartments() {
-          //      this.axios.get(`${this.api}/company/department/${this.userInfo.ShortName}`).then(res => {
-          //           this.departmentList = res.data
-          //           this.loadSections()
-          //      })
-          // },
-          // loadSections() {
-          //      this.axios.get(`${this.api}/company/department/section/${this.userInfo.ShortName}`).then(res => {
-          //           this.sectionList = res.data
-                    
-          //           this.loadTeams()
-          //           this.loadShifts()
-          //      })
-          // },
-          // loadTeams() {
-          //      this.axios.get(`${this.api}/company/department/section/team/${this.userInfo.ShortName}`).then(res => {
-          //           this.teamList = res.data
-          //           this.loadDesignations()
-          //      })
-          // },
+          },        
+        
           loadDesignations() {
                this.axios.get(`${this.api}/company/designation/${this.userInfo.ShortName}`).then(res => {
                     this.designationList = res.data
@@ -656,7 +627,7 @@ export default {
           loadOperatingSystem() {
                this.axios.get(`${this.api}/os`).then(res => {
                     this.operatingSystem = res.data
-                    // console.log(this.operatingSystem)
+                   
                })
           },
           saveRecord() {
