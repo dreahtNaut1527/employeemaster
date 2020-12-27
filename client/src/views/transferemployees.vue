@@ -71,7 +71,6 @@
                </v-card>
                <v-dialog v-model="dialog" width="500" persistent>
                     <v-card>
-                         {{transdivsecteam}}
                          <v-toolbar color="primary" dark flat>
                               <v-toolbar-title>Transfer Employees</v-toolbar-title>
                          </v-toolbar>
@@ -230,7 +229,13 @@ export default {
      },
      methods:{
           loadEmployees(){
-               this.axios.get(`${this.api}/employees/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}`).then(res => {
+               let url = ''
+               if (this.userInfo.UserLevel == 9 ){
+                    url = `${this.api}/employees/${this.userInfo.ShortName}`
+               }else{
+                    url = `${this.api}/employees/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}`
+               }
+               this.axios.get(url).then(res => {
                     this.history = res.data
                     console.log(res.data)
                })
