@@ -27,7 +27,8 @@ router.get('/dayofflist', (req, res) => {
      let company = req.params.company
      config.connect().then(() => {
          const request = new mssql.Request(config)
-         request.query(`SELECT * FROM DayOffList`, (err, results) => {
+         request.query(`SELECT * FROM DayOffList
+                         WHERE DayOffId IN (0, 1, 8)`, (err, results) => {
              if(err) {
                  res.send(err)
              } else {
@@ -37,7 +38,7 @@ router.get('/dayofflist', (req, res) => {
          })
      })
  })
-
+ 
 router.get('/dayoff/:company', (req, res) => {
      let company = req.params.company
      config.connect().then(() => {
@@ -70,6 +71,22 @@ router.get('/dayoff/:company/:department', (req, res) => {
           })
      })
 })
+
+
+router.get('/overtime/type', (req, res) => {
+     let company = req.params.company
+     config.connect().then(() => {
+         const request = new mssql.Request(config)
+         request.query(`SELECT * FROM TypeOvertime WHERE DeletedDate IS NULL`, (err, results) => {
+             if(err) {
+                 res.send(err)
+             } else {
+                 res.send(results.recordset)
+             }
+             config.close()
+         })
+     })
+ })
 
 router.get('/overtime/:company', (req, res) => {
      let company = req.params.company
