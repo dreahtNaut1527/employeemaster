@@ -4,13 +4,28 @@
           <v-container>
                <v-card class="mx-auto" tile>
                     <v-img height="12.5rem" src="https://cdn.vuetifyjs.com/images/cards/server-room.jpg"></v-img>
-                    <v-col cols="12">
-                         <v-avatar color="white" size="150" style="position:absolute; top: 127px">
-                              <v-avatar size="140">
-                                   <v-img :src="`http://asd_sql:8080/photos/${userInfo.EmployeeCode}.jpg`"></v-img>
-                              </v-avatar>
-                         </v-avatar>
-                    </v-col>
+                    <v-row class="hidden-sm-and-down" dense>
+                         <v-col cols="12" md="4">
+                              <v-card-text>
+                                   <v-avatar color="white" size="150" style="position:absolute; top: 127px">
+                                        <v-avatar size="140">
+                                             <v-img :src="`http://asd_sql:8080/photos/${userInfo.EmployeeCode}.jpg`"></v-img>
+                                        </v-avatar>
+                                   </v-avatar>
+                              </v-card-text>
+                         </v-col>
+                    </v-row>
+                    <v-row class="hidden-md-and-up" align="center" justify="center" dense>
+                         <v-col>
+                              <v-card-text class="text-center">
+                                   <v-avatar color="white" size="150" style="top: -100px; margin-bottom: -130px">
+                                        <v-avatar size="140">
+                                             <v-img :src="`http://asd_sql:8080/photos/${userInfo.EmployeeCode}.jpg`"></v-img>
+                                        </v-avatar>
+                                   </v-avatar>
+                              </v-card-text>
+                         </v-col>
+                    </v-row>
                     <v-list-item class="mt-12">
                          <v-list-item-content>
                               <v-list-item-title class="headline">
