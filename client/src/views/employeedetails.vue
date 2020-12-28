@@ -110,7 +110,8 @@
                                                        :items="designationList"
                                                        item-text="DesignationName"
                                                        item-value="DesignationCode"
-                                                       :readonly="this.isEmpEdit == false"                                                      
+                                                       :readonly="this.isEmpEdit == false" 
+                                                       clearable                                                     
                                                        outlined
                                                        dense
                                                   ></v-autocomplete>
@@ -123,6 +124,7 @@
                                                        item-text="PositionName"
                                                        item-value="PositionCode"
                                                        :readonly="this.isEmpEdit == false"
+                                                       clearable
                                                        outlined
                                                        dense
                                                   ></v-autocomplete>
