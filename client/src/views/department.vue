@@ -201,10 +201,18 @@ export default {
                                    0
                               ]
                          }
+<<<<<<< HEAD
                          this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
                          this.swal.fire('Confirmed!','Changes has been saved', 'success')
                          this.setNotifications('Deleted a record', `User: ${this.userInfo.EmployeeName} deleted a record`)
                          this.clearVariables()
+=======
+                         this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)}).then(() => {
+                              this.swal.fire('Confirmed!','Changes has been saved', 'success')
+                              this.setNotifications('Deleted a record', `User: ${this.userInfo.EmployeeName} deleted a record`)
+                              this.clearVariables()
+                         })
+>>>>>>> 1b6718f8f49c674a6d1f0c57b9b91aafa2e0f0ce
                     }
                }) 
           },
