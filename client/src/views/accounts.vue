@@ -285,14 +285,13 @@ export default {
                                         1
                                    ]
                               }
-                              this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)}).then(() => {
-                                   this.swal.fire('Hooray!','Changes has been saved', 'success')
-                                   this.setNotifications(
-                                        this.userInfo.EmployeeCode, 
-                                        this.editMode == 0 ? 'added a new account' : 'updated an account'
-                                   )
-                                   this.clearVariables()
-                              })
+                              this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
+                              this.swal.fire('Hooray!','Changes has been saved', 'success')
+                              this.setNotifications(
+                                   this.userInfo.EmployeeCode, 
+                                   this.editMode == 0 ? 'added a new account' : 'updated an account'
+                              )
+                              this.clearVariables()
                          } else if(result.isDenied) {
                               this.clearVariables()
                               this.swal.fire('Oh no!', 'Changes are not saved', 'info')
