@@ -188,7 +188,9 @@ export default {
                     IPAddr: '',
                     UserLevel: 0
                },
-               userLevel: [0, 1, 2, 9],
+               userLevel: [
+                    {text: 'Staff', value: 0}
+               ],
                saveOptions: {
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
@@ -207,7 +209,7 @@ export default {
                     {text: 'Status', value: 'Status'},
                     {text: 'Actions', value: 'actions'}
                ],
-               breadCrumbsItems: [
+               breadCrumbsItems: [ 
                     {text: 'Maintenance', disabled: false, href: '/accounts'},
                     {text: 'User Accounts', disabled: true, href: '/accounts'}
                ]

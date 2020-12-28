@@ -560,11 +560,9 @@ export default {
                                         this.userInfo.EmployeeCode  
                               ]
                          }
-                         this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)}).then(res => {
-                              console.log(res.data)
-                              this.swal.fire('Hooray!','Changes has been saved', 'success')
-                              this.loadInformation()
-                         })
+                         this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
+                         this.swal.fire('Hooray!','Changes has been saved', 'success')
+                         this.loadInformation()
                     } else if(result.isDenied) {
                          this.swal.fire('Oh no!', 'Changes are not saved', 'info')
                     }

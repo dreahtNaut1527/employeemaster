@@ -167,10 +167,15 @@ export default {
                     this.loadName = true
                     this.axios.get(`${this.api}/employeeinfo/${this.editedAccount.EmployeeCode}`).then(res => {
                          this.$refs.form.resetValidation()
-                         this.editedAccount.Fullname = res.data[0].EmployeeName
+                         if(res.data.length > 0) {
+                              this.disableButton = false
+                              this.editedAccount.Fullname = res.data[0].EmployeeName
+                              this.getUserAccount()
+                         } else {
+                              this.disableButton = true
+                         }
                          this.loadName = false
                     })
-                    this.getUserAccount()
                }
           },
           getUserAccount() { 
