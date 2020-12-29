@@ -393,6 +393,48 @@ router.get('/history/:company/:department', (req, res) => {
      })
 })
 
+router.get('/history/:company/:department/:section', (req, res) => {
+     let company = req.params.company
+     let department = req.params.department
+     let section = req.params.section
+     let sql = `SELECT * FROM EmployeeHistoryDataView WHERE lower(ShortName) = lower('${company}')
+               AND lower(DepartmentName) = lower('${department}')
+               AND lower(SectionName) = lower('${section}')`
+     config.connect().then(() => {
+          const request = new mssql.Request(config)
+          request.query(sql, (err, results) => {
+               if(err) {
+                    res.send(err)
+               } else {
+                    res.send(results.recordset)
+               }
+               config.close()
+          })
+     })
+})
+
+router.get('/history/:company/:department/:section/:team', (req, res) => {
+     let company = req.params.company
+     let department = req.params.department
+     let section = req.params.section
+     let team = req.params.team
+     let sql = `SELECT * FROM EmployeeHistoryDataView WHERE lower(ShortName) = lower('${company}')
+               AND lower(DepartmentName) = lower('${department}')
+               AND lower(SectionName) = lower('${section}')
+               AND lower(TeamName) = lower('${team}')`
+     config.connect().then(() => {
+          const request = new mssql.Request(config)
+          request.query(sql, (err, results) => {
+               if(err) {
+                    res.send(err)
+               } else {
+                    res.send(results.recordset)
+               }
+               config.close()
+          })
+     })
+})
+
 router.get('/employeehistory/:code', (req, res) => {
      let code = req.params.code
      config.connect().then(() => {
