@@ -211,12 +211,47 @@ export default {
      methods: {
           loadLogtime() {
                this.overlay = true
-               let body = {
-                    logdate: this.moment(this.logtimeDate).format('MMDDYY'),
-                    server: `HRIS${this.userInfo.ShortName.toLowerCase()}`,
-                    deptcode: this.userInfo.UserLevel == 9 ? '' : this.userInfo.DepartmentCode
+               let body = {}
+               switch (this.userInfo.UserLevel) {
+                    case 1: // DH/JA
+                         body = {
+                              logdate: this.moment(this.logtimeDate).format('MMDDYY'),
+                              server: `HRIS${this.userInfo.ShortName.toLowerCase()}`,
+                              deptcode: this.userInfo.DepartmentCode,
+                              sectioncode: '',
+                              teamcode: ''
+                         }
+                         break;
+                    case 2: // Section Head
+                         body = {
+                              logdate: this.moment(this.logtimeDate).format('MMDDYY'),
+                              server: `HRIS${this.userInfo.ShortName.toLowerCase()}`,
+                              deptcode: this.userInfo.DepartmentCode,
+                              sectioncode: this.userInfo.SectionCode,
+                              teamcode: ''
+                         }
+                         break;
+                    case 3: // Team Leader
+                         body = {
+                              logdate: this.moment(this.logtimeDate).format('MMDDYY'),
+                              server: `HRIS${this.userInfo.ShortName.toLowerCase()}`,
+                              deptcode: this.userInfo.DepartmentCode,
+                              sectioncode: this.userInfo.SectionCode,
+                              teamcode: this.userInfo.TeamCode
+                         }
+                         break;
+                    default: // Developer
+                         body = {
+                              logdate: this.moment(this.logtimeDate).format('MMDDYY'),
+                              server: `HRIS${this.userInfo.ShortName.toLowerCase()}`,
+                              deptcode: '',
+                              sectioncode: '',
+                              teamcode: ''
+                         }
+                         break;
                }
                this.axios.post(`${this.asd_sql}/logtime.php`, body).then(res => {
+                    console.log(res.data)
                     if(Array.isArray(res.data)) {
                          this.logtime = res.data
                     } else {

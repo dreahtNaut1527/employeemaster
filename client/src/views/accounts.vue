@@ -138,6 +138,8 @@
                                              <v-select
                                                   v-model="editedAccount.UserLevel"
                                                   :items="userLevel"
+                                                  item-text="text"
+                                                  item-value="value"
                                                   label="Level"
                                                   outlined
                                                   dense
@@ -189,7 +191,11 @@ export default {
                     UserLevel: 0
                },
                userLevel: [
-                    {text: 'Staff', value: 0}
+                    {text: 'Staff', value: 0},
+                    {text: 'DH/JA', value: 1},
+                    {text: 'Section Head', value: 2},
+                    {text: 'Team Leader', value: 3},
+                    {text: 'Developer', value: 9}
                ],
                saveOptions: {
                     title: 'Are you sure?',
