@@ -83,6 +83,7 @@ export default {
                     values: [
                          val.SeqNo,
                          val.SocketId,
+                         val.CompanyCode,
                          val.EmplCode,
                          val.Details,
                          0
@@ -100,7 +101,7 @@ export default {
           notificationList(val) {
                this.totalNotifs = 0
                val.forEach(rec => {
-                    if(rec.EmployeeCode != this.userInfo.EmployeeCode) {
+                    if(rec.EmployeeCode != this.userInfo.EmployeeCode && rec.CompanyCode == this.userInfo.CompanyCode) {
                          if(!rec.Viewed) {
                               this.totalNotifs++
                          }

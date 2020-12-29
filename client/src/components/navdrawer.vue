@@ -126,7 +126,9 @@ export default {
                               }
                          ]
                          break;
-                    case 1: 
+                    case 1: // DH/JA
+                    case 2: // Section Head
+                    case 3: // Team Leader
                          this.navDrawerList = [
                               {
                                    title: 'Dashboard',

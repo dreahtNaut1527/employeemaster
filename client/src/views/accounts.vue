@@ -338,14 +338,13 @@ export default {
                                    0
                               ]
                          }
-                         this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)}).then(() => {
-                              this.swal.fire('Confirmed!','Changes has been saved', 'success')
-                              this.setNotifications(
-                                   this.userInfo.EmployeeCode, 
-                                   val.Status != 1 ? 'restored an account' : `account set to inactive`
-                              )
-                              this.clearVariables()
-                         })
+                         this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
+                         this.swal.fire('Confirmed!','Changes has been saved', 'success')
+                         this.setNotifications(
+                              this.userInfo.EmployeeCode, 
+                              val.Status != 1 ? 'restored an account' : `account set to inactive`
+                         )
+                         this.clearVariables()
                     }
                })
           },

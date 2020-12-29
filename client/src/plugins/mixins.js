@@ -36,6 +36,7 @@ const plugins = {
                               values: [
                                    0,
                                    this.$socket.id,
+                                   this.userInfo.CompanyCode,
                                    code,
                                    message,
                                    1
