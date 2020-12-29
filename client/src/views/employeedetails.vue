@@ -105,7 +105,7 @@
                                              </v-col>
                                              <v-col cols="12" md="4">
                                                   <v-autocomplete
-                                                       v-model="information.DesignationName"
+                                                       v-model="information.DesignationCode"
                                                        label="Designation"
                                                        :items="designationList"
                                                        item-text="DesignationName"
@@ -118,7 +118,7 @@
                                              </v-col>
                                              <v-col cols="12" md="4">
                                                   <v-autocomplete
-                                                       v-model="information.PositionName"
+                                                       v-model="information.PositionCode"
                                                        label="Position"
                                                        :items="positionList"
                                                        item-text="PositionName"
@@ -680,11 +680,12 @@ export default {
                                         this.userInfo.EmployeeCode 
                               ]
                          }
-                         this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)}).then(res => {
-                              console.log(res.data)
-                              this.swal.fire('Hooray!','Changes has been saved', 'success')
-                              this.loadInformation()
-                         })
+                       
+
+                         this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
+                         this.swal.fire('Hooray!','Changes has been saved', 'success')
+                         this.loadInformation()
+                        
                     } else if(result.isDenied) {
                          this.swal.fire('Oh no!', 'Changes are not saved', 'info')
                     }

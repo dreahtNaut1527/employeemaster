@@ -147,15 +147,36 @@ export default {
 
      },
      methods:{
-          
-
           loadEmpinfo(){
-               this.axios.get(`${this.api}/employees/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}`).then(res => {
-                    // console.log("RES DATA", res.data);
+               let url = ''
+
+               switch (this.userInfo.UserLevel) {
+                    case 1: // DH/JA
+                         url = `${this.api}/employees/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}`
+                         break;
+                    case 2: // Section Head
+                         url = `${this.api}/employees/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}/${this.userInfo.SectionName}`
+                         break;
+                    case 3: // Team Leader
+                         url = `${this.api}/employees/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}/${this.userInfo.SectionName}/${this.userInfo.TeamName}`
+                         break;
+                    default: // Developer
+                         url = `${this.api}/employees/${this.userInfo.ShortName}`
+                         break;
+               }
+               this.axios.get(url).then(res => {
                     this.getempInfos = res.data
-                    // this.loadDesignations()
-               })     
-          },
+                    console.log(res.data)
+               })
+          }, 
+
+          // loadEmpinfo(){
+          //      this.axios.get(`${this.api}/employees/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}`).then(res => {
+          //           // console.log("RES DATA", res.data);
+          //           this.getempInfos = res.data
+          //           // this.loadDesignations()
+          //      })     
+          // },
           editRecord(val) {
                //  alert(val)
                store.commit('CHANGE_EMPLCODE', val)
