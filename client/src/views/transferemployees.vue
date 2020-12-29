@@ -230,10 +230,20 @@ export default {
      methods:{
           loadEmployees(){
                let url = ''
-               if (this.userInfo.UserLevel == 9 ){
-                    url = `${this.api}/employees/${this.userInfo.ShortName}`
-               }else{
-                    url = `${this.api}/employees/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}`
+
+               switch (this.userInfo.UserLevel) {
+                    case 1: // DH/JA
+                         url = `${this.api}/employees/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}`
+                         break;
+                    case 2: // Section Head
+                         url = `${this.api}/employees/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}/${this.userInfo.SectionName}`
+                         break;
+                    case 3: // Team Leader
+                         url = `${this.api}/employees/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}/${this.userInfo.SectionName}/${this.userInfo.TeamName}`
+                         break;
+                    default: // Developer
+                         url = `${this.api}/employees/${this.userInfo.ShortName}`
+                         break;
                }
                this.axios.get(url).then(res => {
                     this.history = res.data
