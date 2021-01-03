@@ -192,10 +192,9 @@ export default {
                },
                userLevel: [
                     {text: 'Staff', value: 0},
-                    {text: 'DH/JA', value: 1},
+                    {text: 'JA/DH', value: 1},
                     {text: 'Section Head', value: 2},
-                    {text: 'Team Leader', value: 3},
-                    {text: 'Developer', value: 9}
+                    {text: 'Team Leader', value: 3}
                ],
                saveOptions: {
                     title: 'Are you sure?',

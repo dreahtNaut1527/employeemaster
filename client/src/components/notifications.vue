@@ -89,12 +89,11 @@ export default {
                          0
                     ]
                }
-               this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)}).then(() => {
-                    let index = this.notificationList.findIndex(rec => rec.SeqNo == val.SeqNo)
-                    this.notificationList.splice(index, 1)
-                    this.$socket.emit('newNotifications', body.values)
-                    this.totalNotifs--
-               })
+               this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
+               let index = this.notificationList.findIndex(rec => rec.SeqNo == val.SeqNo)
+               this.notificationList.splice(index, 1)
+               this.$socket.emit('newNotifications', body.values)
+               this.totalNotifs--
           }
      },
      watch: {

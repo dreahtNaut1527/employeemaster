@@ -3,7 +3,26 @@
           <v-navigation-drawer 
                :value="navDrawerVal"
                app
-          >    
+          >     
+               <!-- <v-img src="https://cdn.vuetifyjs.com/images/cards/server-room.jpg">
+                    <v-row align="center" justify="center">
+                         <v-col cols="12" md="6">
+                              <v-avatar color="white" size="120">
+                                   <v-avatar size="110">
+                                        
+                                   <img :src="`http://asd_sql:8080/photos/${user.EmployeeCode}.jpg`" alt="nopic.jpg">
+                                   </v-avatar>
+                              </v-avatar>
+                         </v-col>
+                    </v-row>
+                    <v-list-item>
+                         <v-list-item-content class="text-center white--text">
+                              <v-list-item-title class="headline">{{ user.EmployeeCode }}</v-list-item-title>
+                              <v-list-item-subtitle class="text-center white--text">{{ user.EmployeeName }}</v-list-item-subtitle>
+                              <v-list-item-subtitle class="text-center white--text">{{ user.DesignationName }}</v-list-item-subtitle>
+                         </v-list-item-content>
+                    </v-list-item>
+               </v-img>   -->
                <v-list-item>
                     <v-list-item-content class="ma-2 text-center">
                          <v-list-item-avatar size="112">                                        
@@ -154,7 +173,7 @@ export default {
                               }
                          ]
                          break;
-                    default:
+                    default: // Developer
                          this.navDrawerList = [
                          {
                               title: 'Dashboard',

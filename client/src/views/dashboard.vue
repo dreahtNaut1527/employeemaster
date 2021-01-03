@@ -251,7 +251,6 @@ export default {
                          break;
                }
                this.axios.post(`${this.asd_sql}/logtime.php`, body).then(res => {
-                    console.log(res.data)
                     if(Array.isArray(res.data)) {
                          this.logtime = res.data
                     } else {
