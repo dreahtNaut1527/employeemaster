@@ -155,11 +155,13 @@ export default {
                                   ]
                              }
                              console.log(body)
-                             this.axios.post(`${this.api}/execute`,{data:JSON.stringify(body)}).then(()=>{
-                                   this.swal.fire('Hooray!','Changes has been saved', 'success')
-                                   this.clearVariables()
-                                   
-                             })
+                             this.axios.post(`${this.api}/execute`,{data:JSON.stringify(body)})
+                              this.swal.fire('Hooray!','Changes has been saved', 'success')
+                              this.setNotifications(
+                                   this.userInfo.EmployeeCode, 
+                                   this.editMode == 0 ? 'added a new section' : 'updated a section'
+                              )
+                              this.clearVariables()
                          }else if(result.isDenied) {
                               this.clearVariables()
                               this.swal.fire('Oh no!', 'Changes are not saved', 'info')
@@ -189,11 +191,10 @@ export default {
                                        0
                                   ]
                       }
-                         this.axios.post(`${this.api}/execute`,{data:JSON.stringify(body)}).then(()=>{
-                              this.swal.fire('Confirmed!','Changes has been saved', 'success')
-                              this.setNotifications('Deleted a record', `User: ${this.userInfo.EmployeeName} deleted a record`)
-                              this.clearVariables()
-                         })
+                         this.axios.post(`${this.api}/execute`,{data:JSON.stringify(body)})
+                         this.swal.fire('Confirmed!','Changes has been saved', 'success')
+                         this.setNotifications('Deleted a record', `User: ${this.userInfo.EmployeeName} deleted a record`)
+                         this.clearVariables()
                    }
               })
          },

@@ -1,18 +1,17 @@
 <template>
      <v-dialog
           v-model="dialog"
-          fullscreen
-          hide-overlay
+          width="500"
           transition="scale-transition"
-          origin="center center"
+          persistent
      >
           <v-card>
-               <v-container class="fill-height">
+               <v-container fill-height>
                     <v-row align="center" justify="center">
-                         <v-col cols="12" md="5">
-                              <v-card elevation="7">
+                         <v-col cols="12">
+                              <!-- <v-card elevation="7"> -->
+                                   <v-card-text class="text-center headline">Create account</v-card-text>
                                    <v-card-text class="text-center subheading">
-                                        <v-card-text class="text-center headline">Create account</v-card-text>
                                         <v-form v-model="valid" ref="form" lazy-validation>
                                         <v-card-text>
                                              <v-row align="center" justify="center" dense>
@@ -25,7 +24,7 @@
                                                             dense
                                                             @blur="getEmployeeFullname()"
                                                        ></v-text-field>
-                                                  </v-col>
+                                                   </v-col>
                                                   <v-col cols="12" md="9">
                                                        <v-text-field
                                                             v-model="editedAccount.Fullname"
@@ -92,7 +91,7 @@
                                         </v-btn>
                                    </v-card-actions>
                                    </v-card-text>
-                              </v-card>
+                              <!-- </v-card> -->
                          </v-col>
                     </v-row>
                </v-container>

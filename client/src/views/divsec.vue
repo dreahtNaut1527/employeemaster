@@ -245,11 +245,13 @@ export default {
                                   ]
                              }
                              console.log(body)
-                             this.axios.post(`${this.api}/execute`,{data:JSON.stringify(body)}).then(()=>{
-                                   this.swal.fire('Hooray!','Changes has been saved', 'success')
-                                   this.clearVariables()
-                                   
-                             })
+                             this.axios.post(`${this.api}/execute`,{data:JSON.stringify(body)})
+                              this.swal.fire('Hooray!','Changes has been saved', 'success')
+                              this.setNotifications(
+                                   this.userInfo.EmployeeCode, 
+                                   this.editMode == 0 ? 'added a new Department relation' : 'updated a Department relation'
+                              )
+                              this.clearVariables()
                          }else if(result.isDenied) {
                               this.clearVariables()
                               this.swal.fire('Oh no!', 'Changes are not saved', 'info')
