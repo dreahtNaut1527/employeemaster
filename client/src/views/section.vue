@@ -120,6 +120,13 @@ export default {
      created(){
           this.loadsections()
      },
+     sockets: {
+          showNotifications() {
+               setTimeout(() => {
+                    this.loadsections()
+               }, 1500);
+          }
+     },
      methods:{
          loadsections(){
               this.loading=true

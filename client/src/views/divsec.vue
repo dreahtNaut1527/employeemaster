@@ -215,6 +215,13 @@ export default {
      created(){
           this.loaddivsectionteam()
      },
+     sockets: {
+          showNotifications() {
+               setTimeout(() => {
+                    this.loaddivsectionteam()
+               }, 1500);
+          }
+     },
      methods:{
           loaddivsectionteam(){
                this.loading= true

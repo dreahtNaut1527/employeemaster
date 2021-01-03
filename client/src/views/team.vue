@@ -120,6 +120,13 @@ export default {
      created(){
           this.loadteams()
      },
+     sockets: {
+          showNotifications() {
+               setTimeout(() => {
+                    this.loadteams()
+               }, 1500);
+          }
+     },
      methods:{
          loadteams(){
               this.loading=true
