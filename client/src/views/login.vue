@@ -170,7 +170,7 @@ export default {
                }
           },
           userLoggedIn() {
-               if(this.employeeDetails.Status == 1 || this.employeeDetails.Status != undefined) {
+               if(this.employeeDetails.Status == 1) {
                     if(this.employeeDetails.Password == this.md5(this.password)) {
                          store.commit('CHANGE_USER_INFO', this.employeeDetails)
                          store.commit('CHANGE_USER_LOGGING', true)
