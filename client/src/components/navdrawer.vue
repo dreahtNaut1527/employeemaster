@@ -113,6 +113,7 @@ export default {
           }
      },
      created() {
+          store.commit('CHANGE_SEARCHING', '')
           this.dark = store.state.darkMode
           this.user = store.state.userInfo
           this.getUserLevel()

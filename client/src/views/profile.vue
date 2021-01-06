@@ -555,8 +555,8 @@ export default {
                                         this.information.OperatingSystem,
                                         this.information.WorkEmailAddress,
                                         this.information.WorkLocation,
-                                        this.moment().format('YYYY-MM-DD')  ,
-                                        this.moment().format('YYYY-MM-DD')  ,
+                                        this.moment().format('YYYY-MM-DD'),
+                                        this.moment().format('YYYY-MM-DD'),
                                         this.userInfo.EmployeeCode  
                               ]
                          }

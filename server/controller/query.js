@@ -348,7 +348,8 @@ router.post('/shifts/:company', (req, res) => {
      const request = new mssql.Request(config)
      request.query(`SELECT * FROM ShiftView 
                     WHERE lower(ShortName) = lower('${company}')
-                    AND ShiftID NOT IN(${data})`, (err, results) => {
+                    AND ShiftID NOT IN(${data})
+                    ORDER BY ShiftTime`, (err, results) => {
           if(err) {
                res.send(err)
           } else {

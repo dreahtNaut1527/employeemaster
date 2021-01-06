@@ -56,16 +56,16 @@ export default {
                                    label: 'Casual',
                                    data: Object.values(this.summaryRecords[0]).slice(1),
                                    fill: false,
-                                   borderColor: '#1976d2',
-                                   backgroundColor: '#1976d2',
+                                   borderColor: '#9e9fa1',
+                                   backgroundColor: '#9e9fa1',
                                    borderWidth: 1
                               },
                               {
                                    label: 'Regular',
                                    data: Object.values(this.summaryRecords[1]).slice(1),
                                    fill: false,
-                                   borderColor: '#4caf50',
-                                   backgroundColor: '#4caf50',
+                                   borderColor: '#689EED',
+                                   backgroundColor: '#689EED',
                                    borderWidth: 1
                               }
                          ]

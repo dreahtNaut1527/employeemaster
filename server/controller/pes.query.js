@@ -121,6 +121,40 @@ router.get('/overtime/:company/:department', (req, res) => {
      })
 })
 
+router.get('/shiftingschedule/:company', (req, res) => {
+     let company = req.params.company
+     config.connect().then(() => {
+     const request = new mssql.Request(config)
+          request.query(`SELECT * FROM ShiftingScheduleView 
+                         WHERE lower(ShortName) = lower('${company}')`, (err, results) => {
+               if(err) {
+                    res.send(err)
+               } else {
+                    res.send(results.recordset)
+               }
+               config.close()
+          })
+     })
+})
+
+router.get('/shiftingschedule/:company/:department', (req, res) => {
+     let company = req.params.company
+     let department = req.params.department
+     config.connect().then(() => {
+     const request = new mssql.Request(config)
+          request.query(`SELECT * FROM ShiftingScheduleView 
+                         WHERE lower(ShortName) = lower('${company}')
+                         AND lower(DepartmentName) = lower('${department}')`, (err, results) => {
+               if(err) {
+                    res.send(err)
+               } else {
+                    res.send(results.recordset)
+               }
+               config.close()
+          })
+     })
+})
+
 // =====================================================================
 // ====================== Execute Procedure (MSSQL)=====================
 // =====================================================================

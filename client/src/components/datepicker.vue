@@ -24,6 +24,8 @@
                v-model="date"
                no-title
                scrollable
+               :events="events"
+               event-color="#ED6351"
                @change="$refs.menu.save(date)"
           >
           </v-date-picker>
@@ -39,9 +41,25 @@ export default {
      ],
      data() {
           return {
+               events: [],
                menuDialog: false,
                date: this.dateValue,
                label: this.dateLabel
+          }
+     },
+     created() { 
+          this.loadEvents()
+     },
+     methods: {
+          loadEvents() {
+               let data = {
+                    server: `HRIS${this.userInfo.ShortName.toLowerCase()}`
+               }
+               this.axios.post(`${this.asd_sql}/timeholidays.php`, data).then(res => {
+                    res.data.forEach(rec => {
+                         this.events.push(this.moment(rec.HOLDATE).format('YYYY-MM-DD'))
+                    })
+               })
           }
      },
      watch: {
