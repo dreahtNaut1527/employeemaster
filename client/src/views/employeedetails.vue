@@ -573,6 +573,7 @@ export default {
            loadInformation() {
                 
                this.overlay = true
+               this.information=[]
                this.axios.get(`${this.api}/employeeinfo/${this.emplcode}`).then(res => {
                     this.information = res.data[0]
                     this.loaddivsectionteam() 
