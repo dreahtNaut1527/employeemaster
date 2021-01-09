@@ -462,7 +462,7 @@ export default {
           showNotifications() {
                setTimeout(() => {
                     this.loadInformation()
-               }, 1500);
+               }, 1700);
           },
           connect() {
                this.loadInformation()
@@ -476,6 +476,7 @@ export default {
      methods: {
           loadInformation() {
                this.overlay = true
+               this.information = []
                this.axios.get(`${this.api}/employeeinfo/${this.userInfo.EmployeeCode}`).then(res => {
                     this.information = res.data[0]
                     // If variable has no error
