@@ -113,7 +113,6 @@ export default {
                remember: false,
                loading:false,
                signUpDialog: false,
-               hidePassword: true,
                alertText: '',
                username: '',
                password: '',
@@ -121,7 +120,7 @@ export default {
                dialogText: '',
                dialogIcon: '',
                dialogColor: '',
-               employeeDetails: '',
+               employeeDetails: {},
                myIpAddress: {}
           }
      },
@@ -148,21 +147,31 @@ export default {
           getUserInfo() {
                this.alert = false
                this.loading = true 
+               this.employeeDetails = ''
                let body = {
                     procedureName: 'ProcGetUserAccount',
                     values: [this.username]
                }
-               if (this.username) {     
-                    this.axios.post(`${this.api}/executeselect`, {data: JSON.stringify(body)}).then(res => {
+               if (this.username) {  
+                    this.axios.get(`${this.api_jap}/${this.username}`).then(res => {
                          this.loading = false
-                         this.employeeDetails = res.data[0]
-                         if (!this.employeeDetails) { 
-                              this.alert = !this.alert
-                              this.alertText = 'User not found.'
+                         this.employeeDetails = JSON.parse(JSON.stringify(res.data))
+                         if(this.employeeDetails == '') {
+                              this.axios.post(`${this.api}/executeselect`, {data: JSON.stringify(body)}).then(res => {
+                                   this.loading = false
+                                   this.employeeDetails = res.data[0]
+                                   if (!this.employeeDetails) { 
+                                        this.alert = !this.alert
+                                        this.alertText = 'User not found.'
+                                   }
+                              })
                          } else {
-                              this.hidePassword = this.employeeDetails.UserLevel > 0 ? true : false
+                              Object.assign(this.employeeDetails, {
+                                   UserLevel: 5
+                              })
+                              console.log(this.employeeDetails)
                          }
-                    })
+                    }) 
                } else {
                     this.alert = !this.alert
                     this.alertText = 'Please input username'
@@ -170,25 +179,31 @@ export default {
                }
           },
           userLoggedIn() {
-               if(this.employeeDetails.Status == 1) {
-                    if(this.employeeDetails.Password == this.md5(this.password)) {
-                         store.commit('CHANGE_USER_INFO', this.employeeDetails)
-                         store.commit('CHANGE_USER_LOGGING', true)
-                         if (this.employeeDetails.UserLevel == 0) {
-                              this.$router.push('/profile')
+               if(this.employeeDetails.UserLevel == 5) {
+                    store.commit('CHANGE_USER_INFO', this.employeeDetails)
+                    store.commit('CHANGE_USER_LOGGING', true)
+                    this.$router.push('/dashboard')
+               } else {
+                    if(this.employeeDetails.Status == 1 || this.employeeDetails.Status != undefined) {
+                         if(this.employeeDetails.Password == this.md5(this.password)) {
+                              store.commit('CHANGE_USER_INFO', this.employeeDetails)
+                              store.commit('CHANGE_USER_LOGGING', true)
+                              if (this.employeeDetails.UserLevel == 0) {
+                                   this.$router.push('/profile')
+                              } else {
+                                   this.$router.push('/dashboard')
+                              }
                          } else {
-                              this.$router.push('/dashboard')
+                              this.alert = true
+                              this.alertText = 'Incorrect password. Please try again'
                          }
+                    } else if(this.employeeDetails.Status == 0 || this.employeeDetails.Status != undefined) {
+                         this.alert = true
+                         this.alertText = 'Account has been deactivate.'
                     } else {
                          this.alert = true
-                         this.alertText = 'Incorrect password. Please try again'
+                         this.alertText = 'Account does not exists.'
                     }
-               } else if(this.employeeDetails.Status == 0) {
-                    this.alert = true
-                    this.alertText = 'Account has been deactivate.'
-               } else {
-                    this.alert = true
-                    this.alertText = 'Account does not exists.'
                }
                this.clearVariables()
           },

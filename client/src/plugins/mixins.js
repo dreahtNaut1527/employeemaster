@@ -6,8 +6,12 @@ const plugins = {
                data: () => ({
                     // api: process.env.VUE_APP_LOCAL_URL,
                     api: process.env.VUE_APP_URL,
-                    asd_sql: process.env.VUE_APP_ASD_SQL
+                    asd_sql: process.env.VUE_APP_ASD_SQL,
+                    api_jap: process.env.VUE_APP_JAP_URL
                }),
+               created() {
+                    this.axios.defaults.headers.common['x-api-key'] = process.env.VUA_APP_AWS_KEY
+               },
                computed: {
                     ...mapState([
                          'userInfo', 

@@ -53,7 +53,7 @@ export default {
      methods: {
           loadEvents() {
                let data = {
-                    server: `HRIS${this.userInfo.ShortName.toLowerCase()}`
+                    server: this.userInfo.UserLevel == 5 ? `HRIS${this.userInfo.Comp_Name.toLowerCase()}` : `HRIS${this.userInfo.ShortName.toLowerCase()}`
                }
                this.axios.post(`${this.asd_sql}/timeholidays.php`, data).then(res => {
                     res.data.forEach(rec => {

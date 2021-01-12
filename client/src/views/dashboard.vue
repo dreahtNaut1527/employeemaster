@@ -33,7 +33,7 @@
                                                   :dateValue.sync="logtimeDate"
                                              ></datePicker>
                                         </v-col>
-                                        <v-col v-if="userInfo.UserLevel == 9" cols="12" md="3">
+                                        <v-col v-if="userInfo.UserLevel == 9 || userInfo.UserLevel == 5" cols="12" md="3">
                                              <v-autocomplete
                                                   v-model="department"
                                                   :items="departmentList"
@@ -107,7 +107,7 @@
                          </v-card>
                     </v-col>
                </v-row>
-               <v-row dense>
+               <v-row v-if="userInfo.UserLevel != 5" dense>
                     <v-col cols="12" md="12">
                          <v-card>
                               <v-card-title>Total Summary of Sections</v-card-title>
@@ -213,7 +213,7 @@ export default {
                this.overlay = true
                let body = {}
                switch (this.userInfo.UserLevel) {
-                    case 1: // DH/JA
+                    case 1: // Department Head
                          body = {
                               logdate: this.moment(this.logtimeDate).format('MMDDYY'),
                               server: `HRIS${this.userInfo.ShortName.toLowerCase()}`,
@@ -238,6 +238,15 @@ export default {
                               deptcode: this.userInfo.DepartmentCode,
                               sectioncode: this.userInfo.SectionCode,
                               teamcode: this.userInfo.TeamCode
+                         }
+                         break;
+                    case 5: // Japanese
+                         body = {
+                              logdate: this.moment(this.logtimeDate).format('MMDDYY'),
+                              server: `HRIS${this.userInfo.Comp_Name.toLowerCase()}`,
+                              deptcode: '',
+                              sectioncode: '',
+                              teamcode: ''
                          }
                          break;
                     default: // Developer

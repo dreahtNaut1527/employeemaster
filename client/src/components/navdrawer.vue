@@ -23,7 +23,17 @@
                          </v-list-item-content>
                     </v-list-item>
                </v-img>   -->
-               <v-list-item>
+               <v-list-item v-if="user.UserLevel == 5">
+                    <v-list-item-content class="ma-2 text-center">
+                         <v-list-item-avatar size="112">                                        
+                              <img :src="`http://asd_sql:8080/photos_jap/${user.EmployeeNumber}.jpg`" alt="nopic.jpg">
+                         </v-list-item-avatar>
+                         <v-list-item-title class="headline">{{ user.EmployeeNumber }}</v-list-item-title>
+                         <v-list-item-subtitle>{{ user.LastNameEng }} {{user.FirstNameEng}}</v-list-item-subtitle>
+                         <v-list-item-subtitle>{{ user.userLevel }}</v-list-item-subtitle>
+                    </v-list-item-content>
+               </v-list-item>
+               <v-list-item v-else>
                     <v-list-item-content class="ma-2 text-center">
                          <v-list-item-avatar size="112">                                        
                               <img :src="`http://asd_sql:8080/photos/${user.EmployeeCode}.jpg`" alt="nopic.jpg">
@@ -76,8 +86,13 @@
           >
                <v-app-bar-nav-icon @click="navDrawerHide(null)"></v-app-bar-nav-icon>
                <div class="hidden-sm-and-down">
-                    <v-toolbar-title v-if="userInfo.UserLevel < 9">{{ user.DepartmentName }} Department</v-toolbar-title>
-                    <v-toolbar-title v-else>ASD Team</v-toolbar-title>
+                    <div v-if="userInfo.UserLevel == 5">
+                         <v-toolbar-title>{{ user.workStation }} Department</v-toolbar-title>
+                    </div>
+                    <div v-else>
+                         <v-toolbar-title v-if="userInfo.UserLevel < 9">{{ user.DepartmentName }} Department</v-toolbar-title>
+                         <v-toolbar-title v-else>ASD Team</v-toolbar-title>
+                    </div>
                </div>
                <v-spacer></v-spacer>
                <v-text-field
@@ -146,7 +161,6 @@ export default {
                               }
                          ]
                          break;
-                    case 1: // DH/JA
                     case 2: // Section Head
                     case 3: // Team Leader
                          this.navDrawerList = [
@@ -174,7 +188,32 @@ export default {
                               }
                          ]
                          break;
-                    default: // Developer
+                    case 5: // Japanese
+                         this.navDrawerList = [
+                              {
+                                   title: 'Dashboard',
+                                   icon: 'mdi-home',
+                                   items: [
+                                        {text: 'Home', to: '/dashboard'}
+                                   ],
+                                   active: true   
+                              },
+                              {
+                                   title: 'Main Data',
+                                   icon: 'mdi-account',
+                                   items: [
+                                        {text: 'Employees', to: '/employees'},
+                                        {text: 'Departments', to: '/department'},
+                                        {text: 'Sections', to: '/section'},
+                                        {text: 'Team', to: '/team'},
+                                        {text: 'Department - Section', to: '/divsec'},
+                                        {text: 'Transfer Employees', to: '/transfer'},
+                                   ],
+                                   active: false   
+                              }
+                         ]
+                         break;
+                    default: // Developer & DH
                          this.navDrawerList = [
                          {
                               title: 'Dashboard',

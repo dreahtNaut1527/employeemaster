@@ -5,6 +5,7 @@ import swal from 'sweetalert2'
 import moment from 'moment'
 import socketio from 'socket.io-client'
 import VueSocketIO from 'vue-socket.io'
+import Vuemask from 'v-mask'
 import App from './App.vue'
 import './registerServiceWorker'
 import router from './router'
@@ -28,6 +29,7 @@ Vue.prototype.moment = moment
 
 // Vue Use
 Vue.use(mixins)
+Vue.use(Vuemask)
 Vue.use(new VueSocketIO({
      debug: false,
      connection: SocketInstance

@@ -1,8 +1,8 @@
 <template>
      <v-app id="inspire">
-          <navdrawer v-if="userInfo.EmployeeCode != undefined && isConnect" />
+          <navdrawer v-if="(userInfo.EmployeeCode != undefined || userInfo.EmployeeNumber != undefined) && isConnect" />
           <router-view/>
-          <navfooter v-if="userInfo.EmployeeCode != undefined" />
+          <navfooter v-if="(userInfo.EmployeeCode != undefined || userInfo.EmployeeNumber != undefined)" />
      </v-app>
 </template>
 

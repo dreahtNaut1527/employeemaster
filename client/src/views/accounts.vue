@@ -30,12 +30,12 @@
                          @page-count="pageCount = $event"
                          hide-default-footer
                     >
-                         <template v-slot:item.Status="{ item }">
+                         <template v-slot:[`item.Status`]="{ item }">
                               <v-chip :color="item.Status == 1 ? 'success' : 'error'">
                                    {{item.Status == 1 ? 'Active' : 'Inactive'}}
                               </v-chip>
                          </template>
-                         <template v-slot:item.actions="{ item }">
+                         <template v-slot:[`item.actions`]="{ item }">
                               <v-btn @click="editRecord(item)" icon>
                                    <v-icon>mdi-pencil</v-icon>
                               </v-btn>
@@ -129,7 +129,6 @@
                                                   v-model="editedAccount.IPAddr"
                                                   append-icon="mdi-ip"
                                                   label="IP Address"
-                                                  :rules="[v => !!v || 'IP Address is required']"
                                                   outlined
                                                   dense
                                              ></v-text-field>
@@ -192,9 +191,11 @@ export default {
                },
                userLevel: [
                     {text: 'Staff', value: 0},
-                    {text: 'JA/DH', value: 1},
+                    {text: 'Department Head', value: 1},
                     {text: 'Section Head', value: 2},
-                    {text: 'Team Leader', value: 3}
+                    {text: 'Team Leader', value: 3},
+                    {text: 'QA', value: 4},
+                    {text: 'Japanese Manager', value: 5}
                ],
                saveOptions: {
                     title: 'Are you sure?',

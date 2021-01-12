@@ -102,7 +102,7 @@
                                              </v-col>
                                              <v-col cols="12" md="12">
                                                   <v-text-field
-                                                       v-model="information.DesignationName"
+                                                       v-model="information.PositionName"
                                                        label="Designation"
                                                        readonly
                                                        outlined
@@ -111,7 +111,7 @@
                                              </v-col>
                                              <v-col cols="12" md="12">
                                                   <v-text-field
-                                                       v-model="information.PositionName"
+                                                       v-model="information.DesignationName"
                                                        label="Position"
                                                        readonly
                                                        outlined
@@ -233,6 +233,8 @@
                                                        v-model="information.Phone"
                                                        append-icon="mdi-phone"
                                                        label="Telephone"
+                                                       v-mask="'(###)-###-####'"
+                                                       hint="(###)-###-####"
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -242,7 +244,8 @@
                                                        v-model="information.Cellphone"
                                                        append-icon="mdi-cellphone"
                                                        label="Cellphone"
-                                                       hint="0000-000-0000"
+                                                       v-mask="'####-###-####'"
+                                                       hint="####-###-####"
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -345,7 +348,7 @@
                                                        dense
                                                   ></v-text-field>
                                              </v-col>
-                                             <v-col cols="12" md="12">
+                                             <!-- <v-col cols="12" md="12">
                                                   <v-autocomplete
                                                        v-model="information.OperatingSystem"
                                                        :items="operatingSystem"
@@ -356,7 +359,7 @@
                                                        outlined
                                                        dense
                                                   ></v-autocomplete>
-                                             </v-col>
+                                             </v-col> -->
                                              <v-col cols="12" md="6">
                                                   <v-text-field
                                                        v-model="information.WorkEmailAddress"
@@ -375,7 +378,18 @@
                                                        dense
                                                   ></v-text-field>
                                              </v-col>
-                                             <v-col cols="12" md="12">
+                                             <v-col cols="12" md="6">
+                                                  <v-text-field
+                                                       v-model="information.LocalNumber"
+                                                       append-icon="mdi-phone-classic"
+                                                       label="Local No."
+                                                       v-mask="'####-###'"
+                                                       hint="####-###"
+                                                       outlined
+                                                       dense
+                                                  ></v-text-field>
+                                             </v-col>
+                                             <v-col cols="12" md="6">
                                                   <v-text-field
                                                        v-model="information.StaffCode"
                                                        append-icon="mdi-account-hard-hat"
@@ -544,6 +558,7 @@ export default {
                                         this.information.TeamCode,
                                         this.information.PositionCode,
                                         this.information.DesignationCode,
+                                        this.information.SalaryGrade,
                                         this.information.ContractStatus,
                                         this.information.ContractHiredDate,
                                         this.information.RegularHiredDate,
@@ -556,6 +571,7 @@ export default {
                                         this.information.OperatingSystem,
                                         this.information.WorkEmailAddress,
                                         this.information.WorkLocation,
+                                        this.information.LocalNumber,
                                         this.moment().format('YYYY-MM-DD'),
                                         this.moment().format('YYYY-MM-DD'),
                                         this.userInfo.EmployeeCode  
