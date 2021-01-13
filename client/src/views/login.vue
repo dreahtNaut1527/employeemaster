@@ -170,7 +170,8 @@ export default {
                               // Config Japanese data
                               delete this.employeeDetails.userLevel
                               Object.assign(this.employeeDetails, {
-                                   UserLevel: 5
+                                   UserLevel: 5,
+                                   AssignedDepartments: ['QA', 'CAD']
                               })
                               if(this.employeeDetails.Comp_Name == 'SCAD') {
                                    this.employeeDetails.Comp_Name = 'SCD'

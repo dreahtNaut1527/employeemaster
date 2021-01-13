@@ -9,7 +9,7 @@
                                    <v-card-text class="pa-0 headline">Departments</v-card-text>
                               </v-col>
                          <v-spacer></v-spacer>
-                         <v-btn v-if="userInfo.UserLevel != 5" @click="newRecord()" color="primary"><v-icon left>mdi-plus</v-icon>New</v-btn>
+                         <v-btn v-if="userInfo.UserLevel == 4" @click="newRecord()" color="primary"><v-icon left>mdi-plus</v-icon>New</v-btn>
                          </v-row>
                     </v-card-title>
                     <v-divider></v-divider>
@@ -30,7 +30,7 @@
                                    <td>{{props.item.UpdatedDate}}</td>
                                    <td>
                                         <v-btn @click="editRecord(props.item)" icon>
-                                             <v-icon v-if="userInfo.UserLevel != 5">mdi-pencil</v-icon>
+                                             <v-icon v-if="userInfo.UserLevel == 4">mdi-pencil</v-icon>
                                              <v-icon v-else>mdi-eye</v-icon>
                                         </v-btn>
                                         <v-btn v-if="userInfo.UserLevel != 5" @click="deleteRecord(props.item)" icon>
@@ -51,7 +51,8 @@
           <v-dialog v-model="dialog" width="500" persistent>
                <v-card>
                     <v-toolbar color="primary" dark flat>
-                         <v-toolbar-title>{{editMode == 1 ? 'Edit Record' : 'New Record'}}</v-toolbar-title>
+                         <v-toolbar-title v-if="userInfo.UserLevel == 4">{{editMode == 1 ? 'Edit Record' : 'New Record'}}</v-toolbar-title>
+                         <v-toolbar-title v-else>View Record</v-toolbar-title>
                     </v-toolbar>
                     <v-container>
                               <v-form ref="form" v-model="valid" lazy-validation>
@@ -61,17 +62,39 @@
                                                   v-model="editDepartment.DepartmentName"
                                                   label="Department"
                                                   :rules="[v => !!v || 'Department is required']"
-                                                  :readonly="userInfo.UserLevel == 5"
+                                                  :readonly="userInfo.UserLevel != 4"
                                                   outlined
                                                   dense
                                              ></v-text-field>
                                         </v-col>
+                                        <!-- <div v-if="userInfo.UserLevel != 4" class="ma-0 pa-0">
+                                             <v-col cols="12" md="12">
+                                                  <v-text-field
+                                                       v-model="editDepartment.CreatedDate"
+                                                       label="Date Created"
+                                                       append-icon="mdi-calendar"
+                                                       readonly
+                                                       outlined
+                                                       dense
+                                                  ></v-text-field>
+                                             </v-col>
+                                             <v-col cols="12" md="12">
+                                                  <v-text-field
+                                                       v-model="editDepartment.UpdatedDate"
+                                                       label="Last Update"
+                                                       append-icon="mdi-calendar"
+                                                       readonly
+                                                       outlined
+                                                       dense
+                                                  ></v-text-field>
+                                             </v-col>
+                                        </div> -->
                                    </v-row>
                               </v-form>
                     </v-container>
                     <v-card-actions>
                          <v-spacer></v-spacer>
-                         <v-btn v-if="userInfo.UserLevel != 5" @click="saveRecord()" color="primary">
+                         <v-btn v-if="userInfo.UserLevel == 4" @click="saveRecord()" color="primary">
                               <v-icon left>mdi-content-save</v-icon>Save
                          </v-btn>
                          <v-btn @click="clearVariables()" text>

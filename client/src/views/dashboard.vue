@@ -63,16 +63,6 @@
                                                   dense
                                              ></v-autocomplete>
                                         </v-col>
-                                        <!-- <v-col cols="12" md="2" class="mb-n10">
-                                                  <v-autocomplete
-                                                       v-model="options"
-                                                       :items="optionList"
-                                                       item-text="text"
-                                                       item-value="value"
-                                                       outlined
-                                                       dense
-                                                  ></v-autocomplete>
-                                        </v-col> -->
                                    </v-row>
                               </v-card-text>
                               <v-divider></v-divider>
@@ -186,21 +176,33 @@ export default {
                return this.logtime.filter(rec => {
                     return (
                          rec.TIMEIN == null && 
-                         rec.DEPTDESC.includes(this.department || '') &&
+                         rec.DEPTDESC.match(this.department || '') &&
                          rec.SECTIONDESC.includes(this.section || '') &&
                          rec.TEAMDESC.includes(this.team || '')
                     )
                })
           },
           departmentList() {
-               return this.logtime.map(rec => {
-                    return rec.DEPTDESC
-               }).sort()
+               if(this.userInfo.UserLevel == 5) {
+                    return this.userInfo.AssignedDepartments.map(rec => {
+                         return rec
+                    }).sort()
+               } else {
+                    return this.logtime.map(rec => {
+                         return rec.DEPTDESC
+                    }).sort()
+               }
           },
           sectionList() {
-               return this.logtime.map(rec => {
-                    return rec.SECTIONDESC
-               }).sort()
+               if(this.userInfo.UserLevel == 5) {
+                    return this.filterData.map(rec => {
+                         return rec.SECTIONDESC
+                    }).sort()
+               } else {
+                    return this.logtime.map(rec => {
+                         return rec.SECTIONDESC
+                    }).sort()
+               }
           },
           teamList() {
                return this.filterData.map(rec => {
