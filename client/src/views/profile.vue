@@ -316,6 +316,7 @@
                                                        v-model="information.CPUNumber"
                                                        append-icon="mdi-desktop-classic"
                                                        label="CPU Number"
+                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -325,6 +326,7 @@
                                                        v-model="information.IPAddress"
                                                        append-icon="mdi-ip"
                                                        label="IP Address"
+                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -334,6 +336,7 @@
                                                        v-model="information.CompUserName"
                                                        append-icon="mdi-account"
                                                        label="Computer Username"
+                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -344,6 +347,7 @@
                                                        append-icon="mdi-lock"
                                                        label="Computer Password"
                                                        type="password"
+                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-text-field>

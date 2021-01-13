@@ -22,7 +22,7 @@
                <v-row>
                     <v-col>
                          <v-card>  
-                              <v-card-title>Employee Logtime</v-card-title>
+                              <v-card-title>Employees Logtime</v-card-title>
                               <v-divider></v-divider>
                               <v-card-text>
                                    <v-row class="mb-n10" dense>

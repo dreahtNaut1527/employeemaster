@@ -153,6 +153,7 @@ export default {
                     values: [this.username]
                }
                if (this.username) {  
+                    // check if Japanese
                     this.axios.get(`${this.api_jap}/${this.username}`).then(res => {
                          this.loading = false
                          this.employeeDetails = JSON.parse(JSON.stringify(res.data))
@@ -166,10 +167,16 @@ export default {
                                    }
                               })
                          } else {
+                              // Config Japanese data
+                              delete this.employeeDetails.userLevel
                               Object.assign(this.employeeDetails, {
                                    UserLevel: 5
                               })
-                              console.log(this.employeeDetails)
+                              if(this.employeeDetails.Comp_Name == 'SCAD') {
+                                   this.employeeDetails.Comp_Name = 'SCD'
+                              } else if(this.employeeDetails.Comp_Name == 'WUKONG') {
+                                   this.employeeDetails.Comp_Name = 'WKN'
+                              }
                          }
                     }) 
                } else {

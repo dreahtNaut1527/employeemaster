@@ -9,7 +9,7 @@
                                    <v-card-text class="pa-0 headline">Departments</v-card-text>
                               </v-col>
                          <v-spacer></v-spacer>
-                         <v-btn @click="newRecord()" color="primary"><v-icon left>mdi-plus</v-icon>New</v-btn>
+                         <v-btn v-if="userInfo.UserLevel != 5" @click="newRecord()" color="primary"><v-icon left>mdi-plus</v-icon>New</v-btn>
                          </v-row>
                     </v-card-title>
                     <v-divider></v-divider>
@@ -30,9 +30,10 @@
                                    <td>{{props.item.UpdatedDate}}</td>
                                    <td>
                                         <v-btn @click="editRecord(props.item)" icon>
-                                             <v-icon>mdi-pencil</v-icon>
+                                             <v-icon v-if="userInfo.UserLevel != 5">mdi-pencil</v-icon>
+                                             <v-icon v-else>mdi-eye</v-icon>
                                         </v-btn>
-                                        <v-btn @click="deleteRecord(props.item)" icon>
+                                        <v-btn v-if="userInfo.UserLevel != 5" @click="deleteRecord(props.item)" icon>
                                              <v-icon v-if="props.item.DeletedDate == null">mdi-delete</v-icon>
                                              <v-icon v-else>mdi-restore</v-icon>
                                         </v-btn>
@@ -60,6 +61,7 @@
                                                   v-model="editDepartment.DepartmentName"
                                                   label="Department"
                                                   :rules="[v => !!v || 'Department is required']"
+                                                  :readonly="userInfo.UserLevel == 5"
                                                   outlined
                                                   dense
                                              ></v-text-field>
@@ -69,7 +71,7 @@
                     </v-container>
                     <v-card-actions>
                          <v-spacer></v-spacer>
-                         <v-btn @click="saveRecord()" color="primary">
+                         <v-btn v-if="userInfo.UserLevel != 5" @click="saveRecord()" color="primary">
                               <v-icon left>mdi-content-save</v-icon>Save
                          </v-btn>
                          <v-btn @click="clearVariables()" text>
@@ -113,7 +115,7 @@ export default {
                headers: [
                     {text: 'Department', value: 'DepartmentName'},
                     {text: 'Date Created', value: 'CreatedDate'},
-                    {text: 'Date Updated', value: 'UpdatedDate'},
+                    {text: 'Last Update', value: 'UpdatedDate'},
                     {text: 'Actions', value: 'actions'}
                ],
                breadCrumbsItems: [
@@ -135,7 +137,16 @@ export default {
      methods: {
           loadDepartments() {
                this.loading = true
-               this.axios.get(`${this.api}/company/department/${this.userInfo.ShortName}`).then(res => {
+               let url = ''
+               switch(this.userInfo.UserLevel) {
+                    case 5: // Japanese
+                         url = `${this.api}/company/department/${this.userInfo.Comp_Name}`
+                         break;
+                    default:
+                         url = `${this.api}/company/department/${this.userInfo.ShortName}`
+                         break;
+               }
+               this.axios.get(url).then(res => {
                     this.departments = res.data
                     this.loading = false
                })
