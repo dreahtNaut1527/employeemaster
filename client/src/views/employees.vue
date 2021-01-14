@@ -51,6 +51,7 @@
                                  
                                    <v-icon>mdi-eye</v-icon>
                               </v-btn>
+                            
                               <v-btn  v-if="userInfo.UserLevel != 5" @click="editRecord(item.EmployeeCode)" icon>
                                    <v-icon>mdi-pencil</v-icon>
                               </v-btn>
@@ -150,8 +151,8 @@ export default {
                let url = ''
 
                switch (this.userInfo.UserLevel) {
-                    case 1: // DH/JA
-                         url = `${this.api}/employees/${this.userInfo.Comp_Name}/${this.userInfo.Dept_Name}`
+                    case 1: // DH
+                         url = `${this.api}/employees/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}`
                          break;
                     case 5: //JA
                          url = `${this.api}/employees/${this.userInfo.Comp_Name}/${this.userInfo.Dept_Name}`
