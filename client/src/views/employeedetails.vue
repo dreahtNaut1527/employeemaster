@@ -105,26 +105,37 @@
                                              </v-col>
                                              <v-col cols="12" md="4">
                                                   <v-autocomplete
-                                                       v-model="information.DesignationCode"
+                                                       v-model="information.PositionCode"
                                                        label="Designation"
+                                                       :items="positionList"
+                                                       item-text="PositionName"
+                                                       item-value="PositionCode"
+                                                       :readonly="this.isEmpEdit == false"
+                                                       clearable
+                                                       outlined
+                                                       dense
+                                                  ></v-autocomplete>
+                                             </v-col>
+                                              <v-col cols="12" md="4">
+                                                  <v-autocomplete
+                                                       v-model="information.DesignationCode"
+                                                       label="Position"
                                                        :items="designationList"
                                                        item-text="DesignationName"
                                                        item-value="DesignationCode"
-                                                       :readonly="this.isEmpEdit == false" 
-                                                       clearable                                                     
+                                                       readonly                                               
                                                        outlined
                                                        dense
                                                   ></v-autocomplete>
                                              </v-col>
                                              <v-col cols="12" md="4">
                                                   <v-autocomplete
-                                                       v-model="information.PositionCode"
-                                                       label="Position"
-                                                       :items="positionList"
-                                                       item-text="PositionName"
-                                                       item-value="PositionCode"
-                                                       :readonly="this.isEmpEdit == false"
-                                                       clearable
+                                                       v-model="information.SalaryGrade"
+                                                       label="Salary Grade"
+                                                       :items="salarygradeList"
+                                                       item-text="SalaryGrade"
+                                                       item-value="SalaryGrade"
+                                                       readonly  
                                                        outlined
                                                        dense
                                                   ></v-autocomplete>
@@ -248,23 +259,24 @@
                                                        dense
                                                   ></v-autocomplete>
                                              </v-col>
-                                             <v-col cols="12" md="7">
+                                             <v-col cols="12" md="6">
                                                   <v-text-field
                                                        v-model="information.Phone"
                                                        append-icon="mdi-phone"
                                                        label="Telephone"
-                                                       :readonly="this.isEmpEdit == false"
+                                                       v-mask="'(###)-###-####'"
+                                                       hint="(###)-###-####"
                                                        outlined
                                                        dense
                                                   ></v-text-field>
                                              </v-col>
-                                             <v-col cols="12" md="5">
+                                             <v-col cols="12" md="6">
                                                   <v-text-field
                                                        v-model="information.Cellphone"
                                                        append-icon="mdi-cellphone"
                                                        label="Cellphone"
-                                                       hint="0000-000-0000"
-                                                      :readonly="this.isEmpEdit == false"
+                                                       v-mask="'####-###-####'"
+                                                       hint="####-###-####"
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -341,7 +353,7 @@
                                                        v-model="information.CPUNumber"
                                                        append-icon="mdi-desktop-classic"
                                                        label="CPU Number"
-                                                       :readonly="this.isEmpEdit == false"
+                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -351,7 +363,7 @@
                                                        v-model="information.IPAddress"
                                                        append-icon="mdi-ip"
                                                        label="IP Address"
-                                                       :readonly="this.isEmpEdit == false"
+                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -361,7 +373,7 @@
                                                        v-model="information.CompUserName"
                                                        append-icon="mdi-account"
                                                        label="Computer Username"
-                                                       :readonly="this.isEmpEdit == false"
+                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -372,23 +384,23 @@
                                                        append-icon="mdi-lock"
                                                        label="Computer Password"
                                                        type="password"
-                                                       :readonly="this.isEmpEdit == false"
+                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-text-field>
                                              </v-col>
                                              <v-col cols="12" md="6">
-                                                  <v-autocomplete
-                                                       v-model="information.OperatingSystem"
-                                                       :items="operatingSystem"
-                                                       item-text="OperatingSystem"
-                                                       item-value="OperatingSystem"
-                                                       label="Operating System"
+                                                  <v-text-field
+                                                       v-model="information.LocalNumber"
+                                                       :items="LocalNumber"
+                                                       item-text="LocalNumber"
+                                                       item-value="LocalNumber"
+                                                       label="Local Number"
                                                        :readonly="this.isEmpEdit == false"
                                                        clearable
                                                        outlined
                                                        dense
-                                                  ></v-autocomplete>
+                                                  ></v-text-field>
                                              </v-col>
                                              <v-col cols="12" md="6">
                                                   <v-text-field
@@ -426,7 +438,7 @@
                     </v-card-text>
                          <v-card-actions v-if="this.isEmpEdit == true">
                               <v-spacer></v-spacer>
-                              <v-btn color="primary" @click="saveRecord()">
+                              <v-btn v-if="userInfo.UserLevel != 5" @click="saveRecord()" color="primary">
                                    <v-icon left>mdi-content-save</v-icon>Save
                               </v-btn>
                               <v-btn @click="loadInformation()" text>
@@ -487,6 +499,7 @@ export default {
                divsecteam:[],
                designationList: [],
                positionList: [],
+               salarygradeList:[],
                educationList: [],
                shiftList: [],
                operatingSystem: [],
@@ -559,6 +572,7 @@ export default {
      },
       created() {
           this.loadInformation()
+          this.loadSalaryGrade() 
        
      },
       sockets: {
@@ -613,6 +627,16 @@ export default {
                     this.loadEducations()
                })
           },
+          loadSalaryGrade() {
+               let body = {
+                    server: `HRIS${this.userInfo.ShortName.toLowerCase()}`,
+                    database: 'MASTER'
+               }
+               this.axios.post(`${this.asd_sql}/salarygrade.php`, body).then(res => {
+                    this.salarygradeList = res.data
+               })
+          },
+
           loadEducations() {
                this.axios.get(`${this.api}/education`).then(res => {
                     this.educationList = res.data
@@ -636,7 +660,7 @@ export default {
                          let body = {
                               procedureName: 'ProcPostEmployee',
                               values: [	
-                                        this.information.CompanyCode,
+                                         this.information.CompanyCode,
                                         this.information.EmployeeCode,
                                         this.information.AgencyCode,
                                         this.information.LastName,
@@ -664,6 +688,7 @@ export default {
                                         this.information.TeamCode,
                                         this.information.PositionCode,
                                         this.information.DesignationCode,
+                                        this.information.SalaryGrade,
                                         this.information.ContractStatus,
                                         this.information.ContractHiredDate,
                                         this.information.RegularHiredDate,
@@ -676,9 +701,10 @@ export default {
                                         this.information.OperatingSystem,
                                         this.information.WorkEmailAddress,
                                         this.information.WorkLocation,
-                                        this.moment().format('YYYY-MM-DD')  ,
-                                        this.moment().format('YYYY-MM-DD')  ,
-                                        this.userInfo.EmployeeCode 
+                                        this.information.LocalNumber,
+                                        this.moment().format('YYYY-MM-DD'),
+                                        this.moment().format('YYYY-MM-DD'),
+                                        this.userInfo.EmployeeCode  
                               ]
                          }
                        

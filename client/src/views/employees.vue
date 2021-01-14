@@ -5,8 +5,7 @@
                <v-card>
                     <v-card-title>
                               <v-row  dense>
-                                   <v-col v-if="userInfo.UserLevel == 9" cols="12" md="3">
-                                   
+                                    <v-col v-if="userInfo.UserLevel == 9 || userInfo.UserLevel == 5" cols="12" md="3">           
                                         <v-autocomplete
                                              v-model="department"
                                              :items="departmentList"
@@ -50,9 +49,9 @@
                <template v-slot:item.actions="{ item }">
                               <v-btn @click="viewRecord(item.EmployeeCode)" icon>
                                  
-                                   <v-icon>mdi-account-details</v-icon>
+                                   <v-icon>mdi-eye</v-icon>
                               </v-btn>
-                              <v-btn @click="editRecord(item.EmployeeCode)" icon>
+                              <v-btn  v-if="userInfo.UserLevel != 5" @click="editRecord(item.EmployeeCode)" icon>
                                    <v-icon>mdi-pencil</v-icon>
                               </v-btn>
                               
@@ -152,7 +151,10 @@ export default {
 
                switch (this.userInfo.UserLevel) {
                     case 1: // DH/JA
-                         url = `${this.api}/employees/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}`
+                         url = `${this.api}/employees/${this.userInfo.Comp_Name}/${this.userInfo.Dept_Name}`
+                         break;
+                    case 5: //JA
+                         url = `${this.api}/employees/${this.userInfo.Comp_Name}/${this.userInfo.Dept_Name}`
                          break;
                     case 2: // Section Head
                          url = `${this.api}/employees/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}/${this.userInfo.SectionName}`
