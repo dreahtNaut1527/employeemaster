@@ -27,9 +27,9 @@
                <v-list-item v-if="user.UserLevel == 5">
                     <v-list-item-content class="ma-2 text-center">
                          <v-list-item-avatar size="112">                                        
-                              <img :src="`${photo_jap}/${user.EmployeeNumber}.jpg`" alt="nopic.jpg">
+                              <img :src="`${photo_jap}/${user.id}.jpg`" alt="nopic.jpg">
                          </v-list-item-avatar>
-                         <v-list-item-title class="headline">{{ user.EmployeeNumber }}</v-list-item-title>
+                         <v-list-item-title class="headline">{{ user.id }}</v-list-item-title>
                          <v-list-item-subtitle>{{ user.LastNameEng }} {{user.FirstNameEng}}</v-list-item-subtitle>
                          <v-list-item-subtitle>( {{ user.LastName}} {{ user.FirstName }} )</v-list-item-subtitle>
                     </v-list-item-content>
@@ -89,7 +89,7 @@
                <v-app-bar-nav-icon @click="navDrawerHide(null)"></v-app-bar-nav-icon>
                <div class="hidden-sm-and-down">
                     <div v-if="userInfo.UserLevel == 5">
-                         <v-toolbar-title>{{ user.workStation }}</v-toolbar-title>
+                         <v-toolbar-title>{{ user.LocalDepartments }}</v-toolbar-title>
                     </div>
                     <div v-else>
                          <v-toolbar-title v-if="userInfo.UserLevel < 9">{{ user.DepartmentName }} Department</v-toolbar-title>

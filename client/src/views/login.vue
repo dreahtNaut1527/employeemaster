@@ -171,8 +171,8 @@ export default {
                               delete this.employeeDetails.userLevel
                               Object.assign(this.employeeDetails, {
                                    UserLevel: 5,
-                                   AssignedDepartments: ['QA', 'CAD']
                               })
+                              this.employeeDetails.AssignDepartments.push(this.employeeDetails.LocalDepartments)
                               if(this.employeeDetails.Comp_Name == 'SCAD') {
                                    this.employeeDetails.Comp_Name = 'SCD'
                               } else if(this.employeeDetails.Comp_Name == 'WUKONG') {
@@ -186,11 +186,17 @@ export default {
                     this.loading = false 
                }
           },
-          userLoggedIn() {
+          userLoggedIn() { 
+               // Japanese Account
                if(this.employeeDetails.UserLevel == 5) {
-                    store.commit('CHANGE_USER_INFO', this.employeeDetails)
-                    store.commit('CHANGE_USER_LOGGING', true)
-                    this.$router.push('/dashboard')
+                    if(this.employeeDetails.Password == this.md5(this.password)) {
+                         store.commit('CHANGE_USER_INFO', this.employeeDetails)
+                         store.commit('CHANGE_USER_LOGGING', true)
+                         this.$router.push('/dashboard')
+                    } else {
+                         this.alert = true
+                         this.alertText = 'Incorrect password. Please try again'
+                    }
                } else {
                     if(this.employeeDetails.Status == 1 || this.employeeDetails.Status != undefined) {
                          if(this.employeeDetails.Password == this.md5(this.password)) {

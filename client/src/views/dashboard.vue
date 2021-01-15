@@ -184,7 +184,7 @@ export default {
           },
           departmentList() {
                if(this.userInfo.UserLevel == 5) {
-                    return this.userInfo.AssignedDepartments.map(rec => {
+                    return this.userInfo.AssignDepartments.map(rec => {
                          return rec
                     }).sort()
                } else {
