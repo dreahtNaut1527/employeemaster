@@ -15,7 +15,7 @@
                     <v-divider></v-divider>
                     <v-card-title>
                          <v-row class="mb-n6" dense>
-                              <v-col v-if="userInfo.UserLevel == 9" cols="12" md="3">
+                              <v-col cols="12" md="3">
                                    <v-autocomplete
                                         v-model="departmentFilter"
                                         :items="loadDepartmentFilter"
@@ -229,23 +229,7 @@ export default {
      },
      methods:{
           loadEmployees(){
-               let url = ''
-
-               switch (this.userInfo.UserLevel) {
-                    case 1: // DH/JA
-                         url = `${this.api}/employees/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}`
-                         break;
-                    case 2: // Section Head
-                         url = `${this.api}/employees/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}/${this.userInfo.SectionName}`
-                         break;
-                    case 3: // Team Leader
-                         url = `${this.api}/employees/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}/${this.userInfo.SectionName}/${this.userInfo.TeamName}`
-                         break;
-                    default: // Developer
-                         url = `${this.api}/employees/${this.userInfo.ShortName}`
-                         break;
-               }
-               this.axios.get(url).then(res => {
+               this.axios.get(`${this.api}/employees/${this.userInfo.ShortName}`).then(res => {
                     this.history = res.data
                     console.log(res.data)
                })
@@ -274,6 +258,7 @@ export default {
                     ]
                     body.values.push(data)
                })
+               console.log(body)
                this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
                this.swal.fire('Saved','', 'success')
                this.$router.push('/transfer')

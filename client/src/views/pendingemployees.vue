@@ -6,15 +6,8 @@
                     <v-card-title>
                          <v-row dense>
                               <v-col>
-                                   <v-card-text class="pa-0 headline">Transfer Employees</v-card-text>
+                                   <v-card-text class="pa-0 headline">Pending Employees</v-card-text>
                               </v-col>
-                              <v-spacer></v-spacer>
-                              <v-btn
-                                   v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9"
-                                   color="primary" 
-                                   to="/transferemployees">
-                                        <v-icon left>mdi-transit-transfer</v-icon>Transfer Employees
-                              </v-btn>
                          </v-row>
                     </v-card-title>
                     <v-divider></v-divider>
@@ -97,8 +90,8 @@ export default {
                page: 1,
                loading: false,
                breadCrumbsItems: [
-                    {text: 'Main Data', disabled: false, href: '/transfer'},
-                    {text: 'Transfer Employee', disabled: true, href: '/transfer'}
+                    {text: 'Main Data', disabled: false, href: '/pendingemployees'},
+                    {text: 'Pending Employees', disabled: true, href: 'pendingemployees'}
                ],
                headers: [
                     {text:'Code',value:'EmployeeCode'},
