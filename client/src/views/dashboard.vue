@@ -218,7 +218,7 @@ export default {
                     case 1: // Department Head
                          body = {
                               logdate: this.moment(this.logtimeDate).format('MMDDYY'),
-                              server: `HRIS${this.userInfo.ShortName.toLowerCase()}`,
+                              company: this.userInfo.ShortName.toLowerCase(),
                               deptcode: this.userInfo.DepartmentCode,
                               sectioncode: '',
                               teamcode: ''
@@ -227,7 +227,7 @@ export default {
                     case 2: // Section Head
                          body = {
                               logdate: this.moment(this.logtimeDate).format('MMDDYY'),
-                              server: `HRIS${this.userInfo.ShortName.toLowerCase()}`,
+                              company: this.userInfo.ShortName.toLowerCase(),
                               deptcode: this.userInfo.DepartmentCode,
                               sectioncode: this.userInfo.SectionCode,
                               teamcode: ''
@@ -236,7 +236,7 @@ export default {
                     case 3: // Team Leader
                          body = {
                               logdate: this.moment(this.logtimeDate).format('MMDDYY'),
-                              server: `HRIS${this.userInfo.ShortName.toLowerCase()}`,
+                              company: this.userInfo.ShortName.toLowerCase(),
                               deptcode: this.userInfo.DepartmentCode,
                               sectioncode: this.userInfo.SectionCode,
                               teamcode: this.userInfo.TeamCode
@@ -245,7 +245,7 @@ export default {
                     case 5: // Japanese
                          body = {
                               logdate: this.moment(this.logtimeDate).format('MMDDYY'),
-                              server: `HRIS${this.userInfo.Comp_Name.toLowerCase()}`,
+                              company: this.userInfo.Comp_Name.toLowerCase(),
                               deptcode: '',
                               sectioncode: '',
                               teamcode: ''
@@ -254,7 +254,7 @@ export default {
                     default: // Developer
                          body = {
                               logdate: this.moment(this.logtimeDate).format('MMDDYY'),
-                              server: `HRIS${this.userInfo.ShortName.toLowerCase()}`,
+                              company: this.userInfo.ShortName.toLowerCase(),
                               deptcode: '',
                               sectioncode: '',
                               teamcode: ''

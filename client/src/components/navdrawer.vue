@@ -46,7 +46,45 @@
                     </v-list-item-content>
                </v-list-item>
                <v-divider></v-divider>
-               <v-list shaped dense>
+               <v-list dense>
+                    <v-list-group
+                         v-for="(item, i) in navDrawerList" :key="i"
+                         v-model="item.active"
+                         :prepend-icon="item.icon"
+                         no-action
+                    >
+                         
+                         <template v-slot:activator>
+                              <v-list-item-title>{{item.title}}</v-list-item-title>
+                         </template>
+                         <v-list-item
+                              v-for="child in item.items"
+                              :to="child.to"
+                              :key="child.text"
+                              :link="!child.hasChild"
+                         >
+                              <v-list-item-content v-if="!child.hasChild">
+                                   <v-list-item-subtitle>{{child.text}}</v-list-item-subtitle>
+                              </v-list-item-content>
+                              <v-list-item-content v-else>
+                                   <v-list-item-subtitle class="font-weight-bold">{{child.text}}:</v-list-item-subtitle>
+                                   <v-list dense>
+                                        <v-list-item
+                                             v-for="grandChild in child.childItems"
+                                             :to="grandChild.to"
+                                             :key="grandChild.text"
+                                             link
+                                        >
+                                             <v-list-item-content>
+                                                  <v-list-item-subtitle>{{grandChild.text}}</v-list-item-subtitle>
+                                             </v-list-item-content>
+                                        </v-list-item>
+                                   </v-list>
+                              </v-list-item-content>
+                         </v-list-item>
+                    </v-list-group>
+               </v-list>    
+               <!-- <v-list shaped dense>
                     <v-list-group
                          v-for="(item, i) in navDrawerList" :key="i"
                          v-model="item.active"
@@ -64,13 +102,12 @@
                               :key="child.text"
                               link 
                          >
-                              <!-- @click="navDrawerHide(child.to)" -->
                               <v-list-item-content>
                                    <v-list-item-subtitle>{{child.text}}</v-list-item-subtitle>
                               </v-list-item-content>
                          </v-list-item>
                     </v-list-group>
-               </v-list>               
+               </v-list>                -->
                <v-bottom-navigation
                     background-color="transparent" 
                     absolute
@@ -163,6 +200,7 @@ export default {
                               }
                          ]
                          break;
+                    case 1: // Department Head
                     case 2: // Section Head
                     case 3: // Team Leader
                          this.navDrawerList = [
@@ -215,24 +253,32 @@ export default {
                               }
                          ]
                          break;
-                    default: // Developer & DH
+                    default: // Developer & QA
                          this.navDrawerList = [
                          {
                               title: 'Dashboard',
                               icon: 'mdi-home',
-                              items: [{text: 'Home', to: '/dashboard'}],
+                              items: [{text: 'Home', to: '/dashboard', hasChild: false}],
                               active: true   
                          },
                          {
                               title: 'Main Data',
                               icon: 'mdi-account',
                               items: [
-                                   {text: 'Employees', to: '/employees'},
-                                   {text: 'Departments', to: '/department'},
-                                   {text: 'Sections', to: '/section'},
-                                   {text: 'Team', to: '/team'},
-                                   {text: 'Department - Section', to: '/divsec'},
-                                   {text: 'Transfer Employees', to: '/transfer'},
+                                   {text: 'Employees', to: '/employees', hasChild: false},
+                                   {text: 'Departments', to: '/department', hasChild: false},
+                                   {text: 'Sections', to: '/section', hasChild: false},
+                                   {text: 'Team', to: '/team', hasChild: false},
+                                   {text: 'Department - Section', to: '/divsec', hasChild: false},
+                                   {
+                                        text: 'Transfer Employees',
+                                        childItems: [
+                                             {text: 'Transfer', to: '/transferemployees'},
+                                             {text: 'History', to: '/transfer'},
+                                             {text: 'Pending', to: '/pending'}
+                                        ],
+                                        hasChild: true
+                                   },
                               ],
                               active: false   
                          },
@@ -240,8 +286,8 @@ export default {
                               title: 'Maintenance',
                               icon: 'mdi-cog',
                               items: [
-                                   {text: 'User Accounts', to: '/accounts'},
-                                   {text: 'Profile', to: '/profile'}
+                                   {text: 'User Accounts', to: '/accounts', hasChild: false},
+                                   {text: 'Profile', to: '/profile', hasChild: false}
                               ],
                               active: false   
                          }
