@@ -51,6 +51,16 @@ const routes = [
     component: () => import('@/views/transfer'),
   },
   {
+    path: '/transferemployees',
+    name: 'transferemployees',
+    component: () => import('@/views/transferemployees'),
+  },
+  {
+    path: '/pendingemployees',
+    name: 'pendingemployees',
+    component: () => import('@/views/pendingemployees'),
+  },
+  {
     path: '/accounts',
     name: 'accounts',
     component: () => import('@/views/accounts'),
@@ -59,11 +69,6 @@ const routes = [
     path: '/profile',
     name: 'profile',
     component: () => import('@/views/profile'),
-  },
-  {
-    path: '/transferemployees',
-    name: 'transferemployees',
-    component: () => import('@/views/transferemployees'),
   },
   {
     path: '*',

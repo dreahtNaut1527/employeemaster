@@ -275,7 +275,7 @@ export default {
                                         childItems: [
                                              {text: 'Transfer', to: '/transferemployees'},
                                              {text: 'History', to: '/transfer'},
-                                             {text: 'Pending', to: '/pending'}
+                                             {text: 'Pending', to: '/pendingemployees'}
                                         ],
                                         hasChild: true
                                    },
