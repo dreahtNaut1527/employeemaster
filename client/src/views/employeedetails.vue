@@ -396,6 +396,8 @@
                                                        item-text="LocalNumber"
                                                        item-value="LocalNumber"
                                                        label="Local Number"
+                                                       v-mask="'####-###'"
+                                                       hint="####-###"
                                                        :readonly="this.isEmpEdit == false"
                                                        clearable
                                                        outlined
