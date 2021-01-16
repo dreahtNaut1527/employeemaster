@@ -46,48 +46,60 @@
                     </v-list-item-content>
                </v-list-item>
                <v-divider></v-divider>
-               <v-list dense>
+               <v-list shaped dense>
                     <v-list-group
                          v-for="(item, i) in navDrawerList" :key="i"
-                         v-model="item.active"
+                         v-model="item.active"    
                          :prepend-icon="item.icon"
                          no-action
                     >
-                         
                          <template v-slot:activator>
-                              <v-list-item-title>{{item.title}}</v-list-item-title>
+                              <v-list-item-content>
+                                   <v-list-item-title>{{item.title}}</v-list-item-title>
+                              </v-list-item-content>
                          </template>
                          <v-list-item
                               v-for="child in item.items"
                               :to="child.to"
                               :key="child.text"
-                              :link="!child.hasChild"
+                              link 
                          >
-                              <v-list-item-content v-if="!child.hasChild">
+                              <v-list-item-content>
                                    <v-list-item-subtitle>{{child.text}}</v-list-item-subtitle>
                               </v-list-item-content>
-                              <v-list-item-content v-else>
-                                   <v-list-item-subtitle class="font-weight-bold">{{child.text}}:</v-list-item-subtitle>
-                                   <v-list dense>
-                                        <v-list-item
-                                             v-for="grandChild in child.childItems"
-                                             :to="grandChild.to"
-                                             :key="grandChild.text"
-                                             link
-                                        >
-                                             <v-list-item-content>
-                                                  <v-list-item-subtitle>{{grandChild.text}}</v-list-item-subtitle>
-                                             </v-list-item-content>
-                                        </v-list-item>
-                                   </v-list>
-                              </v-list-item-content>
                          </v-list-item>
+                         <div v-if="i == 1">
+                              <v-list-group
+                                   v-for="(subGroup, i) in navDrawerSubGroup" :key="i"
+                                   no-action
+                                   sub-group
+                              >
+                                   <template v-slot:activator>
+                                        <v-list-item-content>
+                                             <v-list-item-subtitle class="ml-2">{{subGroup.text}}</v-list-item-subtitle>
+                                        </v-list-item-content>
+                                   </template>
+                                   <v-list-item
+                                        v-for="subGroupChild in subGroup.items"
+                                        :to="subGroupChild.to"
+                                        :key="subGroupChild.text"
+                                        link 
+                                   >
+                                        <v-list-item-content>
+                                             <v-list-item-subtitle>{{subGroupChild.text}}</v-list-item-subtitle>
+                                        </v-list-item-content>
+                                        <v-list-item-icon>
+                                             <v-icon>{{subGroupChild.icon}}</v-icon>
+                                        </v-list-item-icon>
+                                   </v-list-item>
+                              </v-list-group>
+                         </div>
                     </v-list-group>
                </v-list>    
                <!-- <v-list shaped dense>
                     <v-list-group
                          v-for="(item, i) in navDrawerList" :key="i"
-                         v-model="item.active"
+                         v-model="item.active"    
                          :prepend-icon="item.icon"
                          no-action
                     >
@@ -164,6 +176,7 @@ export default {
                search: '',
                socketId: '',
                navDrawerList: [],
+               navDrawerSubGroup: []
           }
      },
      created() {
@@ -221,8 +234,7 @@ export default {
                                         {text: 'Departments', to: '/department'},
                                         {text: 'Sections', to: '/section'},
                                         {text: 'Team', to: '/team'},
-                                        {text: 'Department - Section', to: '/divsec'},
-                                        {text: 'Transfer Employees', to: '/transfer'},
+                                        {text: 'Department - Section', to: '/divsec'}
                                    ],
                                    active: false   
                               }
@@ -246,8 +258,7 @@ export default {
                                         {text: 'Departments', to: '/department'},
                                         {text: 'Sections', to: '/section'},
                                         {text: 'Team', to: '/team'},
-                                        {text: 'Department - Section', to: '/divsec'},
-                                        {text: 'Transfer Employees', to: '/transfer'},
+                                        {text: 'Department - Section', to: '/divsec'}
                                    ],
                                    active: false   
                               }
@@ -258,42 +269,44 @@ export default {
                          {
                               title: 'Dashboard',
                               icon: 'mdi-home',
-                              items: [{text: 'Home', to: '/dashboard', hasChild: false}],
-                              active: true   
+                              items: [{text: 'Home', to: '/dashboard'}],
+                              active: true    
                          },
                          {
                               title: 'Main Data',
                               icon: 'mdi-account',
                               items: [
-                                   {text: 'Employees', to: '/employees', hasChild: false},
-                                   {text: 'Departments', to: '/department', hasChild: false},
-                                   {text: 'Sections', to: '/section', hasChild: false},
-                                   {text: 'Team', to: '/team', hasChild: false},
-                                   {text: 'Department - Section', to: '/divsec', hasChild: false},
-                                   {
-                                        text: 'Transfer Employees',
-                                        childItems: [
-                                             {text: 'Transfer', to: '/transferemployees'},
-                                             {text: 'History', to: '/transfer'},
-                                             {text: 'Pending', to: '/pendingemployees'}
-                                        ],
-                                        hasChild: true
-                                   },
+                                   {text: 'Employees', to: '/employees'},
+                                   {text: 'Departments', to: '/department'},
+                                   {text: 'Sections', to: '/section'},
+                                   {text: 'Team', to: '/team'},
+                                   {text: 'Department - Section', to: '/divsec'}
                               ],
-                              active: false   
+                              active: false ,
+                              hasGrandChild: true  
                          },
                          {
                               title: 'Maintenance',
                               icon: 'mdi-cog',
                               items: [
-                                   {text: 'User Accounts', to: '/accounts', hasChild: false},
-                                   {text: 'Profile', to: '/profile', hasChild: false}
+                                   {text: 'User Accounts', to: '/accounts'},
+                                   {text: 'Profile', to: '/profile'}
                               ],
-                              active: false   
+                              active: false  
                          }
                     ]
                     break;
                }
+               this.navDrawerSubGroup = [
+                    {
+                         text: 'Transfer Employees',
+                         items: [
+                              {text: 'Transfer', icon: 'mdi-transfer', to: '/transferemployees'},
+                              {text: 'History', icon: 'mdi-history', to: '/transfer'},
+                              {text: 'Pending', icon: 'mdi-timer-sand', to: '/pendingemployees'}
+                         ]
+                    }
+               ]
           },
           navDrawerHide(path) {
                if(!store.state.navDrawerVal) {

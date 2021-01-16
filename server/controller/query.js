@@ -436,6 +436,106 @@ router.get('/history/:company/:department/:section/:team', (req, res) => {
      })
 })
 
+router.get('/pending/:company', (req, res) => {
+     let company = req.params.company
+     let sql = `SELECT EmployeeForTransferView.*,
+               EmployeeInformationView.EmployeeName, EmployeeInformationView.DesignationCode,
+               EmployeeInformationView.DesignationName
+               FROM EmployeeForTransferView
+               INNER JOIN EmployeeInformationView 
+               ON EmployeeForTransferView.EmployeeCode = EmployeeInformationView.EmployeeCode
+               WHERE lower(EmployeeForTransferView.ShortName) = lower('${company}')`
+     config.connect().then(() => {
+          const request = new mssql.Request(config)
+          request.query(sql, (err, results) => {
+               if(err) {
+                    res.send(err)
+               } else {
+                    res.send(results.recordset)
+               }
+               config.close()
+          })
+     })
+})
+
+router.get('/pending/:company/:department', (req, res) => {
+     let company = req.params.company
+     let department = req.params.department
+     let sql = `SELECT EmployeeForTransferView.*,
+               EmployeeInformationView.EmployeeName, EmployeeInformationView.DesignationCode,
+               EmployeeInformationView.DesignationName
+               FROM EmployeeForTransferView
+               INNER JOIN EmployeeInformationView 
+               ON EmployeeForTransferView.EmployeeCode = EmployeeInformationView.EmployeeCode
+               WHERE lower(EmployeeForTransferView.ShortName) = lower('${company}')
+               AND lower(EmployeeForTransferView.DepartmentName) = lower('${department}')`
+     config.connect().then(() => {
+          const request = new mssql.Request(config)
+          request.query(sql, (err, results) => {
+               if(err) {
+                    res.send(err)
+               } else {
+                    res.send(results.recordset)
+               }
+               config.close()
+          })
+     })
+})
+
+router.get('/pending/:company/:department/:section', (req, res) => {
+     let company = req.params.company
+     let department = req.params.department
+     let section = req.params.section
+     let sql = `SELECT EmployeeForTransferView.*,
+               EmployeeInformationView.EmployeeName, EmployeeInformationView.DesignationCode,
+               EmployeeInformationView.DesignationName
+               FROM EmployeeForTransferView
+               INNER JOIN EmployeeInformationView 
+               ON EmployeeForTransferView.EmployeeCode = EmployeeInformationView.EmployeeCode
+               WHERE lower(EmployeeForTransferView.ShortName) = lower('${company}')
+               AND lower(EmployeeForTransferView.DepartmentName) = lower('${department}')
+               AND lower(EmployeeForTransferView.SectionName) = lower('${section}')`
+     config.connect().then(() => {
+          const request = new mssql.Request(config)
+          request.query(sql, (err, results) => {
+               if(err) {
+                    res.send(err)
+               } else {
+                    res.send(results.recordset)
+               }
+               config.close()
+          })
+     })
+})
+
+router.get('/pending/:company/:department/:section/:team', (req, res) => {
+     let company = req.params.company
+     let department = req.params.department
+     let section = req.params.section
+     let team = req.params.team
+     let sql = `SELECT EmployeeForTransferView.*,
+               EmployeeInformationView.EmployeeName, EmployeeInformationView.DesignationCode,
+               EmployeeInformationView.DesignationName
+               FROM EmployeeForTransferView
+               INNER JOIN EmployeeInformationView 
+               ON EmployeeForTransferView.EmployeeCode = EmployeeInformationView.EmployeeCode
+               WHERE lower(EmployeeForTransferView.ShortName) = lower('${company}')
+               AND lower(EmployeeForTransferView.DepartmentName) = lower('${department}')
+               AND lower(EmployeeForTransferView.SectionName) = lower('${section}')
+               AND lower(EmployeeForTransferView.TeamName) = lower('${team}')`
+     config.connect().then(() => {
+          const request = new mssql.Request(config)
+          request.query(sql, (err, results) => {
+               if(err) {
+                    res.send(err)
+               } else {
+                    res.send(results.recordset)
+               }
+               config.close()
+          })
+     })
+})
+
 router.get('/employeehistory/:code', (req, res) => {
      let code = req.params.code
      config.connect().then(() => {
