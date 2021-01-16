@@ -79,6 +79,11 @@
                                    <v-form ref="form" v-model="valid" lazy-validation>
                                         <v-row align="center" justify="center" dense>
                                              <v-col cols="12" md="12">     
+                                                  <datePicker
+                                                       :menu="dateDialog"
+                                                       dateLabel="Effectivity Date"
+                                                       :dateValue.sync="transdivsecteam.EffectivityDate"
+                                                  ></datePicker>
                                                   <v-autocomplete
                                                        v-model="transdivsecteam.DepartmentCode"
                                                        :items="departmentList"
@@ -130,6 +135,7 @@
 </template>
 
 <script>
+import datePicker from '@/components/datepicker'
 
 export default {
      data() {
@@ -142,6 +148,7 @@ export default {
                divsecteam: [],
                pageCount: 0,
                page: 1,
+               dateDialog: false,
                loading: false,
                singleSelect: false,
                dialog: false,
@@ -159,6 +166,7 @@ export default {
                     {text:'Team',value:'TeamName'}
                ],
                transdivsecteam:{
+                    EffectivityDate: this.moment().format('YYYY-MM-DD'),
                     DepartmentCode: '',
                     SectionCode: '',
                     TeamCode: '',
@@ -231,7 +239,6 @@ export default {
           loadEmployees(){
                this.axios.get(`${this.api}/employees/${this.userInfo.ShortName}`).then(res => {
                     this.history = res.data
-                    console.log(res.data)
                })
           },
           transferEmployees(){
@@ -243,11 +250,13 @@ export default {
           saveRecord(){
                let data = []
                let body = {
-                    procedureName: 'ProcPostTransferEmployee',
+                    procedureName: 'ProcGetEmployeesForTransfer',
                     values: []
                }
                this.selected.forEach(rec =>{
                     data = [
+                         this.transdivsecteam.EffectivityDate,
+                         rec.CompanyCode,
                          rec.EmployeeCode,
                          this.transdivsecteam.DepartmentCode,
                          this.transdivsecteam.SectionCode,
@@ -258,14 +267,15 @@ export default {
                     ]
                     body.values.push(data)
                })
-               console.log(body)
                this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
                this.swal.fire('Saved','', 'success')
-               this.$router.push('/transfer')
+               // this.$router.push('/transfer')
+               this.selected = [],
                this.dialog = false
           },
           clearVariables(){
                this.transdivsecteam = {
+                    EffectivityDate: this.moment().format('YYYY-MM-DD'),
                     DepartmentCode: '',
                     SectionCode: '',
                     TeamCode: '',
@@ -277,6 +287,7 @@ export default {
           }
      },
      components: {
+          datePicker
      }
 }
 </script>

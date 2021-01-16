@@ -6,15 +6,8 @@
                     <v-card-title>
                          <v-row dense>
                               <v-col>
-                                   <v-card-text class="pa-0 headline">Transfer Employees</v-card-text>
+                                   <v-card-text class="pa-0 headline">Transferred History</v-card-text>
                               </v-col>
-                              <v-spacer></v-spacer>
-                              <v-btn
-                                   v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9"
-                                   color="primary" 
-                                   to="/transferemployees">
-                                        <v-icon left>mdi-transit-transfer</v-icon>Transfer Employees
-                              </v-btn>
                          </v-row>
                     </v-card-title>
                     <v-divider></v-divider>
@@ -151,7 +144,6 @@ export default {
                let url = ''
                switch (this.userInfo.UserLevel) {
                     case 1: // DH
-                    case 4: // QA
                          url = `${this.api}/history/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}`
                          break;
                     case 2: // Section Head
@@ -163,13 +155,12 @@ export default {
                     case 5: // JA
                          url = `${this.api}/history/${this.userInfo.Comp_Name}`
                          break;
-                    default: // Developer
+                    default: // Developer & QA
                          url = `${this.api}/history/${this.userInfo.ShortName}`
                          break;
                }
                this.axios.get(url).then(res => {
                     this.history = res.data
-                    console.log(res.data)
                })
           }
      },

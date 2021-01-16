@@ -16,8 +16,8 @@
                               <v-col cols="12" md="2">
                                    <datePicker
                                         :menu="dateDialog"
-                                        dateLabel="Transferred Date"
-                                        :dateValue.sync="transferredDate"
+                                        dateLabel="Effectivity Date"
+                                        :dateValue.sync="EffectivityDate"
                                    ></datePicker>
                               </v-col>
                               <v-col v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 5 || userInfo.UserLevel == 9" cols="12" md="3">
@@ -80,9 +80,9 @@ import datePicker from '@/components/datepicker'
 export default {
      data() {
           return {
-               history: [],
+               pending: [],
                dateDialog: false,
-               transferredDate: this.moment().format('YYYY-MM-DD'),
+               EffectivityDate: this.moment().format('YYYY-MM-DD'),
                department: '',
                section: '',
                team: '',
@@ -91,7 +91,7 @@ export default {
                loading: false,
                breadCrumbsItems: [
                     {text: 'Main Data', disabled: false, href: '/pendingemployees'},
-                    {text: 'Pending Employees', disabled: true, href: 'pendingemployees'}
+                    {text: 'Pending Employees', disabled: true, href: '/pendingemployees'}
                ],
                headers: [
                     {text:'Code',value:'EmployeeCode'},
@@ -104,13 +104,13 @@ export default {
           }
      },
      created(){
-          this.loadHistory()
+          this.loadPending()
      },
      computed: {
           filterData() {
-               return this.history.filter(rec => {
+               return this.pending.filter(rec => {
                     return (
-                         this.moment(rec.TransferredDate).format('YYYY-MM-DD') == this.transferredDate &&
+                         this.moment(rec.EffectivityDate).format('YYYY-MM-DD') == this.EffectivityDate &&
                          (rec.DepartmentName.includes(this.department || '') &&
                          rec.SectionName.includes(this.section || '') &&
                          rec.TeamName.includes(this.team || '')      )                   
@@ -123,13 +123,13 @@ export default {
                          return rec
                     }).sort()
                }else{
-                    return this.history.map(rec =>{
+                    return this.pending.map(rec =>{
                     return rec.DepartmentName
                     }).sort()
                }
           },
           loadSectionList(){
-               return this.history.map(rec =>{
+               return this.pending.map(rec =>{
                    return rec.SectionName
                }).sort()
           },
@@ -140,29 +140,27 @@ export default {
           }
      },
      methods:{
-          loadHistory(){
+          loadPending(){
                let url = ''
                switch (this.userInfo.UserLevel) {
                     case 1: // DH
-                    case 4: // QA
-                         url = `${this.api}/history/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}`
+                         url = `${this.api}/ /${this.userInfo.ShortName}/${this.userInfo.DepartmentName}`
                          break;
                     case 2: // Section Head
-                         url = `${this.api}/history/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}/${this.userInfo.SectionName}`
+                         url = `${this.api}/pending/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}/${this.userInfo.SectionName}`
                          break;
                     case 3: // Team Leader
-                         url = `${this.api}/history/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}/${this.userInfo.SectionName}/${this.userInfo.TeamName}`
+                         url = `${this.api}/pending/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}/${this.userInfo.SectionName}/${this.userInfo.TeamName}`
                          break;
                     case 5: // JA
-                         url = `${this.api}/history/${this.userInfo.Comp_Name}`
+                         url = `${this.api}/pending/${this.userInfo.Comp_Name}`
                          break;
-                    default: // Developer
-                         url = `${this.api}/history/${this.userInfo.ShortName}`
+                    default: // Developer & QA
+                         url = `${this.api}/pending/${this.userInfo.ShortName}`
                          break;
                }
                this.axios.get(url).then(res => {
-                    this.history = res.data
-                    console.log(res.data)
+                    this.pending = res.data
                })
           }
      },
