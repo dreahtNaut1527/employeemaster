@@ -127,7 +127,7 @@
                     <v-spacer></v-spacer>
                     <v-switch
                          v-model="dark"
-                         :prepend-icon="icon"
+                         :prepend-icon="icon"          
                          @change="changeTheme()"
                     ></v-switch>
                </v-bottom-navigation>
@@ -156,9 +156,9 @@
                <notifications v-if="userInfo.UserLevel != 0" />    
                <v-btn @click="logout()" icon>
                     <v-icon small>mdi-logout</v-icon>
-               </v-btn>
+               </v-btn>  
           </v-app-bar>
-     </div>    
+     </div>       
 </template>
 
 <script>

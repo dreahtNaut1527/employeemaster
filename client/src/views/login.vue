@@ -55,6 +55,13 @@
                                              </v-btn>
                                         </v-card-text>
                                    </v-form>
+                                   <v-btn 
+                                        color="primary" 
+                                        x-small 
+                                        text
+                                   >
+                                        Forgot Password
+                                   </v-btn>
                               </v-card-text>
                          </v-card>
                     </v-col>
