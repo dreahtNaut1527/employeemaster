@@ -219,45 +219,45 @@ export default {
                          body = {
                               logdate: this.moment(this.logtimeDate).format('MMDDYY'),
                               company: this.userInfo.ShortName.toLowerCase(),
-                              deptcode: this.userInfo.DepartmentCode,
-                              sectioncode: '',
-                              teamcode: ''
+                              department: this.userInfo.DepartmentName,
+                              section: '',
+                              team: ''
                          }
                          break;
                     case 2: // Section Head
                          body = {
                               logdate: this.moment(this.logtimeDate).format('MMDDYY'),
                               company: this.userInfo.ShortName.toLowerCase(),
-                              deptcode: this.userInfo.DepartmentCode,
-                              sectioncode: this.userInfo.SectionCode,
-                              teamcode: ''
+                              department: this.userInfo.DepartmentName,
+                              section: this.userInfo.SectionName,
+                              team: ''
                          }
                          break;
                     case 3: // Team Leader
                          body = {
                               logdate: this.moment(this.logtimeDate).format('MMDDYY'),
                               company: this.userInfo.ShortName.toLowerCase(),
-                              deptcode: this.userInfo.DepartmentCode,
-                              sectioncode: this.userInfo.SectionCode,
-                              teamcode: this.userInfo.TeamCode
+                              department: this.userInfo.DepartmentName,
+                              section: this.userInfo.SectionName,
+                              team: this.userInfo.TeamName
                          }
                          break;
                     case 5: // Japanese
                          body = {
                               logdate: this.moment(this.logtimeDate).format('MMDDYY'),
                               company: this.userInfo.Comp_Name.toLowerCase(),
-                              deptcode: '',
-                              sectioncode: '',
-                              teamcode: ''
+                              department: this.userInfo.AssignDepartments,
+                              section: '',
+                              team: ''
                          }
                          break;
                     default: // Developer
                          body = {
                               logdate: this.moment(this.logtimeDate).format('MMDDYY'),
                               company: this.userInfo.ShortName.toLowerCase(),
-                              deptcode: '',
-                              sectioncode: '',
-                              teamcode: ''
+                              department: '',
+                              section: '',
+                              team: ''
                          }
                          break;
                }
