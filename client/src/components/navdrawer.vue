@@ -196,9 +196,9 @@ export default {
           },
           logout() {
                store.commit('CHANGE_USER_INFO', {})
-               store.commit('CHANGE_THEME', false)
                store.commit('CHANGE_USER_LOGGING', false)
                store.commit('CHANGE_NAVDRAWER', false)
+               store.commit('CHANGE_THEME', false)
                this.$router.push('/')
           },
           getUserLevel() {
@@ -234,7 +234,8 @@ export default {
                                         {text: 'Departments', to: '/department'},
                                         {text: 'Sections', to: '/section'},
                                         {text: 'Team', to: '/team'},
-                                        {text: 'Department - Section', to: '/divsec'}
+                                        {text: 'Department - Section', to: '/divsec'},
+                                        {text: 'User Accounts', to: '/accounts'}
                                    ],
                                    active: false   
                               }

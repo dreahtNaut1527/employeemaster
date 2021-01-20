@@ -327,8 +327,8 @@ router.get('/logging', (req, res) => {
      config.connect().then(() => {
          const request = new mssql.Request(config)
          request.query(`SELECT Logging.SocketId, 
-                               Logging.EmployeeCode, 
-                               EmployeeInformationView.EmployeeName, Logging.Details FROM Logging
+                         Logging.EmployeeCode, 
+                         EmployeeInformationView.EmployeeName, Logging.Details FROM Logging
                          INNER JOIN EmployeeInformationView 
                          ON EmployeeInformationView.EmployeeCode = Logging.EmployeeCode`, (err, results) => {
              if(err) {

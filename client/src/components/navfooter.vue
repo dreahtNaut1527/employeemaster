@@ -1,6 +1,7 @@
 <template>
      <v-footer
           class="font-weight-medium"
+          clipped-left
           padless
           app
      >

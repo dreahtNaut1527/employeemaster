@@ -100,7 +100,7 @@ export default {
           notificationList(val) {
                this.totalNotifs = 0
                val.forEach(rec => {
-                    if(rec.EmployeeCode != this.userInfo.EmployeeCode && rec.CompanyCode == this.userInfo.CompanyCode) {
+                    if(rec.EmployeeCode != this.userInfo.EmployeeCode && rec.ShortName == this.userInfo.ShortName) {
                          if(!rec.Viewed) {
                               this.totalNotifs++
                          }

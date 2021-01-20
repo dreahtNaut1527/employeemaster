@@ -2,22 +2,55 @@
      <v-main>
           <v-breadcrumbs :items="breadCrumbsItems" divider="/"></v-breadcrumbs>
           <v-container>
+               <v-row class="mb-n6" dense>
+                    <v-col cols="12" md="2">
+                         <v-select
+                              v-model="companies"
+                              :items="companyList"
+                              placeholder="Company"
+                              clearable
+                              outlined
+                              dense
+                         ></v-select>
+                    </v-col>
+                    <v-col cols="12" md="4">
+                         <v-select
+                              v-model="departments"
+                              :items="departmentList"
+                              placeholder="Department"
+                              clearable
+                              outlined
+                              dense
+                         ></v-select>
+                    </v-col>
+                    <v-col cols="12" md="3">
+                         <v-select
+                              v-model="sections"
+                              :items="sectionList"
+                              placeholder="Section"
+                              clearable
+                              outlined
+                              dense
+                         ></v-select>
+                    </v-col>
+                    <v-col cols="12" md="3">
+                         <v-select
+                              v-model="teams"
+                              :items="teamList"
+                              placeholder="Team"
+                              clearable
+                              outlined
+                              dense
+                         ></v-select>
+                    </v-col>
+               </v-row>
                <v-card>
                     <v-card-title>
-                         <v-row class="mb-n6" dense>
-                              <v-col cols="12" md="4">
-                                   <v-select
-                                        v-model="companies"
-                                        :items="companyList"
-                                        placeholder="Company"
-                                        clearable
-                                        outlined
-                                        dense
-                                   ></v-select>
-                              </v-col>
+                         User Accounts
                          <v-spacer></v-spacer>
-                         <v-btn @click="dialog = !dialog" color="primary"><v-icon left>mdi-plus</v-icon>New</v-btn>
-                         </v-row>
+                         <v-btn @click="dialog = !dialog" color="primary">
+                              <v-icon left>mdi-plus</v-icon>New
+                         </v-btn>
                     </v-card-title>
                     <v-divider></v-divider>
                     <v-data-table 
@@ -42,6 +75,9 @@
                               <v-btn @click="deleteRecord(item)" icon>
                                    <v-icon v-if="item.Status == 1">mdi-delete</v-icon>
                                    <v-icon v-else>mdi-restore</v-icon>
+                              </v-btn>
+                              <v-btn @click="resetRecord(item)" icon>
+                                   <v-icon>mdi-lock-reset</v-icon>
                               </v-btn>
                          </template>
                     </v-data-table>
@@ -176,6 +212,9 @@ export default {
                editMode: 0,
                newPassword: '',
                companies: '',
+               departments: '',
+               sections: '',
+               teams: '',
                confirmedPassword: '',
                accounts: [],
                passwordRules: [
@@ -227,20 +266,38 @@ export default {
      },
      sockets: {
           showNotifications() {
-               setTimeout(() => {
-                    this.loadAccounts()
-               }, 1500);
+               this.loadAccounts()
           }
      },
      computed: {
           filterData() {
                return this.accounts.filter(rec => {
-                    return rec.ShortName.includes(this.companies || '')
+                    return (
+                         rec.ShortName.includes(this.companies || '') &&
+                         rec.DepartmentName.includes(this.departments || '') &&
+                         rec.SectionName.includes(this.sections || '') &&
+                         rec.TeamName.includes(this.teams || '')
+                    )
                })
           },
           companyList() {
                return this.accounts.map(rec => {
                     return rec.ShortName
+               })
+          },
+          departmentList() {
+               return this.filterData.map(rec => {
+                    return rec.DepartmentName
+               })
+          },
+          sectionList() {
+               return this.filterData.map(rec => {
+                    return rec.SectionName
+               })
+          },
+          teamList() {
+               return this.filterData.map(rec => {
+                    return rec.TeamName
                })
           }
      },
@@ -343,6 +400,42 @@ export default {
                          this.setNotifications(
                               this.userInfo.EmployeeCode, 
                               val.Status != 1 ? 'restored an account' : `account set to inactive`
+                         )
+                         this.clearVariables()
+                    }
+               })
+          },
+          resetRecord(val) {
+               this.swal.fire({
+                    title: 'Are you sure?',
+                    text: `This will reset the account of: ${val.Fullname}.`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, reset the account!',
+                    denyButtonText: 'Cancel'
+               }).then(result => {
+                    if(result.isConfirmed) {
+                         let body = {
+                              procedureName: 'ProcUserControl',
+                              values: [
+                                   val.EmployeeCode,
+                                   val.EmployeeCode, // set the username to employee code
+                                   val.Fullname,
+                                   this.md5(val.EmployeeCode),
+                                   val.IPAddr,
+                                   val.UserLevel,
+                                   this.moment().format('YYYY-MM-DD'),
+                                   this.moment().format('YYYY-MM-DD'),
+                                   this.userInfo.EmployeeCode,
+                                   2
+                              ]
+                         }
+                         console.log(body.values)
+                         this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
+                         this.swal.fire('Confirmed!','Changes has been saved', 'success')
+                         this.setNotifications(
+                              this.userInfo.EmployeeCode, 
+                              `reset the account of: ${val.EmployeeCode}: ${val.Fullname}`
                          )
                          this.clearVariables()
                     }

@@ -9,7 +9,7 @@
                                    <v-card-text class="pa-0 headline">Departments</v-card-text>
                               </v-col>
                          <v-spacer></v-spacer>
-                         <v-btn v-if="userInfo.UserLevel == 4" @click="newRecord()" color="primary"><v-icon left>mdi-plus</v-icon>New</v-btn>
+                         <v-btn v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9" @click="newRecord()" color="primary"><v-icon left>mdi-plus</v-icon>New</v-btn>
                          </v-row>
                     </v-card-title>
                     <v-divider></v-divider>
@@ -30,10 +30,10 @@
                                    <td>{{props.item.UpdatedDate}}</td>
                                    <td>
                                         <v-btn @click="editRecord(props.item)" icon>
-                                             <v-icon v-if="userInfo.UserLevel == 4">mdi-pencil</v-icon>
+                                             <v-icon v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9">mdi-pencil</v-icon>
                                              <v-icon v-else>mdi-eye</v-icon>
                                         </v-btn>
-                                        <v-btn v-if="userInfo.UserLevel != 5" @click="deleteRecord(props.item)" icon>
+                                        <v-btn v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9" @click="deleteRecord(props.item)" icon>
                                              <v-icon v-if="props.item.DeletedDate == null">mdi-delete</v-icon>
                                              <v-icon v-else>mdi-restore</v-icon>
                                         </v-btn>
@@ -61,8 +61,9 @@
                                              <v-text-field
                                                   v-model="editDepartment.DepartmentName"
                                                   label="Department"
+                                                  @keypress.enter="saveRecord()"
                                                   :rules="[v => !!v || 'Department is required']"
-                                                  :readonly="userInfo.UserLevel != 4"
+                                                  :readonly="userInfo.UserLevel != 4 && userInfo.UserLevel != 9"
                                                   outlined
                                                   dense
                                              ></v-text-field>
@@ -94,7 +95,7 @@
                     </v-container>
                     <v-card-actions>
                          <v-spacer></v-spacer>
-                         <v-btn v-if="userInfo.UserLevel == 4" @click="saveRecord()" color="primary">
+                         <v-btn v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9" @click="saveRecord()" color="primary">
                               <v-icon left>mdi-content-save</v-icon>Save
                          </v-btn>
                          <v-btn @click="clearVariables()" text>
@@ -185,7 +186,7 @@ export default {
                                         this.editDepartment.DepartmentCode,
                                         this.editDepartment.DepartmentName,
                                         this.editDepartment.CreatedDate,
-                                        this.editDepartment.UpdatedDate,
+                                        this.moment().format('YYYY-MM-DD hh:mm:ss'),
                                         this.userInfo.EmployeeCode,
                                         1
                                    ]
@@ -230,7 +231,7 @@ export default {
                                    val.DepartmentCode,
                                    val.DepartmentName,
                                    val.CreatedDate,
-                                   val.UpdatedDate,
+                                   this.moment().format('YYYY-MM-DD hh:mm:ss'),
                                    this.userInfo.EmployeeCode,
                                    0
                               ]
@@ -254,6 +255,7 @@ export default {
                },
                this.dialog = false
                this.editMode = 0
+               this.loadDepartments()
           }
      }
 }
