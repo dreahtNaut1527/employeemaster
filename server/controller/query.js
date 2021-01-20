@@ -69,27 +69,22 @@ router.get('/employees/:company', (req, res) => {
 })
 
 router.get('/employees/:compname/:department', (req, res) => {
+     let sqlwhere = ''
+     let arr = req.query.array
      let compname = req.params.compname
      let department = req.params.department
-     let sql = `SELECT * FROM EmployeeBasicInfoView WHERE lower(ShortName) = lower('${compname}')
-               AND lower(DepartmentName) = lower('${department}')`
-     config.connect().then(() => {
-          const request = new mssql.Request(config)
-          request.query(sql, (err, results) => {
-               if(err) {
-                    res.send(err)
-               } else {
-                    res.send(results.recordset)
-               }
-               config.close()
+
+     if (Array.isArray(arr)) {
+          arr.split(',')
+          arr.forEach(rec => {
+               sqlwhere += `'${rec}',`
           })
-     })   
-})
-router.get('/employees/:compname/:department', (req, res) => {
-     let compname = req.params.compname
-     let department = req.params.department
-     let sql = `SELECT * FROM EmployeeBasicInfoView WHERE lower(ShortName) = lower('${compname}')
-               AND lower(DepartmentName) = lower('${department}')`
+          sqlwhere = ` AND DepartmentName IN (${sqlwhere.slice(0, -1)})`
+     } else {
+          sqlwhere = ` AND lower(DepartmentName) = lower('${department}')`
+     }
+
+     let sql = `SELECT * FROM EmployeeBasicInfoView WHERE lower(ShortName) = lower('${compname}') ${sqlwhere}`
      config.connect().then(() => {
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {

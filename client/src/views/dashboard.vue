@@ -151,6 +151,12 @@ export default {
      },
      created() {
           this.loadLogtime()
+          this.axios.get(`${this.api}/employees/${this.userInfo.Comp_Name}/${this.userInfo.LocalDepartment}?array=${this.userInfo.AssignDepartments}`).then(res => {
+               console.log(res.data)
+          })
+          this.axios.get(`${this.api}/employees/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}`).then(res => {
+               console.log(res.data)
+          })
      },
      computed: {
           filterData() {
