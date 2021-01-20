@@ -127,16 +127,29 @@ export default {
                })
           },
           departmentList() {
-               return this.getempInfos.map(rec => {
-                    return rec.DepartmentName
-                   
-               }).sort()
+               if(this.userInfo.UserLevel == 5) {
+                    return this.userInfo.AssignDepartments.map(rec => {
+                          return rec
+                    }).sort()
+                }else {
+                    return this.getempInfos.map(rec => {
+                         return rec.DepartmentName
+                    
+                    }).sort()
+                }
           },
           sectionList() { 
-               return this.getempInfos.map(rec => {
-                    return rec.SectionName   
-               }).sort()
-      
+                if(this.userInfo.UserLevel == 5) {
+                    return this.filterData.map(rec => {
+                         return rec.SectionName   
+                    }).sort()
+                }else {
+                     return this.getempInfos.map(rec => {
+                         return rec.SectionName   
+                    }).sort()     
+
+                }
+       
           },
           teamList() {
                return this.filterData.map(rec => {
@@ -155,7 +168,7 @@ export default {
                          url = `${this.api}/employees/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}`
                          break;
                     case 5: //JA
-                         url = `${this.api}/employees/${this.userInfo.Comp_Name}/${this.userInfo.Dept_Name}`
+                         url = `${this.api}/employees/${this.userInfo.Comp_Name}`
                          break;
                     case 2: // Section Head
                          url = `${this.api}/employees/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}/${this.userInfo.SectionName}`
