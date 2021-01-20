@@ -9,7 +9,7 @@
                                    <v-card-text class="pa-0 headline">Department-Section-Team</v-card-text>
                               </v-col>
                               <v-spacer></v-spacer>
-                              <v-btn @click="newRecord()" color="primary"><v-icon left>mdi-plus</v-icon>New</v-btn>
+                              <v-btn v-if="userInfo.UserLevel==4 || userInfo.UserLevel==9" @click="newRecord()" color="primary"><v-icon left>mdi-plus</v-icon>New</v-btn>
                          </v-row>
                     </v-card-title>
                     <v-divider></v-divider>
@@ -178,12 +178,20 @@ export default {
                          rec.SectionName.includes(this.sectionfilter || '') && 
                          rec.TeamName.includes(this.teamfilter || '')
                     )
+
                })
           },
           departmentlistfilter(){
-               return this.divsecteam.map((rec)=>{
-                    return rec.DepartmentName
-               }).sort()               
+               if(this.userInfo.UserLevel==5){
+                    return this.userInfo.AssignDepartments.map((rec)=>{
+                         return rec
+                    }).sort()                
+               } else {
+                    return this.divsecteam.map((rec)=>{
+                         return rec.DepartmentName
+                    }).sort()                        
+               }
+           
           },
           sectionlistfilter(){
                return this.filterData.map((rec)=>{
@@ -225,7 +233,13 @@ export default {
      methods:{
           loaddivsectionteam(){
                this.loading= true
-               this.axios.get(`${this.api}/company/department/section/team/${this.userInfo.ShortName}`).then(res=>{
+               let url='yves pogi'
+               if (this.userInfo.UserLevel==5){
+                    url=`${this.api}/company/department/section/team/${this.userInfo.Comp_Name}`
+               }else {
+                    url=`${this.api}/company/department/section/team/${this.userInfo.ShortName}`
+               }
+               this.axios.get(url).then(res=>{
                     this.divsecteam = res.data
                     this.loading=false
                })
