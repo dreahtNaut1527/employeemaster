@@ -9,7 +9,7 @@
                                         <v-card-text class="pa-0 headline">Team</v-card-text>
                                    </v-col>
                                    <v-spacer></v-spacer>
-                                   <v-btn @click="newRecord()" color="primary"><v-icon left>mdi-plus</v-icon>New</v-btn>
+                                   <v-btn  v-if="userInfo.UserLevel==4 || userInfo.UserLevel==9" @click="newRecord()" color="primary"><v-icon left>mdi-plus</v-icon>New</v-btn>
                               </v-row>
                          </v-card-title>
                          <v-divider></v-divider>
@@ -30,9 +30,10 @@
                                    <td>{{props.item.UpdatedDate}}</td>
                                    <td>
                                         <v-btn @click="editRecord(props.item)" icon>
-                                             <v-icon>mdi-pencil</v-icon>
+                                             <v-icon v-if="userInfo.UserLevel==4 || userInfo.UserLevel==9">mdi-pencil</v-icon>
+                                             <v-icon v-else>mdi-eye</v-icon>                                            
                                         </v-btn>
-                                        <v-btn @click="deleteRecord(props.item)" icon>
+                                        <v-btn v-if="userInfo.UserLevel==4 || userInfo.UserLevel==9" @click="deleteRecord(props.item)" icon>
                                              <v-icon v-if="props.item.DeletedDate == null">mdi-delete</v-icon>
                                              <v-icon v-else>mdi-restore</v-icon>
                                         </v-btn>
@@ -60,6 +61,7 @@
                                                   outlined
                                                   dense
                                                   :rules="[v => !!v || 'SectionName is required']"
+                                                  :readonly="userInfo.UserLevel!=4 && userInfo.UserLevel!=9"
                                              ></v-text-field>
                                         </v-col>
                                    </v-row>
@@ -67,8 +69,8 @@
                          </v-container>
                          <v-card-actions>
                               <v-spacer></v-spacer>
-                              <v-btn @click="saveRecord()" color="primary"><v-icon>mdi-content-save</v-icon> Save</v-btn>
-                              <v-btn @click="clearVariables()" text><v-icon>mdi-cancel</v-icon> Cancel</v-btn>
+                              <v-btn v-if="userInfo.UserLevel==4 || userInfo.UserLevel==9" @click="saveRecord()" color="primary"><v-icon left>mdi-content-save</v-icon>Save</v-btn>
+                              <v-btn @click="clearVariables()" text><v-icon left>mdi-cancel</v-icon>Cancel</v-btn>
                          </v-card-actions>
                     </v-card>
                </v-dialog>               
@@ -130,7 +132,16 @@ export default {
      methods:{
          loadteams(){
               this.loading=true
-              this.axios.get(`${this.api}/company/team/${this.userInfo.ShortName}`).then(res=>{
+              let url=''
+              switch(this.userInfo.UserLevel){
+                    case 5:
+                         url=`${this.api}/company/team/${this.userInfo.Comp_Name}`
+                        break;
+                    default :
+                         url=`${this.api}/company/team/${this.userInfo.ShortName}`
+                         break;
+              }
+              this.axios.get(url).then(res=>{
                    this.teams=res.data
                    this.loading=false
               })
