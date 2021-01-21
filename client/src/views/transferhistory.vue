@@ -162,7 +162,7 @@ export default {
                }
                this.axios.get(url).then(res => {
                     this.history = res.data
-               })
+               }).catch(() => this.$router.push('*'))
           }
      },
      components: {
