@@ -173,7 +173,7 @@ export default {
                this.axios.get(url).then(res => {
                     this.departments = res.data
                     this.loading = false
-               })
+               }).catch(() => this.$router.push('*'))
           },
           saveRecord() {
                if(this.$refs.form.validate()) {

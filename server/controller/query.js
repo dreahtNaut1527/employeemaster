@@ -54,7 +54,8 @@ router.get('/basicinfo/:code', (req, res) => {
 
 router.get('/employees/:company', (req, res) => {
      let company = req.params.company
-     let sql = `SELECT * FROM EmployeeBasicInfoView WHERE lower(ShortName) = lower('${company}')`
+     let sql = `SELECT * FROM EmployeeBasicInfoView WHERE lower(ShortName) = lower('${company}')
+                ORDER BY EmployeeCode`
      config.connect().then(() => {
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {  
@@ -74,9 +75,9 @@ router.get('/employees/:compname/:department', (req, res) => {
      let compname = req.params.compname
      let department = req.params.department
 
-     if (Array.isArray(arr)) {
-          arr.split(',')
-          arr.forEach(rec => {
+     let arrData = arr.split(",")
+     if (Array.isArray(arrData)) {
+          arrData.forEach(rec => {
                sqlwhere += `'${rec}',`
           })
           sqlwhere = ` AND DepartmentName IN (${sqlwhere.slice(0, -1)})`
@@ -84,7 +85,8 @@ router.get('/employees/:compname/:department', (req, res) => {
           sqlwhere = ` AND lower(DepartmentName) = lower('${department}')`
      }
 
-     let sql = `SELECT * FROM EmployeeBasicInfoView WHERE lower(ShortName) = lower('${compname}') ${sqlwhere}`
+     let sql = `SELECT * FROM EmployeeBasicInfoView WHERE lower(ShortName) = lower('${compname}') 
+               ${sqlwhere} ORDER BY EmployeeCode`
      config.connect().then(() => {
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {
@@ -305,16 +307,30 @@ router.get('/os', (req, res) => {
  })
 
 router.get('/usercontrol', (req, res) => {
+     let arr = req.query.array.split(',')
+     let sqlwhere = ''
+
+     if(Array.isArray(arr)) {
+          let company = arr[0]
+          let department = arr[1]
+          let section = arr[2]
+          let team = arr[3]
+
+          sqlwhere = company != 'NONE' ? `WHERE lower(ShortName) = '${company.toLowerCase()}'` : ''
+          sqlwhere += department != 'NONE' ? ` AND lower(DepartmentName) = '${department.toLowerCase()}'` : ''
+          sqlwhere += section != 'NONE' ? ` AND lower(SectionName) = '${section.toLowerCase()}'` : ''
+          sqlwhere += team != 'NONE' ? ` AND lower(TeamName) = '${team.toLowerCase()}'` : ''
+     }
      config.connect().then(() => {
-     const request = new mssql.Request(config)
-     request.query(`SELECT * FROM UserControlView`, (err, results) => {
-          if(err) {
-               res.send(err)
-          } else {
-               res.send(results.recordset)
-          }
-          config.close()
-     })
+          const request = new mssql.Request(config)
+          request.query(`SELECT * FROM UserControlView ${sqlwhere}`, (err, results) => {
+               if(err) {
+                    res.send(err)
+               } else {
+                    res.send(results.recordset)
+               }
+               config.close()
+          })
      })
 })
 

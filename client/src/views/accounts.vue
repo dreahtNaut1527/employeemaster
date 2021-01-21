@@ -8,7 +8,7 @@
                               v-model="companies"
                               :items="companyList"
                               placeholder="Company"
-                              clearable
+                              :readonly="userInfo.UserLevel < 9"
                               outlined
                               dense
                          ></v-select>
@@ -305,10 +305,47 @@ export default {
           loadAccounts() {
                this.loading = true
                this.accounts = []
-               this.axios.get(`${this.api}/usercontrol`).then(res => {
+               let arrayParams = []
+               switch (this.userInfo.UserLevel) {
+                    case 1: // Department Head
+                    case 4: // QA Staff
+                         arrayParams = [
+                              this.userInfo.ShortName,
+                              this.userInfo.DepartmentName,
+                              'NONE',
+                              'NONE'
+                         ]
+                         break;
+                    case 2: // Section Head
+                         arrayParams = [
+                              this.userInfo.ShortName,
+                              this.userInfo.DepartmentName,
+                              this.userInfo.SectionName,
+                              'NONE'
+                         ]
+                         break;
+                    case 3: // Team Leader
+                         arrayParams = [
+                              this.userInfo.ShortName,
+                              this.userInfo.DepartmentName,
+                              this.userInfo.SectionName,
+                              this.userInfo.TeamName,
+                         ]
+                         break;            
+                    default: // Developer
+                         arrayParams = [
+                              'NONE',
+                              'NONE',
+                              'NONE',
+                              'NONE'
+                         ]
+                         break;
+               }
+               console.log(`${this.api}/usercontrol?array=${arrayParams}`)
+               this.axios.get(`${this.api}/usercontrol?array=${arrayParams}`).then(res => {
                     this.accounts = res.data
                     this.loading = false
-               })
+               }).catch(() => this.$router.push('*'))
           },
           getEmployeeFullname() {
                this.loadName = true

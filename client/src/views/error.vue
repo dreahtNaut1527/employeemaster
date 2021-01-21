@@ -9,9 +9,9 @@
                               <v-card-text v-if="!isConnect" class="headline text-center">
                                    Error in network connection. Please try again
                               </v-card-text>
-                              <v-card-title v-else class="headline text-caption text-center">
+                              <v-card-text v-else class="headline font-weight-bold text-center">
                                    Page not found
-                              </v-card-title>
+                              </v-card-text>
                               <v-card-actions>
                                    <v-btn @click="reloadPage()" color="primary" block text>Reload</v-btn>
                               </v-card-actions>
