@@ -46,7 +46,7 @@
                @page-count="pageCount = $event"
                hide-default-footer
                >
-               <template v-slot:item.actions="{ item }">
+               <template v-slot:[`item.actions`]="{ item }">
                               <v-btn @click="viewRecord(item.EmployeeCode)" icon>
                                  
                                    <v-icon>mdi-eye</v-icon>
@@ -168,7 +168,8 @@ export default {
                          url = `${this.api}/employees/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}`
                          break;
                     case 5: //JA
-                         url = `${this.api}/employees/${this.userInfo.Comp_Name}`
+                         // url = `${this.api}/employees/${this.userInfo.Comp_Name}`
+                         url = `${this.api}/employees/${this.userInfo.Comp_Name}/${this.userInfo.LocalDepartments}?array=${this.userInfo.AssignDepartments}`
                          break;
                     case 2: // Section Head
                          url = `${this.api}/employees/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}/${this.userInfo.SectionName}`
