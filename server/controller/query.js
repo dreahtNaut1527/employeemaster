@@ -494,7 +494,7 @@ router.get('/pending/:company/:department', (req, res) => {
           arrData.forEach(rec => {
                sqlwhere += `'${rec}',`
           })
-          sqlwhere = ` AND DepartmentName IN (${sqlwhere.slice(0, -1)})`
+          sqlwhere = ` AND EmployeeForTransferView.DepartmentName IN (${sqlwhere.slice(0, -1)})`
      } else {
           sqlwhere = ` AND lower(EmployeeForTransferView.DepartmentName) = lower('${department}')`
      }

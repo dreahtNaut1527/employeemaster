@@ -298,16 +298,32 @@ export default {
                     ]
                     break;
                }
-               this.navDrawerSubGroup = [
-                    {
-                         text: 'Transfer Employees',
-                         items: [
-                              {text: 'Transfer', icon: 'mdi-transfer', to: '/transferemployees'},
-                              {text: 'History', icon: 'mdi-history', to: '/transfer'},
-                              {text: 'Pending', icon: 'mdi-timer-sand', to: '/pendingemployees'}
+               switch (this.userInfo.UserLevel) {
+                    case 5:
+                         this.navDrawerSubGroup = [
+                              {
+                                   text: 'Transfer Employees',
+                                   items: [
+                                        {text: 'History', icon: 'mdi-history', to: '/transfer'},
+                                        {text: 'Pending', icon: 'mdi-timer-sand', to: '/pendingemployees'}
+                                   ]
+                              }
                          ]
-                    }
-               ]
+                         break;
+               
+                    default:
+                         this.navDrawerSubGroup = [
+                              {
+                                   text: 'Transfer Employees',
+                                   items: [
+                                        {text: 'Transfer', icon: 'mdi-transfer', to: '/transferemployees'},
+                                        {text: 'History', icon: 'mdi-history', to: '/transfer'},
+                                        {text: 'Pending', icon: 'mdi-timer-sand', to: '/pendingemployees'}
+                                   ]
+                              }
+                         ]
+                         break;
+               }
           },
           navDrawerHide(path) {
                if(!store.state.navDrawerVal) {
