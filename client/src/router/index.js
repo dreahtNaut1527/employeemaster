@@ -46,9 +46,9 @@ const routes = [
     component: () => import('@/views/divsec'),
   },
   {
-    path: '/transfer',
-    name: 'transfer',
-    component: () => import('@/views/transfer'),
+    path: '/transferhistory',
+    name: 'transferhistory',
+    component: () => import('@/views/transferhistory'),
   },
   {
     path: '/transferemployees',

@@ -304,7 +304,7 @@ export default {
                               {
                                    text: 'Transfer Employees',
                                    items: [
-                                        {text: 'History', icon: 'mdi-history', to: '/transfer'},
+                                        {text: 'History', icon: 'mdi-history', to: '/transferhistory'},
                                         {text: 'Pending', icon: 'mdi-timer-sand', to: '/pendingemployees'}
                                    ]
                               }
@@ -317,7 +317,7 @@ export default {
                                    text: 'Transfer Employees',
                                    items: [
                                         {text: 'Transfer', icon: 'mdi-transfer', to: '/transferemployees'},
-                                        {text: 'History', icon: 'mdi-history', to: '/transfer'},
+                                        {text: 'History', icon: 'mdi-history', to: '/transferhistory'},
                                         {text: 'Pending', icon: 'mdi-timer-sand', to: '/pendingemployees'}
                                    ]
                               }
