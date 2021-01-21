@@ -119,7 +119,7 @@ export default {
           },
           loadDepartmentList(){
                if (this.userInfo.UserLevel == 5){
-                    return this.userInfo.AssignedDepartments.map(rec =>{
+                    return this.userInfo.AssignDepartments.map(rec =>{
                          return rec
                     }).sort()
                }else{
@@ -153,7 +153,8 @@ export default {
                          url = `${this.api}/pending/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}/${this.userInfo.SectionName}/${this.userInfo.TeamName}`
                          break;
                     case 5: // JA
-                         url = `${this.api}/pending/${this.userInfo.Comp_Name}`
+                         // url = `${this.api}/pending/${this.userInfo.Comp_Name}`
+                         url = `${this.api}/pending/${this.userInfo.Comp_Name}/${this.userInfo.LocalDepartments}?array=${this.userInfo.AssignDepartments}`
                          break;
                     default: // Developer & QA
                          url = `${this.api}/pending/${this.userInfo.ShortName}`
