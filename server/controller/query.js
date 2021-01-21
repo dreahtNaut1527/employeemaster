@@ -75,7 +75,7 @@ router.get('/employees/:compname/:department', (req, res) => {
      let compname = req.params.compname
      let department = req.params.department
 
-     let arrData = arr.split(",")
+     let arrData = arr.split(",")       
      if (Array.isArray(arrData)) {
           arrData.forEach(rec => {
                sqlwhere += `'${rec}',`
@@ -390,11 +390,25 @@ router.get('/history/:company', (req, res) => {
 router.get('/history/:company/:department', (req, res) => {
      let company = req.params.company
      let department = req.params.department
+     let sqlwhere = ''
+
+     let arr = req.query.array
+     let arrData = arr.split(",")
+
+     if (Array.isArray(arrData)) {
+          arrData.forEach(rec => {
+               sqlwhere += `'${rec}',`
+          })
+          sqlwhere = ` AND DepartmentName IN (${sqlwhere.slice(0, -1)})`
+     } else {
+          sqlwhere = ` AND lower(DepartmentName) = lower('${department}')`
+     }
+
      config.connect().then(() => {
                const request = new mssql.Request(config)
                request.query(`SELECT * FROM EmployeeHistoryDataView  
                          WHERE lower(ShortName) = lower('${company}')
-                         AND lower(DepartmentName) = lower('${department}')`, (err, results) => {
+                         ${sqlwhere} ORDER BY EmployeeCode`, (err, results) => {
                if(err) {
                     res.send(err)
                } else {
@@ -472,6 +486,19 @@ router.get('/pending/:company', (req, res) => {
 router.get('/pending/:company/:department', (req, res) => {
      let company = req.params.company
      let department = req.params.department
+     let sqlwhere = ''
+     let arr = req.query.array
+     let arrData = arr.split(",")
+
+     if (Array.isArray(arrData)) {
+          arrData.forEach(rec => {
+               sqlwhere += `'${rec}',`
+          })
+          sqlwhere = ` AND DepartmentName IN (${sqlwhere.slice(0, -1)})`
+     } else {
+          sqlwhere = ` AND lower(EmployeeForTransferView.DepartmentName) = lower('${department}')`
+     }
+
      let sql = `SELECT EmployeeForTransferView.*,
                EmployeeInformationView.EmployeeName, EmployeeInformationView.DesignationCode,
                EmployeeInformationView.DesignationName
@@ -479,7 +506,7 @@ router.get('/pending/:company/:department', (req, res) => {
                INNER JOIN EmployeeInformationView 
                ON EmployeeForTransferView.EmployeeCode = EmployeeInformationView.EmployeeCode
                WHERE lower(EmployeeForTransferView.ShortName) = lower('${company}')
-               AND lower(EmployeeForTransferView.DepartmentName) = lower('${department}')`
+               ${sqlwhere} ORDER BY EmployeeCode`
      config.connect().then(() => {
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {
