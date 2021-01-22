@@ -23,6 +23,7 @@ const server = app.listen(port, () => {
 const socketio = require('socket.io')(server, {
     cors: {
         origin: [
+            process.env.URL,
             process.env.GRP_URL,
             process.env.PES_URL,
             process.env.GRP_LOCAL_URL,

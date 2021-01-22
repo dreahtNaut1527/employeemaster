@@ -71,11 +71,12 @@ router.get('/employees/:company', (req, res) => {
 
 router.get('/employees/:compname/:department', (req, res) => {
      let sqlwhere = ''
-     let arr = req.query.array
      let compname = req.params.compname
      let department = req.params.department
+     
+     let arr = req.query.array
+     let arrData = arr != undefined ? arr.split(",") : ''       
 
-     let arrData = arr.split(",")       
      if (Array.isArray(arrData)) {
           arrData.forEach(rec => {
                sqlwhere += `'${rec}',`
@@ -393,7 +394,7 @@ router.get('/history/:company/:department', (req, res) => {
      let sqlwhere = ''
 
      let arr = req.query.array
-     let arrData = arr.split(",")
+     let arrData = arr != undefined ? arr.split(",") : ''       
 
      if (Array.isArray(arrData)) {
           arrData.forEach(rec => {
@@ -488,7 +489,7 @@ router.get('/pending/:company/:department', (req, res) => {
      let department = req.params.department
      let sqlwhere = ''
      let arr = req.query.array
-     let arrData = arr.split(",")
+     let arrData = arr != undefined ? arr.split(",") : ''
 
      if (Array.isArray(arrData)) {
           arrData.forEach(rec => {
@@ -513,7 +514,7 @@ router.get('/pending/:company/:department', (req, res) => {
                if(err) {
                     res.send(err)
                } else {
-                    res.send(results.recordset)
+                    res.send(results.   recordset)
                }
                config.close()
           })
@@ -534,7 +535,7 @@ router.get('/pending/:company/:department/:section', (req, res) => {
                AND lower(EmployeeForTransferView.DepartmentName) = lower('${department}')
                AND lower(EmployeeForTransferView.SectionName) = lower('${section}')`
      config.connect().then(() => {
-          const request = new mssql.Request(config)
+          const request = new mssql.Request(config)    
           request.query(sql, (err, results) => {
                if(err) {
                     res.send(err)
