@@ -8,5 +8,6 @@ module.exports = {
     public: '0.0.0.0:1000',
     disableHostCheck: true,
     noInfo: true
-  }
-}
+  },
+  publicPath: process.env.NODE_ENV == 'production' ? '/employeemaster/' : '/'
+} 

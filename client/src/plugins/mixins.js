@@ -4,8 +4,8 @@ const plugins = {
      install(Vue) {
           Vue.mixin({
                data: () => ({
-                    api: process.env.VUE_APP_LOCAL_URL,
-                    // api: process.env.VUE_APP_URL,
+                    // api: process.env.VUE_APP_LOCAL_URL,
+                    api: process.env.VUE_APP_URL,
                     api_jap: process.env.VUE_APP_JAP_URL,
                     asd_sql: process.env.VUE_APP_ASD_SQL,
                     photo: process.env.VUE_APP_PHOTO,
