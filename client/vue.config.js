@@ -9,5 +9,5 @@ module.exports = {
     disableHostCheck: true,
     noInfo: true
   },
-  publicPath: process.env.NODE_ENV == 'production' ? '/employeemaster/' : '/'
+  publicPath: process.env.NODE_ENV ==='production' ? '/employeemaster/' : '/'
 } 
