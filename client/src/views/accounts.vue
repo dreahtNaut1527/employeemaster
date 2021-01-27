@@ -341,7 +341,6 @@ export default {
                          ]
                          break;
                }
-               console.log(`${this.api}/usercontrol?array=${arrayParams}`)
                this.axios.get(`${this.api}/usercontrol?array=${arrayParams}`).then(res => {
                     this.accounts = res.data
                     this.loading = false
@@ -467,7 +466,6 @@ export default {
                                    2
                               ]
                          }
-                         console.log(body.values)
                          this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
                          this.swal.fire('Confirmed!','Changes has been saved', 'success')
                          this.setNotifications(
