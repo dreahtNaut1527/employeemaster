@@ -12,7 +12,7 @@ const plugins = {
                     photo_jap: process.env.VUE_APP_PHOTO_JAP
                }),
                created() {
-                    this.axios.defaults.headers.common['x-api-key'] = process.env.VUA_APP_AWS_KEY
+                    this.axios.defaults.headers.common['x-api-key'] = process.env.VUE_APP_AWS_KEY
                },
                computed: {
                     ...mapState([
