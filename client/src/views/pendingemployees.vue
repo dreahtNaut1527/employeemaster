@@ -88,7 +88,7 @@ export default {
                team: '',
                pageCount: 0,
                page: 1,
-               loading: false,
+               loading: true,
                breadCrumbsItems: [
                     {text: 'Main Data', disabled: false, href: '/pendingemployees'},
                     {text: 'Pending Employees', disabled: true, href: '/pendingemployees'}
@@ -142,6 +142,7 @@ export default {
      methods:{
           loadPending(){
                let url = ''
+               this.loading = true
                switch (this.userInfo.UserLevel) {
                     case 1: // DH
                          url = `${this.api}/ /${this.userInfo.ShortName}/${this.userInfo.DepartmentName}`
@@ -162,6 +163,7 @@ export default {
                }
                this.axios.get(url).then(res => {
                     this.pending = res.data
+                    this.loading = false
                }).catch(() => this.$router.push('*'))
           }
      },

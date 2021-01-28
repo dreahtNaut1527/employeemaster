@@ -88,7 +88,7 @@ export default {
                team: '',
                pageCount: 0,
                page: 1,
-               loading: false,
+               loading: true,
                breadCrumbsItems: [
                     {text: 'Main Data', disabled: false, href: '/transfer'},
                     {text: 'Transfer Employee', disabled: true, href: '/transfer'}
@@ -142,6 +142,7 @@ export default {
      methods:{
           loadHistory(){
                let url = ''
+               this.loading = true
                switch (this.userInfo.UserLevel) {
                     case 1: // DH
                          url = `${this.api}/history/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}`
@@ -162,6 +163,7 @@ export default {
                }
                this.axios.get(url).then(res => {
                     this.history = res.data
+                    this.loading = false
                }).catch(() => this.$router.push('*'))
           }
      },

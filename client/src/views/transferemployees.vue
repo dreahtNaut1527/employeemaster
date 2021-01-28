@@ -149,7 +149,7 @@ export default {
                pageCount: 0,
                page: 1,
                dateDialog: false,
-               loading: false,
+               loading: true,
                singleSelect: false,
                dialog: false,
                valid: true,
@@ -237,8 +237,10 @@ export default {
      },
      methods:{
           loadEmployees(){
+               this.loading = true
                this.axios.get(`${this.api}/employees/${this.userInfo.ShortName}`).then(res => {
                     this.history = res.data
+                    this.loading = false
                })
           },
           transferEmployees(){
