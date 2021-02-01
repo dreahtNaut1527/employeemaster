@@ -145,7 +145,7 @@ export default {
                this.loading = true
                switch (this.userInfo.UserLevel) {
                     case 1: // DH
-                         url = `${this.api}/ /${this.userInfo.ShortName}/${this.userInfo.DepartmentName}`
+                         url = `${this.api}/pending/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}`
                          break;
                     case 2: // Section Head
                          url = `${this.api}/pending/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}/${this.userInfo.SectionName}`
