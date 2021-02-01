@@ -161,15 +161,6 @@
                                              ></v-text-field>
                                         </v-col>
                                         <v-col cols="12" md="6">
-                                             <v-text-field
-                                                  v-model="editedAccount.IPAddr"
-                                                  append-icon="mdi-ip"
-                                                  label="IP Address"
-                                                  outlined
-                                                  dense
-                                             ></v-text-field>
-                                        </v-col>
-                                        <v-col cols="12" md="6">
                                              <v-select
                                                   v-model="editedAccount.UserLevel"
                                                   :items="userLevel"
