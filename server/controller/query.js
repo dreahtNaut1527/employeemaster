@@ -9,15 +9,15 @@ const router = express.Router()
 // =====================================================================
 router.get('/companies', (req, res) => {
      config.connect().then(() => {
-         const request = new mssql.Request(config)
-         request.query(`SELECT ShortName FROM Companies`, (err, results) => {
-             if(err) {
-                 res.send(err)
-             } else {
-                 res.send(results.recordset)
-             }
-             config.close()
-         })
+          const request =  new mssql.Request(config)
+          request.query(`SELECT ShortName FROM Companies`, (err, results) => {
+               if(err) {
+                    res.send(err)
+               } else {
+                    res.send(results.recordset)
+               }
+               config.close()
+          })
      })
  })
 
@@ -46,8 +46,8 @@ router.get('/basicinfo/:code', (req, res) => {
                     res.send(err)
                } else {
                     res.send(results.recordset)
+                    config.close()
                }
-               config.close()
           })
      })
 })

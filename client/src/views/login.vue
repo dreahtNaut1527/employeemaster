@@ -132,6 +132,7 @@ export default {
           }
      },
      created() {
+          this.clearHeaders(0)
           store.commit('CHANGE_CONNECTION', true)
           store.commit('CHANGE_USER_INFO', {})
           store.commit('CHANGE_USER_LOGGING', false)
@@ -165,6 +166,7 @@ export default {
                          this.loading = false
                          this.employeeDetails = JSON.parse(JSON.stringify(res.data))
                          if(this.employeeDetails == '') {
+                              this.clearHeaders(1)
                               this.axios.post(`${this.api}/executeselect`, {data: JSON.stringify(body)}).then(res => {
                                    this.loading = false
                                    this.employeeDetails = res.data[0]
@@ -175,7 +177,7 @@ export default {
                               })
                          } else {
                               // Config Japanese data
-                              delete this.employeeDetails.userLevel
+                              delete this.employeeDetails.userLevel   
                               Object.assign(this.employeeDetails, {
                                    UserLevel: 5,
                               })

@@ -241,6 +241,30 @@ export default {
                               }
                          ]
                          break;
+                    case 4: // QA Staff
+                         this.navDrawerList = [
+                              {
+                                   title: 'Dashboard',
+                                   icon: 'mdi-home',
+                                   items: [
+                                        {text: 'Home', to: '/dashboard'},
+                                        {text: 'Profile', to: '/profile'}
+                                   ],
+                                   active: true   
+                              },
+                              {
+                                   title: 'Main Data',
+                                   icon: 'mdi-account',
+                                   items: [
+                                        {text: 'Departments', to: '/department'},
+                                        {text: 'Sections', to: '/section'},
+                                        {text: 'Team', to: '/team'},
+                                        {text: 'Department - Section', to: '/divsec'}
+                                   ],
+                                   active: false   
+                              }
+                         ]
+                         break;
                     case 5: // Japanese
                          this.navDrawerList = [
                               {
@@ -265,7 +289,7 @@ export default {
                               }
                          ]
                          break;
-                    default: // Developer & QA
+                    default: // Developer
                          this.navDrawerList = [
                          {
                               title: 'Dashboard',
@@ -299,6 +323,9 @@ export default {
                     break;
                }
                switch (this.userInfo.UserLevel) {
+                    case 4: 
+                         this.navDrawerSubGroup = []
+                         break;
                     case 5:
                          this.navDrawerSubGroup = [
                               {
@@ -310,7 +337,6 @@ export default {
                               }
                          ]
                          break;
-               
                     default:
                          this.navDrawerSubGroup = [
                               {

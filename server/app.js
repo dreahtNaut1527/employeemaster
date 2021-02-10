@@ -5,6 +5,7 @@ const dotenv = require('dotenv')
 const helmet = require('helmet')
 const query = require('./controller/query')
 const pes = require('./controller/pes.query')
+const auth = require('./config/auth.config')
 
 dotenv.config()
 
@@ -29,7 +30,11 @@ const socketio = require('socket.io')(server, {
             process.env.GRP_LOCAL_URL,
             process.env.PES_LOCAL_URL
         ], 
-        methods: ["GET", "POST"]
+        methods: ["GET", "POST"],
+        allowedHeaders: [
+            "master-api"
+        ],
+        credentials: true
     }
 })
 
@@ -50,5 +55,6 @@ socketio.on('connection', (socket) => {
     })
 })
 
-app.use('/api', query)
+app.use('/api', auth, query)
+// app.use('/api', query)
 app.use('/pes', pes)

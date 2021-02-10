@@ -51,6 +51,15 @@ const plugins = {
                          }
                          this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
                          this.$socket.emit('newNotifications', body.values)
+                    },
+                    clearHeaders(reset) {
+                         if(reset == 1) {
+                              delete this.axios.defaults.headers.common['x-api-key']
+                              this.axios.defaults.headers.common['master-api'] = process.env.VUE_APP_URL_KEY
+                         } else {
+                              delete this.axios.defaults.headers.common['master-api']
+                              this.axios.defaults.headers.common['x-api-key'] = process.env.VUE_APP_AWS_KEY
+                         }
                     }
                }
           })
