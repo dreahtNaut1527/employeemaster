@@ -162,6 +162,7 @@ export default {
                }
                if (this.username) {  
                     // check if Japanese
+                    this.clearHeaders(0)
                     this.axios.get(`${this.api_jap}/${this.username}`).then(res => {
                          this.loading = false
                          this.employeeDetails = JSON.parse(JSON.stringify(res.data))
@@ -199,6 +200,7 @@ export default {
                // Japanese Account
                if(this.employeeDetails.UserLevel == 5) {
                     if(this.employeeDetails.Password == this.md5(this.password)) {
+                         this.clearHeaders(1)
                          store.commit('CHANGE_USER_INFO', this.employeeDetails)
                          store.commit('CHANGE_USER_LOGGING', true)
                          this.$router.push('/dashboard')

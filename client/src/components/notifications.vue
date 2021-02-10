@@ -99,13 +99,15 @@ export default {
      watch: {
           notificationList(val) {
                this.totalNotifs = 0
-               val.forEach(rec => {
-                    if(rec.EmployeeCode != this.userInfo.EmployeeCode && rec.ShortName == this.userInfo.ShortName) {
-                         if(!rec.Viewed) {
-                              this.totalNotifs++
+               if(val != undefined) {                    
+                    val.forEach(rec => {
+                         if(rec.EmployeeCode != this.userInfo.EmployeeCode && rec.ShortName == this.userInfo.ShortName) {
+                              if(!rec.Viewed) {
+                                   this.totalNotifs++
+                              }
                          }
-                    }
-               })
+                    })
+               }
           }
      }
 }

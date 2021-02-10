@@ -12,7 +12,11 @@ const plugins = {
                     photo_jap: process.env.VUE_APP_PHOTO_JAP
                }),
                created() {
-                    this.axios.defaults.headers.common['x-api-key'] = process.env.VUE_APP_AWS_KEY
+                    if(this.$store.state.userInfo.EmployeeCode == undefined) {
+                         this.axios.defaults.headers.common['x-api-key'] = process.env.VUE_APP_AWS_KEY
+                    } else {
+                         this.axios.defaults.headers.common['master-api'] = process.env.VUE_APP_URL_KEY
+                    }
                },
                computed: {
                     ...mapState([
