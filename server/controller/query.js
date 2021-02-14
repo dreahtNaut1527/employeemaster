@@ -10,7 +10,7 @@ const router = express.Router()
 router.get('/companies', (req, res) => {
      config.connect().then(() => {
           const request =  new mssql.Request(config)
-          request.query(`SELECT ShortName FROM Companies`, (err, results) => {
+          request.query(`SELECT * FROM CompanyView`, (err, results) => {
                if(err) {
                     res.send(err)
                } else {
