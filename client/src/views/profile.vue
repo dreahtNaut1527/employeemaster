@@ -9,7 +9,7 @@
                               <v-card-text>
                                    <v-avatar color="white" size="150" style="position:absolute; top: 127px">
                                         <v-avatar size="140">
-                                             <v-img :src="`http://asd_sql:8080/photos/${userInfo.EmployeeCode}.jpg`"></v-img>
+                                             <v-img :src="`${photo}/${userInfo.EmployeeCode}.jpg`"></v-img>
                                         </v-avatar>
                                    </v-avatar>
                               </v-card-text>
@@ -20,7 +20,7 @@
                               <v-card-text class="text-center">
                                    <v-avatar color="white" size="150" style="top: -100px; margin-bottom: -130px">
                                         <v-avatar size="140">
-                                             <v-img :src="`http://asd_sql:8080/photos/${userInfo.EmployeeCode}.jpg`"></v-img>
+                                             <v-img :src="`${photo}/${userInfo.EmployeeCode}.jpg`"></v-img>
                                         </v-avatar>
                                    </v-avatar>
                               </v-card-text>
@@ -51,6 +51,7 @@
                                                   <v-text-field
                                                        v-model="information.LastName"
                                                        label="Last Name"
+                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -59,6 +60,7 @@
                                                   <v-text-field
                                                        v-model="information.FirstName"
                                                        label="First Name"
+                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -67,6 +69,7 @@
                                                   <v-text-field
                                                        v-model="information.MiddleName"
                                                        label="Middle Name"
+                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -158,16 +161,20 @@
                                                   <v-text-field
                                                        v-model="information.NickName"
                                                        label="Nick Name"
+                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-text-field>
                                              </v-col>
                                              <v-col cols="12" md="2">
-                                                  <datePicker
-                                                       :menu="dateDialog"
-                                                       dateLabel="Date of Birth"
-                                                       :dateValue.sync="dateBirth"
-                                                  ></datePicker>
+                                                  <v-text-field
+                                                       v-model="dateBirth"
+                                                       label="Date of Birth"
+                                                       append-icon="mdi-calendar"
+                                                       readonly
+                                                       outlined
+                                                       dense
+                                                  ></v-text-field>
                                              </v-col>
                                              <v-col cols="12" md="1">
                                                   <v-text-field
@@ -188,53 +195,29 @@
                                                   ></v-text-field>
                                              </v-col>
                                              <v-col cols="12" md="8">
-                                                  <v-autocomplete
-                                                       v-model="information.MarStatus"
-                                                       :items="marStatus"
-                                                       item-text="label"
-                                                       item-value="value"
-                                                       label="Marital Status"
-                                                       clearable
-                                                       outlined
-                                                       dense
-                                                  ></v-autocomplete>
-                                             </v-col>
-                                             <v-col cols="12" md="4">
                                                   <v-text-field
-                                                       v-model="information.NoOfChildren"
-                                                       label="No of Children"
-                                                       type="number"
-                                                       outlined
-                                                       dense
-                                                  ></v-text-field>
-                                             </v-col>
-                                             <v-col cols="12" md="8">
-                                                  <v-text-field
-                                                       v-model="information.School"
-                                                       label="School"
+                                                       v-model="information.Course"
+                                                       label="Course"
+                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-text-field>
                                              </v-col>
                                              <v-col cols="12" md="4">
-                                                  <v-autocomplete
-                                                       v-model="information.EducCode"
-                                                       :items="educationList"
-                                                       item-text="EducDesc"
-                                                       item-value="EducCode"
+                                                  <v-text-field
+                                                       v-model="information.EducDesc"
                                                        label="Educational Attainment"
-                                                       clearable
+                                                       readonly
                                                        outlined
                                                        dense
-                                                  ></v-autocomplete>
+                                                  ></v-text-field>
                                              </v-col>
                                              <v-col cols="12" md="6">
                                                   <v-text-field
                                                        v-model="information.Phone"
                                                        append-icon="mdi-phone"
                                                        label="Telephone"
-                                                       v-mask="'(###)-###-####'"
-                                                       hint="(###)-###-####"
+                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -244,8 +227,7 @@
                                                        v-model="information.Cellphone"
                                                        append-icon="mdi-cellphone"
                                                        label="Cellphone"
-                                                       v-mask="'####-###-####'"
-                                                       hint="####-###-####"
+                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -254,6 +236,7 @@
                                                   <v-textarea
                                                        v-model="information.PresentAddress"
                                                        label="Present Address"
+                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-textarea>
@@ -262,6 +245,7 @@
                                                   <v-textarea
                                                        v-model="information.PermanentAddress"
                                                        label="Permanent Address"
+                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-textarea>
@@ -276,6 +260,7 @@
                                                   <v-text-field
                                                        v-model="information.ConPerson"
                                                        label="Contact Person"
+                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -284,6 +269,7 @@
                                                   <v-text-field
                                                        v-model="information.ConRelationship"
                                                        label="Relationship"
+                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -292,6 +278,7 @@
                                                   <v-textarea
                                                        v-model="information.ConAddress"
                                                        label="Contact Address"
+                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-textarea>
@@ -301,6 +288,7 @@
                                                        v-model="information.ConNumber"
                                                        append-icon="mdi-phone"
                                                        label="Contact Phone No."
+                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -316,7 +304,6 @@
                                                        v-model="information.CPUNumber"
                                                        append-icon="mdi-desktop-classic"
                                                        label="CPU Number"
-                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -326,7 +313,6 @@
                                                        v-model="information.IPAddress"
                                                        append-icon="mdi-ip"
                                                        label="IP Address"
-                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -336,7 +322,6 @@
                                                        v-model="information.CompUserName"
                                                        append-icon="mdi-account"
                                                        label="Computer Username"
-                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -347,23 +332,10 @@
                                                        append-icon="mdi-lock"
                                                        label="Computer Password"
                                                        type="password"
-                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-text-field>
                                              </v-col>
-                                             <!-- <v-col cols="12" md="12">
-                                                  <v-autocomplete
-                                                       v-model="information.OperatingSystem"
-                                                       :items="operatingSystem"
-                                                       item-text="OperatingSystem"
-                                                       item-value="OperatingSystem"
-                                                       label="Operating System"
-                                                       clearable
-                                                       outlined
-                                                       dense
-                                                  ></v-autocomplete>
-                                             </v-col> -->
                                              <v-col cols="12" md="6">
                                                   <v-text-field
                                                        v-model="information.WorkEmailAddress"
@@ -406,7 +378,7 @@
                                    </v-card-text>
                               </v-tab-item>
                          </v-tabs-items>
-                         <v-card-actions>
+                         <v-card-actions v-if="tab == 4">
                               <v-spacer></v-spacer>
                               <v-btn color="primary" @click="saveRecord()">
                                    <v-icon left>mdi-content-save</v-icon>Save
@@ -429,7 +401,6 @@
 
 <script>
 import store from '@/store'
-import datePicker from '@/components/datepicker'
 
 export default {
      data() {
@@ -604,9 +575,6 @@ export default {
                this.information.DateBirth = val
                this.ageValue = this.moment().diff(val, 'years')
           }
-     },
-     components: {
-          datePicker
      }
 }
 </script>

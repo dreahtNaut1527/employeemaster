@@ -5,7 +5,7 @@
                <v-card class="mx-auto" tile>
                     <v-col cols="12">
                          <v-avatar size="70">
-                              <v-img :src="`http://asd_sql:8080/photos/${emplcode}.jpg`"></v-img>
+                              <v-img :src="`${photo}/${emplcode}.jpg`"></v-img>
                          </v-avatar>
                     </v-col>
                     

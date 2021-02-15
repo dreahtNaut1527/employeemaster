@@ -7,10 +7,18 @@
      >
           <v-card>
                <v-container fill-height>
+                    <v-toolbar flat>
+                         <v-toolbar-title class="text-center headline">
+                              Create account
+                         </v-toolbar-title>
+                         <v-spacer></v-spacer>
+                         <v-btn @click="dialog = false" icon>
+                              <v-icon>mdi-close</v-icon>
+                         </v-btn>
+                    </v-toolbar>
                     <v-row align="center" justify="center">
                          <v-col cols="12">
                               <!-- <v-card elevation="7"> -->
-                                   <v-card-text class="text-center headline">Create account</v-card-text>
                                    <v-card-text class="text-center subheading">
                                         <v-form v-model="valid" ref="form" lazy-validation>
                                         <v-card-text>
