@@ -19,10 +19,9 @@
                               <!-- <v-list-item-subtitle>{{information.WorkEmailAddress}}</v-list-item-subtitle> -->
                               
                          </v-list-item-content>
-                         <v-col cols="1">
+                         <v-list-item-actions>
                                    <v-btn  @click="loadTransferHist()" color="primary">History</v-btn>
-                         </v-col>
-                    
+                         </v-list-item-actions>                    
                     </v-list-item>
                     <v-divider class="mx-3"></v-divider>
                     <v-card-text>
