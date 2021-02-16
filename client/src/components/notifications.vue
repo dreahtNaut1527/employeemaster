@@ -32,7 +32,7 @@
                          <v-list-item  v-for="(item, i) in notificationList" :key="i">
                               <v-list-item-avatar>
                                    <v-img
-                                        :src="`http://asd_sql:8080/photos/${item.EmployeeCode}.jpg`"
+                                        :src="`${photo}/${item.EmployeeCode}.jpg`"
                                    ></v-img>
                               </v-list-item-avatar>
                               <v-list-item-content>
