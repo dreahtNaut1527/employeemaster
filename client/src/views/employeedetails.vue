@@ -19,7 +19,7 @@
                               <!-- <v-list-item-subtitle>{{information.WorkEmailAddress}}</v-list-item-subtitle> -->
                               
                          </v-list-item-content>
-                         <v-col cols="2">
+                         <v-col cols="1">
                                    <v-btn  @click="loadTransferHist()" color="primary">History</v-btn>
                          </v-col>
                     
@@ -111,6 +111,7 @@
                                                        item-text="PositionName"
                                                        item-value="PositionCode"
                                                        :readonly="this.isEmpEdit == false"
+                                                       :filled="this.isEmpEdit == true"
                                                        clearable
                                                        outlined
                                                        dense
@@ -122,24 +123,13 @@
                                                        label="Position"
                                                        :items="designationList"
                                                        item-text="DesignationName"
-                                                       item-value="DesignationCode"
+                                                       item-value="DesignationCode"  
                                                        readonly                                               
                                                        outlined
                                                        dense
                                                   ></v-autocomplete>
                                              </v-col>
-                                             <v-col cols="12" md="4">
-                                                  <v-autocomplete
-                                                       v-model="information.SalaryGrade"
-                                                       label="Salary Grade"
-                                                       :items="salarygradeList"
-                                                       item-text="SalaryGrade"
-                                                       item-value="SalaryGrade"
-                                                       readonly  
-                                                       outlined
-                                                       dense
-                                                  ></v-autocomplete>
-                                             </v-col>
+                                      
                                               <v-col cols="12" md="4">
                                                   <v-autocomplete
                                                        v-model="information.ShiftID"
@@ -184,6 +174,7 @@
                                                        v-model="information.NickName"
                                                        label="Nick Name"
                                                        :readonly="this.isEmpEdit == false"
+                                                       :filled="this.isEmpEdit == true"
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -214,47 +205,23 @@
                                                        dense
                                                   ></v-text-field>
                                              </v-col>
-                                             <v-col cols="12" md="7">
-                                                  <v-autocomplete
-                                                       v-model="information.MarStatus"
-                                                       :items="marStatus"
-                                                       item-text="label"
-                                                       item-value="value"
-                                                       label="Marital Status"
-                                                       :readonly="this.isEmpEdit == false"
-                                                       clearable
-                                                       outlined
-                                                       dense
-                                                  ></v-autocomplete>
-                                             </v-col>
-                                             <v-col cols="12" md="5">
+                                              <v-col cols="12" md="6">
                                                   <v-text-field
-                                                       v-model="information.NoOfChildren"
-                                                       label="No of Children"
-                                                       type="number"
-                                                       :readonly="this.isEmpEdit == false"
+                                                       v-model="information.Course"
+                                                       label="Course"
+                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-text-field>
                                              </v-col>
-                                             <v-col cols="12" md="7">
-                                                  <v-text-field
-                                                       v-model="information.School"
-                                                       label="School"
-                                                       :readonly="this.isEmpEdit == false"
-                                                       outlined
-                                                       dense
-                                                  ></v-text-field>
-                                             </v-col>
-                                             <v-col cols="12" md="5">
+                                             <v-col cols="12" md="6">
                                                   <v-autocomplete
                                                        v-model="information.EducCode"
                                                        :items="educationList"
                                                        item-text="EducDesc"
                                                        item-value="EducCode"
                                                        label="Educational Attainment"
-                                                       :readonly="this.isEmpEdit == false"
-                                                       clearable
+                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-autocomplete>
@@ -264,8 +231,10 @@
                                                        v-model="information.Phone"
                                                        append-icon="mdi-phone"
                                                        label="Telephone"
-                                                       v-mask="'(###)-###-####'"
+                                                       v-mask="'(###)-###-####'"                                                    
                                                        hint="(###)-###-####"
+                                                       :readonly="this.isEmpEdit == false"
+                                                       :filled="this.isEmpEdit == true"
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -276,6 +245,8 @@
                                                        append-icon="mdi-cellphone"
                                                        label="Cellphone"
                                                        v-mask="'####-###-####'"
+                                                       :readonly="this.isEmpEdit == false"
+                                                       :filled="this.isEmpEdit == true"
                                                        hint="####-###-####"
                                                        outlined
                                                        dense
@@ -286,6 +257,7 @@
                                                        v-model="information.PresentAddress"
                                                        label="Present Address"
                                                        :readonly="this.isEmpEdit == false"
+                                                       :filled="this.isEmpEdit == true"
                                                        outlined
                                                        dense
                                                   ></v-textarea>
@@ -295,6 +267,7 @@
                                                        v-model="information.PermanentAddress"
                                                        label="Permanent Address"
                                                        :readonly="this.isEmpEdit == false"
+                                                       :filled="this.isEmpEdit == true"
                                                        outlined
                                                        dense
                                                   ></v-textarea>
@@ -309,7 +282,8 @@
                                                   <v-text-field
                                                        v-model="information.ConPerson"
                                                        label="Contact Person"
-                                                       :readonly="this.isEmpEdit == false"                                                
+                                                       :readonly="this.isEmpEdit == false"
+                                                       :filled="this.isEmpEdit == true"                                           
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -319,6 +293,7 @@
                                                        v-model="information.ConRelationship"
                                                        label="Relationship"
                                                        :readonly="this.isEmpEdit == false"
+                                                       :filled="this.isEmpEdit == true"
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -328,6 +303,7 @@
                                                        v-model="information.ConAddress"
                                                        label="Contact Address"
                                                        :readonly="this.isEmpEdit == false"
+                                                       :filled="this.isEmpEdit == true"
                                                        outlined
                                                        dense
                                                   ></v-textarea>
@@ -337,7 +313,8 @@
                                                        v-model="information.ConNumber"
                                                        append-icon="mdi-phone"
                                                        label="Contact Phone No."
-                                                       :readonly="this.isEmpEdit == false"      
+                                                       :readonly="this.isEmpEdit == false"
+                                                       :filled="this.isEmpEdit == true"
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -398,7 +375,8 @@
                                                        label="Local Number"
                                                        v-mask="'####-###'"
                                                        hint="####-###"
-                                                       :readonly="this.isEmpEdit == false"
+                                                        :readonly="this.isEmpEdit == false"
+                                                       :filled="this.isEmpEdit == true"
                                                        clearable
                                                        outlined
                                                        dense
@@ -410,6 +388,7 @@
                                                        append-icon="mdi-email"
                                                        label="Work Email Address"
                                                        :readonly="this.isEmpEdit == false"
+                                                       :filled="this.isEmpEdit == true"
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -419,7 +398,8 @@
                                                        v-model="information.WorkLocation"
                                                        append-icon="mdi-map-marker"
                                                        label="Work Location"
-                                                       :readonly="this.isEmpEdit == false"
+                                                        :readonly="this.isEmpEdit == false"
+                                                       :filled="this.isEmpEdit == true"
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -429,6 +409,7 @@
                                                        v-model="information.StaffCode"
                                                        label="Staff Code"
                                                        :readonly="this.isEmpEdit == false"
+                                                       :filled="this.isEmpEdit == true"
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -574,7 +555,7 @@ export default {
      },
       created() {
           this.loadInformation()
-          this.loadSalaryGrade() 
+          // this.loadSalaryGrade() 
        
      },
       sockets: {
