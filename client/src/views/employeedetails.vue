@@ -20,7 +20,7 @@
                               
                          </v-list-item-content>
                          <v-list-item-actions>
-                                   <v-btn  @click="loadTransferHist()" color="primary">History</v-btn>
+                                   <v-btn @click="loadTransferHist()" color="primary">History</v-btn>
                          </v-list-item-actions>                    
                     </v-list-item>
                     <v-divider class="mx-3"></v-divider>
