@@ -20,7 +20,7 @@
                               
                          </v-list-item-content>
                          <v-list-item-actions>
-                                   <v-btn  @click="loadTransferHist()" color="primary">History</v-btn>
+                                   <v-btn @click="loadTransferHist()" color="primary">History</v-btn>
                          </v-list-item-actions>                    
                     </v-list-item>
                     <v-divider class="mx-3"></v-divider>
@@ -109,9 +109,7 @@
                                                        :items="positionList"
                                                        item-text="PositionName"
                                                        item-value="PositionCode"
-                                                       :readonly="this.isEmpEdit == false"
-                                                       :filled="this.isEmpEdit == true"
-                                                       clearable
+                                                       readonly    
                                                        outlined
                                                        dense
                                                   ></v-autocomplete>
@@ -156,7 +154,7 @@
                                                        v-model="information.RetiredDate"
                                                        label="Date Resigned"
                                                        append-icon="mdi-calendar"
-                                                       :readonly="this.isEmpEdit == false"
+                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -233,7 +231,6 @@
                                                        v-mask="'(###)-###-####'"                                                    
                                                        hint="(###)-###-####"
                                                        :readonly="this.isEmpEdit == false"
-                                                       :filled="this.isEmpEdit == true"
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -245,7 +242,6 @@
                                                        label="Cellphone"
                                                        v-mask="'####-###-####'"
                                                        :readonly="this.isEmpEdit == false"
-                                                       :filled="this.isEmpEdit == true"
                                                        hint="####-###-####"
                                                        outlined
                                                        dense
@@ -255,8 +251,7 @@
                                                   <v-textarea
                                                        v-model="information.PresentAddress"
                                                        label="Present Address"
-                                                       :readonly="this.isEmpEdit == false"
-                                                       :filled="this.isEmpEdit == true"
+                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-textarea>
@@ -265,8 +260,7 @@
                                                   <v-textarea
                                                        v-model="information.PermanentAddress"
                                                        label="Permanent Address"
-                                                       :readonly="this.isEmpEdit == false"
-                                                       :filled="this.isEmpEdit == true"
+                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-textarea>
@@ -281,8 +275,7 @@
                                                   <v-text-field
                                                        v-model="information.ConPerson"
                                                        label="Contact Person"
-                                                       :readonly="this.isEmpEdit == false"
-                                                       :filled="this.isEmpEdit == true"                                           
+                                                       readonly                                                  
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -291,8 +284,7 @@
                                                   <v-text-field
                                                        v-model="information.ConRelationship"
                                                        label="Relationship"
-                                                       :readonly="this.isEmpEdit == false"
-                                                       :filled="this.isEmpEdit == true"
+                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -301,8 +293,7 @@
                                                   <v-textarea
                                                        v-model="information.ConAddress"
                                                        label="Contact Address"
-                                                       :readonly="this.isEmpEdit == false"
-                                                       :filled="this.isEmpEdit == true"
+                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-textarea>
@@ -312,8 +303,7 @@
                                                        v-model="information.ConNumber"
                                                        append-icon="mdi-phone"
                                                        label="Contact Phone No."
-                                                       :readonly="this.isEmpEdit == false"
-                                                       :filled="this.isEmpEdit == true"
+                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-text-field>
