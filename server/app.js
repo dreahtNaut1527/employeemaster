@@ -27,8 +27,12 @@ const socketio = require('socket.io')(server, {
             process.env.URL,
             process.env.GRP_URL,
             process.env.PES_URL,
+            process.env.PRESENT_EMPLOYEE_URL,
+            process.env.LOGTIME_URL,
             process.env.GRP_LOCAL_URL,
-            process.env.PES_LOCAL_URL
+            process.env.PES_LOCAL_URL,
+            process.env.PRESENT_EMPLOYEE_LOCAL_URL,
+            process.env.LOGTIME_LOCAL_URL
         ], 
         methods: ["GET", "POST"],
         allowedHeaders: [
