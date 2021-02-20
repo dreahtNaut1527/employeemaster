@@ -120,7 +120,7 @@
                          </v-list-item>
                     </v-list-group>
                </v-list>                -->
-               <v-bottom-navigation
+               <!-- <v-bottom-navigation
                     background-color="transparent" 
                     absolute
                >
@@ -130,7 +130,7 @@
                          :prepend-icon="icon"          
                          @change="changeTheme()"
                     ></v-switch>
-               </v-bottom-navigation>
+               </v-bottom-navigation> -->
           </v-navigation-drawer>
           <v-app-bar
                app
@@ -157,6 +157,46 @@
                <v-btn @click="logout()" icon>
                     <v-icon small>mdi-logout</v-icon>
                </v-btn>  
+               <v-menu
+                    :close-on-content-click="false"
+                    :nudge-width="200"
+                    offset-y
+               >
+                    <template v-slot:activator="{ on, attrs }">
+                         <v-btn 
+                              class="mt-15 mr-n5 rounded-l-xl" 
+                              color="blue-grey lighten-4"
+                              v-bind="attrs"
+                              v-on="on"
+                              absolute 
+                              top 
+                              right>
+                              <v-icon>mdi-cog-outline</v-icon>
+                         </v-btn>
+                    </template>
+                    <v-card>
+                         <v-list dense>
+                              <v-list-item>
+                                   <v-list-item-content>
+                                        <v-list-item-title class="grey--text">Themes</v-list-item-title>
+                                   </v-list-item-content>
+                              </v-list-item>
+                              <v-divider></v-divider>
+                              <v-list-item>
+                                   <v-list-item-content>
+                                        <v-list-item-subtitle>Dark Mode</v-list-item-subtitle>
+                                   </v-list-item-content>
+                                   <v-list-item-action>
+                                        <v-switch
+                                             v-model="dark"        
+                                             @change="changeTheme()"
+                                             inset
+                                        ></v-switch>
+                                   </v-list-item-action>
+                              </v-list-item>
+                         </v-list>
+                    </v-card>
+               </v-menu>
           </v-app-bar>
      </div>       
 </template>

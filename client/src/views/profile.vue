@@ -3,7 +3,7 @@
           <v-breadcrumbs :items="breadCrumbsItems" divider="/"></v-breadcrumbs>
           <v-container>
                <v-card class="mx-auto" tile>
-                    <v-img height="12.5rem" src="https://cdn.vuetifyjs.com/images/cards/server-room.jpg"></v-img>
+                    <v-img height="12.5rem" src="../assets/16251.jpg"></v-img>
                     <v-row class="hidden-sm-and-down" dense>
                          <v-col cols="12" md="4">
                               <v-card-text>
