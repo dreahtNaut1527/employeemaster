@@ -609,6 +609,11 @@ router.get('/notifications/:company/:code', (req, res) => {
           })
      })
 })
+
+// ======================== MSSQL Procedure API ========================
+// =====================================================================
+// ======================= Select Query (MSSQL)=========================
+// =====================================================================
   
 router.post('/executeselect', (req, res) => {
      let data = JSON.parse(req.body.data)
@@ -619,8 +624,8 @@ router.post('/executeselect', (req, res) => {
      if (!Array.isArray(values[0])) {
           values = Array(data.values)
      }
-     values.forEach(rec => {
-          config.connect().then(() => {
+     values.forEach(async (rec) => {
+          await config.connect().then(() => {
                const request = new mssql.Request(config)
                request.query(`${sql} '${rec.join("','").replace(/''/g, null)}'`, (err, results) => {
                     if(err) {
@@ -648,8 +653,8 @@ router.post('/execute', (req, res) => {
      if (!Array.isArray(values[0])) {
           values = Array(data.values)
      }
-     values.forEach(rec => {
-          config.connect().then(() => {
+     values.forEach(async (rec) => {
+          await config.connect().then(() => {
                const request = new mssql.Request(config)
                // console.log(`${sql} '${rec.join("','").replace(/''/g, null)}'`)
                request.query(`${sql} '${rec.join("','").replace(/''/g, null)}'`, err => {
@@ -663,33 +668,5 @@ router.post('/execute', (req, res) => {
           })
      })
 })
-
-// =====================================================================
-// ======================= Delete Query (MSSQL)=========================
-// =====================================================================
-router.put('/deleteemployee', (req, res) => {
-     let data = JSON.parse(req.body.data)
-     let values = data.values
-     let sql = `EXECUTE ${data.procedureName}`
-
-     // Loop through values
-     if (!Array.isArray(values[0])) {
-          values = Array(data.values)
-     }
-     values.forEach(rec => {
-          config.connect().then(() => {
-               const request = new mssql.Request(config)
-               request.query(`${sql} '${rec.join("','").replace(/''/g, null)}'`, err => {
-                    if(err) {
-                         res.send(err)
-                    } else {
-                         return res.status
-                    }
-                    config.close()   
-               })
-          })
-     })
-})
-
 
 module.exports = router       

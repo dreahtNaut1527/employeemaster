@@ -160,12 +160,12 @@
                <v-menu
                     :close-on-content-click="false"
                     :nudge-width="200"
-                    offset-y
+                    :nudge-left="270"
                >
                     <template v-slot:activator="{ on, attrs }">
                          <v-btn 
-                              class="mt-15 mr-n5 rounded-l-xl" 
-                              color="blue-grey lighten-4"
+                              class="mt-15 mr-n5 rounded-l-lg" 
+                              style="background-color: rgb(0, 0, 0, 0.3)"
                               v-bind="attrs"
                               v-on="on"
                               absolute 

@@ -155,33 +155,11 @@ router.get('/shiftingschedule/:company/:department', (req, res) => {
      })
 })
 
+// ======================== MSSQL Procedure API ========================
 // =====================================================================
-// ====================== Execute Procedure (MSSQL)=====================
+// ======================= Select Query (MSSQL)=========================
 // =====================================================================
-router.post('/postexecute', (req, res) => {
-     let data = JSON.parse(req.body.data)
-     let values = data.values
-     let sql = `EXECUTE ${data.procedureName}`
-
-     // Loop through values
-     if (!Array.isArray(values[0])) {
-          values = Array(data.values)
-     }
-     values.forEach(rec => {
-          config.connect().then(() => {
-               const request = new mssql.Request(config)
-               request.query(`${sql} '${rec.join("','").replace(/''/g, null)}'`, err => {
-                    if(err) {
-                         res.send(err)
-                    } else {
-                         return res.status
-                    }
-                    config.close() 
-               })
-          })
-     })   
-})
-
+  
 router.post('/getexecute', (req, res) => {
      let data = JSON.parse(req.body.data)
      let values = data.values
@@ -191,14 +169,44 @@ router.post('/getexecute', (req, res) => {
      if (!Array.isArray(values[0])) {
           values = Array(data.values)
      }
-     values.forEach(rec => {
-          config.connect().then(() => {
+     values.forEach(async (rec) => {
+          await config.connect().then(() => {
                const request = new mssql.Request(config)
                request.query(`${sql} '${rec.join("','").replace(/''/g, null)}'`, (err, results) => {
                     if(err) {
                          res.send(err)
                     } else {
                          res.send(results.recordset)
+                    }
+                    config.close()   
+               })
+          })
+     })
+})
+
+
+// =====================================================================
+// ===================== Insert / Update Query (MSSQL)==================
+// =====================================================================
+router.post('/postexecute', (req, res) => {
+     let data = JSON.parse(req.body.data)
+     let values = data.values
+     let sql = `EXECUTE ${data.procedureName}`
+
+
+     // Loop through values
+     if (!Array.isArray(values[0])) {
+          values = Array(data.values)
+     }
+     values.forEach(async (rec) => {
+          await config.connect().then(() => {
+               const request = new mssql.Request(config)
+               // console.log(`${sql} '${rec.join("','").replace(/''/g, null)}'`)
+               request.query(`${sql} '${rec.join("','").replace(/''/g, null)}'`, err => {
+                    if(err) {
+                         res.send(err)
+                    } else {
+                         return res.status
                     }
                     config.close()   
                })
