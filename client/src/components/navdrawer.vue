@@ -135,7 +135,7 @@
           <v-app-bar
                app
           >
-               <v-app-bar-nav-icon @click="navDrawerHide(null)"></v-app-bar-nav-icon>
+               <v-app-bar-nav-icon @click="navDrawerVal = !navDrawerVal"></v-app-bar-nav-icon>
                <div class="hidden-sm-and-down">
                     <div v-if="userInfo.UserLevel == 5">
                          <v-toolbar-title>{{ user.LocalDepartments }}</v-toolbar-title>
@@ -203,7 +203,6 @@
 
 <script>
 import notifications from '@/components/notifications'
-import store from '@/store'
 
 export default {
      data() {
@@ -211,6 +210,7 @@ export default {
                user: '',
                dark: false,
                overlay: false,
+               navDrawerVal: true,
                isConnected: false,
                icon: 'mdi-weather-night',
                search: '',
@@ -220,29 +220,28 @@ export default {
           }
      },
      created() {
-          store.commit('CHANGE_SEARCHING', '')
-          this.dark = store.state.darkMode
-          this.user = store.state.userInfo
+          this.$store.commit('CHANGE_SEARCHING', '')
+          this.dark = this.darkMode
+          this.user = this.userInfo
           this.getUserLevel()
      },
      methods: {
           getSearchData() {
-               store.commit('CHANGE_SEARCHING', this.search)
+               this.$store.commit('CHANGE_SEARCHING', this.search)
           },
           changeTheme() {
                this.$vuetify.theme.dark = this.dark
                this.icon = this.dark ? 'mdi-weather-sunny' : 'mdi-weather-night'
-               store.commit('CHANGE_THEME', this.dark)
+               this.$store.commit('CHANGE_THEME', this.dark)
           },
           logout() {
-               store.commit('CHANGE_USER_INFO', {})
-               store.commit('CHANGE_USER_LOGGING', false)
-               store.commit('CHANGE_NAVDRAWER', false)
-               store.commit('CHANGE_THEME', false)
+               this.$store.commit('CHANGE_USER_INFO', {})
+               this.$store.commit('CHANGE_USER_LOGGING', false)
+               this.$store.commit('CHANGE_THEME', false)
                this.$router.push('/')
           },
           getUserLevel() {
-               switch (store.state.userInfo.UserLevel) {
+               switch (this.userInfo.UserLevel) {
                     case 0:
                          this.navDrawerList = [
                               {
@@ -275,7 +274,9 @@ export default {
                                         {text: 'Sections', to: '/section'},
                                         {text: 'Team', to: '/team'},
                                         {text: 'Department - Section', to: '/divsec'},
-                                        {text: 'User Accounts', to: '/accounts'}
+                                        {text: 'User Accounts', to: '/accounts'},
+                                        {text: 'Job Assignments', to: '/jobassignments'},
+                                        {text: 'Query Builder', to: '/querybuilder'}
                                    ],
                                    active: false   
                               }
@@ -299,7 +300,9 @@ export default {
                                         {text: 'Departments', to: '/department'},
                                         {text: 'Sections', to: '/section'},
                                         {text: 'Team', to: '/team'},
-                                        {text: 'Department - Section', to: '/divsec'}
+                                        {text: 'Department - Section', to: '/divsec'},
+                                        {text: 'Job Assignments', to: '/jobassignments'},
+                                        {text: 'Query Builder', to: '/querybuilder'}
                                    ],
                                    active: false   
                               }
@@ -345,7 +348,9 @@ export default {
                                    {text: 'Departments', to: '/department'},
                                    {text: 'Sections', to: '/section'},
                                    {text: 'Team', to: '/team'},
-                                   {text: 'Department - Section', to: '/divsec'}
+                                   {text: 'Department - Section', to: '/divsec'},
+                                   {text: 'Job Assignments', to: '/jobassignments'},
+                                   {text: 'Query Builder', to: '/querybuilder'}
                               ],
                               active: false ,
                               hasGrandChild: true  
@@ -391,20 +396,6 @@ export default {
                          break;
                }
           },
-          navDrawerHide(path) {
-               if(!store.state.navDrawerVal) {
-                    store.commit('CHANGE_NAVDRAWER', true)
-               } else {
-                    store.commit('CHANGE_NAVDRAWER', false)
-               }
-               if(path != null) {
-                    this.$router.push(path).catch(err => {
-                         if(err.name != 'NavigationDuplicated') {
-                              console.log(err)
-                         }
-                    })
-               }
-          }
      },
      watch: {
           dark() {

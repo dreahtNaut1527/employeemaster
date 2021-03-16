@@ -19,9 +19,9 @@
                               <!-- <v-list-item-subtitle>{{information.WorkEmailAddress}}</v-list-item-subtitle> -->
                               
                          </v-list-item-content>
-                         <v-list-item-actions>
-                                   <v-btn @click="loadTransferHist()" color="primary">History</v-btn>
-                         </v-list-item-actions>                    
+                         <v-list-item-action>
+                              <v-btn @click="loadTransferHist()" color="primary">History</v-btn>
+                         </v-list-item-action>                    
                     </v-list-item>
                     <v-divider class="mx-3"></v-divider>
                     <v-card-text>
@@ -150,16 +150,20 @@
                                                   ></v-text-field>
                                              </v-col>
                                              <v-col cols="12" md="4">
-                                                  <v-text-field
+                                                  <!-- <v-text-field
                                                        v-model="information.RetiredDate"
                                                        label="Date Resigned"
                                                        append-icon="mdi-calendar"
                                                        readonly
                                                        outlined
                                                        dense
-                                                  ></v-text-field>
+                                                  ></v-text-field> -->
+                                                  <datePicker
+                                                       :menu="dateDialog"
+                                                       dateLabel="Department Resigned"
+                                                       :dateValue.sync="information.RetiredDate"
+                                                  ></datePicker>
                                              </v-col>
-                                            
                                         </v-row>
                                    </v-card-text>
                               </v-tab-item>
@@ -358,15 +362,12 @@
                                              <v-col cols="12" md="6">
                                                   <v-text-field
                                                        v-model="information.LocalNumber"
-                                                       :items="LocalNumber"
-                                                       item-text="LocalNumber"
-                                                       item-value="LocalNumber"
-                                                       label="Local Number"
+                                                       append-icon="mdi-phone-classic"
+                                                       label="Local No."
                                                        v-mask="'####-###'"
-                                                       hint="####-###"
-                                                        :readonly="this.isEmpEdit == false"
+                                                       :readonly="this.isEmpEdit == false"
                                                        :filled="this.isEmpEdit == true"
-                                                       clearable
+                                                       hint="####-###"
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -403,20 +404,42 @@
                                                        dense
                                                   ></v-text-field>
                                              </v-col>
+                                             <v-col cols="12" md="6">
+                                                  <v-autocomplete
+                                                       v-model="information.JobAssignmentCode"
+                                                       :items="jobassignments"
+                                                       item-text="JobAssignmentDesc"
+                                                       item-value="JobAssignmentCode"
+                                                       label="Job Assignment"
+                                                       outlined
+                                                       dense
+                                                  ></v-autocomplete>
+                                             </v-col>
+                                             <v-col cols="12" md="6">
+                                                  <v-autocomplete
+                                                       v-model="information.CategoryCode"
+                                                       :items="category"
+                                                       item-text="label"
+                                                       item-value="value"
+                                                       label="Category"
+                                                       outlined
+                                                       dense
+                                                  ></v-autocomplete>
+                                             </v-col>
                                         </v-row>
                                    </v-card-text>
                               </v-tab-item>
                          </v-tabs-items>
                     </v-card-text>
-                         <v-card-actions v-if="this.isEmpEdit == true">
-                              <v-spacer></v-spacer>
-                              <v-btn v-if="userInfo.UserLevel != 5" @click="saveRecord()" color="primary">
-                                   <v-icon left>mdi-content-save</v-icon>Save
-                              </v-btn>
-                              <v-btn @click="loadInformation()" text>
-                                   <v-icon left>mdi-cancel</v-icon>Cancel
-                              </v-btn>
-                         </v-card-actions>
+                    <v-card-actions v-if="this.isEmpEdit == true">
+                         <v-spacer></v-spacer>
+                         <v-btn v-if="userInfo.UserLevel != 5" @click="saveRecord()" color="primary">
+                              <v-icon left>mdi-content-save</v-icon>Save
+                         </v-btn>
+                         <v-btn @click="loadInformation()" text>
+                              <v-icon left>mdi-cancel</v-icon>Cancel
+                         </v-btn>
+                    </v-card-actions>
                </v-card>
               
           </v-container>
@@ -475,6 +498,11 @@ export default {
                educationList: [],
                shiftList: [],
                operatingSystem: [],
+               jobassignments: [],
+               category: [
+                    {label: 'Direct', value: 'D'},
+                    {label: 'Indirect', value: 'I'}
+               ],
                saveOptions: {
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
@@ -542,32 +570,29 @@ export default {
                }).sort()
           }
      },
-      created() {
+     created() {
           this.loadInformation()
           // this.loadSalaryGrade() 
        
      },
-      sockets: {
+     sockets: {
           connect() {
                this.loadInformation()
                
           }
      },
      
-   
      methods:{
-           loadInformation() {
-                
+          loadInformation() {
                this.overlay = true
                this.information=[]
                this.axios.get(`${this.api}/employeeinfo/${this.emplcode}`).then(res => {
                     this.information = res.data[0]
                     this.loaddivsectionteam() 
-                      
-                                      
+                    this.loadJobAssignments()
                })
           },
-           loadTransferHist() {
+          loadTransferHist() {
                this.dialog=true
                this.overlay = true            
                this.axios.get(`${this.api}/employeehistory/${this.emplcode}`).then(res => {      
@@ -576,12 +601,12 @@ export default {
     
                })
           },
-           loaddivsectionteam(){
+          loaddivsectionteam(){
                this.loading= true
                this.axios.get(`${this.api}/company/department/section/team/${this.userInfo.ShortName}`).then(res=>{
                     this.divsecteam = res.data
                     // console.log('div',res.data)
-                    this.loading=false
+                    this.loading  =false
                       this.loadShifts()
                       this.loadDesignations()
                })
@@ -626,13 +651,18 @@ export default {
                    
                })
           },
+          loadJobAssignments() {
+               this.axios.get(`${this.api}/jobassignment/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}`).then(async res => {
+                    this.jobassignments = await res.data
+               })
+          },
           saveRecord() {
                this.swal.fire(this.saveOptions).then(result => {
                     if(result.isConfirmed) {
                          let body = {
                               procedureName: 'ProcPostEmployee',
                               values: [	
-                                         this.information.CompanyCode,
+                                        this.information.CompanyCode,
                                         this.information.EmployeeCode,
                                         this.information.AgencyCode,
                                         this.information.LastName,
@@ -674,6 +704,8 @@ export default {
                                         this.information.WorkEmailAddress,
                                         this.information.WorkLocation,
                                         this.information.LocalNumber,
+                                        this.information.JobAssignmentCode,
+                                        this.information.CategoryCode,
                                         this.moment().format('YYYY-MM-DD'),
                                         this.moment().format('YYYY-MM-DD'),
                                         this.userInfo.EmployeeCode  

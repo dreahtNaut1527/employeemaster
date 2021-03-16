@@ -23,9 +23,11 @@ router.get('/companies', (req, res) => {
 
 router.get('/employeeinfo/:code', (req, res) => {
      let code = req.params.code
-     config.connect().then(() => {
+     config.connect().then(async () => {
           const request = new mssql.Request(config)
-          request.query(`SELECT * FROM EmployeeInformationView WHERE EmployeeCode = '${code}'`, (err, results) => {
+          await request.query(`SELECT * FROM EmployeeInformationView WHERE EmployeeCode = '${code}'
+                    AND (RetiredDate IS NULL 
+                    OR RetiredDate >= convert(VARCHAR(10), getdate(), 111))`, (err, results) => {
                if(err) {
                     res.send(err)
                } else {
@@ -36,11 +38,11 @@ router.get('/employeeinfo/:code', (req, res) => {
      })   
 })
 
-router.get('/basicinfo/:code', (req, res) => {
+router.get('/basicinfo/:code', async (req, res) => {
      let code = req.params.code
-     config.connect().then(() => {
+     await config.connect().then(async () => {
                const request = new mssql.Request(config)
-               request.query(`SELECT * FROM EmployeeBasicInfoView  
+               await request.query(`SELECT * FROM EmployeeBasicInfoView  
                               WHERE EmployeeCode = '${code}'`, (err, results) => {
                if(err) {
                     res.send(err)
@@ -608,6 +610,38 @@ router.get('/notifications/:company/:code', (req, res) => {
                config.close()
           })
      })
+})
+
+router.get('/jobassignment/:compname/:department', (req, res) => {
+     let sqlwhere = ''
+     let compname = req.params.compname
+     let department = req.params.department
+     
+     let arr = req.query.array
+     let arrData = arr != undefined ? arr.split(",") : ''       
+
+     if (Array.isArray(arrData)) {
+          arrData.forEach(rec => {
+               sqlwhere += `'${rec}',`
+          })
+          sqlwhere = ` AND DepartmentName IN (${sqlwhere.slice(0, -1)})`
+     } else {
+          sqlwhere = ` AND lower(DepartmentName) = lower('${department}')`
+     }
+
+     let sql = `SELECT * FROM JobAssignmentView WHERE lower(ShortName) = lower('${compname}') 
+               ${sqlwhere} ORDER BY JobAssignmentDesc`
+     config.connect().then(() => {
+          const request = new mssql.Request(config)
+          request.query(sql, (err, results) => {
+               if(err) {
+                    res.send(err)
+               } else {
+                    res.send(results.recordset)
+               }
+               config.close()
+          })
+     })   
 })
 
 // ======================== MSSQL Procedure API ========================

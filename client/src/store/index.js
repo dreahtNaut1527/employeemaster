@@ -10,7 +10,6 @@ export default new Vuex.Store({
     isLoggedIn: false,
     darkMode: false,
     searchData: '',
-    navDrawerVal: false,
     emplcode: '',
     isEmpEdit: false,
     isConnect: true
@@ -30,9 +29,6 @@ export default new Vuex.Store({
     },
     CHANGE_SEARCHING: (state, data) => {
       state.searchData = data
-    },
-    CHANGE_NAVDRAWER: (state, data) => {
-      state.navDrawerVal = data
     },
     CHANGE_EMPLCODE: (state, data) => {
       state.emplcode = data

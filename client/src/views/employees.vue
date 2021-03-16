@@ -96,7 +96,7 @@ export default {
                headers:[
                     {text: 'Code', value: 'EmployeeCode'},
                     {text: 'LastName', value: 'LastName'},
-                    {text: 'FirstName', value: 'FirstName'},
+                    {text: 'FirstName', value: 'FirstName'},     
                     // {text: 'MiddleName', value: 'MiddleName'},
                     // {text: 'NickName', value: 'NickName'},
                     {text: 'Department', value: 'DepartmentName'},
@@ -183,7 +183,6 @@ export default {
                }
                this.axios.get(url).then(res => {
                     this.getempInfos = res.data
-                    console.log(res.data)
                })
           }, 
 

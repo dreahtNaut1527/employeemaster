@@ -71,6 +71,16 @@ const routes = [
     component: () => import('@/views/profile'),
   },
   {
+    path: '/jobassignments',
+    name: 'jobassignments',
+    component: () => import('@/views/jobassignments'),
+  },
+  {
+    path: '/querybuilder',
+    name: 'querybuilder',
+    component: () => import('@/views/querybuilder'),
+  },
+  {
     path: '*',
     name: 'error',
     component: () => import('@/views/error'),

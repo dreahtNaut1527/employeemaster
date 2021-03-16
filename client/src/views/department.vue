@@ -253,6 +253,7 @@ export default {
                     UpdatedUserId: '',
                     Option: 1
                },
+               this.$refs.form.resetValidation()
                this.dialog = false
                this.editMode = 0
                this.loadDepartments()

@@ -134,7 +134,7 @@
                                              <v-col cols="12" md="12">
                                                   <v-text-field
                                                        v-model="information.RetiredDate"
-                                                       label="Date Resigned"
+                                                       label="Department Resigned"
                                                        append-icon="mdi-calendar"
                                                        readonly
                                                        outlined
@@ -146,6 +146,26 @@
                                                        v-model="information.ShiftTime"
                                                        label="Shift"
                                                        append-icon="mdi-clock"
+                                                       readonly
+                                                       outlined
+                                                       dense
+                                                  ></v-text-field>
+                                             </v-col>
+                                             <v-col cols="12" md="12">
+                                                  <v-text-field
+                                                       v-model="information.EmployeeStatus"
+                                                       label="Emloyment Status"
+                                                       append-icon="mdi-podium-silver"
+                                                       readonly
+                                                       outlined
+                                                       dense
+                                                  ></v-text-field>
+                                             </v-col>
+                                             <v-col cols="12" md="12">
+                                                  <v-text-field
+                                                       v-model="lengthOfService"
+                                                       label="Length of Service"
+                                                       append-icon="mdi-briefcase"
                                                        readonly
                                                        outlined
                                                        dense
@@ -374,6 +394,28 @@
                                                        dense
                                                   ></v-text-field>
                                              </v-col>
+                                             <v-col cols="12" md="6">
+                                                  <v-autocomplete
+                                                       v-model="information.JobAssignmentCode"
+                                                       :items="jobassignments"
+                                                       item-text="JobAssignmentDesc"
+                                                       item-value="JobAssignmentCode"
+                                                       label="Job Assignment"
+                                                       outlined
+                                                       dense
+                                                  ></v-autocomplete>
+                                             </v-col>
+                                             <v-col cols="12" md="6">
+                                                  <v-autocomplete
+                                                       v-model="information.CategoryCode"
+                                                       :items="category"
+                                                       item-text="label"
+                                                       item-value="value"
+                                                       label="Category"
+                                                       outlined
+                                                       dense
+                                                  ></v-autocomplete>
+                                             </v-col>
                                         </v-row>
                                    </v-card-text>
                               </v-tab-item>
@@ -400,7 +442,6 @@
 </template>
 
 <script>
-import store from '@/store'
 
 export default {
      data() {
@@ -412,6 +453,7 @@ export default {
                genderValue: '',
                information: '',
                dateBirth: '',
+               lengthOfService: '',
                departmentList: [],
                sectionList: [],
                teamList: [],
@@ -421,6 +463,11 @@ export default {
                breadCrumbsItems: [],
                shiftList: [],
                operatingSystem: [],
+               jobassignments: [],
+               category: [
+                    {label: 'Direct', value: 'D'},
+                    {label: 'Indirect', value: 'I'}
+               ],
                saveOptions: {
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
@@ -455,11 +502,11 @@ export default {
           },
           connect() {
                this.loadInformation()
-               store.commit('CHANGE_CONNECTION', true)
+               this.$store.commit('CHANGE_CONNECTION', true)
           },
           disconnect() {
                this.$router.push('*')
-               store.commit('CHANGE_CONNECTION', false)
+               this.$store.commit('CHANGE_CONNECTION', false)
           }
      },
      methods: {
@@ -477,6 +524,7 @@ export default {
                          ]
                          this.loadEducations()
                          this.loadShifts()
+                         this.loadJobAssignments()
                     // catch error goto error page
                     } else {
                          this.$router.push('*')
@@ -497,6 +545,11 @@ export default {
           loadOperatingSystem() {
                this.axios.get(`${this.api}/os`).then(res => {
                     this.operatingSystem = res.data
+               })
+          },
+          loadJobAssignments() {
+               this.axios.get(`${this.api}/jobassignment/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}`).then(async res => {
+                    this.jobassignments = await res.data
                })
           },
           saveRecord() {
@@ -547,6 +600,8 @@ export default {
                                         this.information.WorkEmailAddress,
                                         this.information.WorkLocation,
                                         this.information.LocalNumber,
+                                        this.information.JobAssignmentCode,
+                                        this.information.CategoryCode,
                                         this.moment().format('YYYY-MM-DD'),
                                         this.moment().format('YYYY-MM-DD'),
                                         this.userInfo.EmployeeCode  
@@ -570,6 +625,7 @@ export default {
                this.dateBirth = val.DateBirth ? this.moment(val.DateBirth).format('YYYY-MM-DD') : ""
                this.genderValue = val.Gender == 'M' ? 'Male' : 'Female'
                this.ageValue = this.moment().diff(this.dateBirth, 'years')
+               this.lengthOfService = this.moment().diff(val.ContractHiredDate, 'years')
           },
           dateBirth(val) {
                this.information.DateBirth = val

@@ -1,18 +1,19 @@
 import { mapState, mapMutations } from 'vuex'
+import store from '../store'
 
 const plugins = {
      install(Vue) {
           Vue.mixin({
                data: () => ({
-                    // api: process.env.VUE_APP_LOCAL_URL,
-                    api: process.env.VUE_APP_URL,
+                    api: process.env.VUE_APP_LOCAL_URL,
+                    // api: process.env.VUE_APP_URL,
                     api_jap: process.env.VUE_APP_JAP_URL,
                     asd_sql: process.env.VUE_APP_ASD_SQL,
                     photo: process.env.VUE_APP_PHOTO,
                     photo_jap: process.env.VUE_APP_PHOTO_JAP
                }),
                created() {
-                    if(this.$store.state.userInfo.EmployeeCode == undefined) {
+                    if(store.state.EmployeeCode == undefined) {
                          this.axios.defaults.headers.common['x-api-key'] = process.env.VUE_APP_AWS_KEY
                     } else {
                          this.axios.defaults.headers.common['master-api'] = process.env.VUE_APP_URL_KEY
@@ -24,7 +25,6 @@ const plugins = {
                          'isLoggedIn', 
                          'darkMode', 
                          'searchData',
-                         'navDrawerVal',
                          'emplcode',
                          'isEmpEdit',
                          'isConnect'
@@ -36,7 +36,6 @@ const plugins = {
                          'CHANGE_USER_LOGGING', 
                          'CHANGE_THEME', 
                          'CHANGE_SEARCHING',
-                         'CHANGE_NAVDRAWER',
                          'CHANGE_EMPLCODE',
                          'CHANGE_EMP_EDIT',
                          'CHANGE_CONNECTION'

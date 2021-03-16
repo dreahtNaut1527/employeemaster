@@ -10,11 +10,12 @@ import App from './App.vue'
 import './registerServiceWorker'
 import router from './router'
 import store from './store'
+import printreport from './plugins/printreport'
 import vuetify from './plugins/vuetify'
 import mixins from './plugins/mixins'
 
-// const url = process.env.VUE_APP_LOCAL_SERVER
-const url = process.env.VUE_APP_SERVER
+const url = process.env.VUE_APP_LOCAL_SERVER
+// const url = process.env.VUE_APP_SERVER
 
 export const SocketInstance = socketio(url)
 
@@ -26,6 +27,7 @@ Vue.prototype.axios = axios
 Vue.prototype.swal = swal
 Vue.prototype.md5 = md5
 Vue.prototype.moment = moment
+Vue.prototype.printreport = printreport
 
 // Vue Use
 Vue.use(mixins)
