@@ -573,12 +573,10 @@ export default {
      created() {
           this.loadInformation()
           // this.loadSalaryGrade() 
-       
      },
      sockets: {
           connect() {
                this.loadInformation()
-               
           }
      },
      
@@ -589,7 +587,6 @@ export default {
                this.axios.get(`${this.api}/employeeinfo/${this.emplcode}`).then(res => {
                     this.information = res.data[0]
                     this.loaddivsectionteam() 
-                    this.loadJobAssignments()
                })
           },
           loadTransferHist() {
@@ -648,6 +645,7 @@ export default {
           loadOperatingSystem() {
                this.axios.get(`${this.api}/os`).then(res => {
                     this.operatingSystem = res.data
+                    this.loadJobAssignments()
                    
                })
           },

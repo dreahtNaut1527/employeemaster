@@ -3,7 +3,6 @@ const mssql = require('mssql')
 const config = require('../config/db.config')()
 
 const router = express.Router()
-
 // =====================================================================
 // ======================= Select Query (MSSQL)=========================
 // =====================================================================
@@ -23,33 +22,28 @@ router.get('/companies', (req, res) => {
 
 router.get('/employeeinfo/:code', (req, res) => {
      let code = req.params.code
-     config.connect().then(async () => {
-          const request = new mssql.Request(config)
-          await request.query(`SELECT * FROM EmployeeInformationView WHERE EmployeeCode = '${code}'
+     let sqlQuery = `SELECT * FROM EmployeeInformationView WHERE EmployeeCode = '${code}'
                     AND (RetiredDate IS NULL 
-                    OR RetiredDate >= convert(VARCHAR(10), getdate(), 111))`, (err, results) => {
-               if(err) {
-                    res.send(err)
-               } else {
-                    res.send(results.recordset)
-               }
-               config.close()
+                     OR RetiredDate >= convert(VARCHAR(10), getdate(), 111))`
+     config.connect(err => {
+          if(err) res.send(err)
+          const request = new mssql.Request(config)
+          request.query(sqlQuery, (err, results) => {
+               if(err) res.send(err)
+               res.send(results.recordset)
           })
-     })   
+     })
 })
 
-router.get('/basicinfo/:code', async (req, res) => {
+router.get('/basicinfo/:code', (req, res) => {
      let code = req.params.code
-     await config.connect().then(async () => {
-               const request = new mssql.Request(config)
-               await request.query(`SELECT * FROM EmployeeBasicInfoView  
-                              WHERE EmployeeCode = '${code}'`, (err, results) => {
-               if(err) {
-                    res.send(err)
-               } else {
-                    res.send(results.recordset)
-                    config.close()
-               }
+     let sqlQuery = `SELECT * FROM EmployeeBasicInfoView WHERE EmployeeCode = '${code}'`
+     config.connect(err => {
+          if(err) res.send(err)
+          const request = new mssql.Request(config)
+          request.query(sqlQuery, (err, results) => {
+               if(err) res.send(err)
+               res.send(results.recordset)
           })
      })
 })
@@ -658,16 +652,14 @@ router.post('/executeselect', (req, res) => {
      if (!Array.isArray(values[0])) {
           values = Array(data.values)
      }
-     values.forEach(async (rec) => {
-          await config.connect().then(() => {
+
+     values.forEach(rec => {
+          config.connect(err => {
+               if(err) res.send(err)
                const request = new mssql.Request(config)
                request.query(`${sql} '${rec.join("','").replace(/''/g, null)}'`, (err, results) => {
-                    if(err) {
-                         res.send(err)
-                    } else {
-                         res.send(results.recordset)
-                    }
-                    config.close()   
+                    if(err) res.send(err)
+                    res.send(results.recordset)
                })
           })
      })

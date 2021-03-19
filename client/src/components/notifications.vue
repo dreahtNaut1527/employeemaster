@@ -74,7 +74,9 @@ export default {
      methods: {
           loadNotifications() {
                this.axios.get(`${this.api}/notifications/${this.userInfo.ShortName}/${this.userInfo.EmployeeCode}`).then(res => {
-                    this.notificationList = res.data
+                    if(Array.isArray(res.data)) {
+                         this.notificationList = res.data
+                    }
                })
           },
           removeNotif(val) {

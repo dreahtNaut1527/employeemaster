@@ -10,13 +10,8 @@ const connect = function() {
         server: process.env.SERVER,
         database: process.env.GRP_DATABASE,
         options: {
-            max: 15,
-            min: 0,
             encrypt: false,
-            enableArithAbort: true,
-            idleTimeoutMillis: 30000,
-            connectionTimeout : 30000,
-            requestTimeout: 30000
+            enableArithAbort: true
         },
     })
     return conn

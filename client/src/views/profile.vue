@@ -524,10 +524,10 @@ export default {
                          ]
                          this.loadEducations()
                          this.loadShifts()
-                         this.loadJobAssignments()
                     // catch error goto error page
                     } else {
-                         this.$router.push('*')
+                         // this.$router.push('*')
+                         console.log(res.data);
                     }
                })
           },
@@ -545,6 +545,7 @@ export default {
           loadOperatingSystem() {
                this.axios.get(`${this.api}/os`).then(res => {
                     this.operatingSystem = res.data
+                    this.loadJobAssignments()
                })
           },
           loadJobAssignments() {
