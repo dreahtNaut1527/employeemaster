@@ -90,8 +90,8 @@ export default {
                // sectionList: '',
                // teamList: '',
                breadCrumbsItems: [
-                    {text: 'Main Data', disabled: false, href: '/employees'},
-                    {text: 'Employees', disabled: true, href: '/employees'}
+                    {text: 'Main Data', disabled: false, href: '#'},
+                    {text: 'Employees', disabled: true, href: '#'}
                ],
                headers:[
                     {text: 'Code', value: 'EmployeeCode'},

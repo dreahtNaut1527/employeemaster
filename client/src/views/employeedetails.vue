@@ -513,9 +513,9 @@ export default {
                     denyButtonText: `Don't Save`
                },
                breadCrumbsItems: [
-                    {text: 'Main Data', disabled: false, href: '/employees'},
-                    {text: 'Employees', disabled: false, href: '/employees'},
-                    {text: 'Details', disabled: true, href: '/employees'},
+                    {text: 'Main Data', disabled: false, href: '#'},
+                    {text: 'Employees', disabled: false, href: '#'},
+                    {text: 'Details', disabled: true, href: '#'},
                   
                ],
                tabsHeader: [
