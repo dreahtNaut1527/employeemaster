@@ -634,4 +634,14 @@ router.post('/execute', (req, res) => {
      })
 })
 
+// router.get('/textCommand', (req, res) => {
+//      const exec = require('child_process').exec
+//      exec('cmd /c ""C:\\Program Files\\HRDev\\XPAApps\\ClinicHealth.lnk""', (err, stdout, stderr) => {
+//           if (err) {
+//                res.send(err)
+//           }
+//           res.send(stdout)
+//      })
+// })
+
 module.exports = router       

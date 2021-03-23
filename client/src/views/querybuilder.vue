@@ -328,7 +328,7 @@ export default {
             return (
                 (!relatedElement || !relatedElement.fixed) && !draggedElement.fixed
             )
-        },
+        },   
         searchDataClick() {
             if(this.$refs.form.validate()) {
                 this.loading = true

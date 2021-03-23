@@ -524,7 +524,7 @@ export default {
                     {label: 'Contact Person', icon:'mdi-card-account-details', value: 3},
                     {label: 'Work Information', icon:'mdi-briefcase', value: 4}
                ],
-                marStatus: [
+                 marStatus: [
                     {label: 'Single', value: 'S'},
                     {label: 'Married', value: 'M'},
                     {label: 'Widowed/Widower', value: 'W'},
