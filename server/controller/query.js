@@ -9,10 +9,10 @@ const router = express.Router()
 router.get('/companies', (req, res) => {
      let sqlQuery = `SELECT * FROM CompanyView`
      config.connect(err => {
-          if(err) res.send(err)
+          if(err) return res.send(err)
           const request = new mssql.Request(config)
           request.query(sqlQuery, (err, results) => {
-               if(err) res.send(err)
+               if(err) return res.send(err)
                res.send(results.recordset)
           })
      })
@@ -24,10 +24,10 @@ router.get('/employeeinfo/:code', (req, res) => {
                     AND (RetiredDate IS NULL 
                      OR RetiredDate >= convert(VARCHAR(10), getdate(), 111))`
      config.connect(err => {
-          if(err) res.send(err)
+          if(err) return res.send(err)
           const request = new mssql.Request(config)
           request.query(sqlQuery, (err, results) => {
-               if(err) res.send(err)
+               if(err) return res.send(err)
                res.send(results.recordset)
           })
      })
@@ -37,10 +37,10 @@ router.get('/basicinfo/:code', (req, res) => {
      let code = req.params.code
      let sqlQuery = `SELECT * FROM EmployeeBasicInfoView WHERE EmployeeCode = '${code}'`
      config.connect(err => {
-          if(err) res.send(err)
+          if(err) return res.send(err)
           const request = new mssql.Request(config)
           request.query(sqlQuery, (err, results) => {
-               if(err) res.send(err)
+               if(err) return res.send(err)
                res.send(results.recordset)
           })
      })
@@ -51,10 +51,10 @@ router.get('/employees/:company', (req, res) => {
      let sql = `SELECT * FROM EmployeeBasicInfoView WHERE lower(ShortName) = lower('${company}')
                 ORDER BY EmployeeCode`
      config.connect(err => {
-          if(err) res.send(err)
+          if(err) return res.send(err)
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {
-               if(err) res.send(err)
+               if(err) return res.send(err)
                res.send(results.recordset)
           })
      })
@@ -80,10 +80,10 @@ router.get('/employees/:compname/:department', (req, res) => {
      let sql = `SELECT * FROM EmployeeBasicInfoView WHERE lower(ShortName) = lower('${compname}') 
                ${sqlwhere} ORDER BY EmployeeCode`
      config.connect(err => {
-          if(err) res.send(err)
+          if(err) return res.send(err)
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {
-               if(err) res.send(err)
+               if(err) return res.send(err)
                res.send(results.recordset)
           })
      })   
@@ -97,10 +97,10 @@ router.get('/employees/:compname/:department/:section', (req, res) => {
                AND lower(DepartmentName) = lower('${department}')
                AND lower(SectionName) = lower('${section}')`
      config.connect(err => {
-          if(err) res.send(err)
+          if(err) return res.send(err)
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {
-               if(err) res.send(err)
+               if(err) return res.send(err)
                res.send(results.recordset)
           })
      })   
@@ -117,10 +117,10 @@ router.get('/employees/:compname/:department/:section/:team', (req, res) => {
                AND lower(TeamName) = lower('${team}')`
 
      config.connect(err => {
-          if(err) res.send(err)
+          if(err) return res.send(err)
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {
-               if(err) res.send(err)
+               if(err) return res.send(err)
                res.send(results.recordset)
           })
      })   
@@ -132,10 +132,10 @@ router.get('/company/department/:compname', (req, res) => {
                     WHERE lower(ShortName) = lower('${compname}')
                     ORDER BY DepartmentName`
      config.connect(err => {
-          if(err) res.send(err)
+          if(err) return res.send(err)
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {
-               if(err) res.send(err)
+               if(err) return res.send(err)
                res.send(results.recordset)
           })
      })   
@@ -147,10 +147,10 @@ router.get('/company/section/:compname', (req, res) => {
                     WHERE lower(ShortName) = lower('${compname}')
                     ORDER BY SectionName`
      config.connect(err => {
-          if(err) res.send(err)
+          if(err) return res.send(err)
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {
-               if(err) res.send(err)
+               if(err) return res.send(err)
                res.send(results.recordset)
           })
      })   
@@ -162,10 +162,10 @@ router.get('/company/team/:compname', (req, res) => {
                     WHERE lower(ShortName) = lower('${compname}')
                     ORDER BY TeamName`
      config.connect(err => {
-          if(err) res.send(err)
+          if(err) return res.send(err)
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {
-               if(err) res.send(err)
+               if(err) return res.send(err)
                res.send(results.recordset)
           })
      })   
@@ -176,10 +176,10 @@ router.get('/company/department/section/:compname', (req, res) => {
      let sql = `SELECT * FROM DepartmentSectionRelationView WHERE lower(ShortName) = lower('${compname}')`
 
      config.connect(err => {
-          if(err) res.send(err)
+          if(err) return res.send(err)
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {
-               if(err) res.send(err)
+               if(err) return res.send(err)
                res.send(results.recordset)
           })
      })   
@@ -190,10 +190,10 @@ router.get('/company/department/section/team/:compname', (req, res) => {
      let sql = `SELECT * FROM SectionTeamRelationView WHERE lower(ShortName) = lower('${compname}')`
 
      config.connect(err => {
-          if(err) res.send(err)
+          if(err) return res.send(err)
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {
-               if(err) res.send(err)
+               if(err) return res.send(err)
                res.send(results.recordset)
           })
      })   
@@ -204,10 +204,10 @@ router.get('/company/designation/:compname', (req, res) => {
      let sql = `SELECT * FROM DesignationView WHERE lower(ShortName) = lower('${compname}')`
 
      config.connect(err => {
-          if(err) res.send(err)
+          if(err) return res.send(err)
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {
-               if(err) res.send(err)
+               if(err) return res.send(err)
                res.send(results.recordset)
           })
      })   
@@ -218,10 +218,10 @@ router.get('/company/position/:compname', (req, res) => {
      let sql = `SELECT * FROM PositionView WHERE lower(ShortName) = lower('${compname}')`
 
      config.connect(err => {
-          if(err) res.send(err)
+          if(err) return res.send(err)
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {
-               if(err) res.send(err)
+               if(err) return res.send(err)
                res.send(results.recordset)
           })
      })   
@@ -231,10 +231,10 @@ router.get('/education', (req, res) => {
      let sql = `SELECT * FROM Educations`
 
      config.connect(err => {
-          if(err) res.send(err)
+          if(err) return res.send(err)
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {
-               if(err) res.send(err)
+               if(err) return res.send(err)
                res.send(results.recordset)
           })
      })   
@@ -245,10 +245,10 @@ router.get('/shift/:compname', (req, res) => {
      let sql = `SELECT * FROM ShiftView WHERE lower(ShortName) = lower('${compname}')`
 
      config.connect(err => {
-          if(err) res.send(err)
+          if(err) return res.send(err)
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {
-               if(err) res.send(err)
+               if(err) return res.send(err)
                res.send(results.recordset)
           })
      })   
@@ -258,10 +258,10 @@ router.get('/os', (req, res) => {
      let sql = `SELECT * FROM OperatingSystemView`
 
      config.connect(err => {
-          if(err) res.send(err)
+          if(err) return res.send(err)
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {
-               if(err) res.send(err)
+               if(err) return res.send(err)
                res.send(results.recordset)
           })
      })   
@@ -286,10 +286,10 @@ router.get('/usercontrol', (req, res) => {
      let sql = `SELECT * FROM UserControlView ${sqlwhere}`
 
      config.connect(err => {
-          if(err) res.send(err)
+          if(err) return res.send(err)
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {
-               if(err) res.send(err)
+               if(err) return res.send(err)
                res.send(results.recordset)
           })
      })   
@@ -303,10 +303,10 @@ router.get('/logging', (req, res) => {
                          ON EmployeeInformationView.EmployeeCode = Logging.EmployeeCode`
 
      config.connect(err => {
-          if(err) res.send(err)
+          if(err) return res.send(err)
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {
-               if(err) res.send(err)
+               if(err) return res.send(err)
                res.send(results.recordset)
           })
      })   
@@ -322,10 +322,10 @@ router.post('/shifts/:company', (req, res) => {
                     ORDER BY ShiftTime`
 
      config.connect(err => {
-          if(err) res.send(err)
+          if(err) return res.send(err)
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {
-               if(err) res.send(err)
+               if(err) return res.send(err)
                res.send(results.recordset)
           })
      })   
@@ -336,10 +336,10 @@ router.get('/history/:company', (req, res) => {
      let sql = `SELECT * FROM EmployeeHistoryDataView WHERE lower(ShortName) = lower('${company}')`
 
      config.connect(err => {
-          if(err) res.send(err)
+          if(err) return res.send(err)
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {
-               if(err) res.send(err)
+               if(err) return res.send(err)
                res.send(results.recordset)
           })
      })   
@@ -367,10 +367,10 @@ router.get('/history/:company/:department', (req, res) => {
                          ${sqlwhere} ORDER BY EmployeeCode`
 
      config.connect(err => {
-          if(err) res.send(err)
+          if(err) return res.send(err)
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {
-               if(err) res.send(err)
+               if(err) return res.send(err)
                res.send(results.recordset)
           })
      })   
@@ -385,10 +385,10 @@ router.get('/history/:company/:department/:section', (req, res) => {
                AND lower(SectionName) = lower('${section}')`
 
      config.connect(err => {
-          if(err) res.send(err)
+          if(err) return res.send(err)
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {
-               if(err) res.send(err)
+               if(err) return res.send(err)
                res.send(results.recordset)
           })
      })   
@@ -405,10 +405,10 @@ router.get('/history/:company/:department/:section/:team', (req, res) => {
                AND lower(TeamName) = lower('${team}')`
 
      config.connect(err => {
-          if(err) res.send(err)
+          if(err) return res.send(err)
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {
-               if(err) res.send(err)
+               if(err) return res.send(err)
                res.send(results.recordset)
           })
      })   
@@ -425,10 +425,10 @@ router.get('/pending/:company', (req, res) => {
                WHERE lower(EmployeeForTransferView.ShortName) = lower('${company}')`
                
      config.connect(err => {
-          if(err) res.send(err)
+          if(err) return res.send(err)
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {
-               if(err) res.send(err)
+               if(err) return res.send(err)
                res.send(results.recordset)
           })
      })
@@ -460,10 +460,10 @@ router.get('/pending/:company/:department', (req, res) => {
                ${sqlwhere} ORDER BY EmployeeCode`
         
      config.connect(err => {
-          if(err) res.send(err)
+          if(err) return res.send(err)
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {
-               if(err) res.send(err)
+               if(err) return res.send(err)
                res.send(results.recordset)
           })
      })   
@@ -484,10 +484,10 @@ router.get('/pending/:company/:department/:section', (req, res) => {
                AND lower(EmployeeForTransferView.SectionName) = lower('${section}')`
 
      config.connect(err => {
-          if(err) res.send(err)
+          if(err) return res.send(err)
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {
-               if(err) res.send(err)
+               if(err) return res.send(err)
                res.send(results.recordset)
           })
      })   
@@ -510,10 +510,10 @@ router.get('/pending/:company/:department/:section/:team', (req, res) => {
                AND lower(EmployeeForTransferView.TeamName) = lower('${team}')`
                
      config.connect(err => {
-          if(err) res.send(err)
+          if(err) return res.send(err)
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {
-               if(err) res.send(err)
+               if(err) return res.send(err)
                res.send(results.recordset)
           })
      })   
@@ -524,10 +524,10 @@ router.get('/employeehistory/:code', (req, res) => {
      let sql = `SELECT * FROM EmployeeHistoryDataView WHERE EmployeeCode = '${code}'`
      
      config.connect(err => {
-          if(err) res.send(err)
+          if(err) return res.send(err)
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {
-               if(err) res.send(err)
+               if(err) return res.send(err)
                res.send(results.recordset)
           })
      })   
@@ -542,10 +542,10 @@ router.get('/notifications/:company/:code', (req, res) => {
                               ORDER BY Viewed, CreatedDate DESC`
 
      config.connect(err => {
-          if(err) res.send(err)
+          if(err) return res.send(err)
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {
-               if(err) res.send(err)
+               if(err) return res.send(err)
                res.send(results.recordset)
           })
      })   
@@ -572,10 +572,10 @@ router.get('/jobassignment/:compname/:department', (req, res) => {
                ${sqlwhere} ORDER BY JobAssignmentDesc`
             
      config.connect(err => {
-          if(err) res.send(err)
+          if(err) return res.send(err)
           const request = new mssql.Request(config)
           request.query(sql, (err, results) => {
-               if(err) res.send(err)
+               if(err) return res.send(err)
                res.send(results.recordset)
           })
      })     
@@ -598,10 +598,10 @@ router.post('/executeselect', (req, res) => {
 
      values.forEach(rec => {
           config.connect(err => {
-               if(err) res.send(err)
+               if(err) return res.send(err)
                const request = new mssql.Request(config)
                request.query(`${sql} '${rec.join("','").replace(/''/g, null)}'`, (err, results) => {
-                    if(err) res.send(err)
+                    if(err) return res.send(err)
                     res.send(results.recordset)
                })
           })
@@ -624,10 +624,10 @@ router.post('/execute', (req, res) => {
      }
      values.forEach(rec => {
           config.connect(err => {
-               if(err) res.send(err)
+               if(err) return res.send(err)
                const request = new mssql.Request(config)
                request.query(`${sql} '${rec.join("','").replace(/''/g, null)}'`, (err, results) => {
-                    if(err) res.send(err)
+                    if(err) return res.send(err)
                     res.send(results.recordset)
                })
           })
