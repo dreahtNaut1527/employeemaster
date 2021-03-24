@@ -30,10 +30,9 @@
                                    <td>{{props.item.UpdatedDate}}</td>
                                    <td>
                                         <v-btn @click="editRecord(props.item)" icon>
-                                             <v-icon v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9">mdi-pencil</v-icon>
-                                             <v-icon v-else>mdi-eye</v-icon>
+                                             <v-icon>mdi-pencil</v-icon>
                                         </v-btn>
-                                        <v-btn v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9" @click="deleteRecord(props.item)" icon>
+                                        <v-btn @click="deleteRecord(props.item)" icon>
                                              <v-icon v-if="props.item.DeletedDate == null">mdi-delete</v-icon>
                                              <v-icon v-else>mdi-restore</v-icon>
                                         </v-btn>
@@ -51,8 +50,7 @@
           <v-dialog v-model="dialog" width="500" persistent>
                <v-card>
                     <v-toolbar color="primary" dark flat>
-                         <v-toolbar-title v-if="userInfo.UserLevel == 4">{{editMode == 1 ? 'Edit Record' : 'New Record'}}</v-toolbar-title>
-                         <v-toolbar-title v-else>View Record</v-toolbar-title>
+                         <v-toolbar-title>{{editMode == 1 ? 'Edit Record' : 'New Record'}}</v-toolbar-title>
                     </v-toolbar>
                     <v-container>
                               <v-form ref="form" v-model="valid" lazy-validation>
@@ -63,7 +61,6 @@
                                                   label="Job Assignment Name"
                                                   @keypress.enter="saveRecord()"
                                                   :rules="[v => !!v || 'This field is required']"
-                                                  :readonly="userInfo.UserLevel != 4 && userInfo.UserLevel != 9"
                                                   outlined
                                                   dense
                                              ></v-text-field>
@@ -73,7 +70,7 @@
                     </v-container>
                     <v-card-actions>
                          <v-spacer></v-spacer>
-                         <v-btn v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9" @click="saveRecord()" color="primary">
+                         <v-btn @click="saveRecord()" color="primary">
                               <v-icon left>mdi-content-save</v-icon>Save
                          </v-btn>
                          <v-btn @click="clearVariables()" text>
