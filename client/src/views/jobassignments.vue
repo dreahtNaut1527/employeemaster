@@ -9,7 +9,7 @@
                                    <v-card-text class="pa-0 headline">Job Assignments</v-card-text>
                               </v-col>
                          <v-spacer></v-spacer>
-                         <v-btn v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9" @click="newRecord()" color="primary"><v-icon left>mdi-plus</v-icon>New</v-btn>
+                         <v-btn @click="newRecord()" color="primary"><v-icon left>mdi-plus</v-icon>New</v-btn>
                          </v-row>
                     </v-card-title>
                     <v-divider></v-divider>
