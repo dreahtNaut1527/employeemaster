@@ -150,19 +150,43 @@
                                                   ></v-text-field>
                                              </v-col>
                                              <v-col cols="12" md="4">
-                                                  <!-- <v-text-field
+                                                <!-- <v-text-field
+                                                
                                                        v-model="information.RetiredDate"
-                                                       label="Date Resigned"
+                                                       label="Department Resigned"
                                                        append-icon="mdi-calendar"
-                                                       readonly
+                                                       :readonly="this.isEmpEdit == false"
+                                                       :filled="this.isEmpEdit == true"
                                                        outlined
+                                                       clearable
                                                        dense
-                                                  ></v-text-field> -->
+                                                  ></v-text-field>  -->
                                                   <datePicker
                                                        :menu="dateDialog"
                                                        dateLabel="Department Resigned"
-                                                       :dateValue.sync="information.RetiredDate"
+                                                       :dateValue.sync="information.RetiredDate" 
                                                   ></datePicker>
+                                                  <!-- <v-text-field 
+                                                       v-model="information.RetiredDate"
+                                                       outlined
+                                                       v-mask="'####-##-##'" 
+                                                       dense
+                                                       :filled="this.isEmpEdit == true"
+                                                       label="Department Resigned"
+                                                       >
+
+                                                       <template v-slot:append>
+                                                       <dtPicker v-model="information.RetiredDate"             
+                                                       :menu="dateDialog"
+                                                       
+                                                       >
+                                                       
+                                                       </dtPicker> 
+                                                       </template>
+                                                   
+                                                  </v-text-field> -->
+                                                  
+                                                  
                                              </v-col>
                                         </v-row>
                                    </v-card-text>
@@ -235,6 +259,7 @@
                                                        v-mask="'(###)-###-####'"                                                    
                                                        hint="(###)-###-####"
                                                        :readonly="this.isEmpEdit == false"
+                                                       :filled="this.isEmpEdit == true"
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -247,6 +272,7 @@
                                                        v-mask="'####-###-####'"
                                                        :readonly="this.isEmpEdit == false"
                                                        hint="####-###-####"
+                                                        :filled="this.isEmpEdit == true"
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -255,7 +281,8 @@
                                                   <v-textarea
                                                        v-model="information.PresentAddress"
                                                        label="Present Address"
-                                                       readonly
+                                                       :readonly="this.isEmpEdit == false"
+                                                       :filled="this.isEmpEdit == true"
                                                        outlined
                                                        dense
                                                   ></v-textarea>
@@ -264,7 +291,8 @@
                                                   <v-textarea
                                                        v-model="information.PermanentAddress"
                                                        label="Permanent Address"
-                                                       readonly
+                                                       :readonly="this.isEmpEdit == false"
+                                                       :filled="this.isEmpEdit == true"
                                                        outlined
                                                        dense
                                                   ></v-textarea>
@@ -279,7 +307,8 @@
                                                   <v-text-field
                                                        v-model="information.ConPerson"
                                                        label="Contact Person"
-                                                       readonly                                                  
+                                                       :readonly="this.isEmpEdit == false"
+                                                       :filled="this.isEmpEdit == true"                                               
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -288,7 +317,8 @@
                                                   <v-text-field
                                                        v-model="information.ConRelationship"
                                                        label="Relationship"
-                                                       readonly
+                                                       :readonly="this.isEmpEdit == false"
+                                                       :filled="this.isEmpEdit == true"
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -297,7 +327,8 @@
                                                   <v-textarea
                                                        v-model="information.ConAddress"
                                                        label="Contact Address"
-                                                       readonly
+                                                       :readonly="this.isEmpEdit == false"
+                                                       :filled="this.isEmpEdit == true"
                                                        outlined
                                                        dense
                                                   ></v-textarea>
@@ -307,7 +338,8 @@
                                                        v-model="information.ConNumber"
                                                        append-icon="mdi-phone"
                                                        label="Contact Phone No."
-                                                       readonly
+                                                       :readonly="this.isEmpEdit == false"
+                                                       :filled="this.isEmpEdit == true"
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -413,6 +445,8 @@
                                                        label="Job Assignment"
                                                        outlined
                                                        dense
+                                                       clearable
+                                                       :filled="this.isEmpEdit == true"
                                                   ></v-autocomplete>
                                              </v-col>
                                              <v-col cols="12" md="6">
@@ -424,6 +458,8 @@
                                                        label="Category"
                                                        outlined
                                                        dense
+                                                       clearable
+                                                       :filled="this.isEmpEdit == true"
                                                   ></v-autocomplete>
                                              </v-col>
                                         </v-row>
@@ -476,10 +512,12 @@
 
 <script>
 import datePicker from '@/components/datepicker'
+
 export default {
      data() {
           return {
-               tab: null,
+              
+               tab: null,         
                pageCount: 0,
                page: 1,
                disabled: false,
@@ -750,6 +788,7 @@ export default {
      },
      components: {
           datePicker
+         
      }
 }
 </script>

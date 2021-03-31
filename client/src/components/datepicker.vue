@@ -12,10 +12,12 @@
                <v-text-field
                     v-model="date"
                     :label="label"
+                    :filled="isEmpEdit == true"
                     append-icon="mdi-calendar"
                     v-bind="attrs"
                     v-on="on"
                     readonly
+                    clearable
                     dense
                     outlined
                ></v-text-field>
