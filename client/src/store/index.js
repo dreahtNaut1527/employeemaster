@@ -12,7 +12,8 @@ export default new Vuex.Store({
     searchData: '',
     emplcode: '',
     isEmpEdit: false,
-    isConnect: true
+    isConnect: true,
+    themeColor: ''
   },
   plugins: [
     createPersistedState() 
@@ -38,6 +39,9 @@ export default new Vuex.Store({
     },
     CHANGE_CONNECTION: (state, data) => {
       state.isConnect = data
+    },
+    CHANGE_THEMECOLOR: (state, data) => {
+      state.themeColor = data
     }
   },
   actions: {

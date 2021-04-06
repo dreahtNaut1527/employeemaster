@@ -50,6 +50,7 @@
                                              <v-col cols="12" md="4">
                                                   <v-text-field
                                                        v-model="information.LastName"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        label="Last Name"
                                                        readonly
                                                        outlined
@@ -59,6 +60,7 @@
                                              <v-col cols="12" md="5">
                                                   <v-text-field
                                                        v-model="information.FirstName"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        label="First Name"
                                                        readonly
                                                        outlined
@@ -68,6 +70,7 @@
                                              <v-col cols="12" md="3">
                                                   <v-text-field
                                                        v-model="information.MiddleName"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        label="Middle Name"
                                                        readonly
                                                        outlined
@@ -79,6 +82,7 @@
                                              <v-col cols="12" md="12">
                                                   <v-text-field
                                                        v-model="information.DepartmentName"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        label="Department"
                                                        readonly
                                                        outlined
@@ -88,6 +92,7 @@
                                              <v-col cols="12" md="12">
                                                   <v-text-field
                                                        v-model="information.SectionName"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        label="Section"
                                                        readonly
                                                        outlined
@@ -97,6 +102,7 @@
                                              <v-col cols="12" md="12">
                                                   <v-text-field
                                                        v-model="information.TeamName"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        label="Team"
                                                        readonly
                                                        outlined
@@ -106,6 +112,7 @@
                                              <v-col cols="12" md="12">
                                                   <v-text-field
                                                        v-model="information.PositionName"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        label="Designation"
                                                        readonly
                                                        outlined
@@ -115,6 +122,7 @@
                                              <v-col cols="12" md="12">
                                                   <v-text-field
                                                        v-model="information.DesignationName"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        label="Position"
                                                        readonly
                                                        outlined
@@ -124,6 +132,7 @@
                                              <v-col cols="12" md="12">
                                                   <v-text-field
                                                        v-model="information.ContractHiredDate"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        label="Date Hired"
                                                        append-icon="mdi-calendar"
                                                        readonly
@@ -134,6 +143,7 @@
                                              <v-col cols="12" md="12">
                                                   <v-text-field
                                                        v-model="information.RetiredDate"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        label="Department Resigned"
                                                        append-icon="mdi-calendar"
                                                        readonly
@@ -144,6 +154,7 @@
                                              <v-col cols="12" md="12">
                                                   <v-text-field
                                                        v-model="information.ShiftTime"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        label="Shift"
                                                        append-icon="mdi-clock"
                                                        readonly
@@ -154,6 +165,7 @@
                                              <v-col cols="12" md="12">
                                                   <v-text-field
                                                        v-model="information.EmployeeStatus"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        label="Emloyment Status"
                                                        append-icon="mdi-podium-silver"
                                                        readonly
@@ -164,6 +176,7 @@
                                              <v-col cols="12" md="12">
                                                   <v-text-field
                                                        v-model="lengthOfService"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        label="Length of Service"
                                                        append-icon="mdi-briefcase"
                                                        readonly
@@ -180,6 +193,7 @@
                                              <v-col cols="12" md="8">
                                                   <v-text-field
                                                        v-model="information.NickName"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        label="Nick Name"
                                                        readonly
                                                        outlined
@@ -191,6 +205,7 @@
                                                        v-model="dateBirth"
                                                        label="Date of Birth"
                                                        append-icon="mdi-calendar"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        readonly
                                                        outlined
                                                        dense
@@ -199,6 +214,7 @@
                                              <v-col cols="12" md="1">
                                                   <v-text-field
                                                        v-model="ageValue"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        label="Age"
                                                        readonly
                                                        outlined
@@ -208,6 +224,7 @@
                                              <v-col cols="12" md="1">
                                                   <v-text-field
                                                        v-model="genderValue"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        label="Gender"
                                                        readonly
                                                        outlined
@@ -217,6 +234,7 @@
                                              <v-col cols="12" md="8">
                                                   <v-text-field
                                                        v-model="information.Course"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        label="Course"
                                                        readonly
                                                        outlined
@@ -226,6 +244,7 @@
                                              <v-col cols="12" md="4">
                                                   <v-text-field
                                                        v-model="information.EducDesc"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        label="Educational Attainment"
                                                        readonly
                                                        outlined
@@ -235,6 +254,7 @@
                                              <v-col cols="12" md="6">
                                                   <v-text-field
                                                        v-model="information.Phone"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        append-icon="mdi-phone"
                                                        label="Telephone"
                                                        readonly
@@ -245,6 +265,7 @@
                                              <v-col cols="12" md="6">
                                                   <v-text-field
                                                        v-model="information.Cellphone"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        append-icon="mdi-cellphone"
                                                        label="Cellphone"
                                                        readonly
@@ -255,6 +276,7 @@
                                              <v-col cols="12" md="6">
                                                   <v-textarea
                                                        v-model="information.PresentAddress"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        label="Present Address"
                                                        readonly
                                                        outlined
@@ -264,6 +286,7 @@
                                              <v-col cols="12" md="6">
                                                   <v-textarea
                                                        v-model="information.PermanentAddress"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        label="Permanent Address"
                                                        readonly
                                                        outlined
@@ -279,6 +302,7 @@
                                              <v-col cols="12" md="12">
                                                   <v-text-field
                                                        v-model="information.ConPerson"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        label="Contact Person"
                                                        readonly
                                                        outlined
@@ -288,6 +312,7 @@
                                              <v-col cols="12" md="12">
                                                   <v-text-field
                                                        v-model="information.ConRelationship"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        label="Relationship"
                                                        readonly
                                                        outlined
@@ -297,6 +322,7 @@
                                              <v-col cols="12" md="12">
                                                   <v-textarea
                                                        v-model="information.ConAddress"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        label="Contact Address"
                                                        readonly
                                                        outlined
@@ -306,6 +332,7 @@
                                              <v-col cols="12" md="12">
                                                   <v-text-field
                                                        v-model="information.ConNumber"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        append-icon="mdi-phone"
                                                        label="Contact Phone No."
                                                        readonly
@@ -322,6 +349,7 @@
                                              <v-col cols="12" md="6">
                                                   <v-text-field
                                                        v-model="information.CPUNumber"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        append-icon="mdi-desktop-classic"
                                                        label="CPU Number"
                                                        outlined
@@ -331,6 +359,7 @@
                                              <v-col cols="12" md="6">
                                                   <v-text-field
                                                        v-model="information.IPAddress"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        append-icon="mdi-ip"
                                                        label="IP Address"
                                                        outlined
@@ -340,6 +369,7 @@
                                              <v-col cols="12" md="6">
                                                   <v-text-field
                                                        v-model="information.CompUserName"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        append-icon="mdi-account"
                                                        label="Computer Username"
                                                        outlined
@@ -349,6 +379,7 @@
                                              <v-col cols="12" md="6">
                                                   <v-text-field
                                                        v-model="information.CompPassword"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        append-icon="mdi-lock"
                                                        label="Computer Password"
                                                        type="password"
@@ -359,6 +390,7 @@
                                              <v-col cols="12" md="6">
                                                   <v-text-field
                                                        v-model="information.WorkEmailAddress"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        append-icon="mdi-email"
                                                        label="Work Email Address"
                                                        outlined
@@ -368,6 +400,7 @@
                                              <v-col cols="12" md="6">
                                                   <v-text-field
                                                        v-model="information.WorkLocation"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        append-icon="mdi-map-marker"
                                                        label="Work Location"
                                                        outlined
@@ -377,6 +410,7 @@
                                              <v-col cols="12" md="6">
                                                   <v-text-field
                                                        v-model="information.LocalNumber"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        append-icon="mdi-phone-classic"
                                                        label="Local No."
                                                        v-mask="'####-###'"
@@ -388,6 +422,7 @@
                                              <v-col cols="12" md="6">
                                                   <v-text-field
                                                        v-model="information.StaffCode"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        append-icon="mdi-account-hard-hat"
                                                        label="Staff Code"
                                                        outlined
@@ -397,6 +432,7 @@
                                              <v-col cols="12" md="6">
                                                   <v-autocomplete
                                                        v-model="information.JobAssignmentCode"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        :items="jobassignments"
                                                        item-text="JobAssignmentDesc"
                                                        item-value="JobAssignmentCode"
@@ -408,6 +444,7 @@
                                              <v-col cols="12" md="6">
                                                   <v-autocomplete
                                                        v-model="information.CategoryCode"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        :items="category"
                                                        item-text="label"
                                                        item-value="value"
@@ -422,7 +459,7 @@
                          </v-tabs-items>
                          <v-card-actions v-if="tab == 4">
                               <v-spacer></v-spacer>
-                              <v-btn color="primary" @click="saveRecord()">
+                              <v-btn :color="themeColor == '' ? 'primary' : themeColor" @click="saveRecord()">
                                    <v-icon left>mdi-content-save</v-icon>Save
                               </v-btn>
                               <v-btn @click="loadInformation()" text>

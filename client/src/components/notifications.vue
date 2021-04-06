@@ -21,7 +21,7 @@
                </v-btn>
           </template>
           <v-card>
-               <v-toolbar color="primary" flat dark dense>
+               <v-toolbar :color="themeColor == '' ? 'primary' : themeColor" flat dark dense>
                     <v-toolbar-title>Notifications</v-toolbar-title>
                </v-toolbar>
                <v-list v-if="notificationList.length > 0" two-line dense>

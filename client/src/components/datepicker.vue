@@ -13,6 +13,7 @@
                     v-model="date"
                     :label="label"
                     :filled="isEmpEdit == true"
+                    :color="themeColor == '' ? 'primary' : themeColor"
                     append-icon="mdi-calendar"
                     v-bind="attrs"
                     v-on="on"
@@ -28,6 +29,7 @@
                scrollable
                :events="events"
                event-color="#ED6351"
+               :color="themeColor == '' ? 'primary' : themeColor"
                @change="$refs.menu.save(date)"
           >
           </v-date-picker>

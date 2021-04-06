@@ -9,7 +9,7 @@
                                    <v-card-text class="pa-0 headline">Job Assignments</v-card-text>
                               </v-col>
                          <v-spacer></v-spacer>
-                         <v-btn @click="newRecord()" color="primary"><v-icon left>mdi-plus</v-icon>New</v-btn>
+                         <v-btn @click="newRecord()" :color="themeColor == '' ? 'primary' : themeColor"><v-icon left>mdi-plus</v-icon>New</v-btn>
                          </v-row>
                     </v-card-title>
                     <v-divider></v-divider>
@@ -44,12 +44,13 @@
                          v-model="page"
                          :length="pageCount"
                          :total-visible="10"
+                         :color="themeColor == '' ? 'primary' : themeColor"
                     ></v-pagination>
                </v-card>
           </v-container>
           <v-dialog v-model="dialog" width="500" persistent>
                <v-card>
-                    <v-toolbar color="primary" dark flat>
+                    <v-toolbar :color="themeColor == '' ? 'primary' : themeColor" dark flat>
                          <v-toolbar-title>{{editMode == 1 ? 'Edit Record' : 'New Record'}}</v-toolbar-title>
                     </v-toolbar>
                     <v-container>
@@ -61,6 +62,7 @@
                                                   label="Job Assignment Name"
                                                   @keypress.enter="saveRecord()"
                                                   :rules="[v => !!v || 'This field is required']"
+                                                  :color="themeColor == '' ? 'primary' : themeColor"
                                                   outlined
                                                   dense
                                              ></v-text-field>
@@ -70,7 +72,7 @@
                     </v-container>
                     <v-card-actions>
                          <v-spacer></v-spacer>
-                         <v-btn @click="saveRecord()" color="primary">
+                         <v-btn @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor">
                               <v-icon left>mdi-content-save</v-icon>Save
                          </v-btn>
                          <v-btn @click="clearVariables()" text>

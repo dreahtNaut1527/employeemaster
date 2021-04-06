@@ -27,7 +27,8 @@ const plugins = {
                          'searchData',
                          'emplcode',
                          'isEmpEdit',
-                         'isConnect'
+                         'isConnect',
+                         'themeColor'
                     ])
                },
                methods: {
@@ -38,7 +39,8 @@ const plugins = {
                          'CHANGE_SEARCHING',
                          'CHANGE_EMPLCODE',
                          'CHANGE_EMP_EDIT',
-                         'CHANGE_CONNECTION'
+                         'CHANGE_CONNECTION',
+                         'CHANGE_THEMECOLOR'
                     ]),
                     setNotifications(code, message) {
                          let body = {

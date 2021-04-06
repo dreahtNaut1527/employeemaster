@@ -7,8 +7,9 @@
                          <v-select
                               v-model="companies"
                               :items="companyList"
-                              placeholder="Company"
                               :readonly="userInfo.UserLevel < 9"
+                              :color="themeColor == '' ? 'primary' : themeColor"
+                              placeholder="Company"
                               outlined
                               dense
                          ></v-select>
@@ -17,6 +18,7 @@
                          <v-select
                               v-model="departments"
                               :items="departmentList"
+                              :color="themeColor == '' ? 'primary' : themeColor"
                               placeholder="Department"
                               clearable
                               outlined
@@ -27,6 +29,7 @@
                          <v-select
                               v-model="sections"
                               :items="sectionList"
+                              :color="themeColor == '' ? 'primary' : themeColor"
                               placeholder="Section"
                               clearable
                               outlined
@@ -37,6 +40,7 @@
                          <v-select
                               v-model="teams"
                               :items="teamList"
+                              :color="themeColor == '' ? 'primary' : themeColor"
                               placeholder="Team"
                               clearable
                               outlined
@@ -48,7 +52,7 @@
                     <v-card-title>
                          User Accounts
                          <v-spacer></v-spacer>
-                         <v-btn @click="dialog = !dialog" color="primary">
+                         <v-btn @click="dialog = !dialog" :color="themeColor == '' ? 'primary' : themeColor">
                               <v-icon left>mdi-plus</v-icon>New
                          </v-btn>
                     </v-card-title>
@@ -85,12 +89,13 @@
                          v-model="page"
                          :length="pageCount"
                          :total-visible="10"
+                         :color="themeColor == '' ? 'primary' : themeColor"
                     ></v-pagination>
                </v-card>
           </v-container>
           <v-dialog v-model="dialog" width="500" persistent>
                <v-card>
-                    <v-toolbar color="primary" dark flat>
+                    <v-toolbar :color="themeColor == '' ? 'primary' : themeColor" dark flat>
                          <v-toolbar-title>{{editMode == 1 ? 'Edit Record' : 'New Record'}}</v-toolbar-title>
                     </v-toolbar>
                     <v-container>
@@ -103,6 +108,7 @@
                                                   label="Code"
                                                   :readonly="editMode == 1"
                                                   :rules="[v => !!v || 'Code is required']"
+                                                  :color="themeColor == '' ? 'primary' : themeColor"
                                                   outlined
                                                   dense
                                                   @blur="getEmployeeFullname()"
@@ -111,6 +117,7 @@
                                         <v-col cols="12" md="9">
                                              <v-text-field
                                                   v-model="editedAccount.Fullname"
+                                                  :color="themeColor == '' ? 'primary' : themeColor"
                                                   label="Name"
                                                   readonly
                                                   outlined
@@ -121,7 +128,7 @@
                                                             <v-progress-circular
                                                             v-if="loadName"
                                                             size="24"
-                                                            color="primary"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
                                                             indeterminate
                                                             ></v-progress-circular>
                                                        </v-fade-transition>
@@ -134,6 +141,7 @@
                                                   append-icon="mdi-account"
                                                   label="UserName"
                                                   :rules="[v => !!v || 'Username is required']"
+                                                  :color="themeColor == '' ? 'primary' : themeColor"
                                                   outlined
                                                   dense
                                              ></v-text-field>
@@ -145,6 +153,7 @@
                                                   label="Password"
                                                   type="password"
                                                   :rules="[v => !!v || 'Password is required']"
+                                                  :color="themeColor == '' ? 'primary' : themeColor"
                                                   outlined
                                                   dense
                                              ></v-text-field>
@@ -156,6 +165,7 @@
                                                   label="Confirm Password"
                                                   type="password"
                                                   :rules="passwordRules"
+                                                  :color="themeColor == '' ? 'primary' : themeColor"
                                                   outlined
                                                   dense
                                              ></v-text-field>
@@ -164,6 +174,7 @@
                                              <v-select
                                                   v-model="editedAccount.UserLevel"
                                                   :items="userLevel"
+                                                  :color="themeColor == '' ? 'primary' : themeColor"
                                                   item-text="text"
                                                   item-value="value"
                                                   label="Level"
@@ -177,7 +188,7 @@
                     </v-container>
                     <v-card-actions>
                          <v-spacer></v-spacer>
-                         <v-btn @click="saveRecord()" color="primary" :disabled="disabled">
+                         <v-btn @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor" :disabled="disabled">
                               <v-icon left>mdi-content-save</v-icon>Save
                          </v-btn>
                          <v-btn @click="clearVariables()" text>

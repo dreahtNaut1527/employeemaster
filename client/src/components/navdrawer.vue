@@ -52,6 +52,7 @@
                          v-model="item.active"    
                          :prepend-icon="item.icon"
                          no-action
+                         :color="themeColor == '' ? 'primary' : themeColor"
                     >
                          <template v-slot:activator>
                               <v-list-item-content>
@@ -148,6 +149,7 @@
                <v-spacer></v-spacer>
                <v-text-field
                     class="mt-4 mr-3" 
+                    :color="themeColor == '' ? 'primary' : themeColor"
                     v-model="search"    
                     append-icon="mdi-magnify"     
                     placeholder="Search"
@@ -184,6 +186,22 @@
                               <v-divider></v-divider>
                               <v-list-item>
                                    <v-list-item-content>
+                                        <v-row>
+                                             <v-col cols="12" md="4" v-for="(item, i) in themeColors" :key="i">
+                                                  <v-card 
+                                                       @click="changeThemeColor(item)" 
+                                                       elevation="3" 
+                                                       height="60" 
+                                                       :color="item" 
+                                                       rounded 
+                                                       link
+                                                  ></v-card>
+                                             </v-col>
+                                        </v-row>
+                                   </v-list-item-content>
+                              </v-list-item>
+                              <v-list-item>
+                                   <v-list-item-content>
                                         <v-list-item-subtitle>Dark Mode</v-list-item-subtitle>
                                    </v-list-item-content>
                                    <v-list-item-action>
@@ -216,7 +234,28 @@ export default {
                search: '',
                socketId: '',
                navDrawerList: [],
-               navDrawerSubGroup: []
+               navDrawerSubGroup: [],
+               themeColors: [
+                    'red',
+                    'pink',
+                    'purple',
+                    'deep-purple',
+                    'indigo',
+                    'blue',
+                    'light-blue',
+                    'cyan',
+                    'teal',
+                    'green',
+                    'light-green',
+                    'lime',
+                    'yellow',
+                    'amber',
+                    'orange',
+                    'deep-orange',
+                    'brown',
+                    'blue-grey',
+                    'grey'
+               ]
           }
      },
      created() {
@@ -396,6 +435,9 @@ export default {
                          break;
                }
           },
+          changeThemeColor(val) {
+               this.$store.commit('CHANGE_THEMECOLOR', val)
+          }
      },
      watch: {
           dark() {

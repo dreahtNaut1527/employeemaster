@@ -8,7 +8,7 @@
                                    <v-card-text>
                                         <v-card-text class="text-center title">Sign in to Employee Master</v-card-text>
                                    </v-card-text>
-                                   <v-avatar class="mb-6" color="primary" size="95">
+                                   <v-avatar class="mb-6" :color="themeColor == '' ? 'primary' : themeColor" size="95">
                                         <v-icon x-large dark>mdi-account</v-icon>
                                    </v-avatar>
                                    <v-form>
@@ -18,6 +18,7 @@
                                              outlined
                                              rounded
                                              @blur="getUserInfo()"
+                                             :color="themeColor == '' ? 'primary' : themeColor"
                                         >
                                              <template v-slot:append>
                                                   <v-icon v-if="!loading">mdi-account</v-icon>
@@ -25,7 +26,7 @@
                                                        <v-progress-circular
                                                             v-if="loading"
                                                             size="24"
-                                                            color="info"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
                                                             indeterminate
                                                        ></v-progress-circular>
                                                   </v-fade-transition>
@@ -39,15 +40,16 @@
                                              outlined
                                              rounded
                                              @keydown.enter="userLoggedIn()"
+                                             :color="themeColor == '' ? 'primary' : themeColor"
                                         ></v-text-field>
                                         <v-card-actions>
-                                             <v-btn @click="userLoggedIn()" color="primary" :disabled="loading == true" block>Login</v-btn>
+                                             <v-btn @click="userLoggedIn()" :color="themeColor == '' ? 'primary' : themeColor" :disabled="loading == true" block>Login</v-btn>
                                         </v-card-actions>
                                         <v-card-text class="text-center">
                                              Don't have any account? 
                                              <v-btn 
                                                   @click="signUpDialog = !signUpDialog" 
-                                                  color="primary" 
+                                                  :color="themeColor == '' ? 'primary' : themeColor"
                                                   x-small 
                                                   text
                                              >

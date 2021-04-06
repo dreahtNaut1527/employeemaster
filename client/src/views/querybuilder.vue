@@ -3,7 +3,7 @@
         <v-breadcrumbs :items="breadCrumbsItems" divider="/"></v-breadcrumbs>
         <v-container class="mt-n3">
             <v-card>
-                <v-toolbar color="primary" dark>
+                <v-toolbar :color="themeColor == '' ? 'primary' : themeColor" dark>
                     <v-toolbar-title>Query Builder</v-toolbar-title>
                 </v-toolbar>
                 <v-card-text>
@@ -14,6 +14,7 @@
                                     v-model="selectedFilter"
                                     :items="filterByItems"
                                     :rules="[v => !!v || 'Filter is required']"
+                                    :color="themeColor == '' ? 'primary' : themeColor"
                                     label="Filter By"
                                     clearable
                                     outlined
@@ -25,6 +26,7 @@
                                     v-model="selectedOperator"
                                     :items="operatorItems"
                                     :rules="[v => !!v || 'Operator is required']"
+                                    :color="themeColor == '' ? 'primary' : themeColor"
                                     label="Operator"
                                     return-object
                                     clearable
@@ -36,6 +38,7 @@
                                 <v-text-field
                                     v-model="searchBy"
                                     :rules="[v => !!v || 'This field is required']"
+                                    :color="themeColor == '' ? 'primary' : themeColor"
                                     label="Search"
                                     append-icon="mdi-magnify"
                                     clearable
@@ -129,7 +132,7 @@
                     <v-btn @click="clearVariables()" text>
                         <v-icon left>mdi-close</v-icon>Clear
                     </v-btn>
-                    <v-btn color="primary" @click="searchDataClick()">
+                    <v-btn :color="themeColor == '' ? 'primary' : themeColor" @click="searchDataClick()">
                         <v-icon left>mdi-play</v-icon>Run Query
                     </v-btn>
                 </v-card-actions>
@@ -137,7 +140,7 @@
         </v-container>
         <v-dialog v-model="displayDialog" persistent>
             <v-card>
-                <v-toolbar color="primary" flat dark>
+                <v-toolbar :color="themeColor == '' ? 'primary' : themeColor" flat dark>
                     <v-toolbar-title>Results</v-toolbar-title>
                     <v-spacer></v-spacer>
                     <v-btn @click="displayDialog = !displayDialog" icon><v-icon>mdi-close</v-icon></v-btn>
@@ -148,6 +151,7 @@
                             <v-autocomplete
                                 v-model="selectedDepartment"
                                 :items="filterDepartments"
+                                :color="themeColor == '' ? 'primary' : themeColor"
                                 label="Department"
                                 clearable
                                 outlined
@@ -158,6 +162,7 @@
                             <v-autocomplete
                                 v-model="selectedSection"
                                 :items="filterSection"
+                                :color="themeColor == '' ? 'primary' : themeColor"
                                 label="Section"
                                 clearable
                                 outlined
@@ -168,6 +173,7 @@
                             <v-autocomplete
                                 v-model="selectedTeam"
                                 :items="filterTeam"
+                                :color="themeColor == '' ? 'primary' : themeColor"
                                 label="Team"
                                 clearable
                                 outlined
@@ -177,6 +183,7 @@
                         <v-col cols="12" md="3">
                             <v-text-field
                                 v-model="searchVal"
+                                :color="themeColor == '' ? 'primary' : themeColor"
                                 label="Search"
                                 append-icon="mdi-magnify"
                                 clearable
@@ -202,10 +209,11 @@
                     v-model="page"
                     :length="pageCount"
                     :total-visible="10"
+                    :color="themeColor == '' ? 'primary' : themeColor"
                 ></v-pagination>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn @click="printPreview()" color="primary">
+                    <v-btn @click="printPreview()" :color="themeColor == '' ? 'primary' : themeColor">
                         <v-icon left>mdi-file-find</v-icon>Print Preview
                     </v-btn>
                 </v-card-actions>

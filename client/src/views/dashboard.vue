@@ -37,6 +37,7 @@
                                              <v-autocomplete
                                                   v-model="department"
                                                   :items="departmentList"
+                                                  :color="themeColor == '' ? 'primary' : themeColor"
                                                   placeholder="Department"
                                                   clearable
                                                   outlined
@@ -47,6 +48,7 @@
                                              <v-autocomplete
                                                   v-model="section"
                                                   :items="sectionList"
+                                                  :color="themeColor == '' ? 'primary' : themeColor"
                                                   placeholder="Section"
                                                   clearable
                                                   outlined
@@ -57,6 +59,7 @@
                                              <v-autocomplete
                                                   v-model="team"
                                                   :items="teamList"
+                                                  :color="themeColor == '' ? 'primary' : themeColor"
                                                   placeholder="Team"
                                                   clearable
                                                   outlined
@@ -77,6 +80,7 @@
                                    @page-count="pageCount = $event"
                                    hide-default-footer
                               >
+                                   <v-progress-linear v-show="loading" slot="progress" :color="themeColor == '' ? 'primary' : themeColor" indeterminate></v-progress-linear>
                                    <template v-slot:item="props">
                                         <tr :style="props.item.TIMEIN == null ? 'color: #b71c1c;' : ''">
                                              <td>{{props.item.EMPLCODE}}</td>
@@ -93,6 +97,7 @@
                                    v-model="page"
                                    :length="pageCount"
                                    :total-visible="10"
+                                   :color="themeColor == '' ? 'primary' : themeColor"
                               ></v-pagination>
                          </v-card>
                     </v-col>

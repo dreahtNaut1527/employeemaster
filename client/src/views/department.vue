@@ -9,7 +9,7 @@
                                    <v-card-text class="pa-0 headline">Departments</v-card-text>
                               </v-col>
                          <v-spacer></v-spacer>
-                         <v-btn v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9" @click="newRecord()" color="primary"><v-icon left>mdi-plus</v-icon>New</v-btn>
+                         <v-btn v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9" @click="newRecord()" :color="themeColor == '' ? 'primary' : themeColor"><v-icon left>mdi-plus</v-icon>New</v-btn>
                          </v-row>
                     </v-card-title>
                     <v-divider></v-divider>
@@ -45,12 +45,13 @@
                          v-model="page"
                          :length="pageCount"
                          :total-visible="10"
+                         :color="themeColor == '' ? 'primary' : themeColor"
                     ></v-pagination>
                </v-card>
           </v-container>
           <v-dialog v-model="dialog" width="500" persistent>
                <v-card>
-                    <v-toolbar color="primary" dark flat>
+                    <v-toolbar :color="themeColor == '' ? 'primary' : themeColor" dark flat>
                          <v-toolbar-title v-if="userInfo.UserLevel == 4">{{editMode == 1 ? 'Edit Record' : 'New Record'}}</v-toolbar-title>
                          <v-toolbar-title v-else>View Record</v-toolbar-title>
                     </v-toolbar>
@@ -64,6 +65,7 @@
                                                   @keypress.enter="saveRecord()"
                                                   :rules="[v => !!v || 'Department is required']"
                                                   :readonly="userInfo.UserLevel != 4 && userInfo.UserLevel != 9"
+                                                  :color="themeColor == '' ? 'primary' : themeColor"
                                                   outlined
                                                   dense
                                              ></v-text-field>
@@ -95,7 +97,7 @@
                     </v-container>
                     <v-card-actions>
                          <v-spacer></v-spacer>
-                         <v-btn v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9" @click="saveRecord()" color="primary">
+                         <v-btn v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9" @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor">
                               <v-icon left>mdi-content-save</v-icon>Save
                          </v-btn>
                          <v-btn @click="clearVariables()" text>
