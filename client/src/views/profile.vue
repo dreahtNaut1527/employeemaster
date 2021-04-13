@@ -459,7 +459,7 @@
                          </v-tabs-items>
                          <v-card-actions v-if="tab == 4">
                               <v-spacer></v-spacer>
-                              <v-btn :color="themeColor == '' ? 'primary' : themeColor" @click="saveRecord()">
+                              <v-btn :color="themeColor == '' ? 'primary' : themeColor" @click="saveRecord()" dark>
                                    <v-icon left>mdi-content-save</v-icon>Save
                               </v-btn>
                               <v-btn @click="loadInformation()" text>

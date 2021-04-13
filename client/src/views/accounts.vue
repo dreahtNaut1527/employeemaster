@@ -52,7 +52,7 @@
                     <v-card-title>
                          User Accounts
                          <v-spacer></v-spacer>
-                         <v-btn @click="dialog = !dialog" :color="themeColor == '' ? 'primary' : themeColor">
+                         <v-btn @click="dialog = !dialog" :color="themeColor == '' ? 'primary' : themeColor" dark>
                               <v-icon left>mdi-plus</v-icon>New
                          </v-btn>
                     </v-card-title>
@@ -67,6 +67,8 @@
                          @page-count="pageCount = $event"
                          hide-default-footer
                     >
+                    
+                         <v-progress-linear v-show="loading" slot="progress" :color="themeColor == '' ? 'primary' : themeColor" indeterminate></v-progress-linear>
                          <template v-slot:[`item.Status`]="{ item }">
                               <v-chip :color="item.Status == 1 ? 'success' : 'error'">
                                    {{item.Status == 1 ? 'Active' : 'Inactive'}}
@@ -188,7 +190,7 @@
                     </v-container>
                     <v-card-actions>
                          <v-spacer></v-spacer>
-                         <v-btn @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor" :disabled="disabled">
+                         <v-btn @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor" :disabled="disabled" dark>
                               <v-icon left>mdi-content-save</v-icon>Save
                          </v-btn>
                          <v-btn @click="clearVariables()" text>

@@ -9,6 +9,7 @@
                                         <v-autocomplete
                                              v-model="department"
                                              :items="departmentList"
+                                             :color="themeColor == '' ? 'primary' : themeColor"
                                              placeholder="Department"
                                              clearable
                                              outlined
@@ -19,6 +20,7 @@
                                         <v-autocomplete
                                              v-model="section"
                                              :items="sectionList"
+                                             :color="themeColor == '' ? 'primary' : themeColor"
                                              placeholder="Section"
                                              clearable
                                              outlined
@@ -29,6 +31,7 @@
                                         <v-autocomplete
                                              v-model="team"
                                              :items="teamList"
+                                             :color="themeColor == '' ? 'primary' : themeColor"
                                              placeholder="Team"
                                              clearable
                                              outlined
@@ -39,31 +42,32 @@
                               </v-row>
                     </v-card-title>
                <v-data-table 
-               :headers="headers"
-               :items="filterData"
-               :search="searchData"
-               :page.sync="page"
-               @page-count="pageCount = $event"
-               hide-default-footer
+                    :headers="headers"
+                    :items="filterData"
+                    :search="searchData"
+                    :page.sync="page"
+                    @page-count="pageCount = $event"
+                    hide-default-footer
                >
-               <template v-slot:[`item.actions`]="{ item }">
-                              <v-btn @click="viewRecord(item.EmployeeCode)" icon>
-                                 
-                                   <v-icon>mdi-eye</v-icon>
-                              </v-btn>
-                            
-                              <v-btn  v-if="userInfo.UserLevel != 5" @click="editRecord(item.EmployeeCode)" icon>
-                                   <v-icon>mdi-pencil</v-icon>
-                              </v-btn>
+                    <template v-slot:[`item.actions`]="{ item }">
+                         <v-btn @click="viewRecord(item.EmployeeCode)" icon>
                               
-               </template>
+                              <v-icon>mdi-eye</v-icon>
+                         </v-btn>
+                         
+                         <v-btn  v-if="userInfo.UserLevel != 5" @click="editRecord(item.EmployeeCode)" icon>
+                              <v-icon>mdi-pencil</v-icon>
+                         </v-btn>
+                                   
+                    </template>
 
                </v-data-table>
                 <v-pagination
-                         v-model="page"
-                         :length="pageCount"
-                         :total-visible="10"
-                    ></v-pagination>
+                    v-model="page"
+                    :length="pageCount"
+                    :total-visible="10"
+                    :color="themeColor == '' ? 'primary' : themeColor"
+               ></v-pagination>
                <!-- Your Code Here -->
                </v-card>
           </v-container>

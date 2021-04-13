@@ -72,6 +72,7 @@
                          <div v-if="i == 1">
                               <v-list-group
                                    v-for="(subGroup, i) in navDrawerSubGroup" :key="i"
+                                   :color="themeColor == '' ? 'primary' : themeColor"
                                    no-action
                                    sub-group
                               >
@@ -186,19 +187,21 @@
                               <v-divider></v-divider>
                               <v-list-item>
                                    <v-list-item-content>
-                                        <v-row>
-                                             <v-col cols="12" md="4" v-for="(item, i) in themeColors" :key="i">
-                                                  <v-card 
-                                                       @click="changeThemeColor(item)" 
-                                                       elevation="3" 
-                                                       height="60" 
-                                                       :color="item" 
-                                                       rounded 
-                                                       link
-                                                  ></v-card>
-                                             </v-col>
-                                        </v-row>
+                                        <v-color-picker 
+                                            v-model="themeColorVal"
+                                            mode="hexa" 
+                                            hide-mode-switch 
+                                            hide-canvas
+                                            :show-swatches="swatches"
+                                        ></v-color-picker>
                                    </v-list-item-content>
+                              </v-list-item>
+                              <v-list-item>
+                                    <v-list-item-content>
+                                        <v-btn x-small block text @click="swatches = !swatches" :color="themeColor == '' ? 'primary' : themeColor">
+                                            {{swatches == false ? "Show more" : "Hide"}}
+                                        </v-btn>
+                                    </v-list-item-content>
                               </v-list-item>
                               <v-list-item>
                                    <v-list-item-content>
@@ -230,35 +233,17 @@ export default {
                overlay: false,
                navDrawerVal: true,
                isConnected: false,
+               swatches: false,
                icon: 'mdi-weather-night',
                search: '',
                socketId: '',
+               themeColorVal: '',
                navDrawerList: [],
-               navDrawerSubGroup: [],
-               themeColors: [
-                    'red',
-                    'pink',
-                    'purple',
-                    'deep-purple',
-                    'indigo',
-                    'blue',
-                    'light-blue',
-                    'cyan',
-                    'teal',
-                    'green',
-                    'light-green',
-                    'lime',
-                    'yellow',
-                    'amber',
-                    'orange',
-                    'deep-orange',
-                    'brown',
-                    'blue-grey',
-                    'grey'
-               ]
+               navDrawerSubGroup: []
           }
      },
      created() {
+          this.themeColorVal = this.themeColor
           this.$store.commit('CHANGE_SEARCHING', '')
           this.dark = this.darkMode
           this.user = this.userInfo
@@ -434,14 +419,14 @@ export default {
                          ]
                          break;
                }
-          },
-          changeThemeColor(val) {
-               this.$store.commit('CHANGE_THEMECOLOR', val)
           }
      },
      watch: {
           dark() {
                this.changeTheme()
+          },
+          themeColorVal(val) {
+               this.$store.commit('CHANGE_THEMECOLOR', val)
           }
      },
      components: {

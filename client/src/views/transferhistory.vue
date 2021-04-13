@@ -24,6 +24,7 @@
                                    <v-autocomplete
                                         v-model="department"
                                         :items="loadDepartmentList"
+                                        :color="themeColor == '' ? 'primary' : themeColor"
                                         placeholder="Department"
                                         clearable
                                         outlined
@@ -34,6 +35,7 @@
                                    <v-autocomplete
                                         v-model="section"
                                         :items="loadSectionList"
+                                        :color="themeColor == '' ? 'primary' : themeColor"
                                         placeholder="Section"
                                         clearable
                                         outlined
@@ -44,6 +46,7 @@
                                    <v-autocomplete
                                         v-model="team"
                                         :items="loadTeamList"
+                                        :color="themeColor == '' ? 'primary' : themeColor"
                                         placeholder="Team"
                                         clearable
                                         outlined
@@ -63,11 +66,14 @@
                          loading-text="Loading Data. . .Please Wait"
                          @page-count="pageCount = $event"
                          hide-default-footer>
+                         
+                              <v-progress-linear v-show="loading" slot="progress" :color="themeColor == '' ? 'primary' : themeColor" indeterminate></v-progress-linear>
                     </v-data-table>
                     <v-pagination
                          v-model="page"
                          :length="pageCount"
                          :total-visible="10"
+                         :color="themeColor == '' ? 'primary' : themeColor"
                     ></v-pagination>
                </v-card>
           </v-container>

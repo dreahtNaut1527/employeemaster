@@ -9,7 +9,7 @@
                                    <v-card-text class="pa-0 headline">Transfer Employees</v-card-text>
                               </v-col>
                               <v-spacer></v-spacer>
-                              <v-btn color="primary" @click="transferEmployees()" :disabled="selected.length <= 0"><v-icon left>mdi-transit-transfer</v-icon>Proceed</v-btn>
+                              <v-btn :color="themeColor == '' ? 'primary' : themeColor" @click="transferEmployees()" :disabled="selected.length <= 0" dark><v-icon left>mdi-transit-transfer</v-icon>Proceed</v-btn>
                          </v-row>
                     </v-card-title>
                     <v-divider></v-divider>
@@ -19,6 +19,7 @@
                                    <v-autocomplete
                                         v-model="departmentFilter"
                                         :items="loadDepartmentFilter"
+                                        :color="themeColor == '' ? 'primary' : themeColor"
                                         placeholder="Department"
                                         clearable
                                         outlined
@@ -29,6 +30,7 @@
                                    <v-autocomplete
                                         v-model="sectionFilter"
                                         :items="loadSectionFilter"
+                                        :color="themeColor == '' ? 'primary' : themeColor"
                                         placeholder="Section"
                                         clearable
                                         outlined
@@ -39,6 +41,7 @@
                                    <v-autocomplete
                                         v-model="teamFilter"
                                         :items="loadTeamFilter"
+                                        :color="themeColor == '' ? 'primary' : themeColor"
                                         placeholder="Team"
                                         clearable
                                         outlined
@@ -62,16 +65,19 @@
                          @page-count="pageCount = $event"
                          show-select
                          hide-default-footer>
+                         
+                              <v-progress-linear v-show="loading" slot="progress" :color="themeColor == '' ? 'primary' : themeColor" indeterminate></v-progress-linear>
                     </v-data-table>
                     <v-pagination
                          v-model="page"
                          :length="pageCount"
                          :total-visible="10"
+                         :color="themeColor == '' ? 'primary' : themeColor"
                     ></v-pagination>
                </v-card>
                <v-dialog v-model="dialog" width="500" persistent>
                     <v-card>
-                         <v-toolbar color="primary" dark flat>
+                         <v-toolbar :color="themeColor == '' ? 'primary' : themeColor" dark flat>
                               <v-toolbar-title>Transfer Employees</v-toolbar-title>
                          </v-toolbar>
                          <v-card-text>
@@ -87,6 +93,7 @@
                                                   <v-autocomplete
                                                        v-model="transdivsecteam.DepartmentCode"
                                                        :items="departmentList"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        item-value="DepartmentCode"
                                                        item-text="DepartmentName"
                                                        placeholder="Department"
@@ -97,6 +104,7 @@
                                                   <v-autocomplete
                                                        v-model="transdivsecteam.SectionCode"
                                                        :items="sectionList"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        item-value="SectionCode"
                                                        item-text="SectionName"
                                                        placeholder="Section"
@@ -107,6 +115,7 @@
                                                   <v-autocomplete
                                                        v-model="transdivsecteam.TeamCode"
                                                        :items="teamList"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        item-value="TeamCode"
                                                        item-text="TeamName"
                                                        placeholder="Team"
@@ -120,7 +129,7 @@
                               </v-container>
                               <v-card-actions>
                                    <v-spacer></v-spacer>
-                                   <v-btn @click="saveRecord()" color="primary">
+                                   <v-btn @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor" dark>
                                         <v-icon left>mdi-content-save</v-icon>Save
                                    </v-btn>
                                    <v-btn @click="dialog = !dialog" text>

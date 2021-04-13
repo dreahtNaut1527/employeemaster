@@ -13,7 +13,7 @@
                                    Page not found
                               </v-card-text>
                               <v-card-actions>
-                                   <v-btn @click="reloadPage()" color="primary" block text>Reload</v-btn>
+                                   <v-btn @click="reloadPage()" :color="themeColor == '' ? 'primary' : themeColor" block text>Reload</v-btn>
                               </v-card-actions>
                          </v-card>
                     </v-col>

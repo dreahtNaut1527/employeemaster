@@ -132,7 +132,7 @@
                     <v-btn @click="clearVariables()" text>
                         <v-icon left>mdi-close</v-icon>Clear
                     </v-btn>
-                    <v-btn :color="themeColor == '' ? 'primary' : themeColor" @click="searchDataClick()">
+                    <v-btn :color="themeColor == '' ? 'primary' : themeColor" @click="searchDataClick()" dark>
                         <v-icon left>mdi-play</v-icon>Run Query
                     </v-btn>
                 </v-card-actions>
@@ -204,7 +204,10 @@
                     :items-per-page="7"
                     loading-text="Loading Data. . .Please Wait"
                     hide-default-footer
-                ></v-data-table>
+                >
+                
+                    <v-progress-linear v-show="loading" slot="progress" :color="themeColor == '' ? 'primary' : themeColor" indeterminate></v-progress-linear>
+                </v-data-table>
                 <v-pagination
                     v-model="page"
                     :length="pageCount"
@@ -213,7 +216,7 @@
                 ></v-pagination>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn @click="printPreview()" :color="themeColor == '' ? 'primary' : themeColor">
+                    <v-btn @click="printPreview()" :color="themeColor == '' ? 'primary' : themeColor" dark>
                         <v-icon left>mdi-file-find</v-icon>Print Preview
                     </v-btn>
                 </v-card-actions>

@@ -9,7 +9,7 @@
                                    <v-card-text class="pa-0 headline">Job Assignments</v-card-text>
                               </v-col>
                          <v-spacer></v-spacer>
-                         <v-btn @click="newRecord()" :color="themeColor == '' ? 'primary' : themeColor"><v-icon left>mdi-plus</v-icon>New</v-btn>
+                         <v-btn @click="newRecord()" :color="themeColor == '' ? 'primary' : themeColor" dark><v-icon left>mdi-plus</v-icon>New</v-btn>
                          </v-row>
                     </v-card-title>
                     <v-divider></v-divider>
@@ -23,6 +23,8 @@
                          @page-count="pageCount = $event"
                          hide-default-footer
                     >
+                    
+                         <v-progress-linear v-show="loading" slot="progress" :color="themeColor == '' ? 'primary' : themeColor" indeterminate></v-progress-linear>
                          <template v-slot:item="props">
                               <tr :style="props.item.DeletedDate != null ? 'color: #b71c1c;' : ''">
                                    <td>{{props.item.JobAssignmentDesc}}</td>
@@ -72,7 +74,7 @@
                     </v-container>
                     <v-card-actions>
                          <v-spacer></v-spacer>
-                         <v-btn @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor">
+                         <v-btn @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor" dark>
                               <v-icon left>mdi-content-save</v-icon>Save
                          </v-btn>
                          <v-btn @click="clearVariables()" text>

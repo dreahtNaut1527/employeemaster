@@ -9,7 +9,7 @@
                                    <v-card-text class="pa-0 headline">Department-Section-Team</v-card-text>
                               </v-col>
                               <v-spacer></v-spacer>
-                              <v-btn v-if="userInfo.UserLevel==4 || userInfo.UserLevel==9" @click="newRecord()" color="primary"><v-icon left>mdi-plus</v-icon>New</v-btn>
+                              <v-btn v-if="userInfo.UserLevel==4 || userInfo.UserLevel==9" @click="newRecord()" :color="themeColor == '' ? 'primary' : themeColor" dark><v-icon left>mdi-plus</v-icon>New</v-btn>
                          </v-row>
                     </v-card-title>
                     <v-divider></v-divider>
@@ -19,6 +19,7 @@
                                    <v-autocomplete
                                    v-model="departmentfilter"
                                    :items="departmentlistfilter"
+                                   :color="themeColor == '' ? 'primary' : themeColor"
                                    label="Department"    
                                    clearable                                 
                                    outlined
@@ -29,6 +30,7 @@
                                    <v-autocomplete 
                                    v-model="sectionfilter"
                                    :items="sectionlistfilter"
+                                   :color="themeColor == '' ? 'primary' : themeColor"
                                    label="Section"   
                                    clearable    
                                    outlined
@@ -39,6 +41,7 @@
                                    <v-autocomplete 
                                    v-model="teamfilter"
                                    :items="teamlistfilter"
+                                   :color="themeColor == '' ? 'primary' : themeColor"
                                    label="Team" 
                                    clearable    
                                    outlined
@@ -58,6 +61,8 @@
                          @page-count="pageCount = $event"
                               hide-default-footer
                     >
+                         
+                         <v-progress-linear v-show="loading" slot="progress" :color="themeColor == '' ? 'primary' : themeColor" indeterminate></v-progress-linear>
                          <template v-slot:item="props">                             
                               <tr >
                                    <td>{{props.item.DepartmentName}}</td>                              
@@ -65,18 +70,18 @@
                                    <td>{{props.item.TeamName}}</td>                                   
                               </tr>                              
                          </template>
-
                     </v-data-table>
                     <v-pagination
                          v-model="page"
                          :length="pageCount"
                          :total-visible="10"
+                         :color="themeColor == '' ? 'primary' : themeColor"
                     ></v-pagination>
               </v-card>
           </v-container>
           <v-dialog v-model="dialog" width="500" persistent>
                <v-card>
-                    <v-toolbar color="primary" flat dark>New Record</v-toolbar>
+                    <v-toolbar :color="themeColor == '' ? 'primary' : themeColor" flat dark>New Record</v-toolbar>
                     <v-container>
                          <v-form ref="form"  lazy-validation>
                               <v-row align="center" justify="center" dense>
@@ -84,6 +89,7 @@
                                         <v-autocomplete
                                              v-model="editdivsecteam.DepartmentCode"
                                              :items="departmentlist"
+                                             :color="themeColor == '' ? 'primary' : themeColor"
                                              item-value="DepartmentCode"
                                              item-text="DepartmentName"
                                              label="Department"   
@@ -95,6 +101,7 @@
                                         <v-autocomplete 
                                              v-model="editdivsecteam.SectionCode"
                                              :items="sectionlist"
+                                             :color="themeColor == '' ? 'primary' : themeColor"
                                              item-value="SectionCode"
                                              item-text="SectionName"
                                              label="Section"   
@@ -106,6 +113,7 @@
                                         <v-autocomplete 
                                              v-model="editdivsecteam.TeamCode"
                                              :items="teamlist"
+                                             :color="themeColor == '' ? 'primary' : themeColor"
                                              item-value="TeamCode"
                                              item-text="TeamName"
                                              label="Team" 
@@ -120,7 +128,7 @@
                     </v-container>
                     <v-card-actions>
                          <v-spacer></v-spacer>    
-                         <v-btn @click="saveRecord()" color="primary"><v-icon>mdi-content-save</v-icon> Save</v-btn>
+                         <v-btn @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor" dark><v-icon>mdi-content-save</v-icon> Save</v-btn>
                          <v-btn @click="clearVariables()" text> <v-icon>mdi-cancel</v-icon> Cancel</v-btn>
                     </v-card-actions>
                </v-card>
