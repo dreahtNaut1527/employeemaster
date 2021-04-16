@@ -28,6 +28,7 @@
                                                             v-model="editedAccount.EmployeeCode"
                                                             label="Code"
                                                             :rules="[v => !!v || 'Code is required']"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
                                                             outlined
                                                             dense
                                                             @blur="getEmployeeFullname()"
@@ -36,6 +37,7 @@
                                                   <v-col cols="12" md="9">
                                                        <v-text-field
                                                             v-model="editedAccount.Fullname"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
                                                             label="Name"
                                                             readonly
                                                             outlined
@@ -59,6 +61,7 @@
                                                             append-icon="mdi-account"
                                                             label="UserName"
                                                             :rules="[v => !!v || 'Username is required']"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
                                                             outlined
                                                             dense
                                                        ></v-text-field>
@@ -70,6 +73,7 @@
                                                             label="Password"
                                                             type="password"
                                                             :rules="[v => !!v || 'Password is required']"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
                                                             outlined
                                                             dense
                                                        ></v-text-field>
@@ -81,6 +85,7 @@
                                                             label="Confirm Password"
                                                             type="password"
                                                             :rules="passwordRules"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
                                                             outlined
                                                             dense
                                                        ></v-text-field>
@@ -89,12 +94,12 @@
                                         </v-card-text>
                                    </v-form>
                                    <v-card-actions>
-                                        <v-btn @click="saveRecord()" color="primary" :disabled="disableButton" block>
+                                        <v-btn @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor" :disabled="disableButton" block>
                                              Create an account
                                         </v-btn>
                                    </v-card-actions>
                                    <v-card-actions>
-                                        <v-btn @click="clearVariables()" color="primary" block>
+                                        <v-btn @click="clearVariables()" :color="themeColor == '' ? 'primary' : themeColor" block>
                                              Log in to your account
                                         </v-btn>
                                    </v-card-actions>

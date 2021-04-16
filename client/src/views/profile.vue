@@ -37,7 +37,7 @@
                     </v-list-item>
                     <v-divider class="mx-3"></v-divider>
                     <v-card-text>
-                         <v-tabs v-model="tab" centered icons-and-text grow>
+                         <v-tabs v-model="tab" :color="themeColor == '' ? 'primary' : themeColor" centered icons-and-text grow>
                               <v-tabs-slider></v-tabs-slider>
                               <v-tab v-for="(item, i) in tabsHeader" :key="i" :href="`#${item.value}`">
                                    {{item.label}} <v-icon :color="item.color" left>{{item.icon}}</v-icon>
@@ -672,3 +672,9 @@ export default {
      }
 }
 </script>
+
+<style scoped>
+     .breadcrumb-item a {
+          color: red;
+     }
+</style>

@@ -43,7 +43,7 @@
                                              :color="themeColor == '' ? 'primary' : themeColor"
                                         ></v-text-field>
                                         <v-card-actions>
-                                             <v-btn @click="userLoggedIn()" :color="themeColor == '' ? 'primary' : themeColor" :disabled="loading == true" block>Login</v-btn>
+                                             <v-btn @click="userLoggedIn()" :color="themeColor == '' ? 'primary' : themeColor" :disabled="loading == true" block dark>Login</v-btn>
                                         </v-card-actions>
                                         <v-card-text class="text-center">
                                              Don't have any account? 
