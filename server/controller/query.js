@@ -1,6 +1,7 @@
 const express = require('express')
 const mssql = require('mssql')
 const config = require('../config/db.config')()
+const { Parser } = require('json2csv')
 
 const router = express.Router()
 // =====================================================================
@@ -632,6 +633,13 @@ router.post('/execute', (req, res) => {
                })
           })
      })
+})
+
+router.post('/exportcsv', (req, res) => {
+     let value = JSON.parse(req.body.data)
+     const json = new Parser()
+     const csv = json.parse(value)
+     res.send(csv)
 })
 
 // router.get('/textCommand', (req, res) => {
