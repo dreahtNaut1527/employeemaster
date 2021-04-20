@@ -6,6 +6,7 @@ import moment from 'moment'
 import socketio from 'socket.io-client'
 import VueSocketIO from 'vue-socket.io'
 import Vuemask from 'v-mask'
+import jsfiledownload from 'js-file-download'
 import App from './App.vue'
 import './registerServiceWorker'
 import router from './router'
@@ -28,6 +29,7 @@ Vue.prototype.swal = swal
 Vue.prototype.md5 = md5
 Vue.prototype.moment = moment
 Vue.prototype.printreport = printreport
+Vue.prototype.jsfiledownload = jsfiledownload
 
 // Vue Use
 Vue.use(mixins)

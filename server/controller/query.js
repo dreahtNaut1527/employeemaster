@@ -2,6 +2,7 @@ const express = require('express')
 const mssql = require('mssql')
 const config = require('../config/db.config')()
 const { Parser } = require('json2csv')
+const Excel = require('exceljs')
 
 const router = express.Router()
 // =====================================================================
@@ -638,8 +639,63 @@ router.post('/execute', (req, res) => {
 router.post('/exportcsv', (req, res) => {
      let value = JSON.parse(req.body.data)
      const json = new Parser()
-     const csv = json.parse(value)
+     const csv = JSON.parse(value)
      res.send(csv)
+})
+
+router.get('/exportexcel', (req, res) => {
+     let rowData = []
+     let colData = []
+     let headers = []
+     let data = req.query.value
+     let workbook = new Excel.Workbook()
+     let worksheet = workbook.addWorksheet('Discography')
+
+     // Convert data into JSON format
+     data.forEach((rec, index) => {
+          let rowVal = JSON.parse(rec)
+          if(index == 0) {
+               colData = Object.keys(JSON.parse(rec))
+          }
+          rowData.push(Object.values(rowVal))
+     })
+     
+     // add column headers
+     // worksheet.columns = [
+     //      { header: 'Album', key: 'album'},
+     //      { header: 'Year', key: 'year'}
+     // ]
+     
+     colData.forEach(rec => {
+          headers.push({header: rec, key: rec})
+     })
+     worksheet.columns = headers
+
+     // edit cells directly
+     // worksheet.getCell('A6').value = "1989"
+     // worksheet.getCell('B6').value = 2014
+
+     // add an array of rows
+     // rowData = [
+     //      ["Speak Now1", 2010],
+     //      ["Speak Now2", 2010]
+     // ]
+     worksheet.addRows(rowData)
+
+     // download workbook
+     res.setHeader(
+          "Content-Type",
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+     )
+     res.setHeader(
+          "Content-Disposition",
+          "attachment; filename=" + "taylor.xls"
+     )
+
+     workbook.xlsx.write(res).then(function () {
+          res.status(200).end()
+     })
+
 })
 
 // router.get('/textCommand', (req, res) => {

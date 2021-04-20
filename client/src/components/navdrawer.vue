@@ -282,7 +282,7 @@ export default {
                          this.navDrawerList = [
                               {
                                    title: 'Dashboard',
-                                   icon: 'mdi-home',
+                                   icon: 'mdi-view-dashboard',
                                    items: [
                                         {text: 'Home', to: '/dashboard'},
                                         {text: 'Profile', to: '/profile'}
@@ -310,7 +310,7 @@ export default {
                          this.navDrawerList = [
                               {
                                    title: 'Dashboard',
-                                   icon: 'mdi-home',
+                                   icon: 'mdi-view-dashboard',
                                    items: [
                                         {text: 'Home', to: '/dashboard'},
                                         {text: 'Profile', to: '/profile'}
@@ -336,7 +336,7 @@ export default {
                          this.navDrawerList = [
                               {
                                    title: 'Dashboard',
-                                   icon: 'mdi-home',
+                                   icon: 'mdi-view-dashboard',
                                    items: [
                                         {text: 'Home', to: '/dashboard'}
                                    ],
@@ -360,7 +360,7 @@ export default {
                          this.navDrawerList = [
                          {
                               title: 'Dashboard',
-                              icon: 'mdi-home',
+                              icon: 'mdi-view-dashboard',
                               items: [{text: 'Home', to: '/dashboard'}],
                               active: true    
                          },

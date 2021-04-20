@@ -554,7 +554,6 @@ export default {
                     this.information = res.data[0]
                     // If variable has no error
                     if(this.information) {
-                         this.overlay = false
                          this.breadCrumbsItems = [
                               {text: this.userInfo.UserLevel == 0 ? 'Employee' : 'Maintenance', disabled: false, href: '/profile'},
                               {text: 'Profile', disabled: true, href: '/profile'}
@@ -566,6 +565,7 @@ export default {
                          // this.$router.push('*')
                          console.log(res.data);
                     }
+                    this.overlay = false
                })
           },
           loadEducations() {
@@ -672,9 +672,3 @@ export default {
      }
 }
 </script>
-
-<style scoped>
-     .breadcrumb-item a {
-          color: red;
-     }
-</style>

@@ -66,6 +66,9 @@
                                                   dense
                                              ></v-autocomplete>
                                         </v-col>
+                                        <v-col cols="12" md="2">
+                                             <v-btn @click="exportData()">try</v-btn>
+                                        </v-col>
                                    </v-row>
                               </v-card-text>
                               <v-divider></v-divider>
@@ -216,6 +219,14 @@ export default {
           }
      },
      methods: {
+          exportData() {
+               let body = ''
+               let value = this.filterData
+               value.forEach((rec) => {
+                    body += `value=${JSON.stringify(rec)}&`
+               })
+               window.open(`http://localhost:8700/api/exportexcel?${body}`, '_blank')
+          },
           loadLogtime() {
                this.overlay = true
                let body = {}
