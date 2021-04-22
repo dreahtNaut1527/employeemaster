@@ -5,14 +5,14 @@ const plugins = {
      install(Vue) {
           Vue.mixin({
                data: () => ({
-                    // api: process.env.VUE_APP_LOCAL_URL,
-                    api: process.env.VUE_APP_URL,
+                    api: null,
                     api_jap: process.env.VUE_APP_JAP_URL,
                     asd_sql: process.env.VUE_APP_ASD_SQL,
                     photo: process.env.VUE_APP_PHOTO,
                     photo_jap: process.env.VUE_APP_PHOTO_JAP
                }),
                created() {
+                    this.api = process.env.NODE_ENV == 'production' ? process.env.VUE_APP_URL : process.env.VUE_APP_LOCAL_URL
                     if(store.state.EmployeeCode == undefined) {
                          this.axios.defaults.headers.common['x-api-key'] = process.env.VUE_APP_AWS_KEY
                     } else {

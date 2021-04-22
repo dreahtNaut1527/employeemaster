@@ -94,12 +94,12 @@
                                         </v-card-text>
                                    </v-form>
                                    <v-card-actions>
-                                        <v-btn @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor" :disabled="disableButton" block>
+                                        <v-btn @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor" :disabled="disableButton" block dark>
                                              Create an account
                                         </v-btn>
                                    </v-card-actions>
                                    <v-card-actions>
-                                        <v-btn @click="clearVariables()" :color="themeColor == '' ? 'primary' : themeColor" block>
+                                        <v-btn @click="clearVariables()" :color="themeColor == '' ? 'primary' : themeColor" block dark>
                                              Log in to your account
                                         </v-btn>
                                    </v-card-actions>

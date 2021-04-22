@@ -82,7 +82,7 @@
                                         <draggable v-model="headers" v-bind="dragOptions" :move="onMove">
                                             <v-list-item v-for="item in headers" :key="item.id">
                                                 <v-list-item-content>
-                                                    <v-card outlined>
+                                                    <v-card class="dragItem" outlined>
                                                         <v-card-actions class="ma-0 pa-0">
                                                             <v-card-text>{{item.text}}</v-card-text>
                                                             <v-spacer></v-spacer>
@@ -106,7 +106,7 @@
                                         <draggable v-model="selectedHeaders" v-bind="dragOptions" :move="onMove">
                                             <v-list-item v-for="(item, i) in selectedHeaders" :key="i">
                                                 <v-list-item-content>
-                                                    <v-card outlined>
+                                                    <v-card class="dragItem" outlined>
                                                         <v-card-actions class="ma-0 pa-0">
                                                             <v-card-text>{{item.text}}</v-card-text>
                                                             <v-spacer></v-spacer>
@@ -320,11 +320,6 @@ export default {
                 return rec.TeamName
             }).sort()
         },
-        // filterHeaders() {
-        //     return this.headers.filter(rec => {
-        //         return rec.text.toLowerCase().includes(this.searchFields.toLowerCase() || '')
-        //     })
-        // }
     },
     methods: {
         removeItem(val) {
@@ -385,25 +380,20 @@ export default {
         getTableFields() {
             // call procedure
             let body = {
-                procedureName: 'ProcQueryData',
-                values: [
-                    this.userInfo.CompanyCode,
-                    ` AND EmployeeCode = #${this.userInfo.EmployeeCode}#`,
-                    0
-                ]
+                procedureName: 'ProcGetFields',
+                values: []
             }
             this.axios.post(`${this.api}/executeselect`, {data: JSON.stringify(body)}).then(res => {
                 this.headers = []
                 if(Array.isArray(res.data)) {
-                    let objectKeys = Object.keys(res.data[0])
-                    objectKeys.forEach((rec, index) => {
+                    let fields = res.data
+                    fields.forEach((rec, index) => {
                         this.headers.push({
                             id: index,
-                            text: rec,
-                            value: rec
+                            text: rec.FieldDesc,
+                            value: rec.FieldUsed
                         })
                     })
-                    this.headers.sort()
                 } else {
                     this.headers = []
                 }
@@ -502,5 +492,11 @@ export default {
           height: 380px;
           overflow-y: auto;
           overflow-x: hidden;
+     }
+     .dragItem {
+         cursor: grab;
+     }
+     .dragItem:active {
+         cursor: grabbing;
      }
 </style>

@@ -11,6 +11,19 @@
                                    <v-avatar class="mb-6" :color="themeColor == '' ? 'primary' : themeColor" size="95">
                                         <v-icon x-large dark>mdi-account</v-icon>
                                    </v-avatar>
+                                   <v-alert
+                                        class="pa-2 mb-5"
+                                        v-model="alert"
+                                        transition="scale-transition"
+                                        type="error"
+                                        border="left"
+                                        outlined
+                                        dismissible
+                                        dense
+                                        text
+                                   >
+                                        <v-subheader class="pa-0 caption">{{alertText}}</v-subheader>
+                                   </v-alert>
                                    <v-form>
                                         <v-text-field
                                              v-model="username"
@@ -85,7 +98,7 @@
                     </v-card-text>
                </v-card>
           </v-dialog>
-          <v-snackbar
+          <!-- <v-snackbar
                v-model="alert" 
                color="error" 
                :timeout="2000"
@@ -103,7 +116,7 @@
                          <v-icon>mdi-close-circle</v-icon>
                     </v-btn>
                </template>
-          </v-snackbar>
+          </v-snackbar> -->
           <signUp :signUpDialog="signUpDialog"></signUp>
      </v-main>
 </template>
@@ -238,6 +251,9 @@ export default {
                this.username = ''
                this.password = ''
           }
+     },
+     watch: {
+          
      },
      components: {
           signUp

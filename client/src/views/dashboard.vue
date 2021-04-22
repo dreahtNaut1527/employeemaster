@@ -66,9 +66,9 @@
                                                   dense
                                              ></v-autocomplete>
                                         </v-col>
-                                        <v-col cols="12" md="2">
+                                        <!-- <v-col cols="12" md="2">
                                              <v-btn @click="exportData()">try</v-btn>
-                                        </v-col>
+                                        </v-col> -->
                                    </v-row>
                               </v-card-text>
                               <v-divider></v-divider>
