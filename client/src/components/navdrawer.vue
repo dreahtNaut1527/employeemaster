@@ -298,6 +298,7 @@ export default {
                                         {text: 'Sections', to: '/section'},
                                         {text: 'Team', to: '/team'},
                                         {text: 'Department - Section', to: '/divsec'},
+                                        {text: 'Department Categories', to: '/deptcategory'},
                                         {text: 'User Accounts', to: '/accounts'},
                                         {text: 'Job Assignments', to: '/jobassignments'},
                                         {text: 'Query Builder', to: '/querybuilder'}
@@ -325,6 +326,7 @@ export default {
                                         {text: 'Sections', to: '/section'},
                                         {text: 'Team', to: '/team'},
                                         {text: 'Department - Section', to: '/divsec'},
+                                        {text: 'Department Categories', to: '/deptcategory'},
                                         {text: 'Job Assignments', to: '/jobassignments'},
                                         {text: 'Query Builder', to: '/querybuilder'}
                                    ],
@@ -373,6 +375,7 @@ export default {
                                    {text: 'Sections', to: '/section'},
                                    {text: 'Team', to: '/team'},
                                    {text: 'Department - Section', to: '/divsec'},
+                                   {text: 'Department Categories', to: '/deptcategory'},
                                    {text: 'Job Assignments', to: '/jobassignments'},
                                    {text: 'Query Builder', to: '/querybuilder'}
                               ],

@@ -3,39 +3,19 @@
           <v-breadcrumbs :items="breadCrumbsItems" divider="/"></v-breadcrumbs>
           <v-container>
                <v-card>
-                    <v-toolbar flat>
-                         <v-toolbar-title class="headline hidden-sm-and-down">Departments</v-toolbar-title>
-                         <v-spacer></v-spacer>
-                         <v-row align="center" >
-                              <v-col class="ml-auto" cols="12" md="7">
-                                   <v-autocomplete
-                                        v-model="deptCategory"
-                                        :items="departmentCategories"
-                                        :color="themeColor == '' ? 'primary' : themeColor"
-                                        item-value="DepartmentCategoryDesc"
-                                        item-text="DepartmentCategoryDesc"
-                                        label="Department Category"   
-                                        hide-details
-                                        clearable    
-                                        outlined
-                                        dense
-                                   ></v-autocomplete>
+                    <v-card-title>
+                         <v-row dense>
+                              <v-col cols="12" md="4">
+                                   <v-card-text class="pa-0 headline">Department Categories</v-card-text>
                               </v-col>
+                         <v-spacer></v-spacer>
+                         <v-btn v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9" @click="newRecord()" :color="themeColor == '' ? 'primary' : themeColor" dark><v-icon left>mdi-plus</v-icon>New</v-btn>
                          </v-row>
-                         <v-btn 
-                              class="mx-3"
-                              v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9" 
-                              @click="newRecord()" 
-                              :color="themeColor == '' ? 'primary' : themeColor" 
-                              dark
-                         >
-                              <v-icon left>mdi-plus</v-icon>New
-                         </v-btn>
-                    </v-toolbar>
+                    </v-card-title>
                     <v-divider></v-divider>
                     <v-data-table
                          :headers="headers"
-                         :items="filterDepartments"
+                         :items="departmentCategories"
                          :loading="loading"
                          :search="searchData"
                          :page.sync="page"
@@ -47,9 +27,9 @@
                          <v-progress-linear v-show="loading" slot="progress" :color="themeColor == '' ? 'primary' : themeColor" indeterminate></v-progress-linear>
                          <template v-slot:item="props">
                               <tr :style="props.item.DeletedDate != null ? 'color: #b71c1c;' : ''">
-                                   <td>{{props.item.DepartmentName}}</td>
-                                   <td>{{props.item.CreatedDate}}</td>
-                                   <td>{{props.item.UpdatedDate}}</td>
+                                   <td>{{props.item.DepartmentCategoryDesc}}</td>
+                                   <td>{{moment(props.item.CreatedDate).format('YYYY-MM-DD')}}</td>
+                                   <td>{{moment(props.item.UpdatedDate).format('YYYY-MM-DD')}}</td>
                                    <td>
                                         <v-btn @click="editRecord(props.item)" icon>
                                              <v-icon v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9">mdi-pencil</v-icon>
@@ -82,7 +62,7 @@
                                    <v-row align="center" justify="center" dense>
                                         <v-col cols="12" md="12">
                                              <v-text-field
-                                                  v-model="editDepartment.DepartmentName"
+                                                  v-model="editDepartmentCategories.DepartmentCategoryDesc"
                                                   label="Department"
                                                   @keypress.enter="saveRecord()"
                                                   :rules="[v => !!v || 'Department is required']"
@@ -91,19 +71,6 @@
                                                   outlined
                                                   dense
                                              ></v-text-field>
-                                        </v-col>
-                                        <v-col cols="12" md="12">
-                                             <v-autocomplete
-                                                  v-model="editDepartment.DepartmentCategoryCode"
-                                                  :items="departmentCategories"
-                                                  :color="themeColor == '' ? 'primary' : themeColor"
-                                                  item-value="DepartmentCategoryCode"
-                                                  item-text="DepartmentCategoryDesc"
-                                                  label="Department Category"   
-                                                  clearable    
-                                                  outlined
-                                                  dense
-                                             ></v-autocomplete>
                                         </v-col>
                                    </v-row>
                               </v-form>
@@ -132,8 +99,6 @@ export default {
                editMode: 0,
                pageCount: 0,
                page: 1,
-               deptCategory: '',
-               departments: [],
                departmentCategories: [],
                saveOptions: {
                     title: 'Are you sure?',
@@ -144,83 +109,53 @@ export default {
                     confirmButtonText: 'Save',
                     denyButtonText: `Don't Save`
                },
-               editDepartment: {
+               editDepartmentCategories: {
                     CompanyCode: '',
-                    DepartmentCode: '00',
-                    DepartmentName: '',
                     DepartmentCategoryCode: 0,
-                    CreatedDate: this.moment().format('YYYY-MM-DD hh:mm:ss'),
-                    UpdatedDate: this.moment().format('YYYY-MM-DD hh:mm:ss'),
+                    DepartmentCategoryDesc: '',
                     UpdatedUserId: '',
                     Option: 1
                },
                headers: [
-                    {text: 'Department', value: 'DepartmentName'},
+                    {text: 'Category', value: 'DepartmentCategoryDesc'},
                     {text: 'Date Created', value: 'CreatedDate'},
                     {text: 'Last Update', value: 'UpdatedDate'},
                     {text: 'Actions', value: 'actions'}
                ],
                breadCrumbsItems: [
-                    {text: 'Main Data', disabled: false, href: '/department'},
-                    {text: 'Departments', disabled: true, href: '/department'}
+                    {text: 'Main Data', disabled: false, href: '/deptcetegory'},
+                    {text: 'Department Categories', disabled: true, href: '/deptcetegory'}
                ]
           }
      },
      created() {
-          this.loadDepartments()
+          this.loadDepartmentCategory()
      },
      sockets: {
           showNotifications() {
                setTimeout(() => {
-                    this.loadDepartments()
+                    this.loadDepartmentCategory()
                }, 1500);
           }
      },
-     computed: {
-          filterDepartments() {
-               return this.departments.filter(rec => {
-                    return rec.DepartmentCategory.includes(this.deptCategory || '')
-               })
-          }
-     },
      methods: {
-          loadDepartments() {
-               this.loading = true
-               let url = ''
-               switch(this.userInfo.UserLevel) {
-                    case 5: // Japanese
-                         url = `${this.api}/company/department/${this.userInfo.Comp_Name}`
-                         break;
-                    default:
-                         url = `${this.api}/company/department/${this.userInfo.ShortName}`
-                         break;
-               }
-               this.axios.get(url).then(res => {
-                    this.departments = res.data
-                    this.loading = false
-                    this.loadDepartmentCategory()
-               }).catch(() => this.$router.push('*'))
-          },
           loadDepartmentCategory() {
                this.loading = true
                this.axios.get(`${this.api}/departmentcategory/${this.userInfo.ShortName}`).then(res => {
                     this.departmentCategories = res.data
                     this.loading = false
-               })
+               }).catch(() => this.$router.push('*'))
           },
           saveRecord() {
                if(this.$refs.form.validate()) {
                     this.swal.fire(this.saveOptions).then(result => {
                          if(result.isConfirmed) {
                               let body = {
-                                   procedureName: 'ProcDepartment',
+                                   procedureName: 'ProcDepartmentCategory',
                                    values: [
-                                        this.editDepartment.CompanyCode,
-                                        this.editDepartment.DepartmentCode,
-                                        this.editDepartment.DepartmentName,
-                                        this.editDepartment.DepartmentCategoryCode,
-                                        this.editDepartment.CreatedDate,
-                                        this.moment().format('YYYY-MM-DD hh:mm:ss'),
+                                        this.editDepartmentCategories.CompanyCode,
+                                        this.editDepartmentCategories.DepartmentCategoryCode,
+                                        this.editDepartmentCategories.DepartmentCategoryDesc.toUpperCase(),
                                         this.userInfo.EmployeeCode,
                                         1
                                    ]
@@ -229,7 +164,7 @@ export default {
                               this.swal.fire('Hooray!','Changes has been saved', 'success')
                               this.setNotifications(
                                    this.userInfo.EmployeeCode, 
-                                   this.editMode == 0 ? 'added a new department' : 'updated an department'
+                                   this.editMode == 0 ? 'added a new Department Categories' : 'updated an  Department Categories'
                               )
                               this.clearVariables()
                          } else if(result.isDenied) {
@@ -241,12 +176,12 @@ export default {
           },
           newRecord() {
                this.dialog = true
-               this.editDepartment.CompanyCode = this.userInfo.CompanyCode
+               this.editDepartmentCategories.CompanyCode = this.userInfo.CompanyCode
           },
           editRecord(val) {
-               this.editDepartment = val
-               this.dialog = true
                this.editMode = 1
+               this.editDepartmentCategories = val
+               this.dialog = true
           },
           deleteRecord(val) {
                this.swal.fire({
@@ -259,14 +194,11 @@ export default {
                }).then(result => {
                     if(result.isConfirmed) {
                          let body = {
-                              procedureName: 'ProcDepartment',
+                              procedureName: 'ProcDepartmentCategory',
                               values: [
                                    val.CompanyCode,
-                                   val.DepartmentCode,
-                                   val.DepartmentName,
                                    val.DepartmentCategoryCode,
-                                   val.CreatedDate,
-                                   this.moment().format('YYYY-MM-DD hh:mm:ss'),
+                                   val.DepartmentCategoryDesc.toUpperCase(),
                                    this.userInfo.EmployeeCode,
                                    0
                               ]
@@ -279,20 +211,17 @@ export default {
                }) 
           },
           clearVariables() {
-               this.$refs.form.resetValidation()
-               this.editDepartment = {
+               this.editDepartmentCategories = {
                     CompanyCode: '',
-                    DepartmentCode: '00',
-                    DepartmentName: '',
                     DepartmentCategoryCode: 0,
-                    CreatedDate: this.moment().format('YYYY-MM-DD hh:mm:ss'),
-                    UpdatedDate: this.moment().format('YYYY-MM-DD hh:mm:ss'),
+                    DepartmentCategoryDesc: '',
                     UpdatedUserId: '',
                     Option: 1
                },
+               this.$refs.form.resetValidation()
                this.dialog = false
                this.editMode = 0
-               this.loadDepartments()
+               this.loadDepartmentCategory()
           }
      }
 }

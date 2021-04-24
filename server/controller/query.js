@@ -583,6 +583,28 @@ router.get('/jobassignment/:compname/:department', (req, res) => {
      })     
 })
 
+router.get('/departmentcategory/:compname', (req, res) => {
+     let sqlwhere = ''
+     let compname = req.params.compname
+
+     let sql = `SELECT 
+               Companies.CompanyName,
+               Companies.ShortName, 
+               DepartmentCategories.* FROM DepartmentCategories 
+               INNER JOIN Companies on DepartmentCategories.CompanyCode = COmpanies.CompanyCode
+               WHERE lower(ShortName) = lower('${compname}') 
+               ${sqlwhere} ORDER BY DepartmentCategoryDesc`
+            
+     config.connect(err => {
+          if(err) return res.send(err)
+          const request = new mssql.Request(config)
+          request.query(sql, (err, results) => {
+               if(err) return res.send(err)
+               res.send(results.recordset)
+          })
+     })     
+})
+
 // ======================== MSSQL Procedure API ========================
 // =====================================================================
 // ======================= Select Query (MSSQL)=========================

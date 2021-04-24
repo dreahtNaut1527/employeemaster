@@ -81,6 +81,11 @@ const routes = [
     component: () => import('@/views/querybuilder'),
   },
   {
+    path: '/deptcategory',
+    name: 'deptcategory',
+    component: () => import('@/views/deptcategory'),
+  },
+  {
     path: '*',
     name: 'error',
     component: () => import('@/views/error'),
