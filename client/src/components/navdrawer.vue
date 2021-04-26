@@ -160,65 +160,62 @@
                <v-btn @click="logout()" icon>
                     <v-icon small>mdi-logout</v-icon>
                </v-btn>  
-               <v-menu
-                    :close-on-content-click="false"
-                    :nudge-width="200"
-                    :nudge-left="270"
-               >
-                    <template v-slot:activator="{ on, attrs }">
-                         <v-btn 
-                              class="mt-15 mr-n5 rounded-l-lg" 
-                              style="background-color: rgb(0, 0, 0, 0.3)"
-                              v-bind="attrs"
-                              v-on="on"
-                              absolute 
-                              top 
-                              right>
-                              <v-icon>mdi-cog-outline</v-icon>
-                         </v-btn>
-                    </template>
-                    <v-card>
-                         <v-list dense>
-                              <v-list-item>
-                                   <v-list-item-content>
-                                        <v-list-item-title class="grey--text">Themes</v-list-item-title>
-                                   </v-list-item-content>
-                              </v-list-item>
-                              <v-divider></v-divider>
-                              <v-list-item>
-                                   <v-list-item-content>
-                                        <v-color-picker 
-                                            v-model="themeColorVal"
-                                            mode="hexa" 
-                                            hide-mode-switch 
-                                            hide-canvas
-                                            :show-swatches="swatches"
-                                        ></v-color-picker>
-                                   </v-list-item-content>
-                              </v-list-item>
-                              <v-list-item>
-                                    <v-list-item-content>
-                                        <v-btn x-small block text @click="swatches = !swatches" :color="themeColor == '' ? 'primary' : themeColor">
-                                            {{swatches == false ? "Show more" : "Hide"}}
-                                        </v-btn>
-                                    </v-list-item-content>
-                              </v-list-item>
-                              <v-list-item>
-                                   <v-list-item-content>
-                                        <v-list-item-subtitle>Dark Mode</v-list-item-subtitle>
-                                   </v-list-item-content>
-                                   <v-list-item-action>
-                                        <v-switch
-                                             v-model="dark"        
-                                             @change="changeTheme()"
-                                             inset
-                                        ></v-switch>
-                                   </v-list-item-action>
-                              </v-list-item>
-                         </v-list>
-                    </v-card>
-               </v-menu>
+               <v-btn 
+                    class="mt-15 mr-n5 rounded-l-lg" 
+                    style="background-color: rgb(0, 0, 0, 0.3)"
+                    @click="sideDrawer = !sideDrawer"  
+                    absolute 
+                    top 
+                    right>
+                    <v-icon v-if="!sideDrawer">mdi-cog-outline</v-icon>
+                    <v-icon v-else>mdi-close</v-icon>
+               </v-btn>  
           </v-app-bar>
+          <v-navigation-drawer
+               v-model="sideDrawer"
+               :disable-resize-watcher="true"
+               right
+               app         
+          >
+               <v-list dense>
+                    <v-list-item>
+                         <v-list-item-content>
+                              <v-list-item-title class="grey--text">Themes</v-list-item-title>
+                         </v-list-item-content>
+                    </v-list-item>
+                    <v-divider></v-divider>
+                    <v-list-item>
+                         <v-list-item-content>
+                              <v-color-picker 
+                                   v-model="themeColorVal"
+                                   mode="hexa" 
+                                   hide-mode-switch 
+                                   hide-canvas
+                                   :show-swatches="swatches"
+                              ></v-color-picker>
+                         </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item>
+                              <v-list-item-content>
+                              <v-btn x-small block text @click="swatches = !swatches" :color="themeColor == '' ? 'primary' : themeColor">
+                                   {{swatches == false ? "Show more" : "Hide"}}
+                              </v-btn>
+                              </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item>
+                         <v-list-item-content>
+                              <v-list-item-subtitle>Dark Mode</v-list-item-subtitle>
+                         </v-list-item-content>
+                         <v-list-item-action>
+                              <v-switch
+                                   v-model="dark"        
+                                   @change="changeTheme()"
+                                   inset
+                              ></v-switch>
+                         </v-list-item-action>
+                    </v-list-item>
+               </v-list>
+          </v-navigation-drawer>
      </div>       
 </template>
 
@@ -229,9 +226,10 @@ export default {
      data() {
           return {
                user: '',
+               navDrawerVal: true,
                dark: false,
                overlay: false,
-               navDrawerVal: true,
+               sideDrawer: false,
                isConnected: false,
                swatches: false,
                icon: 'mdi-weather-night',
@@ -437,3 +435,9 @@ export default {
      }
 }
 </script>
+
+<style scoped>
+     .v-navigation-drawer--mini-variant, .v-navigation-drawer {
+          overflow: visible !important;
+     }
+</style>

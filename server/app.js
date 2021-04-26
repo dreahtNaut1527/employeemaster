@@ -13,8 +13,8 @@ const app = express()
 const port = process.env.PORT || 8700
 
 app.use(cors())
-app.use(bodyparser.urlencoded({ extended: false }))
-app.use(bodyparser.json())
+app.use(bodyparser.urlencoded({limit: '50mb', extended: true }))
+app.use(bodyparser.json({limit: '50mb'}))
 app.use(helmet())
 
 const server = app.listen(port, () => {

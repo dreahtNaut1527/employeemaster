@@ -658,10 +658,74 @@ router.post('/execute', (req, res) => {
      })
 })
 
+router.get('/exported', (req, res) => {
+     let rowData = []
+     let colData = []
+     let headers = []
+     // let data = JSON.parse(req.body.data)
+     let workbook = new Excel.Workbook()
+     let worksheet = workbook.addWorksheet('Logtime')
+
+     
+     // Get Headers
+     worksheet.columns = [
+          { header: 'Album', key: 'album'},
+          { header: 'Year', key: 'year'}
+     ]
+     // add an array of rows
+     rowData = [
+          ["Speak Now1", 2010],
+          ["Speak Now2", 2010]
+     ]
+     worksheet.addRows(rowData)
+     
+     // // Convert data into JSON format
+     // data.forEach((rec, index) => {
+     //      if(index == 0) {
+     //           colData = Object.keys(rec)
+     //      }
+     //      rowData.push(Object.values(rec))
+     // })
+
+     // Get Headers
+     // colData.forEach(rec => {
+     //      headers.push({header: rec, key: rec})
+     // })
+
+     // worksheet.columns = headers
+     // worksheet.addRows(rowData)
+
+     // download workbook
+     // res.setHeader(
+     //      "Content-Type",
+     //      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+     // )
+     // res.setHeader(
+     //      "Content-Disposition",
+     //      "attachment; filename=text.xls"
+     // )
+
+     // workbook.xlsx.write(res).then(function () {
+     //      res.status(200).end()
+     // })
+     
+    workbook.xlsx.writeFile('test.xls').then(function() {
+        let options = {
+             root: './'
+        }
+        res.sendFile('test.xls', options, function(err){
+             if(err) {
+               console.log('---------- error downloading file: ' + err)
+             }
+        })
+    })
+
+})
+
 router.post('/exportcsv', (req, res) => {
      let value = JSON.parse(req.body.data)
-     const json = new Parser()
-     const csv = JSON.parse(value)
+     const parser = new Parser()
+     const csv = parser.parse(value)
      res.send(csv)
 })
 

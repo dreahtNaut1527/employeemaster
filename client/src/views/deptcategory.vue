@@ -63,7 +63,7 @@
                                         <v-col cols="12" md="12">
                                              <v-text-field
                                                   v-model="editDepartmentCategories.DepartmentCategoryDesc"
-                                                  label="Department"
+                                                  label="Department Category"
                                                   @keypress.enter="saveRecord()"
                                                   :rules="[v => !!v || 'Department is required']"
                                                   :readonly="userInfo.UserLevel != 4 && userInfo.UserLevel != 9"
@@ -219,6 +219,7 @@ export default {
                     Option: 1
                },
                this.$refs.form.resetValidation()
+               this.$refs.form.reset()
                this.dialog = false
                this.editMode = 0
                this.loadDepartmentCategory()
