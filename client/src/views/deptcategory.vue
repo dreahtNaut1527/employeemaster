@@ -186,7 +186,7 @@ export default {
           deleteRecord(val) {
                this.swal.fire({
                     title: 'Are you sure?',
-                    text: val.DeletedDate == null ? "This data wil not be used in any records." : "This wil restore the data.",
+                    text: val.DeletedDate == null ? "This data will not be used in any records." : "This will restore the data.",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: val.DeletedDate == null  ? 'Yes, delete it!' : 'Yes, restore it!',
