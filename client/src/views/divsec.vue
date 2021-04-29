@@ -14,13 +14,14 @@
                     </v-card-title>
                     <v-divider></v-divider>
                     <v-card-title>
-                         <v-row class="mb-n6" dense>
+                         <v-row dense>
                               <v-col cols="4">
                                    <v-autocomplete
                                    v-model="departmentfilter"
                                    :items="departmentlistfilter"
                                    :color="themeColor == '' ? 'primary' : themeColor"
                                    label="Department"    
+                                   hide-details
                                    clearable                                 
                                    outlined
                                    dense
@@ -31,7 +32,8 @@
                                    v-model="sectionfilter"
                                    :items="sectionlistfilter"
                                    :color="themeColor == '' ? 'primary' : themeColor"
-                                   label="Section"   
+                                   label="Section"  
+                                   hide-details 
                                    clearable    
                                    outlined
                                    dense
@@ -43,6 +45,7 @@
                                    :items="teamlistfilter"
                                    :color="themeColor == '' ? 'primary' : themeColor"
                                    label="Team" 
+                                   hide-details
                                    clearable    
                                    outlined
                                    dense
@@ -56,6 +59,7 @@
                          :items="filterData"
                          :search="searchData"
                          :page.sync="page"
+                         :items-per-page="8"
                          loading-text="Loading Data. . .Please Wait"
                          :loading="loading"
                          @page-count="pageCount = $event"
@@ -77,6 +81,7 @@
                          :total-visible="10"
                          :color="themeColor == '' ? 'primary' : themeColor"
                     ></v-pagination>
+                    <v-card-text class="caption">Total Record(s): {{filterData.length}}</v-card-text>
               </v-card>
           </v-container>
           <v-dialog v-model="dialog" width="500" persistent>

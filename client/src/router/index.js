@@ -86,6 +86,16 @@ const routes = [
     component: () => import('@/views/deptcategory'),
   },
   {
+    path: '/systemlist',
+    name: 'systemlist',
+    component: () => import('@/views/systemlist'),
+  },
+  {
+    path: '/accountrights/:code',
+    name: 'accountrights',
+    component: () => import('@/views/accountrights'),
+  },
+  {
     path: '*',
     name: 'error',
     component: () => import('@/views/error'),

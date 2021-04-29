@@ -69,6 +69,7 @@
                          :total-visible="10"
                          :color="themeColor == '' ? 'primary' : themeColor"
                     ></v-pagination>
+                    <v-card-text class="caption">Total Record(s): {{filterDepartments.length}}</v-card-text>
                </v-card>
           </v-container>
           <v-dialog v-model="dialog" width="500" persistent>

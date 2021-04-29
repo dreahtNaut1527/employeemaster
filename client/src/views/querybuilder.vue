@@ -215,6 +215,7 @@
                     :color="themeColor == '' ? 'primary' : themeColor"
                 ></v-pagination>
                 <v-card-actions>
+                    <v-card-text class="caption">Total Record(s): {{filterDataTable.length}}</v-card-text>
                     <v-spacer></v-spacer>
                     <v-btn @click="printPreview()" :color="themeColor == '' ? 'primary' : themeColor" dark>
                         <v-icon left>mdi-file-find</v-icon>Print Preview

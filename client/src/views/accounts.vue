@@ -63,28 +63,55 @@
                          :loading="loading"
                          :search="searchData"
                          :page.sync="page"
+                         :items-per-page="9"
                          loading-text="Loading Data. . .Please Wait"
                          @page-count="pageCount = $event"
                          hide-default-footer
                     >
                     
                          <v-progress-linear v-show="loading" slot="progress" :color="themeColor == '' ? 'primary' : themeColor" indeterminate></v-progress-linear>
+                         <template v-slot:[`item.rights`]="{ item }">
+                              <v-tooltip bottom>
+                                   <template v-slot:activator="{ on, attrs }">
+                                        <v-btn @click="gotoProcessRights(item.EmployeeCode)" v-on="on" v-bind="attrs" icon>
+                                             <v-icon>mdi-card-account-details</v-icon>
+                                        </v-btn>
+                                   </template>
+                                   <span>Account Rights</span>
+                              </v-tooltip>
+                         </template>
+                         <template v-slot:[`item.actions`]="{ item }">
+                              <v-tooltip bottom>
+                                   <template v-slot:activator="{ on, attrs }">
+                                        <v-btn @click="editRecord(item)" v-on="on" v-bind="attrs" icon>
+                                             <v-icon>mdi-pencil</v-icon>
+                                        </v-btn>
+                                   </template>
+                                   <span>Edit</span>
+                              </v-tooltip>
+                              <v-tooltip bottom>
+                                   <template v-slot:activator="{ on, attrs }">
+                                        <v-btn @click="deleteRecord(item)" v-on="on" v-bind="attrs" icon>
+                                             <v-icon v-if="item.Status == 1">mdi-delete</v-icon>
+                                             <v-icon v-else>mdi-restore</v-icon>
+                                        </v-btn>
+                                   </template>
+                                   <span v-if="item.Status == 1">Deactivate</span>
+                                   <span v-else>Restore</span>
+                              </v-tooltip>
+                              <v-tooltip bottom>
+                                   <template v-slot:activator="{ on, attrs }">
+                                        <v-btn @click="resetRecord(item)"  v-on="on" v-bind="attrs" icon>
+                                             <v-icon>mdi-lock-reset</v-icon>
+                                        </v-btn>
+                                   </template>
+                                   <span>Reset</span>
+                              </v-tooltip>
+                         </template>
                          <template v-slot:[`item.Status`]="{ item }">
                               <v-chip :color="item.Status == 1 ? 'success' : 'error'">
                                    {{item.Status == 1 ? 'Active' : 'Inactive'}}
                               </v-chip>
-                         </template>
-                         <template v-slot:[`item.actions`]="{ item }">
-                              <v-btn @click="editRecord(item)" icon>
-                                   <v-icon>mdi-pencil</v-icon>
-                              </v-btn>
-                              <v-btn @click="deleteRecord(item)" icon>
-                                   <v-icon v-if="item.Status == 1">mdi-delete</v-icon>
-                                   <v-icon v-else>mdi-restore</v-icon>
-                              </v-btn>
-                              <v-btn @click="resetRecord(item)" icon>
-                                   <v-icon>mdi-lock-reset</v-icon>
-                              </v-btn>
                          </template>
                     </v-data-table>
                     <v-pagination
@@ -93,6 +120,7 @@
                          :total-visible="10"
                          :color="themeColor == '' ? 'primary' : themeColor"
                     ></v-pagination>
+                    <v-card-text class="caption">Total Record(s): {{filterData.length}}</v-card-text>
                </v-card>
           </v-container>
           <v-dialog v-model="dialog" width="500" persistent>
@@ -190,11 +218,11 @@
                     </v-container>
                     <v-card-actions>
                          <v-spacer></v-spacer>
-                         <v-btn @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor" :disabled="disabled" dark>
-                              <v-icon left>mdi-content-save</v-icon>Save
-                         </v-btn>
                          <v-btn @click="clearVariables()" text>
                               <v-icon left>mdi-cancel</v-icon>Cancel
+                         </v-btn>
+                         <v-btn @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor" :disabled="disabled" dark>
+                              <v-icon left>mdi-content-save</v-icon>Save
                          </v-btn>
                     </v-card-actions>
                </v-card>
@@ -221,6 +249,7 @@ export default {
                teams: '',
                confirmedPassword: '',
                accounts: [],
+               userLevel: [],
                passwordRules: [
                     v => !!v || 'Password is required',
                     v => (v == this.newPassword) || 'Password do not match'
@@ -232,14 +261,6 @@ export default {
                     IPAddr: '',
                     UserLevel: 0
                },
-               userLevel: [
-                    {text: 'Staff', value: 0},
-                    {text: 'Department Head', value: 1},
-                    {text: 'Section Head', value: 2},
-                    {text: 'Team Leader', value: 3},
-                    {text: 'QA', value: 4},
-                    {text: 'Japanese Manager', value: 5}
-               ],
                saveOptions: {
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
@@ -253,10 +274,10 @@ export default {
                     {text: 'Code', value: 'EmployeeCode'},
                     {text: 'Name', value: 'Fullname'},
                     {text: 'Username', value: 'Username'},  
-                    {text: 'IP Address', value: 'IPAddr'},
                     {text: 'Level', value: 'UserLevel'},
-                    {text: 'Status', value: 'Status'},
-                    {text: 'Actions', value: 'actions'}
+                    {text: 'Rights', value: 'rights'},
+                    {text: 'Actions', value: 'actions'},
+                    {text: 'Status', value: 'Status'}
                ],
                breadCrumbsItems: [ 
                     {text: 'Maintenance', disabled: false, href: '/accounts'},
@@ -265,6 +286,7 @@ export default {
           }
      },
      created() {
+          this.loadUserLevel()
           this.loadAccounts()
           this.companies = this.userInfo.ShortName
      },
@@ -306,6 +328,29 @@ export default {
           }
      },
      methods: {
+          gotoProcessRights(code) {
+               this.$router.push(`/accountrights/${code}`)
+          },
+          loadUserLevel() {
+               if(this.userInfo.DepartmentName == 'QA') { 
+                    this.userLevel = [
+                         {text: 'Staff', value: 0},
+                         {text: 'Department Head', value: 1},
+                         {text: 'Section Head', value: 2},
+                         {text: 'Team Leader', value: 3},
+                         {text: 'QA', value: 4},
+                         {text: 'Japanese Manager', value: 5}
+                    ]
+               } else {
+                    this.userLevel = [
+                         {text: 'Staff', value: 0},
+                         {text: 'Department Head', value: 1},
+                         {text: 'Section Head', value: 2},
+                         {text: 'Team Leader', value: 3},
+                         {text: 'Japanese Manager', value: 5}
+                    ]
+               }
+          },
           loadAccounts() {
                this.loading = true
                this.accounts = []
@@ -349,7 +394,7 @@ export default {
                     this.accounts = res.data
                     this.loading = false
                }).catch(() => this.$router.push('*'))
-          },
+          },   
           getEmployeeFullname() {
                this.loadName = true
                this.disabled = false

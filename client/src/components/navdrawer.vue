@@ -384,8 +384,9 @@ export default {
                               title: 'Maintenance',
                               icon: 'mdi-cog',
                               items: [
+                                   {text: 'Profile', to: '/profile'},
                                    {text: 'User Accounts', to: '/accounts'},
-                                   {text: 'Profile', to: '/profile'}
+                                   {text: 'System List', to: '/systemlist'}
                               ],
                               active: false  
                          }

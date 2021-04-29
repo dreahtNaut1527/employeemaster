@@ -8,6 +8,48 @@ const router = express.Router()
 // =====================================================================
 // ======================= Select Query (MSSQL)=========================
 // =====================================================================
+router.get('/systemlist', (req, res) => {
+     let sqlQuery = `SELECT * FROM SystemLists`
+     config.connect(err => {
+          if(err) return res.send(err)
+          const request = new mssql.Request(config)
+          request.query(sqlQuery, (err, results) => {
+               if(err) return res.send(err)
+               res.send(results.recordset)
+          })
+     })
+})
+
+router.get('/systemprocess/:syscode', (req, res) => {
+     let syscode = req.params.syscode
+     let sqlQuery = `SELECT * FROM SystemProcess WHERE SystemCode = '${syscode}'`
+     config.connect(err => {
+          if(err) return res.send(err)
+          const request = new mssql.Request(config)
+          request.query(sqlQuery, (err, results) => {
+               if(err) return res.send(err)
+               res.send(results.recordset)
+          })
+     })
+})
+
+router.get('/processrights/:emplcode/:syscode/:processid', (req, res) => {
+     let emplcode = req.params.emplcode
+     let syscode = req.params.syscode
+     let processid = req.params.processid
+     let sqlQuery = `SELECT * FROM SystemProcessRights WHERE EmployeeCode = '${emplcode}'
+                                   AND SystemCode = '${syscode}'
+                                   AND ProcessId = '${processid}'`
+     config.connect(err => {
+          if(err) return res.send(err)
+          const request = new mssql.Request(config)
+          request.query(sqlQuery, (err, results) => {
+               if(err) return res.send(err)
+               res.send(results.recordset)
+          })
+     })
+})
+
 router.get('/companies', (req, res) => {
      let sqlQuery = `SELECT * FROM CompanyView`
      config.connect(err => {
@@ -18,7 +60,7 @@ router.get('/companies', (req, res) => {
                res.send(results.recordset)
           })
      })
- })
+})
 
 router.get('/employeeinfo/:code', (req, res) => {
      let code = req.params.code
@@ -285,7 +327,7 @@ router.get('/usercontrol', (req, res) => {
           sqlwhere += team != 'NONE' ? ` AND lower(TeamName) = '${team.toLowerCase()}'` : ''
      }
 
-     let sql = `SELECT * FROM UserControlView ${sqlwhere}`
+     let sql = `SELECT * FROM UserControlView ${sqlwhere} ORDER BY EmployeeCode`
 
      config.connect(err => {
           if(err) return res.send(err)
@@ -652,7 +694,7 @@ router.post('/execute', (req, res) => {
                const request = new mssql.Request(config)
                request.query(`${sql} '${rec.join("','").replace(/''/g, null)}'`, (err, results) => {
                     if(err) return res.send(err)
-                    res.send(results.recordset)
+                    res.status(200).end()
                })
           })
      })

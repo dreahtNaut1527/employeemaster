@@ -61,7 +61,7 @@
                          :items="filterData"
                          :loading="loading"
                          :search="searchData"
-                         :items-per-page="9"
+                         :items-per-page="8"
                          :page.sync="page"
                          loading-text="Loading Data. . .Please Wait"
                          @page-count="pageCount = $event"
@@ -75,6 +75,7 @@
                          :total-visible="10"
                          :color="themeColor == '' ? 'primary' : themeColor"
                     ></v-pagination>
+                    <v-card-text class="caption">Total Record(s): {{filterData.length}}</v-card-text>
                </v-card>
           </v-container>
      </v-main>

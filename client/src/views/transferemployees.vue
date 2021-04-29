@@ -57,7 +57,7 @@
                          :items="filterData"
                          :loading="loading"
                          :search="searchData"
-                         :items-per-page="9"
+                         :items-per-page="8"
                          :page.sync="page"
                          :single-select="singleSelect"
                          item-key="EmployeeCode"
@@ -74,6 +74,7 @@
                          :total-visible="10"
                          :color="themeColor == '' ? 'primary' : themeColor"
                     ></v-pagination>
+                    <v-card-text class="caption">Total Record(s): {{filterData.length}}</v-card-text>
                </v-card>
                <v-dialog v-model="dialog" width="500" persistent>
                     <v-card>

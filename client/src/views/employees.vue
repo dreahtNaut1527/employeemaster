@@ -11,6 +11,7 @@
                                              :items="departmentList"
                                              :color="themeColor == '' ? 'primary' : themeColor"
                                              placeholder="Department"
+                                             hide-details
                                              clearable
                                              outlined
                                              dense
@@ -22,6 +23,7 @@
                                              :items="sectionList"
                                              :color="themeColor == '' ? 'primary' : themeColor"
                                              placeholder="Section"
+                                             hide-details
                                              clearable
                                              outlined
                                              dense
@@ -33,6 +35,7 @@
                                              :items="teamList"
                                              :color="themeColor == '' ? 'primary' : themeColor"
                                              placeholder="Team"
+                                             hide-details
                                              clearable
                                              outlined
                                              dense
@@ -41,6 +44,7 @@
                                    
                               </v-row>
                     </v-card-title>
+               <v-divider></v-divider>
                <v-data-table 
                     :headers="headers"
                     :items="filterData"
@@ -68,7 +72,7 @@
                     :total-visible="10"
                     :color="themeColor == '' ? 'primary' : themeColor"
                ></v-pagination>
-               <!-- Your Code Here -->
+               <v-card-text class="caption">Total Record(s): {{filterData.length}}</v-card-text>
                </v-card>
           </v-container>
      </v-main>
