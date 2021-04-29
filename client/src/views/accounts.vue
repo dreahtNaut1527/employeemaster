@@ -329,7 +329,7 @@ export default {
      },
      methods: {
           gotoProcessRights(code) {
-               this.$router.push(`/accountrights/${code}`)
+               this.$router.push({name: 'accountrights', query: {code: code}})
           },
           loadUserLevel() {
                if(this.userInfo.DepartmentName == 'QA') { 

@@ -24,7 +24,7 @@
                          </v-row>
                          <v-btn 
                               class="mx-3"
-                              v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9" 
+                              v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9 || userRights == 3" 
                               @click="newRecord()" 
                               :color="themeColor == '' ? 'primary' : themeColor" 
                               dark
@@ -51,14 +51,20 @@
                                    <td>{{props.item.CreatedDate}}</td>
                                    <td>{{props.item.UpdatedDate}}</td>
                                    <td>
-                                        <v-btn @click="editRecord(props.item)" icon>
-                                             <v-icon v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9">mdi-pencil</v-icon>
-                                             <v-icon v-else>mdi-eye</v-icon>
-                                        </v-btn>
-                                        <v-btn v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9" @click="deleteRecord(props.item)" icon>
-                                             <v-icon v-if="props.item.DeletedDate == null">mdi-delete</v-icon>
-                                             <v-icon v-else>mdi-restore</v-icon>
-                                        </v-btn>
+                                        <div v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9 || (userRights == 2 || userRights == 3)">
+                                             <v-btn @click="editRecord(props.item)" icon>
+                                                  <v-icon >mdi-pencil</v-icon>
+                                             </v-btn>
+                                             <v-btn  @click="deleteRecord(props.item)" icon>
+                                                  <v-icon v-if="props.item.DeletedDate == null">mdi-delete</v-icon>
+                                                  <v-icon v-else>mdi-restore</v-icon>
+                                             </v-btn>
+                                        </div>
+                                        <div v-else>
+                                             <v-btn @click="editRecord(props.item)" icon>
+                                                  <v-icon>mdi-eye</v-icon>
+                                             </v-btn>
+                                        </div>
                                    </td>
                               </tr>
                          </template>
@@ -111,11 +117,11 @@
                     </v-container>
                     <v-card-actions>
                          <v-spacer></v-spacer>
-                         <v-btn v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9" @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor" dark>
-                              <v-icon left>mdi-content-save</v-icon>Save
-                         </v-btn>
                          <v-btn @click="clearVariables()" text>
                               <v-icon left>mdi-cancel</v-icon>Cancel
+                         </v-btn>
+                         <v-btn v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9 || userRights > 1" @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor" dark>
+                              <v-icon left>mdi-content-save</v-icon>Save
                          </v-btn>
                     </v-card-actions>
                </v-card>
@@ -132,6 +138,7 @@ export default {
                loading: true,
                editMode: 0,
                pageCount: 0,
+               userRights: 0,
                page: 1,
                deptCategory: '',
                departments: [],
@@ -168,12 +175,12 @@ export default {
           }
      },
      created() {
-          this.loadDepartments()
+          this.loadRights()
      },
      sockets: {
           showNotifications() {
                setTimeout(() => {
-                    this.loadDepartments()
+                    this.loadRights()
                }, 1500);
           }
      },
@@ -185,6 +192,12 @@ export default {
           }
      },
      methods: {
+          loadRights() {
+               this.axios.get(`${this.api}/processrights/${this.userInfo.EmployeeCode}/EM01/${this.$route.query.id}`).then(res => {
+                    this.userRights = res.data[0].Rights
+                    this.loadDepartments()
+               })
+          },
           loadDepartments() {
                this.loading = true
                let url = ''

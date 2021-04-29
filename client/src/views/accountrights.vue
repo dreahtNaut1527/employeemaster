@@ -132,7 +132,7 @@ export default {
     },
     methods: {
         loadEmployeeDetails() {
-            this.axios.get(`${this.api}/basicinfo/${this.$route.params.code}`).then(res => {
+            this.axios.get(`${this.api}/basicinfo/${this.$route.query.code}`).then(res => {
                 this.employeeDetails = res.data[0]
             })
         },
@@ -154,7 +154,7 @@ export default {
         },
         loadSystemProcessRights(data) {
             let tempData = {}
-            this.axios.get(`${this.api}/processrights/${this.$route.params.code}/${data.SystemCode}/${data.ProcessId}`).then(res => {
+            this.axios.get(`${this.api}/processrights/${this.$route.query.code}/${data.SystemCode}/${data.ProcessId}`).then(res => {
                 if(res.data[0] != undefined) {
                     tempData = res.data[0]
                     this.systemProcessLists.push({
@@ -166,7 +166,7 @@ export default {
                     })
                 } else {
                     this.systemProcessLists.push({
-                        EmployeeCode: this.$route.params.code,
+                        EmployeeCode: this.$route.query.code,
                         SystemCode: data.SystemCode,
                         ProcessId: data.ProcessId,
                         ProcessName: data.ProcessName,
@@ -200,6 +200,10 @@ export default {
                 this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
                 this.selectedProcess = []
                 this.loadSystemProcess(this.selectedSystem)
+                this.setNotifications(
+                    this.userInfo.EmployeeCode, 
+                    'updated an account'
+                )
             }
         }
     },

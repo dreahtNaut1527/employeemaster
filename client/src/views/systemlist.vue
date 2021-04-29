@@ -154,6 +154,14 @@
                                         outlined
                                         dense
                                     ></v-text-field>
+                                    <v-text-field
+                                        v-model="editSystemProcess.ProcessPath"
+                                        :rules="[v => !!v || 'This field is required']"
+                                        :color="themeColor == '' ? 'primary' : themeColor"
+                                        label="Process Path"
+                                        outlined
+                                        dense
+                                    ></v-text-field>
                                     <v-btn @click="saveSystemProcess(editSystemList.SystemCode, editSystemProcess, 1)" text>
                                         <v-icon left>mdi-plus</v-icon>Add
                                     </v-btn>
@@ -195,7 +203,8 @@ export default {
             editSystemProcess: {
                 SystemCode: null,
                 ProcessId: null,
-                ProcessName: null
+                ProcessName: null,
+                ProcessPath: null
             },
             saveOptions: {
                 title: 'Are you sure?',
@@ -248,7 +257,8 @@ export default {
             Object.assign(this.editSystemProcess, {
                 SystemCode: val.SystemCode,
                 ProcessId: val.ProcessId,
-                ProcessName: val.ProcessName
+                ProcessName: val.ProcessName,
+                ProcessPath: val.ProcessPath
             })
         },
         saveRecord(val, option) {
@@ -277,6 +287,7 @@ export default {
                             syscode,
                             val.ProcessId,
                             this.sentenceCase(val.ProcessName),
+                            val.ProcessPath.toLowerCase(),
                             this.userInfo.EmployeeCode,
                             option
                         ]
@@ -305,7 +316,8 @@ export default {
             this.editSystemProcess = {
                 SystemCode: null,
                 ProcessId: null,
-                ProcessName: null
+                ProcessName: null,
+                ProcessPath: null
             }
             this.loadSystemLists()
         }

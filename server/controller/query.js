@@ -37,9 +37,9 @@ router.get('/processrights/:emplcode/:syscode/:processid', (req, res) => {
      let emplcode = req.params.emplcode
      let syscode = req.params.syscode
      let processid = req.params.processid
-     let sqlQuery = `SELECT * FROM SystemProcessRights WHERE EmployeeCode = '${emplcode}'
-                                   AND SystemCode = '${syscode}'
-                                   AND ProcessId = '${processid}'`
+     let sqlQuery = `SELECT * FROM SystemProcessRightView WHERE EmployeeCode = '${emplcode}'
+                                   AND SystemCode = '${syscode}'`
+     if(processid != 0) sqlQuery += ` AND ProcessId = '${processid}'`
      config.connect(err => {
           if(err) return res.send(err)
           const request = new mssql.Request(config)

@@ -61,7 +61,7 @@
                          </template>
                          <v-list-item
                               v-for="child in item.items"
-                              :to="child.to"
+                              @click="gotoPage(child.to, child.id)"
                               :key="child.text"
                               link 
                          >
@@ -247,7 +247,59 @@ export default {
           this.user = this.userInfo
           this.getUserLevel()
      },
+     sockets: {
+          showNotifications() {
+               this.getUserLevel() 
+          }
+     },
      methods: {
+          gotoPage(page, id) {
+               if(this.userInfo.UserLevel == 9) {
+                    this.$router.push({path: page})
+               } else {
+                    this.$router.push({path: page, query: {id: id}})
+               }
+          },
+          loadNavDrawer() {
+               this.axios.get(`${this.api}/processrights/${this.userInfo.EmployeeCode}/EM01/0`).then(res => {
+                    if(Array.isArray(res.data)) {
+                         this.navDrawerList = [
+                              {
+                                   title: 'Dashboard',
+                                   icon: 'mdi-view-dashboard',
+                                   items: [
+                                        {text: 'Home', to: '/dashboard'},
+                                        {text: 'Profile', to: '/profile'}
+                                   ],
+                                   active: true   
+                              },
+                              {
+                                   title: 'Main Data',
+                                   icon: 'mdi-account',
+                                   items: [],
+                                   active: false   
+                              }
+                         ]
+                         res.data.forEach(rec => {
+                              this.navDrawerList[1].items.push(
+                                   {text: rec.ProcessName, to: `/${rec.ProcessPath}`, id: rec.ProcessId}
+                              )
+                         })
+                    } else {
+                         this.navDrawerList = [
+                              {
+                                   title: 'Dashboard',
+                                   icon: 'mdi-view-dashboard',
+                                   items: [
+                                        {text: 'Home', to: '/dashboard'},
+                                        {text: 'Profile', to: '/profile'}
+                                   ],
+                                   active: true   
+                              }
+                         ]
+                    }
+               })
+          },
           getSearchData() {
                this.$store.commit('CHANGE_SEARCHING', this.search)
           },
@@ -277,60 +329,8 @@ export default {
                     case 1: // Department Head
                     case 2: // Section Head
                     case 3: // Team Leader
-                         this.navDrawerList = [
-                              {
-                                   title: 'Dashboard',
-                                   icon: 'mdi-view-dashboard',
-                                   items: [
-                                        {text: 'Home', to: '/dashboard'},
-                                        {text: 'Profile', to: '/profile'}
-                                   ],
-                                   active: true   
-                              },
-                              {
-                                   title: 'Main Data',
-                                   icon: 'mdi-account',
-                                   items: [
-                                        {text: 'Employees', to: '/employees'},
-                                        {text: 'Departments', to: '/department'},
-                                        {text: 'Sections', to: '/section'},
-                                        {text: 'Team', to: '/team'},
-                                        {text: 'Department - Section', to: '/divsec'},
-                                        {text: 'Department Categories', to: '/deptcategory'},
-                                        {text: 'User Accounts', to: '/accounts'},
-                                        {text: 'Job Assignments', to: '/jobassignments'},
-                                        {text: 'Query Builder', to: '/querybuilder'}
-                                   ],
-                                   active: false   
-                              }
-                         ]
-                         break;
                     case 4: // QA Staff
-                         this.navDrawerList = [
-                              {
-                                   title: 'Dashboard',
-                                   icon: 'mdi-view-dashboard',
-                                   items: [
-                                        {text: 'Home', to: '/dashboard'},
-                                        {text: 'Profile', to: '/profile'}
-                                   ],
-                                   active: true   
-                              },
-                              {
-                                   title: 'Main Data',
-                                   icon: 'mdi-account',
-                                   items: [
-                                        {text: 'Departments', to: '/department'},
-                                        {text: 'Sections', to: '/section'},
-                                        {text: 'Team', to: '/team'},
-                                        {text: 'Department - Section', to: '/divsec'},
-                                        {text: 'Department Categories', to: '/deptcategory'},
-                                        {text: 'Job Assignments', to: '/jobassignments'},
-                                        {text: 'Query Builder', to: '/querybuilder'}
-                                   ],
-                                   active: false   
-                              }
-                         ]
+                         this.loadNavDrawer()
                          break;
                     case 5: // Japanese
                          this.navDrawerList = [
