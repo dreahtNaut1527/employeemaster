@@ -9,7 +9,14 @@
                                    <v-card-text class="pa-0 headline">Department-Section-Team</v-card-text>
                               </v-col>
                               <v-spacer></v-spacer>
-                              <v-btn v-if="userInfo.UserLevel==4 || userInfo.UserLevel==9" @click="newRecord()" :color="themeColor == '' ? 'primary' : themeColor" dark><v-icon left>mdi-plus</v-icon>New</v-btn>
+                              <v-btn 
+                                   v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9 || userRights == 3" 
+                                   @click="newRecord()" 
+                                   :color="themeColor == '' ? 'primary' : themeColor" 
+                                   dark
+                              >
+                                   <v-icon left>mdi-plus</v-icon>New
+                              </v-btn>
                          </v-row>
                     </v-card-title>
                     <v-divider></v-divider>
@@ -68,7 +75,7 @@
                          
                          <v-progress-linear v-show="loading" slot="progress" :color="themeColor == '' ? 'primary' : themeColor" indeterminate></v-progress-linear>
                          <template v-slot:item="props">                             
-                              <tr >
+                              <tr>
                                    <td>{{props.item.DepartmentName}}</td>                              
                                    <td>{{props.item.SectionName}}</td>   
                                    <td>{{props.item.TeamName}}</td>                                   
@@ -133,8 +140,8 @@
                     </v-container>
                     <v-card-actions>
                          <v-spacer></v-spacer>    
-                         <v-btn @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor" dark><v-icon>mdi-content-save</v-icon> Save</v-btn>
-                         <v-btn @click="clearVariables()" text> <v-icon>mdi-cancel</v-icon> Cancel</v-btn>
+                         <v-btn @click="clearVariables()" text><v-icon left>mdi-cancel</v-icon> Cancel</v-btn>
+                         <v-btn @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor" dark><v-icon left>mdi-content-save</v-icon> Save</v-btn>
                     </v-card-actions>
                </v-card>
           </v-dialog>
@@ -151,6 +158,7 @@ export default {
                divsecteam:[],
                department:[],
                pageCount: 0,
+               userRights: 0,
                page: 1,
                loading:true,
                headers:[
@@ -234,16 +242,26 @@ export default {
           },         
      },
      created(){
-          this.loaddivsectionteam()
+          this.loadRights()
      },
      sockets: {
           showNotifications() {
                setTimeout(() => {
-                    this.loaddivsectionteam()
+                    this.loadRights()
                }, 1500);
           }
      },
      methods:{
+          loadRights() {
+               if(this.userInfo.UserLevel != 9) {
+                    this.axios.get(`${this.api}/processrights/${this.userInfo.EmployeeCode}/EM01/${this.$route.query.id}`).then(res => {
+                         this.userRights = res.data[0].Rights
+                         this.loaddivsectionteam()
+                    })
+               } else {
+                    this.loaddivsectionteam()
+               }
+          },
           loaddivsectionteam(){
                this.loading= true
                let url='yves pogi'

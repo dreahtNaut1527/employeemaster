@@ -9,7 +9,15 @@
                                    <v-card-text class="pa-0 headline">Transfer Employees</v-card-text>
                               </v-col>
                               <v-spacer></v-spacer>
-                              <v-btn :color="themeColor == '' ? 'primary' : themeColor" @click="transferEmployees()" :disabled="selected.length <= 0" dark><v-icon left>mdi-transit-transfer</v-icon>Proceed</v-btn>
+                              <v-btn 
+                                   v-if="userRights > 1"
+                                   :color="themeColor == '' ? 'primary' : themeColor" 
+                                   @click="transferEmployees()" 
+                                   :disabled="selected.length <= 0" 
+                                   dark
+                              >
+                                   <v-icon left>mdi-transit-transfer</v-icon>Proceed
+                              </v-btn>
                          </v-row>
                     </v-card-title>
                     <v-divider></v-divider>
@@ -157,6 +165,7 @@ export default {
                teamFilter: '',
                divsecteam: [],
                pageCount: 0,
+               userRights: 0,
                page: 1,
                dateDialog: false,
                loading: true,
@@ -187,7 +196,14 @@ export default {
           }
      },
      created(){
-          this.loadEmployees()
+          this.loadRights()
+     },
+     sockets: {
+          showNotifications() {
+               setTimeout(() => {
+                    this.loadRights()
+               }, 1500);
+          }
      },
      computed: {
           filterData() {
@@ -246,6 +262,16 @@ export default {
           }
      },
      methods:{
+          loadRights() {
+               if(this.userInfo.UserLevel != 9) {
+                    this.axios.get(`${this.api}/processrights/${this.userInfo.EmployeeCode}/EM01/${this.$route.query.id}`).then(res => {
+                         this.userRights = res.data[0].Rights
+                         this.loadEmployees()
+                    })
+               } else {
+                    this.loadEmployees()
+               }
+          },
           loadEmployees(){
                this.loading = true
                this.axios.get(`${this.api}/employees/${this.userInfo.ShortName}`).then(res => {

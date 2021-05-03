@@ -69,14 +69,18 @@
                                                   Sign Up
                                              </v-btn>
                                         </v-card-text>
+                                        <v-card-actions class="ma-0 pa-0">
+                                             <v-spacer></v-spacer>
+                                             <v-tooltip bottom>
+                                                  <template v-slot:activator="{ on, attrs }">
+                                                       <v-btn @click="gotoHelp()" v-bind="attrs" v-on="on" small icon>
+                                                            <v-icon>mdi-help-circle-outline</v-icon>
+                                                       </v-btn>
+                                                  </template>
+                                                  <span>Help</span>
+                                             </v-tooltip>
+                                        </v-card-actions>
                                    </v-form>
-                                   <!-- <v-btn 
-                                        color="primary" 
-                                        x-small 
-                                        text
-                                   >
-                                        Forgot Password
-                                   </v-btn> -->
                               </v-card-text>
                          </v-card>
                     </v-col>
@@ -98,25 +102,6 @@
                     </v-card-text>
                </v-card>
           </v-dialog>
-          <!-- <v-snackbar
-               v-model="alert" 
-               color="error" 
-               :timeout="2000"
-               transition="scroll-x-reverse-transition" 
-               right
-               dark 
-          >
-               {{alertText}}
-               <template v-slot:action="{ attrs }">
-                    <v-btn
-                         v-bind="attrs"
-                         @click="alert = false"
-                         icon
-                    >
-                         <v-icon>mdi-close-circle</v-icon>
-                    </v-btn>
-               </template>
-          </v-snackbar> -->
           <signUp :signUpDialog="signUpDialog"></signUp>
      </v-main>
 </template>

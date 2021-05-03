@@ -12,7 +12,7 @@
                     v-bind="attrs"
                     v-on="on"
                     icon>    
-                    <v-icon small>mdi-bell</v-icon>
+                    <v-icon>mdi-bell</v-icon>
                     <v-badge
                          v-if="totalNotifs > 0"
                          color="error"

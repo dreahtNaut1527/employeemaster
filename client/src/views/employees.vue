@@ -54,12 +54,12 @@
                     hide-default-footer
                >
                     <template v-slot:[`item.actions`]="{ item }">
-                         <v-btn @click="viewRecord(item.EmployeeCode)" icon>
+                         <v-btn v-if="userRights == 3 || userRights == 1" @click="viewRecord(item.EmployeeCode)" icon>
                               
                               <v-icon>mdi-eye</v-icon>
                          </v-btn>
                          
-                         <v-btn  v-if="userInfo.UserLevel != 5" @click="editRecord(item.EmployeeCode)" icon>
+                         <v-btn  v-if="(userInfo.UserLevel != 5 && userRights > 1)" @click="editRecord(item.EmployeeCode)" icon>
                               <v-icon>mdi-pencil</v-icon>
                          </v-btn>
                                    
@@ -83,20 +83,12 @@ import store from '@/store'
 export default {
      data() {
           return {
-               
                department: '',
                section: '',
                team: '',
                pageCount: 0,
+               userRights: 0,
                page: 1,
-              
-        
-               // deptList: [],
-               // secList: [],
-               // teamList: [],
-               // departmentList: '',
-               // sectionList: '',
-               // teamList: '',
                breadCrumbsItems: [
                     {text: 'Main Data', disabled: false, href: '#'},
                     {text: 'Employees', disabled: true, href: '#'}
@@ -118,11 +110,16 @@ export default {
 
      },
      created() {
-          this.loadEmpinfo()
-          // this.loadDepartments()
+          this.loadRights()
           store.commit('CHANGE_EMPLCODE', {})
-          store.commit('CHANGE_EMP_EDIT')
-          
+          store.commit('CHANGE_EMP_EDIT')          
+     },
+     sockets: {
+          showNotifications() {
+               setTimeout(() => {
+                    this.loadRights()
+               }, 1500);
+          }
      },
      computed:{
           filterData() {
@@ -130,7 +127,8 @@ export default {
                     return (
                          rec.DepartmentName.includes(this.department || '') &&
                          rec.SectionName.includes(this.section || '') &&
-                         rec.TeamName.includes(this.team || '')                         
+                         rec.TeamName.includes(this.team || '') &&
+                         rec.EmployeeCode != this.userInfo.EmployeeCode                     
                     )
                })
           },
@@ -168,9 +166,18 @@ export default {
 
      },
      methods:{
+          loadRights() {
+               if(this.userInfo.UserLevel != 9) {
+                    this.axios.get(`${this.api}/processrights/${this.userInfo.EmployeeCode}/EM01/${this.$route.query.id}`).then(res => {
+                         this.userRights = res.data[0].Rights
+                         this.loadEmpinfo()
+                    })
+               } else {
+                    this.loadEmpinfo()
+               }
+          },
           loadEmpinfo(){
                let url = ''
-
                switch (this.userInfo.UserLevel) {
                     case 1: // DH
                          url = `${this.api}/employees/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}`

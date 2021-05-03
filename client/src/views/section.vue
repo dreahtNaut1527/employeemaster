@@ -9,7 +9,14 @@
                                         <v-card-text class="pa-0 headline">Sections</v-card-text>
                                    </v-col>
                                    <v-spacer></v-spacer>
-                                   <v-btn v-if="userInfo.UserLevel==4 || userInfo.UserLevel==9" @click="newRecord()" :color="themeColor == '' ? 'primary' : themeColor" dark><v-icon left>mdi-plus</v-icon>New</v-btn>
+                                   <v-btn 
+                                        v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9 || userRights == 3" 
+                                        @click="newRecord()" 
+                                        :color="themeColor == '' ? 'primary' : themeColor" 
+                                        dark
+                                   >
+                                        <v-icon left>mdi-plus</v-icon>New
+                                   </v-btn>
                               </v-row>
                          </v-card-title>
                          <v-divider></v-divider>
@@ -31,14 +38,20 @@
                                    <td>{{props.item.CreatedDate}}</td>
                                    <td>{{props.item.UpdatedDate}}</td>
                                    <td>
-                                        <v-btn @click="editRecord(props.item)" icon>
-                                             <v-icon v-if="userInfo.UserLevel==4 || userInfo.UserLevel==9">mdi-pencil</v-icon>
-                                             <v-icon v-else>mdi-eye</v-icon>
-                                        </v-btn>
-                                        <v-btn v-if="userInfo.UserLevel==4 || userInfo.UserLevel==9" @click="deleteRecord(props.item)" icon>
-                                             <v-icon v-if="props.item.DeletedDate == null">mdi-delete</v-icon>
-                                             <v-icon v-else>mdi-restore</v-icon>
-                                        </v-btn>
+                                        <div v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9 || userRights > 1">
+                                             <v-btn @click="editRecord(props.item)" icon>
+                                                  <v-icon >mdi-pencil</v-icon>
+                                             </v-btn>
+                                             <v-btn  @click="deleteRecord(props.item)" icon>
+                                                  <v-icon v-if="props.item.DeletedDate == null">mdi-delete</v-icon>
+                                                  <v-icon v-else>mdi-restore</v-icon>
+                                             </v-btn>
+                                        </div>
+                                        <div v-else>
+                                             <v-btn @click="editRecord(props.item)" icon>
+                                                  <v-icon>mdi-eye</v-icon>
+                                             </v-btn>
+                                        </div>
                                    </td>
                               </tr>
                          </template>
@@ -74,8 +87,8 @@
                          </v-container>
                          <v-card-actions>
                               <v-spacer></v-spacer>
-                              <v-btn v-if="userInfo.UserLevel==4 || userInfo.UserLevel==9" @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor" dark><v-icon left>mdi-content-save</v-icon>Save</v-btn>
                               <v-btn @click="clearVariables()" text><v-icon left>mdi-cancel</v-icon>Cancel</v-btn>
+                              <v-btn v-if="userInfo.UserLevel==4 || userInfo.UserLevel==9 || userRights > 1" @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor" dark><v-icon left>mdi-content-save</v-icon>Save</v-btn>
                          </v-card-actions>
                     </v-card>
                </v-dialog>               
@@ -90,9 +103,10 @@ export default {
                loading:true,
                sections:[],
                dialog: false,
-               pageCount: 0,
-               page: 1,
                editmode:0,
+               pageCount: 0,
+               userRights: 0,
+               page: 1,
                editSection: {
                     CompanyCode: '',
                     SectionCode: '00',
@@ -125,60 +139,69 @@ export default {
           }
      },
      created(){
-          this.loadsections()
+          this.loadRights()
      },
      sockets: {
           showNotifications() {
                setTimeout(() => {
-                    this.loadsections()
+                    this.loadRights()
                }, 1500);
           }
      },
      methods:{
-         loadsections(){
-               this.loading=true
-               let url=''
-               switch(this.userInfo.UserLevel) {
-                    case 5:
-                         url = `${this.api}/company/section/${this.userInfo.Comp_Name}`
-                         break;
-                    default:
-                         url = `${this.api}/company/section/${this.userInfo.ShortName}`
-                         break;                    
-               }   
-               this.axios.get(url).then(res=>{
-                   this.sections=res.data
-                   this.loading=false
-              })
-         } ,
-         editRecord(val){
-              this.editSection=val
-              this.dialog=true
-              this.editmode=1
-         },
-         newRecord(){
-              
-              this.dialog=true
-              this.editSection.CompanyCode=this.userInfo.CompanyCode
-         },
-         saveRecord(){
-              if (this.$refs.form.validate()){
-                   this.swal.fire(this.saveOptions).then(result=>{
+          loadRights() {
+               if(this.userInfo.UserLevel != 9) {
+                    this.axios.get(`${this.api}/processrights/${this.userInfo.EmployeeCode}/EM01/${this.$route.query.id}`).then(res => {
+                         this.userRights = res.data[0].Rights
+                         this.loadsections()
+                    })
+               } else {
+                    this.loadsections()
+               }
+          },
+          loadsections(){
+                    this.loading=true
+                    let url=''
+                    switch(this.userInfo.UserLevel) {
+                         case 5:
+                              url = `${this.api}/company/section/${this.userInfo.Comp_Name}`
+                              break;
+                         default:
+                              url = `${this.api}/company/section/${this.userInfo.ShortName}`
+                              break;                    
+                    }   
+                    this.axios.get(url).then(res=>{
+                    this.sections=res.data
+                    this.loading=false
+               })
+          } ,
+          editRecord(val){
+               this.editSection=val
+               this.dialog=true
+               this.editmode=1
+          },
+          newRecord(){
+               this.dialog=true
+               this.editSection.CompanyCode=this.userInfo.CompanyCode
+          },
+          saveRecord(){
+               if (this.$refs.form.validate()){
+                    this.swal.fire(this.saveOptions).then(result=>{
                          if(result.isConfirmed){
-                             let body = {
-                                  procedureName:"ProcSection",
-                                  values:[
-                                       this.editSection.CompanyCode,
-                                       this.editSection.SectionCode,
-                                       this.editSection.SectionName,
-                                       this.editSection.CreatedDate,
-                                       this.editSection.UpdatedDate,
-                                       this.editSection.UpdatedUserId,
-                                       1
-                                  ]
-                             }
-                             console.log(body)
-                             this.axios.post(`${this.api}/execute`,{data:JSON.stringify(body)})
+                         let body = {
+                              procedureName:"ProcSection",
+                              values:[
+                                   this.editSection.CompanyCode,
+                                   this.editSection.SectionCode,
+                                   this.editSection.SectionName,
+                                   this.editSection.CreatedDate,
+                                   this.editSection.UpdatedDate,
+                                   this.editSection.UpdatedUserId,
+                                   1
+                              ]
+                         }
+                         console.log(body)
+                         this.axios.post(`${this.api}/execute`,{data:JSON.stringify(body)})
                               this.swal.fire('Hooray!','Changes has been saved', 'success')
                               this.setNotifications(
                                    this.userInfo.EmployeeCode, 
@@ -189,39 +212,39 @@ export default {
                               this.clearVariables()
                               this.swal.fire('Oh no!', 'Changes are not saved', 'info')
                          }
-                   })
-              }
-         },
-         deleteRecord(val){
-              this.swal.fire({
+                    })
+               }
+          },
+          deleteRecord(val){
+               this.swal.fire({
                     title: 'Are you sure?',
                     text: val.DeletedDate == null ? "This data wil not be used in any records." : "This wil restore the data.",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: val.DeletedDate == null  ? 'Yes, delete it!' : 'Yes, restore it!',
                     denyButtonText: 'Cancel'
-              }).then(result=>{
-                   if (result.isConfirmed){
-                      let body = {
-                                  procedureName:"ProcSection",
-                                  values:[
-                                       val.CompanyCode,
-                                       val.SectionCode,
-                                       val.SectionNameName,
-                                       val.CreatedDate,
-                                       val.UpdatedDate,                                      
-                                       this.userInfo.EmployeeCode,
-                                       0
-                                  ]
-                      }
+               }).then(result=>{
+                    if (result.isConfirmed){
+                         let body = {
+                              procedureName:"ProcSection",
+                              values:[
+                                   val.CompanyCode,
+                                   val.SectionCode,
+                                   val.SectionNameName,
+                                   val.CreatedDate,
+                                   val.UpdatedDate,                                      
+                                   this.userInfo.EmployeeCode,
+                                   0
+                              ]
+                         }
                          this.axios.post(`${this.api}/execute`,{data:JSON.stringify(body)})
                          this.swal.fire('Confirmed!','Changes has been saved', 'success')
                          this.setNotifications('Deleted a record', `User: ${this.userInfo.EmployeeName} deleted a record`)
                          this.clearVariables()
-                   }
-              })
-         },
-         clearVariables(){
+               }
+               })
+          },
+          clearVariables(){
                this.editSection={
                     CompanyCode: '',
                     SectionCode: '00',
@@ -231,11 +254,11 @@ export default {
                     UpdatedUserId: '',
                     Option: 1
                }
-          this.$refs.form.resetValidation()
-          this.loadsections()
-          this.dialog=false
-          this.editmode=0
-         }
+               this.$refs.form.resetValidation()
+               this.loadsections()
+               this.dialog=false
+               this.editmode=0
+          }
      }
 }
 </script>

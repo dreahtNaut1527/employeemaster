@@ -196,7 +196,7 @@ export default {
             systemLists: [],
             systemProcess: [],
             processRights: [],
-            editSystemList: {
+            editSystemList: {   
                 SystemCode: null,
                 SystemDesc: null
             },

@@ -225,7 +225,7 @@ export default {
                value.forEach((rec) => {
                     body += `value=${JSON.stringify(rec)}&`
                })
-               window.open(`http://localhost:8700/api/exportexcel?${body}`, '_blank')
+               window.open(`${this.api}/exportexcel?${body}`, '_blank')
           },
           loadLogtime() {
                this.overlay = true

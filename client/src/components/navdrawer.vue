@@ -83,7 +83,7 @@
                                    </template>
                                    <v-list-item
                                         v-for="subGroupChild in subGroup.items"
-                                        :to="subGroupChild.to"
+                                        @click="gotoPage(subGroupChild.to, subGroupChild.id)"
                                         :key="subGroupChild.text"
                                         link 
                                    >
@@ -149,17 +149,23 @@
                </div>
                <v-spacer></v-spacer>
                <v-text-field
-                    class="mt-4 mr-3" 
                     :color="themeColor == '' ? 'primary' : themeColor"
                     v-model="search"    
                     append-icon="mdi-magnify"     
                     placeholder="Search"
                     @keyup="getSearchData()"
+                    hide-details
+                    outlined
+                    rounded
+                    dense
                ></v-text-field>
-               <notifications v-if="userInfo.UserLevel != 0" />    
+               <notifications v-if="userInfo.UserLevel != 0" />     
+               <v-btn @click="gotoHelp()" icon>
+                    <v-icon >mdi-help-circle-outline</v-icon>
+               </v-btn>
                <v-btn @click="logout()" icon>
-                    <v-icon small>mdi-logout</v-icon>
-               </v-btn>  
+                    <v-icon >mdi-logout</v-icon>
+               </v-btn> 
                <v-btn 
                     class="mt-15 mr-n5 rounded-l-lg" 
                     style="background-color: rgb(0, 0, 0, 0.3)"
@@ -260,46 +266,6 @@ export default {
                     this.$router.push({path: page, query: {id: id}})
                }
           },
-          loadNavDrawer() {
-               this.axios.get(`${this.api}/processrights/${this.userInfo.EmployeeCode}/EM01/0`).then(res => {
-                    if(Array.isArray(res.data)) {
-                         this.navDrawerList = [
-                              {
-                                   title: 'Dashboard',
-                                   icon: 'mdi-view-dashboard',
-                                   items: [
-                                        {text: 'Home', to: '/dashboard'},
-                                        {text: 'Profile', to: '/profile'}
-                                   ],
-                                   active: true   
-                              },
-                              {
-                                   title: 'Main Data',
-                                   icon: 'mdi-account',
-                                   items: [],
-                                   active: false   
-                              }
-                         ]
-                         res.data.forEach(rec => {
-                              this.navDrawerList[1].items.push(
-                                   {text: rec.ProcessName, to: `/${rec.ProcessPath}`, id: rec.ProcessId}
-                              )
-                         })
-                    } else {
-                         this.navDrawerList = [
-                              {
-                                   title: 'Dashboard',
-                                   icon: 'mdi-view-dashboard',
-                                   items: [
-                                        {text: 'Home', to: '/dashboard'},
-                                        {text: 'Profile', to: '/profile'}
-                                   ],
-                                   active: true   
-                              }
-                         ]
-                    }
-               })
-          },
           getSearchData() {
                this.$store.commit('CHANGE_SEARCHING', this.search)
           },
@@ -391,36 +357,78 @@ export default {
                               active: false  
                          }
                     ]
+                    // Transfer Employees
+                    this.navDrawerSubGroup = [
+                         {
+                              text: 'Transfer Employees',
+                              items: [
+                                   {text: 'Transfer', icon: 'mdi-transfer', to: '/transferemployees'},
+                                   {text: 'History', icon: 'mdi-history', to: '/transferhistory'},
+                                   {text: 'Pending', icon: 'mdi-timer-sand', to: '/pendingemployees'}
+                              ]
+                         }
+                    ]
                     break;
                }
-               switch (this.userInfo.UserLevel) {
-                    case 4: 
-                         this.navDrawerSubGroup = []
-                         break;
-                    case 5:
+          },
+          loadNavDrawer() {
+               this.axios.get(`${this.api}/processrights/${this.userInfo.EmployeeCode}/EM01/0`).then(res => {
+                    if(Array.isArray(res.data)) {
+                         this.navDrawerList = [
+                              {
+                                   title: 'Dashboard',
+                                   icon: 'mdi-view-dashboard',
+                                   items: [
+                                        {text: 'Home', to: '/dashboard'},
+                                        {text: 'Profile', to: '/profile'}
+                                   ],
+                                   active: true   
+                              },
+                              {
+                                   title: 'Main Data',
+                                   icon: 'mdi-account',
+                                   items: [],
+                                   active: false   
+                              }
+                         ]
+                         res.data.forEach(rec => {
+                              if(rec.ProcessId != 'EM01-09') {
+                                   this.navDrawerList[1].items.push(
+                                        {text: rec.ProcessName, to: `/${rec.ProcessPath}`, id: rec.ProcessId}
+                                   )
+                              }
+                         })
+                    } else {
+                         this.navDrawerList = [
+                              {
+                                   title: 'Dashboard',
+                                   icon: 'mdi-view-dashboard',
+                                   items: [
+                                        {text: 'Home', to: '/dashboard'},
+                                        {text: 'Profile', to: '/profile'}
+                                   ],
+                                   active: true   
+                              }
+                         ]
+                    }
+                    this.loadTransferEmployees()
+               })
+          },
+          loadTransferEmployees() {
+               this.axios.get(`${this.api}/processrights/${this.userInfo.EmployeeCode}/EM01/EM01-09`).then(res => {
+                    if(res.data.length > 0 && res.data[0].DeletedDate == null) {
                          this.navDrawerSubGroup = [
                               {
                                    text: 'Transfer Employees',
                                    items: [
-                                        {text: 'History', icon: 'mdi-history', to: '/transferhistory'},
-                                        {text: 'Pending', icon: 'mdi-timer-sand', to: '/pendingemployees'}
+                                        {text: 'Transfer', icon: 'mdi-transfer', to: '/transferemployees', id: 'EM01-09'},
+                                        {text: 'History', icon: 'mdi-history', to: '/transferhistory', id: 'EM01-09'},
+                                        {text: 'Pending', icon: 'mdi-timer-sand', to: '/pendingemployees', id: 'EM01-09'}
                                    ]
                               }
                          ]
-                         break;
-                    default:
-                         this.navDrawerSubGroup = [
-                              {
-                                   text: 'Transfer Employees',
-                                   items: [
-                                        {text: 'Transfer', icon: 'mdi-transfer', to: '/transferemployees'},
-                                        {text: 'History', icon: 'mdi-history', to: '/transferhistory'},
-                                        {text: 'Pending', icon: 'mdi-timer-sand', to: '/pendingemployees'}
-                                   ]
-                              }
-                         ]
-                         break;
-               }
+                    }
+               })
           }
      },
      watch: {

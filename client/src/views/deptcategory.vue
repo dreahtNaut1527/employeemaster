@@ -9,7 +9,7 @@
                                    <v-card-text class="pa-0 headline">Department Categories</v-card-text>
                               </v-col>
                          <v-spacer></v-spacer>
-                         <v-btn v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9" @click="newRecord()" :color="themeColor == '' ? 'primary' : themeColor" dark><v-icon left>mdi-plus</v-icon>New</v-btn>
+                         <v-btn v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9 || userRights == 3" @click="newRecord()" :color="themeColor == '' ? 'primary' : themeColor" dark><v-icon left>mdi-plus</v-icon>New</v-btn>
                          </v-row>
                     </v-card-title>
                     <v-divider></v-divider>
@@ -31,14 +31,20 @@
                                    <td>{{moment(props.item.CreatedDate).format('YYYY-MM-DD')}}</td>
                                    <td>{{moment(props.item.UpdatedDate).format('YYYY-MM-DD')}}</td>
                                    <td>
-                                        <v-btn @click="editRecord(props.item)" icon>
-                                             <v-icon v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9">mdi-pencil</v-icon>
-                                             <v-icon v-else>mdi-eye</v-icon>
-                                        </v-btn>
-                                        <v-btn v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9" @click="deleteRecord(props.item)" icon>
-                                             <v-icon v-if="props.item.DeletedDate == null">mdi-delete</v-icon>
-                                             <v-icon v-else>mdi-restore</v-icon>
-                                        </v-btn>
+                                        <div v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9 || userRights > 1">
+                                             <v-btn @click="editRecord(props.item)" icon>
+                                                  <v-icon >mdi-pencil</v-icon>
+                                             </v-btn>
+                                             <v-btn  @click="deleteRecord(props.item)" icon>
+                                                  <v-icon v-if="props.item.DeletedDate == null">mdi-delete</v-icon>
+                                                  <v-icon v-else>mdi-restore</v-icon>
+                                             </v-btn>
+                                        </div>
+                                        <div v-else>
+                                             <v-btn @click="editRecord(props.item)" icon>
+                                                  <v-icon>mdi-eye</v-icon>
+                                             </v-btn>
+                                        </div>
                                    </td>
                               </tr>
                          </template>
@@ -55,7 +61,7 @@
           <v-dialog v-model="dialog" width="500" persistent>
                <v-card>
                     <v-toolbar :color="themeColor == '' ? 'primary' : themeColor" dark flat>
-                         <v-toolbar-title v-if="userInfo.UserLevel == 4">{{editMode == 1 ? 'Edit Record' : 'New Record'}}</v-toolbar-title>
+                         <v-toolbar-title v-if="userRights > 1">{{editMode == 1 ? 'Edit Record' : 'New Record'}}</v-toolbar-title>
                          <v-toolbar-title v-else>View Record</v-toolbar-title>
                     </v-toolbar>
                     <v-container>
@@ -67,7 +73,7 @@
                                                   label="Department Category"
                                                   @keypress.enter="saveRecord()"
                                                   :rules="[v => !!v || 'Department is required']"
-                                                  :readonly="userInfo.UserLevel != 4 && userInfo.UserLevel != 9"
+                                                  :readonly="userInfo.UserLevel != 4 && userInfo.UserLevel != 9 || userRights == 1"
                                                   :color="themeColor == '' ? 'primary' : themeColor"
                                                   outlined
                                                   dense
@@ -78,11 +84,11 @@
                     </v-container>
                     <v-card-actions>
                          <v-spacer></v-spacer>
-                         <v-btn v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9" @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor" dark>
-                              <v-icon left>mdi-content-save</v-icon>Save
-                         </v-btn>
                          <v-btn @click="clearVariables()" text>
                               <v-icon left>mdi-cancel</v-icon>Cancel
+                         </v-btn>
+                         <v-btn v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9 || userRights > 1" @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor" dark>
+                              <v-icon left>mdi-content-save</v-icon>Save
                          </v-btn>
                     </v-card-actions>
                </v-card>
@@ -99,6 +105,7 @@ export default {
                loading: true,
                editMode: 0,
                pageCount: 0,
+               userRights: 0,
                page: 1,
                departmentCategories: [],
                saveOptions: {
@@ -130,16 +137,26 @@ export default {
           }
      },
      created() {
-          this.loadDepartmentCategory()
+          this.loadRights()
      },
      sockets: {
           showNotifications() {
                setTimeout(() => {
-                    this.loadDepartmentCategory()
+                    this.loadRights()
                }, 1500);
           }
      },
      methods: {
+          loadRights() {
+               if(this.userInfo.UserLevel != 9) {
+                    this.axios.get(`${this.api}/processrights/${this.userInfo.EmployeeCode}/EM01/${this.$route.query.id}`).then(res => {
+                         this.userRights = res.data[0].Rights
+                         this.loadDepartmentCategory()
+                    })
+               } else {
+                    this.loadDepartmentCategory()
+               }
+          },
           loadDepartmentCategory() {
                this.loading = true
                this.axios.get(`${this.api}/departmentcategory/${this.userInfo.ShortName}`).then(res => {

@@ -14,6 +14,7 @@
                     :label="label"
                     :filled="isEmpEdit == true"
                     :color="themeColor == '' ? 'primary' : themeColor"
+                    @click:append="menuDialog = true"
                     append-icon="mdi-calendar"
                     v-bind="attrs"
                     v-on="on"

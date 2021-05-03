@@ -94,6 +94,7 @@ export default {
                section: '',
                team: '',
                pageCount: 0,
+               userRights: 0,
                page: 1,
                loading: true,
                breadCrumbsItems: [
@@ -111,7 +112,14 @@ export default {
           }
      },
      created(){
-          this.loadHistory()
+          this.loadRights()
+     },
+     sockets: {
+          showNotifications() {
+               setTimeout(() => {
+                    this.loadRights()
+               }, 1500);
+          }
      },
      computed: {
           filterData() {
@@ -147,6 +155,16 @@ export default {
           }
      },
      methods:{
+          loadRights() {
+               if(this.userInfo.UserLevel != 9) {
+                    this.axios.get(`${this.api}/processrights/${this.userInfo.EmployeeCode}/EM01/${this.$route.query.id}`).then(res => {
+                         this.userRights = res.data[0].Rights
+                         this.loadHistory()
+                    })
+               } else {
+                    this.loadHistory()
+               }
+          },
           loadHistory(){
                let url = ''
                this.loading = true

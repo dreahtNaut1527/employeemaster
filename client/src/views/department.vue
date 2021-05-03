@@ -51,7 +51,7 @@
                                    <td>{{props.item.CreatedDate}}</td>
                                    <td>{{props.item.UpdatedDate}}</td>
                                    <td>
-                                        <div v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9 || (userRights == 2 || userRights == 3)">
+                                        <div v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9 || userRights > 1">
                                              <v-btn @click="editRecord(props.item)" icon>
                                                   <v-icon >mdi-pencil</v-icon>
                                              </v-btn>
@@ -81,7 +81,7 @@
           <v-dialog v-model="dialog" width="500" persistent>
                <v-card>
                     <v-toolbar :color="themeColor == '' ? 'primary' : themeColor" dark flat>
-                         <v-toolbar-title v-if="userInfo.UserLevel == 4">{{editMode == 1 ? 'Edit Record' : 'New Record'}}</v-toolbar-title>
+                         <v-toolbar-title v-if="userRights > 1">{{editMode == 1 ? 'Edit Record' : 'New Record'}}</v-toolbar-title>
                          <v-toolbar-title v-else>View Record</v-toolbar-title>
                     </v-toolbar>
                     <v-container>
@@ -93,7 +93,7 @@
                                                   label="Department"
                                                   @keypress.enter="saveRecord()"
                                                   :rules="[v => !!v || 'Department is required']"
-                                                  :readonly="userInfo.UserLevel != 4 && userInfo.UserLevel != 9"
+                                                  :readonly="userInfo.UserLevel != 4 && userInfo.UserLevel != 9 || userRights == 1"
                                                   :color="themeColor == '' ? 'primary' : themeColor"
                                                   outlined
                                                   dense
@@ -193,10 +193,14 @@ export default {
      },
      methods: {
           loadRights() {
-               this.axios.get(`${this.api}/processrights/${this.userInfo.EmployeeCode}/EM01/${this.$route.query.id}`).then(res => {
-                    this.userRights = res.data[0].Rights
+               if(this.userInfo.UserLevel != 9) {
+                    this.axios.get(`${this.api}/processrights/${this.userInfo.EmployeeCode}/EM01/${this.$route.query.id}`).then(res => {
+                         this.userRights = res.data[0].Rights
+                         this.loadDepartments()
+                    })
+               } else {
                     this.loadDepartments()
-               })
+               }
           },
           loadDepartments() {
                this.loading = true

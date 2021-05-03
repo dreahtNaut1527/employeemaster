@@ -74,6 +74,11 @@
                             ></v-radio>
                         </v-radio-group>
                     </template>
+                    <!-- <template v-slot:[`item.actions`]="{ item }">
+                        <v-btn @click="saveUserRights(item)" icon>
+                            <v-icon>mdi-trash-can</v-icon>
+                        </v-btn>
+                    </template> -->
                 </v-data-table>
                 <v-pagination
                     v-model="page"
@@ -87,7 +92,7 @@
                     <v-btn to="/accounts" class="mx-3" text>
                         <v-icon left>mdi-keyboard-return</v-icon>Back
                     </v-btn>
-                    <v-btn @click="saveUserRights()" :color="themeColor == '' ? 'primary' : themeColor" dark>
+                    <v-btn @click="saveUserRights(null)" :color="themeColor == '' ? 'primary' : themeColor" dark>
                         <v-icon left>mdi-content-save</v-icon>Save
                     </v-btn>
                 </v-card-actions>
@@ -117,7 +122,7 @@ export default {
             headers: [
                 {text: 'Id', value: 'ProcessId'},
                 {text: 'Process', value: 'ProcessName'},
-                {text: 'Action', value: 'Rights'}
+                {text: 'Account Rights', value: 'Rights'}
             ],
             breadCrumbsItems: [ 
                 {text: 'Maintenance', disabled: false, href: '/accounts'},
@@ -173,9 +178,10 @@ export default {
                         Rights: 0
                     })
                 }
+                console.log(`${this.api}/processrights/${this.$route.query.code}/${data.SystemCode}/${data.ProcessId}`);
             })
         },
-        saveUserRights() {
+        saveUserRights(val) {
             let data = []
             let body = {
                 procedureName: 'ProcSystemProcessRights',
@@ -193,7 +199,7 @@ export default {
                         rec.ProcessId,
                         rec.Rights,
                         this.userInfo.EmployeeCode,
-                        1
+                        val == null ? 1 : 0
                     ]
                     body.values.push(data)
                 })
@@ -204,13 +210,16 @@ export default {
                     this.userInfo.EmployeeCode, 
                     'updated an account'
                 )
+                this.userRightsAll = 0
             }
         }
     },
     watch: {
         selectedProcess(rec) {
             rec.forEach(rec => {
-                rec.Rights = this.userRightsAll
+                if(this.userRightsAll != 0) {
+                    rec.Rights = this.userRightsAll
+                }
             })
         },
         userRightsAll() {
