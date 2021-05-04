@@ -28,7 +28,8 @@ const plugins = {
                          'emplcode',
                          'isEmpEdit',
                          'isConnect',
-                         'themeColor'
+                         'themeColor',
+                         'profileBackground'
                     ])
                },
                methods: {
@@ -40,7 +41,8 @@ const plugins = {
                          'CHANGE_EMPLCODE',
                          'CHANGE_EMP_EDIT',
                          'CHANGE_CONNECTION',
-                         'CHANGE_THEMECOLOR'
+                         'CHANGE_THEMECOLOR',
+                         'CHANGE_PROFILE_BACKGROUND'
                     ]),
                     setNotifications(code, message) {
                          let body = {

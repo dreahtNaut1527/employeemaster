@@ -22,7 +22,7 @@ router.get('/systemlist', (req, res) => {
 
 router.get('/systemprocess/:syscode', (req, res) => {
      let syscode = req.params.syscode
-     let sqlQuery = `SELECT * FROM SystemProcess WHERE SystemCode = '${syscode}'`
+     let sqlQuery = `SELECT * FROM SystemProcess WHERE SystemCode = '${syscode}' ORDER BY ProcessId`
      config.connect(err => {
           if(err) return res.send(err)
           const request = new mssql.Request(config)
@@ -39,7 +39,7 @@ router.get('/processrights/:emplcode/:syscode/:processid', (req, res) => {
      let processid = req.params.processid
      let sqlQuery = `SELECT * FROM SystemProcessRightView WHERE EmployeeCode = '${emplcode}'
                                    AND SystemCode = '${syscode}'`
-     if(processid != 0) sqlQuery += ` AND ProcessId = '${processid}'`
+     if(processid != 0) sqlQuery += ` AND ProcessId = '${processid}' ORDER BY ProcessId, SystemCode`
      config.connect(err => {
           if(err) return res.send(err)
           const request = new mssql.Request(config)

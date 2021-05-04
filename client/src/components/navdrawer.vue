@@ -3,26 +3,7 @@
           <v-navigation-drawer 
                :value="navDrawerVal"
                app
-          >     
-               <!-- <v-img src="https://cdn.vuetifyjs.com/images/cards/server-room.jpg">
-                    <v-row align="center" justify="center">
-                         <v-col cols="12" md="6">
-                              <v-avatar color="white" size="120">
-                                   <v-avatar size="110">
-                                        
-                                   <img :src="`http://asd_sql:8080/photos/${user.EmployeeCode}.jpg`" alt="nopic.jpg">
-                                   </v-avatar>
-                              </v-avatar>
-                         </v-col>
-                    </v-row>
-                    <v-list-item>
-                         <v-list-item-content class="text-center white--text">
-                              <v-list-item-title class="headline">{{ user.EmployeeCode }}</v-list-item-title>
-                              <v-list-item-subtitle class="text-center white--text">{{ user.EmployeeName }}</v-list-item-subtitle>
-                              <v-list-item-subtitle class="text-center white--text">{{ user.DesignationName }}</v-list-item-subtitle>
-                         </v-list-item-content>
-                    </v-list-item>
-               </v-img>   -->
+          >   
                <!-- For Japanese -->
                <v-list-item v-if="user.UserLevel == 5">
                     <v-list-item-content class="ma-2 text-center">
@@ -51,8 +32,8 @@
                          v-for="(item, i) in navDrawerList" :key="i"
                          v-model="item.active"    
                          :prepend-icon="item.icon"
-                         no-action
                          :color="themeColor == '' ? 'primary' : themeColor"
+                         no-action
                     >
                          <template v-slot:activator>
                               <v-list-item-content>
@@ -149,6 +130,7 @@
                </div>
                <v-spacer></v-spacer>
                <v-text-field
+                    v-if="this.userInfo.UserLevel > 0"
                     :color="themeColor == '' ? 'primary' : themeColor"
                     v-model="search"    
                     append-icon="mdi-magnify"     
@@ -180,6 +162,8 @@
           <v-navigation-drawer
                v-model="sideDrawer"
                :disable-resize-watcher="true"
+               absolute
+               temporary
                right
                app         
           >
@@ -198,16 +182,39 @@
                                    hide-mode-switch 
                                    hide-canvas
                                    :show-swatches="swatches"
+                                   :update:color="changeThemeColor(themeColorVal)"
                               ></v-color-picker>
                          </v-list-item-content>
                     </v-list-item>
                     <v-list-item>
-                              <v-list-item-content>
-                              <v-btn x-small block text @click="swatches = !swatches" :color="themeColor == '' ? 'primary' : themeColor">
-                                   {{swatches == false ? "Show more" : "Hide"}}
-                              </v-btn>
-                              </v-list-item-content>
+                         <v-list-item-content>
+                         <v-btn x-small block text @click="swatches = !swatches" :color="themeColor == '' ? 'primary' : themeColor">
+                              {{swatches == false ? "Show more" : "Hide"}}
+                         </v-btn>
+                         </v-list-item-content>
                     </v-list-item>
+                    <v-divider class="mx-3"></v-divider>
+                    <v-list-item>
+                         <v-list-item-content>
+                              <v-subheader>Profile Background</v-subheader>
+                              <v-item-group mandatory>
+                                   <v-row>
+                                        <v-col v-for="(item, i) in profileImage" :key="i" cols="12" md="4">
+                                             <v-item v-slot="{ toggle }">
+                                                  <v-card 
+                                                       elevation="7"
+                                                       :style="item.value == profileBackground ? `border: 2px solid ${themeColor} !important;` : ''"
+                                                       @click="toggle" 
+                                                  >
+                                                       <v-img @click="changeProfileBackground(item.value)" :src="item.value"></v-img>
+                                                  </v-card>
+                                             </v-item>
+                                        </v-col>
+                                   </v-row>
+                              </v-item-group>
+                         </v-list-item-content>
+                    </v-list-item>
+                    <v-divider class="mx-3"></v-divider>
                     <v-list-item>
                          <v-list-item-content>
                               <v-list-item-subtitle>Dark Mode</v-list-item-subtitle>
@@ -243,14 +250,19 @@ export default {
                socketId: '',
                themeColorVal: '',
                navDrawerList: [],
-               navDrawerSubGroup: []
+               navDrawerSubGroup: [],
+               profileImage: [
+                    {value: require('../assets/16251.jpg')},
+                    {value: require('../assets/2076.jpg')},
+                    {value: require('../assets/3594.jpg')}
+               ]
           }
      },
      created() {
-          this.themeColorVal = this.themeColor
           this.$store.commit('CHANGE_SEARCHING', '')
           this.dark = this.darkMode
           this.user = this.userInfo
+          this.themeColorVal = this.themeColor
           this.getUserLevel()
      },
      sockets: {
@@ -273,6 +285,12 @@ export default {
                this.$vuetify.theme.dark = this.dark
                this.icon = this.dark ? 'mdi-weather-sunny' : 'mdi-weather-night'
                this.$store.commit('CHANGE_THEME', this.dark)
+          },
+          changeThemeColor(val) {
+               this.$store.commit('CHANGE_THEMECOLOR', val)
+          },
+          changeProfileBackground(val) {
+               this.$store.commit('CHANGE_PROFILE_BACKGROUND', val)
           },
           logout() {
                this.$store.commit('CHANGE_USER_INFO', {})
@@ -350,9 +368,9 @@ export default {
                               title: 'Maintenance',
                               icon: 'mdi-cog',
                               items: [
-                                   {text: 'Profile', to: '/profile'},
                                    {text: 'User Accounts', to: '/accounts'},
-                                   {text: 'System List', to: '/systemlist'}
+                                   {text: 'System List', to: '/systemlist'},
+                                   {text: 'Profile', to: '/profile'}
                               ],
                               active: false  
                          }
@@ -435,9 +453,9 @@ export default {
           dark() {
                this.changeTheme()
           },
-          themeColorVal(val) {
-               this.$store.commit('CHANGE_THEMECOLOR', val)
-          }
+          // themeColorVal(val) {
+          //      this.$store.commit('CHANGE_THEMECOLOR', val)
+          // }
      },
      components: {
           notifications

@@ -8,12 +8,13 @@ export default new Vuex.Store({
   state: {
     userInfo: {},
     isLoggedIn: false,
+    isEmpEdit: false,
     darkMode: false,
+    isConnect: true,
+    profileBackground: null,
     searchData: '',
     emplcode: '',
-    isEmpEdit: false,
-    isConnect: true,
-    themeColor: ''
+    themeColor: '#1976d2',
   },
   plugins: [
     createPersistedState() 
@@ -42,6 +43,9 @@ export default new Vuex.Store({
     },
     CHANGE_THEMECOLOR: (state, data) => {
       state.themeColor = data
+    },
+    CHANGE_PROFILE_BACKGROUND: (state, data) => {
+      state.profileBackground = data
     }
   },
   actions: {

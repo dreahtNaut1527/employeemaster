@@ -50,19 +50,20 @@
                     :items="filterData"
                     :search="searchData"
                     :page.sync="page"
+                    :loading="loading"
+                    loading-text="Loading Data. . .Please Wait"
                     @page-count="pageCount = $event"
                     hide-default-footer
                >
+                    <v-progress-linear v-show="loading" slot="progress" :color="themeColor == '' ? 'primary' : themeColor" indeterminate></v-progress-linear>
                     <template v-slot:[`item.actions`]="{ item }">
                          <v-btn v-if="userRights == 3 || userRights == 1" @click="viewRecord(item.EmployeeCode)" icon>
                               
                               <v-icon>mdi-eye</v-icon>
                          </v-btn>
-                         
-                         <v-btn  v-if="(userInfo.UserLevel != 5 && userRights > 1)" @click="editRecord(item.EmployeeCode)" icon>
+                         <v-btn  v-if="(userInfo.UserLevel != 5 || userRights > 1)" @click="editRecord(item.EmployeeCode)" icon>
                               <v-icon>mdi-pencil</v-icon>
                          </v-btn>
-                                   
                     </template>
 
                </v-data-table>
@@ -83,6 +84,7 @@ import store from '@/store'
 export default {
      data() {
           return {
+               loading: true,
                department: '',
                section: '',
                team: '',
@@ -178,6 +180,7 @@ export default {
           },
           loadEmpinfo(){
                let url = ''
+               this.loading = true
                switch (this.userInfo.UserLevel) {
                     case 1: // DH
                          url = `${this.api}/employees/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}`
@@ -198,6 +201,7 @@ export default {
                }
                this.axios.get(url).then(res => {
                     this.getempInfos = res.data
+                    this.loading = false
                })
           }, 
 

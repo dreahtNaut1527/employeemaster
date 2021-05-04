@@ -3,7 +3,9 @@
           <v-breadcrumbs :items="breadCrumbsItems" divider="/"></v-breadcrumbs>
           <v-container>
                <v-card class="mx-auto" tile>
-                    <v-img height="12.5rem" src="../assets/16251.jpg"></v-img>
+                    <v-fade-transition mode="in-out">
+                         <v-img height="12.5rem" :src="profileBackground == null ? require('../assets/16251.jpg') : profileBackground"></v-img>
+                    </v-fade-transition>
                     <v-row class="hidden-sm-and-down" dense>
                          <v-col cols="12" md="4">
                               <v-card-text>
@@ -459,11 +461,11 @@
                          </v-tabs-items>
                          <v-card-actions v-if="tab == 4">
                               <v-spacer></v-spacer>
-                              <v-btn :color="themeColor == '' ? 'primary' : themeColor" @click="saveRecord()" dark>
-                                   <v-icon left>mdi-content-save</v-icon>Save
-                              </v-btn>
                               <v-btn @click="loadInformation()" text>
                                    <v-icon left>mdi-cancel</v-icon>Cancel
+                              </v-btn>
+                              <v-btn :color="themeColor == '' ? 'primary' : themeColor" @click="saveRecord()" dark>
+                                   <v-icon left>mdi-content-save</v-icon>Save
                               </v-btn>
                          </v-card-actions>
                     </v-card-text>

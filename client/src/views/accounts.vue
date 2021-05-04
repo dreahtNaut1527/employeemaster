@@ -68,12 +68,11 @@
                          @page-count="pageCount = $event"
                          hide-default-footer
                     >
-                    
                          <v-progress-linear v-show="loading" slot="progress" :color="themeColor == '' ? 'primary' : themeColor" indeterminate></v-progress-linear>
                          <template v-slot:[`item.rights`]="{ item }">
                               <v-tooltip bottom>
                                    <template v-slot:activator="{ on, attrs }">
-                                        <v-btn @click="gotoProcessRights(item.EmployeeCode)" v-on="on" v-bind="attrs" icon>
+                                        <v-btn @click="gotoProcessRights(item.EmployeeCode)" v-on="on" v-bind="attrs" :color="themeColor == '' ? 'primary' : themeColor" elevation="3" outlined icon>
                                              <v-icon>mdi-card-account-details</v-icon>
                                         </v-btn>
                                    </template>
@@ -109,9 +108,8 @@
                               </v-tooltip>
                          </template>
                          <template v-slot:[`item.Status`]="{ item }">
-                              <v-chip :color="item.Status == 1 ? 'success' : 'error'">
-                                   {{item.Status == 1 ? 'Active' : 'Inactive'}}
-                              </v-chip>
+                              <v-avatar :color="item.Status == 1 ? 'success' : 'error'" :size="24">
+                              </v-avatar>
                          </template>
                     </v-data-table>
                     <v-pagination
@@ -275,8 +273,8 @@ export default {
                     {text: 'Name', value: 'Fullname'},
                     {text: 'Username', value: 'Username'},  
                     {text: 'Level', value: 'UserLevel'},
-                    {text: 'Rights', value: 'rights'},
                     {text: 'Actions', value: 'actions'},
+                    {text: 'Rights', value: 'rights'},
                     {text: 'Status', value: 'Status'}
                ],
                breadCrumbsItems: [ 
@@ -314,17 +312,17 @@ export default {
           departmentList() {
                return this.filterData.map(rec => {
                     return rec.DepartmentName
-               })
+               }).sort()
           },
           sectionList() {
                return this.filterData.map(rec => {
                     return rec.SectionName
-               })
+               }).sort()
           },
           teamList() {
                return this.filterData.map(rec => {
                     return rec.TeamName
-               })
+               }).sort()
           }
      },
      methods: {

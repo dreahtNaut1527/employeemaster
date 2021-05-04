@@ -501,11 +501,11 @@
                     </v-card-text>
                     <v-card-actions v-if="this.isEmpEdit == true">
                          <v-spacer></v-spacer>
-                         <v-btn v-if="userInfo.UserLevel != 5" @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor" dark>
-                              <v-icon left>mdi-content-save</v-icon>Save
-                         </v-btn>
                          <v-btn @click="loadInformation()" text>
                               <v-icon left>mdi-cancel</v-icon>Cancel
+                         </v-btn>
+                         <v-btn v-if="userInfo.UserLevel != 5" @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor" dark>
+                              <v-icon left>mdi-content-save</v-icon>Save
                          </v-btn>
                     </v-card-actions>
                </v-card>

@@ -19,107 +19,110 @@
                          </v-card>
                     </v-col>
                </v-row>
-               <v-row>
-                    <v-col>
-                         <v-card>  
-                              <v-card-title>Employees Logtime</v-card-title>
-                              <v-divider></v-divider>
-                              <v-card-text>
-                                   <v-row class="mb-n10" dense>
-                                        <v-col cols="12" md="2">
-                                             <datePicker
-                                                  :menu="dateDialog"
-                                                  dateLabel="Logtime Date"
-                                                  :dateValue.sync="logtimeDate"
-                                             ></datePicker>
-                                        </v-col>
-                                        <v-col v-if="userInfo.UserLevel == 9 || userInfo.UserLevel == 5" cols="12" md="3">
-                                             <v-autocomplete
-                                                  v-model="department"
-                                                  :items="departmentList"
-                                                  :color="themeColor == '' ? 'primary' : themeColor"
-                                                  placeholder="Department"
-                                                  clearable
-                                                  outlined
-                                                  dense
-                                             ></v-autocomplete>
-                                        </v-col>
-                                        <v-col cols="12" md="3">
-                                             <v-autocomplete
-                                                  v-model="section"
-                                                  :items="sectionList"
-                                                  :color="themeColor == '' ? 'primary' : themeColor"
-                                                  placeholder="Section"
-                                                  clearable
-                                                  outlined
-                                                  dense
-                                             ></v-autocomplete>
-                                        </v-col>
-                                        <v-col cols="12" md="2">
-                                             <v-autocomplete
-                                                  v-model="team"
-                                                  :items="teamList"
-                                                  :color="themeColor == '' ? 'primary' : themeColor"
-                                                  placeholder="Team"
-                                                  clearable
-                                                  outlined
-                                                  dense
-                                             ></v-autocomplete>
-                                        </v-col>
-                                        <!-- <v-col cols="12" md="2">
-                                             <v-btn @click="exportData()">try</v-btn>
-                                        </v-col> -->
-                                   </v-row>
-                              </v-card-text>
-                              <v-divider></v-divider>
-                              <v-data-table
-                                   :headers="headers"
-                                   :items="filterData"
-                                   :loading="loading"
-                                   :search="searchData"
-                                   :items-per-page="7"
-                                   :page.sync="page"
-                                   loading-text="Loading Data. . .Please Wait"
-                                   @page-count="pageCount = $event"
-                                   hide-default-footer
-                              >
-                                   <v-progress-linear v-show="loading" slot="progress" :color="themeColor == '' ? 'primary' : themeColor" indeterminate></v-progress-linear>
-                                   <template v-slot:item="props">
-                                        <tr :style="props.item.TIMEIN == null ? 'color: #b71c1c;' : ''">
-                                             <td>{{props.item.EMPLCODE}}</td>
-                                             <td>{{props.item.EMPNAME}}</td>
-                                             <td>{{props.item.DEPTDESC}}</td>
-                                             <td>{{props.item.SECTIONDESC}}</td>
-                                             <td>{{props.item.TEAMDESC}}</td>
-                                             <td>{{props.item.TIMEIN}}</td>
-                                             <td>{{props.item.TIMEOUT}}</td>
-                                        </tr>
-                                   </template>
-                              </v-data-table>
-                              <v-pagination
-                                   v-model="page"
-                                   :length="pageCount"
-                                   :total-visible="10"
-                                   :color="themeColor == '' ? 'primary' : themeColor"
-                              ></v-pagination>
-                         </v-card>
-                    </v-col>
-               </v-row>
-               <v-row v-if="userInfo.UserLevel != 5" dense>
-                    <v-col cols="12" md="12">
-                         <v-card>
-                              <v-card-title>Total Summary of Sections</v-card-title>
-                              <barGraph></barGraph>
-                         </v-card>
-                    </v-col>
-               </v-row>
+               <v-card class="mt-3">
+                    <v-tabs v-model="tab" :color="themeColor == '' ? 'primary' : themeColor" centered icons-and-text grow>
+                         <v-tabs-slider></v-tabs-slider>
+                         <v-tab href="#tab-1">
+                              Employee Logtime
+                              <v-icon>mdi-clock-outline</v-icon> 
+                         </v-tab>
+                         <v-tab href="#tab-2">
+                              Summary
+                              <v-icon>mdi-poll-box-outline</v-icon> 
+                         </v-tab>
+                    </v-tabs>
+                    <v-tabs-items v-model="tab">
+                         <v-tab-item value="tab-1">
+                              <v-card>
+                                   <v-card-text>
+                                        <v-row class="mb-n8" dense>
+                                             <v-col cols="12" md="3">
+                                                  <datePicker
+                                                       :menu="dateDialog"
+                                                       dateLabel="Logtime Date"
+                                                       :dateValue.sync="logtimeDate"
+                                                  ></datePicker>
+                                             </v-col>
+                                             <v-col v-if="userInfo.UserLevel == 9 || userInfo.UserLevel == 5" cols="12" md="3">
+                                                  <v-autocomplete
+                                                       v-model="department"
+                                                       :items="departmentList"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
+                                                       placeholder="Department"
+                                                       clearable
+                                                       outlined
+                                                       dense
+                                                  ></v-autocomplete>
+                                             </v-col>
+                                             <v-col cols="12" md="3">
+                                                  <v-autocomplete
+                                                       v-model="section"
+                                                       :items="sectionList"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
+                                                       placeholder="Section"
+                                                       clearable
+                                                       outlined
+                                                       dense
+                                                  ></v-autocomplete>
+                                             </v-col>
+                                             <v-col cols="12" md="3">
+                                                  <v-autocomplete
+                                                       v-model="team"
+                                                       :items="teamList"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
+                                                       placeholder="Team"
+                                                       clearable
+                                                       outlined
+                                                       dense
+                                                  ></v-autocomplete>
+                                             </v-col>
+                                             <!-- <v-col cols="12" md="2">
+                                                  <v-btn @click="exportData()">try</v-btn>
+                                             </v-col> -->
+                                        </v-row>
+                                   </v-card-text>
+                                   <v-divider></v-divider>
+                                   <v-data-table
+                                        :headers="headers"
+                                        :items="filterData"
+                                        :loading="loading"
+                                        :search="searchData"
+                                        :items-per-page="6"
+                                        :page.sync="page"
+                                        loading-text="Loading Data. . .Please Wait"
+                                        @page-count="pageCount = $event"
+                                        hide-default-footer
+                                   >
+                                        <v-progress-linear v-show="loading" slot="progress" :color="themeColor == '' ? 'primary' : themeColor" indeterminate></v-progress-linear>
+                                        <template v-slot:item="props">
+                                             <tr :style="props.item.TIMEIN == null ? 'color: #b71c1c;' : ''">
+                                                  <td>{{props.item.EMPLCODE}}</td>
+                                                  <td>{{props.item.EMPNAME}}</td>
+                                                  <td>{{props.item.DEPTDESC}}</td>
+                                                  <td>{{props.item.SECTIONDESC}}</td>
+                                                  <td>{{props.item.TEAMDESC}}</td>
+                                                  <td>{{props.item.TIMEIN}}</td>
+                                                  <td>{{props.item.TIMEOUT}}</td>
+                                             </tr>
+                                        </template>
+                                   </v-data-table>
+                                   <v-pagination
+                                        v-model="page"
+                                        :length="pageCount"
+                                        :total-visible="10"
+                                        :color="themeColor == '' ? 'primary' : themeColor"
+                                   ></v-pagination>
+                                   <v-card-text class="caption">Total Record(s): {{filterData.length}}</v-card-text>
+                              </v-card>
+                         </v-tab-item>
+                         <v-tab-item value="tab-2">
+                              <v-container>
+                                   <barGraph></barGraph>
+                              </v-container>
+                         </v-tab-item>
+                    </v-tabs-items>
+               </v-card>
           </v-container>
-          <v-overlay :value="overlay">
-               <v-progress-circular
-                    :size="100"
-                    indeterminate
-               ></v-progress-circular>
-          </v-overlay>
      </v-main>
 </template>
 
@@ -130,8 +133,8 @@ import barGraph from '@/components/bargraph'
 export default {
      data() {
           return {
+               tab: null,
                loading: true,
-               overlay: true,
                dateDialog: false,
                department: '',
                section: '',
@@ -184,7 +187,7 @@ export default {
                return this.logtime.filter(rec => {
                     return (
                          rec.TIMEIN == null && 
-                         rec.DEPTDESC.match(this.department || '') &&
+                         rec.DEPTDESC.includes(this.department || '') &&
                          rec.SECTIONDESC.includes(this.section || '') &&
                          rec.TEAMDESC.includes(this.team || '')
                     )
@@ -228,7 +231,7 @@ export default {
                window.open(`${this.api}/exportexcel?${body}`, '_blank')
           },
           loadLogtime() {
-               this.overlay = true
+               this.loading = true
                let body = {}
                switch (this.userInfo.UserLevel) {
                     case 1: // Department Head
@@ -283,7 +286,6 @@ export default {
                     } else {
                          this.logtime = []
                     }
-                    this.overlay = false
                     this.loading = !this.loading
                }).catch(() => this.$router.push('*'))
           }

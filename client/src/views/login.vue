@@ -28,23 +28,11 @@
                                         <v-text-field
                                              v-model="username"
                                              placeholder="Username"
+                                             append-icon="mdi-account"
                                              outlined
                                              rounded
-                                             @blur="getUserInfo()"
                                              :color="themeColor == '' ? 'primary' : themeColor"
-                                        >
-                                             <template v-slot:append>
-                                                  <v-icon v-if="!loading">mdi-account</v-icon>
-                                                  <v-fade-transition leave-absolute>
-                                                       <v-progress-circular
-                                                            v-if="loading"
-                                                            size="24"
-                                                            :color="themeColor == '' ? 'primary' : themeColor"
-                                                            indeterminate
-                                                       ></v-progress-circular>
-                                                  </v-fade-transition>
-                                             </template>
-                                        </v-text-field>
+                                        ></v-text-field>
                                         <v-text-field
                                              v-model="password"
                                              placeholder="Password"
@@ -52,11 +40,11 @@
                                              type="password"
                                              outlined
                                              rounded
-                                             @keydown.enter="userLoggedIn()"
+                                             @keydown.enter="getUserInfo()"
                                              :color="themeColor == '' ? 'primary' : themeColor"
                                         ></v-text-field>
                                         <v-card-actions>
-                                             <v-btn @click="userLoggedIn()" :color="themeColor == '' ? 'primary' : themeColor" :disabled="loading == true" block dark>Login</v-btn>
+                                             <v-btn @click="getUserInfo()" :color="themeColor == '' ? 'primary' : themeColor" block dark>Login</v-btn>
                                         </v-card-actions>
                                         <v-card-text class="text-center">
                                              Don't have any account? 
@@ -103,6 +91,12 @@
                </v-card>
           </v-dialog>
           <signUp :signUpDialog="signUpDialog"></signUp>
+          <v-overlay :value="loading">
+               <v-progress-circular
+                    size="100"
+                    indeterminate
+               ></v-progress-circular>
+          </v-overlay>
      </v-main>
 </template>
 
@@ -174,6 +168,8 @@ export default {
                                    if (!this.employeeDetails) { 
                                         this.alert = !this.alert
                                         this.alertText = 'User not found.'
+                                   } else {
+                                        this.userLoggedIn()
                                    }
                               })
                          } else {
@@ -188,6 +184,7 @@ export default {
                               } else if(this.employeeDetails.Comp_Name == 'WUKONG') {
                                    this.employeeDetails.Comp_Name = 'WKN'
                               }
+                              this.userLoggedIn()
                          }
                     }) 
                } else {
@@ -209,7 +206,7 @@ export default {
                          this.alertText = 'Incorrect password. Please try again'
                     }
                } else {
-                    if(this.employeeDetails.Status == 1 || this.employeeDetails.Status != undefined) {
+                    if(this.employeeDetails.Status == 1) {
                          if(this.employeeDetails.Password == this.md5(this.password)) {
                               store.commit('CHANGE_USER_INFO', this.employeeDetails)
                               store.commit('CHANGE_USER_LOGGING', true)
@@ -222,7 +219,7 @@ export default {
                               this.alert = true
                               this.alertText = 'Incorrect password. Please try again'
                          }
-                    } else if(this.employeeDetails.Status == 0 || this.employeeDetails.Status != undefined) {
+                    } else if(this.employeeDetails.Status == 0) {
                          this.alert = true
                          this.alertText = 'Account has been deactivate.'
                     } else {

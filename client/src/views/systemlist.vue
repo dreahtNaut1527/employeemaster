@@ -28,8 +28,9 @@
                             <td>{{props.item.SystemCode}}</td>
                             <td>{{props.item.SystemDesc}}</td>
                             <td>
-                                <v-chip v-if="props.item.DeletedDate == null" color="success">Active</v-chip>
-                                <v-chip v-else color="error">Inactive</v-chip>
+                                <v-avatar :color="props.item.DeletedDate == null ? 'success' : 'error'" :size="24">
+                                    <span></span>
+                                </v-avatar>
                             </td>
                             <td>
                                 <v-tooltip bottom>
@@ -58,6 +59,7 @@
                         :total-visible="10"
                         :color="themeColor == '' ? 'primary' : themeColor"
                 ></v-pagination>
+                <v-card-text class="caption">Total Record(s): {{systemLists.length}}</v-card-text>
             </v-card>
         </v-container>
         <v-dialog v-model="dialog" width="900" persistent>
@@ -107,8 +109,9 @@
                                                 <td>{{item.ProcessId}}</td>
                                                 <td>{{item.ProcessName}}</td>   
                                                 <td>
-                                                    <v-chip v-if="item.DeletedDate == null" color="success">Active</v-chip>
-                                                    <v-chip v-else color="error">Inactive</v-chip>
+                                                    <v-avatar :color="item.DeletedDate == null ? 'success' : 'error'" :size="24">
+                                                        <span></span>
+                                                    </v-avatar>
                                                 </td>
                                                 <td>
                                                     <v-tooltip bottom>
@@ -138,40 +141,59 @@
                         <v-col cols="12" md="4">
                             <v-card outlined>
                                 <v-container>
-                                    <v-text-field
-                                        v-model="editSystemProcess.ProcessId"
-                                        :rules="[v => !!v || 'This field is required']"
-                                        :color="themeColor == '' ? 'primary' : themeColor"
-                                        label="Id"
-                                        outlined
-                                        dense
-                                    ></v-text-field>
-                                    <v-text-field
-                                        v-model="editSystemProcess.ProcessName"
-                                        :rules="[v => !!v || 'This field is required']"
-                                        :color="themeColor == '' ? 'primary' : themeColor"
-                                        label="Process Name"
-                                        outlined
-                                        dense
-                                    ></v-text-field>
-                                    <v-text-field
-                                        v-model="editSystemProcess.ProcessPath"
-                                        :rules="[v => !!v || 'This field is required']"
-                                        :color="themeColor == '' ? 'primary' : themeColor"
-                                        label="Process Path"
-                                        outlined
-                                        dense
-                                    ></v-text-field>
-                                    <v-btn @click="saveSystemProcess(editSystemList.SystemCode, editSystemProcess, 1)" text>
-                                        <v-icon left>mdi-plus</v-icon>Add
-                                    </v-btn>
+                                    <v-form v-model="valid" ref="form" lazy-validation>
+                                        <v-text-field
+                                            v-model="editSystemProcess.ProcessId"
+                                            :rules="[v => !!v || 'This field is required']"
+                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                            :disabled="disableObject"
+                                            label="Id"
+                                            outlined
+                                            dense
+                                        ></v-text-field>
+                                        <v-text-field
+                                            v-model="editSystemProcess.ProcessName"
+                                            :rules="[v => !!v || 'This field is required']"
+                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                            label="Process Name"
+                                            :disabled="disableObject"
+                                            outlined
+                                            dense
+                                        ></v-text-field>
+                                        <v-text-field
+                                            v-model="editSystemProcess.ProcessPath"
+                                            :rules="[v => !!v || 'This field is required']"
+                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                            label="Process Path"
+                                            :disabled="disableObject"
+                                            outlined
+                                            dense
+                                        ></v-text-field>
+                                    </v-form>
+                                    <v-row class="mr-5" align="center" justify="center" dense>
+                                        <v-col cols="12" md="4">
+                                            <v-btn @click="newSystemProcess()" :disabled="!disableObject" :color="themeColor == '' ? 'primary' : themeColor" small text>
+                                                <v-icon left>mdi-pencil</v-icon>New
+                                            </v-btn>
+                                        </v-col>
+                                        <v-col cols="12" md="4">
+                                            <v-btn @click="saveSystemProcess(editSystemList.SystemCode, editSystemProcess, 1)" :disabled="disableObject" small text>
+                                                <v-icon left>mdi-content-save</v-icon>save
+                                            </v-btn>
+                                        </v-col>
+                                        <v-col cols="12" md="4">
+                                            <v-btn @click="clearVariables()" :disabled="disableObject" small text>
+                                                <v-icon left>mdi-close</v-icon>Clear
+                                            </v-btn>
+                                        </v-col>
+                                    </v-row>
                                 </v-container>
                             </v-card>
                         </v-col>
                     </v-row>
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn @click="clearVariables()" text><v-icon left>mdi-cancel</v-icon>Cancel</v-btn>
+                        <v-btn @click="closeDialog()" text><v-icon left>mdi-cancel</v-icon>Cancel</v-btn>
                         <v-btn v-if="systemProcessMode == 0" @click="saveRecord(editSystemList, 1)" :color="themeColor == '' ? 'primary' : themeColor" dark>
                             <v-icon left>mdi-content-save</v-icon>Save
                         </v-btn>
@@ -187,6 +209,7 @@ export default {
     data() {
         return {
             dialog: false,
+            disableObject: true,
             loading: true,
             valid: true,
             systemProcessMode: 0,
@@ -227,7 +250,7 @@ export default {
         }
     },
     created() {
-        this.clearVariables()
+        this.loadSystemLists()
     },
     methods: {
         loadSystemLists() {
@@ -253,6 +276,15 @@ export default {
             })
             this.loadSystemProcess(val.SystemCode)
         },
+        newSystemProcess() {
+            this.disableObject = !this.disableObject
+            this.editSystemProcess = {
+                SystemCode: this.editSystemList.SystemCode,
+                ProcessId: `${this.editSystemList.SystemCode}-`,
+                ProcessName: null,
+                ProcessPath: null
+            }
+        },
         editProcessRecord(val) {
             Object.assign(this.editSystemProcess, {
                 SystemCode: val.SystemCode,
@@ -260,6 +292,7 @@ export default {
                 ProcessName: val.ProcessName,
                 ProcessPath: val.ProcessPath
             })
+            this.disableObject = false
         },
         saveRecord(val, option) {
             this.swal.fire(this.saveOptions).then(result => {
@@ -275,51 +308,52 @@ export default {
                     }
                     this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
                     this.systemProcessMode = 1
+                    this.clearVariables()
                 }
             })
         },  
         saveSystemProcess(syscode, val, option) {
-            this.swal.fire(this.saveOptions).then(result => {
-                if(result.isConfirmed) {
-                    let body = {
-                        procedureName: 'ProcSystemProcess',
-                        values: [
-                            syscode,
-                            val.ProcessId,
-                            this.sentenceCase(val.ProcessName),
-                            val.ProcessPath.toLowerCase(),
-                            this.userInfo.EmployeeCode,
-                            option
-                        ]
+            if(this.$refs.form.validate()) {
+                this.swal.fire(this.saveOptions).then(result => {
+                    if(result.isConfirmed) {
+                        let body = {
+                            procedureName: 'ProcSystemProcess',
+                            values: [
+                                syscode,
+                                val.ProcessId,
+                                this.sentenceCase(val.ProcessName),
+                                val.ProcessPath.toLowerCase(),
+                                this.userInfo.EmployeeCode,
+                                option
+                            ]
+                        }
+                        this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
+                        this.loadSystemProcess(syscode)
+                        this.clearVariables()
                     }
-                    this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
-                    this.loadSystemProcess(syscode)
-                    this.editSystemProcess = {
-                        SystemCode: null,
-                        ProcessId: 0,
-                        ProcessName: null
-                    }
-                }
-            })
-        },  
-        clearVariables() {
-            if(this.dialog) {
-                this.$refs.form.resetValidation()
+                })
             }
-            this.editMode = 0
-            this.systemProcessMode = 0
+        },  
+        closeDialog() {
             this.dialog = false
+            this.systemProcessMode = 0
             this.editSystemList = {
                 SystemCode: null,
                 SystemDesc: null
             }
+            this.clearVariables()
+            this.loadSystemLists()
+        },
+        clearVariables() {
+            this.editMode = 0
+            this.$refs.form.resetValidation()
             this.editSystemProcess = {
                 SystemCode: null,
                 ProcessId: null,
                 ProcessName: null,
                 ProcessPath: null
             }
-            this.loadSystemLists()
+            this.disableObject = true
         }
     }
 }

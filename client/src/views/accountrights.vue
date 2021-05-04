@@ -74,11 +74,6 @@
                             ></v-radio>
                         </v-radio-group>
                     </template>
-                    <!-- <template v-slot:[`item.actions`]="{ item }">
-                        <v-btn @click="saveUserRights(item)" icon>
-                            <v-icon>mdi-trash-can</v-icon>
-                        </v-btn>
-                    </template> -->
                 </v-data-table>
                 <v-pagination
                     v-model="page"
@@ -92,10 +87,20 @@
                     <v-btn to="/accounts" class="mx-3" text>
                         <v-icon left>mdi-keyboard-return</v-icon>Back
                     </v-btn>
-                    <v-btn @click="saveUserRights(null)" :color="themeColor == '' ? 'primary' : themeColor" dark>
+                    <v-btn @click="saveUserRights()" :color="themeColor == '' ? 'primary' : themeColor" dark>
                         <v-icon left>mdi-content-save</v-icon>Save
                     </v-btn>
                 </v-card-actions>
+                <v-overlay
+                    :value="loading"
+                    absolute
+                >
+                    <v-progress-circular
+                        :size="64"
+                        indeterminate
+                        dark
+                    ></v-progress-circular>
+                </v-overlay>
             </v-card>
         </v-container>
     </v-main>
@@ -106,6 +111,7 @@ export default {
     data() {
         return {
             code: null,
+            loading: true,
             pageCount: 0,
             page: 1,
             userRightsAll: 0,
@@ -133,12 +139,14 @@ export default {
     },
     created() {
         this.loadEmployeeDetails()
-        this.loadSystemLists()
     },
     methods: {
         loadEmployeeDetails() {
+            this.loading = true
             this.axios.get(`${this.api}/basicinfo/${this.$route.query.code}`).then(res => {
                 this.employeeDetails = res.data[0]
+                this.loading = false 
+                this.loadSystemLists()
             })
         },
         loadSystemLists() {
@@ -147,14 +155,15 @@ export default {
             })
         },
         loadSystemProcess(syscode) {
+            this.loading = true
             this.systemProcessLists = []
             this.axios.get(`${this.api}/systemprocess/${syscode}`).then(res => {
                 if(Array.isArray(res.data)) {
                     res.data.forEach(rec => {
                         this.loadSystemProcessRights(rec)
                     })
+                    this.loading = false
                 }
-                this.systemProcessLists.sort()
             })
         },
         loadSystemProcessRights(data) {
@@ -178,10 +187,9 @@ export default {
                         Rights: 0
                     })
                 }
-                console.log(`${this.api}/processrights/${this.$route.query.code}/${data.SystemCode}/${data.ProcessId}`);
             })
         },
-        saveUserRights(val) {
+        saveUserRights() {
             let data = []
             let body = {
                 procedureName: 'ProcSystemProcessRights',
@@ -199,7 +207,7 @@ export default {
                         rec.ProcessId,
                         rec.Rights,
                         this.userInfo.EmployeeCode,
-                        val == null ? 1 : 0
+                        1
                     ]
                     body.values.push(data)
                 })
