@@ -117,8 +117,8 @@ export default {
                     Option: 1
                },
                breadCrumbsItems: [
-                    {text: 'Main Data', disabled: false, href: '/section'},
-                    {text: 'Sections', disabled: true, href: '/section'}
+                    {text: 'Main Data', disabled: false, href: '#'},
+                    {text: 'Sections', disabled: true, href: '#'}
                ],
                headers:[
                     {text:'Section',value:'SectionName'},

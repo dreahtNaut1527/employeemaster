@@ -98,8 +98,9 @@ export default {
                page: 1,
                loading: true,
                breadCrumbsItems: [
-                    {text: 'Main Data', disabled: false, href: '/pendingemployees'},
-                    {text: 'Pending Employees', disabled: true, href: '/pendingemployees'}
+                    {text: 'Main Data', disabled: false, href: '#'},
+                    {text: 'Transfer Employees', disabled: false, href: '#'},
+                    {text: 'Pending', disabled: true, href: '#'}
                ],
                headers: [
                     {text:'Code',value:'EmployeeCode'},
@@ -189,7 +190,7 @@ export default {
                this.axios.get(url).then(res => {
                     this.pending = res.data
                     this.loading = false
-               }).catch(() => this.$router.push('*'))
+               })
           }
      },
      components: {

@@ -278,8 +278,8 @@ export default {
                     {text: 'Status', value: 'Status'}
                ],
                breadCrumbsItems: [ 
-                    {text: 'Maintenance', disabled: false, href: '/accounts'},
-                    {text: 'User Accounts', disabled: true, href: '/accounts'}
+                    {text: 'Maintenance', disabled: false, href: '#'},
+                    {text: 'User Accounts', disabled: true, href: '#'}
                ]
           }
      },
@@ -391,7 +391,7 @@ export default {
                this.axios.get(`${this.api}/usercontrol?array=${arrayParams}`).then(res => {
                     this.accounts = res.data
                     this.loading = false
-               }).catch(() => this.$router.push('*'))
+               })
           },   
           getEmployeeFullname() {
                this.loadName = true

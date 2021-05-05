@@ -10,7 +10,7 @@
                               </v-col>
                               <v-spacer></v-spacer>
                               <v-btn 
-                                   v-if="userRights > 1"
+                                   v-if="userRights > 1 || userInfo.UserLevel == 9 || userInfo.UserLevel == 4"
                                    :color="themeColor == '' ? 'primary' : themeColor" 
                                    @click="transferEmployees()" 
                                    :disabled="selected.length <= 0" 
@@ -138,11 +138,11 @@
                               </v-container>
                               <v-card-actions>
                                    <v-spacer></v-spacer>
-                                   <v-btn @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor" dark>
-                                        <v-icon left>mdi-content-save</v-icon>Save
-                                   </v-btn>
                                    <v-btn @click="dialog = !dialog" text>
                                         <v-icon left>mdi-cancel</v-icon>Cancel
+                                   </v-btn>
+                                   <v-btn @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor" dark>
+                                        <v-icon left>mdi-content-save</v-icon>Save
                                    </v-btn>
                               </v-card-actions>
                          </v-card-text>
@@ -173,8 +173,8 @@ export default {
                dialog: false,
                valid: true,
                breadCrumbsItems: [
-                    {text: 'Main Data', disabled: false, href: '/transfer'},
-                    {text: 'Transfer Employee', disabled: false, href: '/transferemployees'},
+                    {text: 'Main Data', disabled: false, href: '#'},
+                    {text: 'Transfer Employee', disabled: false, href: '#'},
                     {text: 'Transfer', disabled: true, href: '#'},
                ],
                headers: [

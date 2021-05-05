@@ -131,8 +131,8 @@ export default {
                     {text: 'Actions', value: 'actions'}
                ],
                breadCrumbsItems: [
-                    {text: 'Main Data', disabled: false, href: '/deptcetegory'},
-                    {text: 'Department Categories', disabled: true, href: '/deptcetegory'}
+                    {text: 'Main Data', disabled: false, href: '#'},
+                    {text: 'Department Categories', disabled: true, href: '#'}
                ]
           }
      },
@@ -162,7 +162,7 @@ export default {
                this.axios.get(`${this.api}/departmentcategory/${this.userInfo.ShortName}`).then(res => {
                     this.departmentCategories = res.data
                     this.loading = false
-               }).catch(() => this.$router.push('*'))
+               })
           },
           saveRecord() {
                if(this.$refs.form.validate()) {

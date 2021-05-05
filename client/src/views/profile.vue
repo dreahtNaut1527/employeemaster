@@ -557,8 +557,8 @@ export default {
                     // If variable has no error
                     if(this.information) {
                          this.breadCrumbsItems = [
-                              {text: this.userInfo.UserLevel == 0 ? 'Employee' : 'Maintenance', disabled: false, href: '/profile'},
-                              {text: 'Profile', disabled: true, href: '/profile'}
+                              {text: this.userInfo.UserLevel == 0 ? 'Employee' : 'Maintenance', disabled: false, href: '#'},
+                              {text: 'Profile', disabled: true, href: '#'}
                          ]
                          this.loadEducations()
                          this.loadShifts()

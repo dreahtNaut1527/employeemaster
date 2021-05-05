@@ -169,8 +169,8 @@ export default {
                     {text: 'Actions', value: 'actions'}
                ],
                breadCrumbsItems: [
-                    {text: 'Main Data', disabled: false, href: '/department'},
-                    {text: 'Departments', disabled: true, href: '/department'}
+                    {text: 'Main Data', disabled: false, href: '#'},
+                    {text: 'Departments', disabled: true, href: '#'}
                ]
           }
      },
@@ -217,7 +217,7 @@ export default {
                     this.departments = res.data
                     this.loading = false
                     this.loadDepartmentCategory()
-               }).catch(() => this.$router.push('*'))
+               })
           },
           loadDepartmentCategory() {
                this.loading = true

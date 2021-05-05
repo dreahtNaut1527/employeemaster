@@ -287,7 +287,7 @@ export default {
                          this.logtime = []
                     }
                     this.loading = !this.loading
-               }).catch(() => this.$router.push('*'))
+               })
           }
      },
      watch: {

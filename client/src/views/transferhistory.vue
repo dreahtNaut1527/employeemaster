@@ -98,8 +98,9 @@ export default {
                page: 1,
                loading: true,
                breadCrumbsItems: [
-                    {text: 'Main Data', disabled: false, href: '/transfer'},
-                    {text: 'Transfer Employee', disabled: true, href: '/transfer'}
+                    {text: 'Main Data', disabled: false, href: '#'},
+                    {text: 'Transfer Employee', disabled: false, href: '#'},
+                    {text: 'History', disabled: true, href: '#'}
                ],
                headers: [
                     {text:'Code',value:'EmployeeCode'},

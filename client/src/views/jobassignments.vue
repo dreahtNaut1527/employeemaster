@@ -141,8 +141,8 @@ export default {
                     {text: 'Actions', value: 'actions'}
                ],
                breadCrumbsItems: [
-                    {text: 'Main Data', disabled: false, href: '#jobassignments'},
-                    {text: 'Job Assignments', disabled: true, href: '#jobassignments'}
+                    {text: 'Main Data', disabled: false, href: '#'},
+                    {text: 'Job Assignments', disabled: true, href: '#'}
                ]
           }
      },
@@ -181,7 +181,7 @@ export default {
                     this.loading = true
                     this.jobassignments = await res.data
                     this.loading = false
-               }).catch(() => this.$router.push('*'))
+               })
           },
           saveRecord() {
                if(this.$refs.form.validate()) {

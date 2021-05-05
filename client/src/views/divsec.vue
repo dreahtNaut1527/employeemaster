@@ -167,8 +167,8 @@ export default {
                     {text:"Team",value: "TeamName"}             
                ],
                breadCrumbsItems: [
-                    {text: 'Main Data', disabled: false, href: '/divsec'},
-                    {text: 'Department - Section', disabled: true, href: '/divsec'}
+                    {text: 'Main Data', disabled: false, href: '#'},
+                    {text: 'Department - Section', disabled: true, href: '#'}
                ],
                editdivsecteam:{
                     CompanyCode: '',

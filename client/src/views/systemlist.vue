@@ -245,7 +245,7 @@ export default {
             headerProcess: ['Id', 'Process', 'Status', 'Action'],
             breadCrumbsItems: [ 
                 {text: 'Maintenance', disabled: false, href: '#'},
-                {text: 'System Lists', disabled: true, href: '/systemlist'}
+                {text: 'System Lists', disabled: true, href: '#'}
             ]
         }
     },

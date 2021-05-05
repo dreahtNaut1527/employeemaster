@@ -131,9 +131,9 @@ export default {
                 {text: 'Account Rights', value: 'Rights'}
             ],
             breadCrumbsItems: [ 
-                {text: 'Maintenance', disabled: false, href: '/accounts'},
-                {text: 'User Accounts', disabled: false, href: '/accounts'},
-                {text: 'Account Rights', disabled: true, href: '/accounts'}
+                {text: 'Maintenance', disabled: false, href: '#'},
+                {text: 'User Accounts', disabled: false, href: '/employeemaster/accounts'},
+                {text: 'Account Rights', disabled: true, href: '#'}
             ]
         }
     },

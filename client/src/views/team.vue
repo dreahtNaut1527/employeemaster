@@ -110,8 +110,8 @@ export default {
                     Option: 1
                },
                breadCrumbsItems: [
-                    {text: 'Main Data', disabled: false, href: '/team'},
-                    {text: 'Teams', disabled: true, href: '/team'}
+                    {text: 'Main Data', disabled: false, href: '#'},
+                    {text: 'Teams', disabled: true, href: '#'}
                ],
                headers:[
                     {text:'Team',value:'TeamName'},
