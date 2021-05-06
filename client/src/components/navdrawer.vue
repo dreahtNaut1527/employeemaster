@@ -1,31 +1,49 @@
 <template>
      <div>
           <v-navigation-drawer 
-               :value="navDrawerVal"
+               v-model="navDrawerVal"
+               :expand-on-hover="$vuetify.breakpoint.mdAndUp"
+               :absolute="$vuetify.breakpoint.smAndDown"
+               :temporary="$vuetify.breakpoint.smAndDown"
                app
           >   
                <!-- For Japanese -->
-               <v-list-item v-if="user.UserLevel == 5">
-                    <v-list-item-content class="ma-2 text-center">
-                         <v-list-item-avatar size="112">                                        
-                              <img :src="`${photo_jap}/${user.id}.jpg`" alt="nopic.jpg">
-                         </v-list-item-avatar>
-                         <v-list-item-title class="headline">{{ user.id }}</v-list-item-title>
-                         <v-list-item-subtitle>{{ user.LastNameEng }} {{user.FirstNameEng}}</v-list-item-subtitle>
-                         <v-list-item-subtitle>( {{ user.LastName}} {{ user.FirstName }} )</v-list-item-subtitle>
-                    </v-list-item-content>
-               </v-list-item>
-               <!-- For Non-Japanese -->
-               <v-list-item v-else>
-                    <v-list-item-content class="ma-2 text-center">
-                         <v-list-item-avatar size="112">                                        
-                              <img :src="`${photo}/${user.EmployeeCode}.jpg`" alt="nopic.jpg">
-                         </v-list-item-avatar>
-                         <v-list-item-title class="headline">{{ user.EmployeeCode }}</v-list-item-title>
-                         <v-list-item-subtitle>{{ user.EmployeeName }}</v-list-item-subtitle>
-                         <v-list-item-subtitle>{{ user.DesignationName }}</v-list-item-subtitle>
-                    </v-list-item-content>
-               </v-list-item>
+               <div class="hidden-md-and-up">
+                    <v-list-item v-if="user.UserLevel == 5">
+                         <v-list-item-content class="ma-2 text-center">
+                              <v-list-item-avatar size="112">                                        
+                                   <img :src="`${photo_jap}/${user.id}.jpg`" alt="nopic.jpg">
+                              </v-list-item-avatar>
+                              <v-list-item-title class="headline">{{ user.id }}</v-list-item-title>
+                              <v-list-item-subtitle>{{ user.LastNameEng }} {{user.FirstNameEng}}</v-list-item-subtitle>
+                              <v-list-item-subtitle>( {{ user.LastName}} {{ user.FirstName }} )</v-list-item-subtitle>
+                         </v-list-item-content>
+                    </v-list-item>
+                    <!-- For Non-Japanese -->
+                    <v-list-item v-else>
+                         <v-list-item-content class="ma-2 text-center">
+                              <v-list-item-avatar size="112">                                        
+                                   <img :src="`${photo}/${user.EmployeeCode}.jpg`" alt="nopic.jpg">
+                              </v-list-item-avatar>
+                              <v-list-item-title class="headline">{{ user.EmployeeCode }}</v-list-item-title>
+                              <v-list-item-subtitle>{{ user.EmployeeName }}</v-list-item-subtitle>
+                              <v-list-item-subtitle>{{ user.DesignationName }}</v-list-item-subtitle>
+                         </v-list-item-content>
+                    </v-list-item>
+               </div>
+               <div class="hidden-sm-and-down">
+                    <v-list three-line>
+                         <v-list-item class="px-2">
+                              <v-list-item-avatar>                                       
+                                   <img :src="`${photo}/${user.EmployeeCode}.jpg`" alt="nopic.jpg">
+                              </v-list-item-avatar>
+                              <v-list-item-content>
+                                   <v-list-title class="caption">{{user.EmployeeCode}}</v-list-title>
+                                   <v-list-subtitle class="caption">{{user.EmployeeName}}</v-list-subtitle>
+                              </v-list-item-content>
+                         </v-list-item>
+                    </v-list>
+               </div>
                <v-divider></v-divider>
                <v-list shaped dense>
                     <v-list-group
@@ -79,46 +97,11 @@
                          </div>
                     </v-list-group>
                </v-list>    
-               <!-- <v-list shaped dense>
-                    <v-list-group
-                         v-for="(item, i) in navDrawerList" :key="i"
-                         v-model="item.active"    
-                         :prepend-icon="item.icon"
-                         no-action
-                    >
-                         <template v-slot:activator>
-                              <v-list-item-content>
-                                   <v-list-item-title>{{item.title}}</v-list-item-title>
-                              </v-list-item-content>
-                         </template>
-                         <v-list-item
-                              v-for="child in item.items"
-                              :to="child.to"
-                              :key="child.text"
-                              link 
-                         >
-                              <v-list-item-content>
-                                   <v-list-item-subtitle>{{child.text}}</v-list-item-subtitle>
-                              </v-list-item-content>
-                         </v-list-item>
-                    </v-list-group>
-               </v-list>                -->
-               <!-- <v-bottom-navigation
-                    background-color="transparent" 
-                    absolute
-               >
-                    <v-spacer></v-spacer>
-                    <v-switch
-                         v-model="dark"
-                         :prepend-icon="icon"          
-                         @change="changeTheme()"
-                    ></v-switch>
-               </v-bottom-navigation> -->
           </v-navigation-drawer>
           <v-app-bar
                app
           >
-               <v-app-bar-nav-icon @click="navDrawerVal = !navDrawerVal"></v-app-bar-nav-icon>
+               <v-app-bar-nav-icon class="hidden-md-and-up" @click.stop="navDrawerVal = !navDrawerVal"></v-app-bar-nav-icon>
                <div class="hidden-sm-and-down">
                     <div v-if="userInfo.UserLevel == 5">
                          <v-toolbar-title>{{ user.LocalDepartments }}</v-toolbar-title>
@@ -162,8 +145,6 @@
           <v-navigation-drawer
                v-model="sideDrawer"
                :disable-resize-watcher="true"
-               absolute
-               temporary
                right
                app         
           >
@@ -239,7 +220,7 @@ export default {
      data() {
           return {
                user: '',
-               navDrawerVal: true,
+               navDrawerVal: false,
                dark: false,
                overlay: false,
                sideDrawer: false,
@@ -263,6 +244,7 @@ export default {
           this.dark = this.darkMode
           this.user = this.userInfo
           this.themeColorVal = this.themeColor
+          this.navDrawerVal = this.$vuetify.breakpoint.smAndDown ? false : true
           this.getUserLevel()
      },
      sockets: {

@@ -172,7 +172,7 @@
                                                   ></v-text-field>  -->
                                                   <datePicker
                                                        :menu="dateDialog"
-                                                       dateLabel="Department Resigned"
+                                                       dateLabel="Department Separation Date"
                                                        :dateValue.sync="information.RetiredDate" 
                                                   ></datePicker>
                                                   <!-- <v-text-field 
@@ -215,19 +215,21 @@
                                                   ></v-text-field>
                                              </v-col>
                                              <v-col cols="12" md="2">
-                                                  <datePicker
-                                                       :menu="dateDialog"
-                                                       dateLabel="Date of Birth"
-                                                       :dateValue.sync="dateBirth"
+                                                  <v-text-field
+                                                       v-model="dateBirth"
+                                                       label="Date of Birth"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
                                                        readonly
-                                                  ></datePicker>
+                                                       outlined
+                                                       dense
+                                                  ></v-text-field>
                                              </v-col>
                                              <v-col cols="12" md="1">
                                                   <v-text-field
                                                        v-model="ageValue"
                                                        label="Age"
                                                        :color="themeColor == '' ? 'primary' : themeColor"
-                                                       readOnly
+                                                       readonly
                                                        outlined
                                                        dense
                                                   ></v-text-field>
@@ -674,7 +676,7 @@ export default {
                this.axios.get(`${this.api}/company/department/section/team/${this.userInfo.ShortName}`).then(res=>{
                     this.divsecteam = res.data
                     // console.log('div',res.data)
-                    this.loading  =false
+                    this.loading = false
                       this.loadShifts()
                       this.loadDesignations()
                })
@@ -799,7 +801,7 @@ export default {
                // Format dates
                val.ContractHiredDate = val.ContractHiredDate ? this.moment(val.ContractHiredDate).format('YYYY-MM-DD') : ""
                val.RegularHiredDate = val.RegularHiredDate ? this.moment(val.RegularHiredDate).format('YYYY-MM-DD') : ""
-               val.RetiredDate = val.RetiredDate ? this.moment(val.RetiredDate).format('YYYY-MM-DD') : ""
+               val.RetiredDate = val.RetiredDate ? this.moment.utc(val.RetiredDate).format('YYYY-MM-DD') : ""
                this.dateBirth = val.DateBirth ? this.moment(val.DateBirth).format('YYYY-MM-DD') : ""
                this.genderValue = val.Gender == 'M' ? 'Male' : 'Female'
                this.ageValue = this.moment().diff(this.dateBirth, 'years')

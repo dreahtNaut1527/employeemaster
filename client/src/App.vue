@@ -15,6 +15,14 @@ export default {
                
           }
      },
+     mounted() {
+          setInterval(() => {
+               this.checkAppVersion()
+          }, 1000);
+     },
+     methods: {
+
+     },
      components: {
           navdrawer,
           navfooter

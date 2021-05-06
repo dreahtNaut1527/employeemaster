@@ -72,7 +72,7 @@
                          <template v-slot:[`item.rights`]="{ item }">
                               <v-tooltip bottom>
                                    <template v-slot:activator="{ on, attrs }">
-                                        <v-btn @click="gotoProcessRights(item.EmployeeCode)" v-on="on" v-bind="attrs" :color="themeColor == '' ? 'primary' : themeColor" elevation="3" outlined icon>
+                                        <v-btn :disabled="item.Status == 0" @click="gotoProcessRights(item.EmployeeCode)" v-on="on" v-bind="attrs" :color="themeColor == '' ? 'primary' : themeColor" elevation="3" outlined icon>
                                              <v-icon>mdi-card-account-details</v-icon>
                                         </v-btn>
                                    </template>

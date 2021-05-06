@@ -8,6 +8,11 @@ const router = express.Router()
 // =====================================================================
 // ======================= Select Query (MSSQL)=========================
 // =====================================================================
+router.get('/appversion', (req, res) => {
+     res.send(JSON.stringify(require('../package.json').version))
+})
+
+
 router.get('/systemlist', (req, res) => {
      let sqlQuery = `SELECT * FROM SystemLists`
      config.connect(err => {
@@ -64,9 +69,7 @@ router.get('/companies', (req, res) => {
 
 router.get('/employeeinfo/:code', (req, res) => {
      let code = req.params.code
-     let sqlQuery = `SELECT * FROM EmployeeInformationView WHERE EmployeeCode = '${code}'
-                    AND (RetiredDate IS NULL 
-                     OR RetiredDate >= convert(VARCHAR(10), getdate(), 111))`
+     let sqlQuery = `SELECT * FROM EmployeeInformationView WHERE EmployeeCode = '${code}'`
      config.connect(err => {
           if(err) return res.send(err)
           const request = new mssql.Request(config)

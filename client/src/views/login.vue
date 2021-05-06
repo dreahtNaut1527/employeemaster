@@ -112,7 +112,7 @@ export default {
                alert: false,
                valid: false,
                remember: false,
-               loading:false,
+               loading: false,
                signUpDialog: false,
                alertText: '',
                username: '',
@@ -137,11 +137,12 @@ export default {
      sockets: {
           connect() {
                store.commit('CHANGE_CONNECTION', true)
+               this.alert = false
+               this.alertText = ''
           },
           disconnect() {
-               this.alert = !this.alert
+               this.alert = true
                this.alertText = 'Could not connect to server. Please try again'
-               this.loading = true 
                store.commit('CHANGE_CONNECTION', false)
           }
      },
@@ -158,12 +159,10 @@ export default {
                     // check if Japanese
                     this.clearHeaders(0)
                     this.axios.get(`${this.api_jap}/${this.username}`).then(res => {
-                         this.loading = false
                          this.employeeDetails = JSON.parse(JSON.stringify(res.data))
                          if(this.employeeDetails == '') {
                               this.clearHeaders(1)
                               this.axios.post(`${this.api}/executeselect`, {data: JSON.stringify(body)}).then(res => {
-                                   this.loading = false
                                    this.employeeDetails = res.data[0]
                                    if (!this.employeeDetails) { 
                                         this.alert = !this.alert
@@ -232,6 +231,7 @@ export default {
           clearVariables() {
                this.username = ''
                this.password = ''
+               this.loading = false
           }
      },
      watch: {

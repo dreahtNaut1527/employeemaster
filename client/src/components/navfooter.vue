@@ -3,13 +3,13 @@
           class="font-weight-medium"
           clipped-left
           padless
+          dense
           app
      >
-          <v-col
-               class="text-center"
-               cols="12"
-          >
-               {{ new Date().getFullYear() }} — <strong>Employee Master</strong>
-          </v-col>
+          <v-card width="100%" flat tile>
+               <v-card-text class="text-center">
+                    {{ new Date().getFullYear() }} — <strong>Employee Master</strong> {{appVersion}}
+               </v-card-text>
+          </v-card>
      </v-footer>
 </template>    

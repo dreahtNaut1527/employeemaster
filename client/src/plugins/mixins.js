@@ -29,6 +29,7 @@ const plugins = {
                          'isEmpEdit',
                          'isConnect',
                          'themeColor',
+                         'appVersion',
                          'profileBackground'
                     ])
                },
@@ -42,7 +43,8 @@ const plugins = {
                          'CHANGE_EMP_EDIT',
                          'CHANGE_CONNECTION',
                          'CHANGE_THEMECOLOR',
-                         'CHANGE_PROFILE_BACKGROUND'
+                         'CHANGE_PROFILE_BACKGROUND',
+                         'CHANGE_APP_VERSION'
                     ]),
                     setNotifications(code, message) {
                          let body = {
@@ -78,6 +80,25 @@ const plugins = {
                     },
                     gotoHelp() {
                          window.open('http://10.169.141.8:5050/JaeAnn/employeemaster/-/wikis/Manual', '_blank')
+                    },
+                    checkAppVersion() {
+                         let version = null
+                         this.axios.get(`${this.api}/appversion`).then(res => {
+                              version = res.data
+                              if(version != this.appVersion) {
+                                   this.$store.commit('CHANGE_APP_VERSION', version)
+                                   this.$store.commit('CHANGE_CONNECTION', true)
+                                   this.$store.commit('CHANGE_USER_INFO', {})
+                                   this.$store.commit('CHANGE_USER_LOGGING', false)
+                                   this.$store.commit('CHANGE_PROFILE_BACKGROUND', null)
+                                   this.$store.commit('CHANGE_THEMECOLOR', '#1976d2')
+                                   this.$store.commit('CHANGE_THEME', null)
+                                   this.$store.commit('CHANGE_SEARCHING', null)
+                                   if(this.$route.name != 'login') {
+                                        this.$router.push('/')
+                                   }
+                              }
+                         })
                     },
                }
           })

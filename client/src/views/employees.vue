@@ -204,7 +204,6 @@ export default {
                     this.loading = false
                })
           }, 
-
           // loadEmpinfo(){
           //      this.axios.get(`${this.api}/employees/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}`).then(res => {
           //           // console.log("RES DATA", res.data);

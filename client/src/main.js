@@ -47,6 +47,7 @@ new Vue({
      vuetify,
      sockets: {
           connect() {
+               this.checkAppVersion()
                store.commit('CHANGE_CONNECTION', true)
                // if(store.state.isLoggedIn) {
                //      if(this.userInfo.UserLevel == 0) {
@@ -56,10 +57,11 @@ new Vue({
                //      }
                // }
           },
-          disconnect() {
-               store.commit('CHANGE_CONNECTION', false)
-               this.$router.push('*')
-          }
+          // disconnect() {
+          //      this.checkAppVersion()
+          //      // store.commit('CHANGE_CONNECTION', false)
+          //      // this.$router.push('*')
+          // }
      },
      render: h => h(App)
 }).$mount('#app')

@@ -71,6 +71,9 @@ export default {
           menu() {
                this.menuDialog = true
           },
+          dateValue(val) {
+               this.date = val
+          },
           date(val) {
                this.$emit('update:dateValue', val)
                this.menuDialog = false

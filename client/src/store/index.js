@@ -12,6 +12,7 @@ export default new Vuex.Store({
     darkMode: false,
     isConnect: true,
     profileBackground: null,
+    appVersion: null,
     searchData: '',
     emplcode: '',
     themeColor: '#1976d2',
@@ -46,6 +47,9 @@ export default new Vuex.Store({
     },
     CHANGE_PROFILE_BACKGROUND: (state, data) => {
       state.profileBackground = data
+    },
+    CHANGE_APP_VERSION: (state, data) => {
+      state.appVersion = data
     }
   },
   actions: {

@@ -305,6 +305,7 @@ export default {
                     ]
                     body.values.push(data)
                })
+               console.log(body);
                this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
                this.swal.fire('Saved','', 'success')
                // this.$router.push('/transfer')
