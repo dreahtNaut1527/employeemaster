@@ -4,10 +4,10 @@
           <v-container>
                <v-card>
                     <v-toolbar flat>
-                         <v-toolbar-title class="headline hidden-sm-and-down">Departments</v-toolbar-title>
+                         <!-- <v-toolbar-title class="headline hidden-sm-and-down">Departments</v-toolbar-title> -->
                          <v-spacer></v-spacer>
-                         <v-row align="center" >
-                              <v-col class="ml-auto" cols="12" md="7">
+                         <v-row >
+                              <v-col class="ml-auto" cols="12" md="4">
                                    <v-autocomplete
                                         v-model="deptCategory"
                                         :items="departmentCategories"
@@ -21,9 +21,21 @@
                                         dense
                                    ></v-autocomplete>
                               </v-col>
+                              <v-col cols="12" md="4">
+                                   <v-text-field
+                                        v-model="searchTable"
+                                        placeholder="Search Department"
+                                        append-icon="mdi-magnify"
+                                        :color="themeColor == '' ? 'primary' : themeColor"
+                                        hide-details
+                                        clearable
+                                        outlined  
+                                        dense
+                                   ></v-text-field>
+                              </v-col>
                          </v-row>
                          <v-btn 
-                              class="mx-3"
+                              class="ml-3"
                               v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9 || userRights == 3" 
                               @click="newRecord()" 
                               :color="themeColor == '' ? 'primary' : themeColor" 
@@ -37,7 +49,7 @@
                          :headers="headers"
                          :items="filterDepartments"
                          :loading="loading"
-                         :search="searchData"
+                         :search="searchTable"
                          :page.sync="page"
                          loading-text="Loading Data. . .Please Wait"
                          @page-count="pageCount = $event"
@@ -140,6 +152,7 @@ export default {
                pageCount: 0,
                userRights: 0,
                page: 1,
+               searchTable: '',
                deptCategory: '',
                departments: [],
                departmentCategories: [],

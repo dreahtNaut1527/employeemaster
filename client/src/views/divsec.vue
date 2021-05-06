@@ -3,22 +3,33 @@
           <v-breadcrumbs :items="breadCrumbsItems" divider="/"></v-breadcrumbs>
           <v-container>
               <v-card>
-                    <v-card-title >                                   
+                    <v-toolbar flat>          
+                         <v-spacer></v-spacer>                         
                          <v-row dense>
-                              <v-col cols="12" md="4">
-                                   <v-card-text class="pa-0 headline">Department-Section-Team</v-card-text>
+                              <v-col class="ml-auto" cols="12" md="6">
+                                   <!-- <v-card-text class="pa-0 headline">Department-Section-Team</v-card-text> -->
+                                   <v-text-field
+                                        v-model="searchTable"
+                                        placeholder="Search Department, Section. . ."
+                                        append-icon="mdi-magnify"
+                                        :color="themeColor == '' ? 'primary' : themeColor"
+                                        hide-details
+                                        clearable
+                                        outlined  
+                                        dense
+                                   ></v-text-field>
                               </v-col>
-                              <v-spacer></v-spacer>
-                              <v-btn 
-                                   v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9 || userRights == 3" 
-                                   @click="newRecord()" 
-                                   :color="themeColor == '' ? 'primary' : themeColor" 
-                                   dark
-                              >
-                                   <v-icon left>mdi-plus</v-icon>New
-                              </v-btn>
                          </v-row>
-                    </v-card-title>
+                         <v-btn 
+                              class="ml-3"
+                              v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9 || userRights == 3" 
+                              @click="newRecord()" 
+                              :color="themeColor == '' ? 'primary' : themeColor" 
+                              dark
+                         >
+                              <v-icon left>mdi-plus</v-icon>New
+                         </v-btn>
+                    </v-toolbar>
                     <v-divider></v-divider>
                     <v-card-title>
                          <v-row dense>
@@ -64,7 +75,7 @@
                     <v-data-table
                          :headers="headers"
                          :items="filterData"
-                         :search="searchData"
+                         :search="searchTable"
                          :page.sync="page"
                          :items-per-page="8"
                          loading-text="Loading Data. . .Please Wait"
@@ -152,9 +163,10 @@ export default {
      data() {
           return {
                dialog:false,
-               departmentfilter:"",
-               sectionfilter:"",
-               teamfilter:"",
+               departmentfilter:'',
+               sectionfilter:'',
+               teamfilter:'',
+               searchTable: '',
                divsecteam:[],
                department:[],
                pageCount: 0,

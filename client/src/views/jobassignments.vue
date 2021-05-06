@@ -3,13 +3,25 @@
           <v-breadcrumbs :items="breadCrumbsItems" divider="/"></v-breadcrumbs>
           <v-container>
                <v-card>
-                    <v-card-title>
-                         <v-row dense>
-                              <v-col cols="12" md="4">
-                                   <v-card-text class="pa-0 headline">Job Assignments</v-card-text>
-                              </v-col>
+                    <v-toolbar flat>
                          <v-spacer></v-spacer>
+                         <v-row dense>
+                              <v-col class="ml-auto" cols="12" md="6">
+                                   <!-- <v-card-text class="pa-0 headline">Job Assignments</v-card-text> -->
+                                   <v-text-field
+                                        v-model="searchTable"
+                                        placeholder="Search Job Assignment"
+                                        append-icon="mdi-magnify"
+                                        :color="themeColor == '' ? 'primary' : themeColor"
+                                        hide-details
+                                        clearable
+                                        outlined  
+                                        dense
+                                   ></v-text-field>
+                              </v-col>
+                         </v-row>
                          <v-btn 
+                              class="ml-3"
                               v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9 || userRights == 3" 
                               @click="newRecord()" 
                               :color="themeColor == '' ? 'primary' : themeColor" 
@@ -17,14 +29,13 @@
                          >
                               <v-icon left>mdi-plus</v-icon>New
                          </v-btn>
-                         </v-row>
-                    </v-card-title>
+                    </v-toolbar>
                     <v-divider></v-divider>
                     <v-data-table
                          :headers="headers"
                          :items="jobassignments"
                          :loading="loading"
-                         :search="searchData"
+                         :search="searchTable"
                          :page.sync="page"
                          loading-text="Loading Data. . .Please Wait"
                          @page-count="pageCount = $event"
@@ -114,6 +125,7 @@ export default {
                pageCount: 0,
                userRights: 0,
                page: 1,
+               searchTable: '',
                jobassignments: [],
                saveOptions: {
                     title: 'Are you sure?',

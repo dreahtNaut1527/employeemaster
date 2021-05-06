@@ -24,7 +24,6 @@ const plugins = {
                          'userInfo', 
                          'isLoggedIn', 
                          'darkMode', 
-                         'searchData',
                          'emplcode',
                          'isEmpEdit',
                          'isConnect',
@@ -38,7 +37,6 @@ const plugins = {
                          'CHANGE_USER_INFO', 
                          'CHANGE_USER_LOGGING', 
                          'CHANGE_THEME', 
-                         'CHANGE_SEARCHING',
                          'CHANGE_EMPLCODE',
                          'CHANGE_EMP_EDIT',
                          'CHANGE_CONNECTION',
@@ -93,7 +91,6 @@ const plugins = {
                                    this.$store.commit('CHANGE_PROFILE_BACKGROUND', null)
                                    this.$store.commit('CHANGE_THEMECOLOR', '#1976d2')
                                    this.$store.commit('CHANGE_THEME', null)
-                                   this.$store.commit('CHANGE_SEARCHING', null)
                                    if(this.$route.name != 'login') {
                                         this.$router.push('/')
                                    }

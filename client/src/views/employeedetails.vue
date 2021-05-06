@@ -5,7 +5,7 @@
                <v-card class="mx-auto" tile>
                     <v-col cols="12">
                          <v-avatar size="70">
-                              <v-img :src="`${photo}/${emplcode}.jpg`"></v-img>
+                              <v-img :src="imgSource" @error="setImageSource"></v-img>
                          </v-avatar>
                     </v-col>
                     
@@ -503,8 +503,8 @@
                     </v-card-text>
                     <v-card-actions v-if="this.isEmpEdit == true">
                          <v-spacer></v-spacer>
-                         <v-btn @click="loadInformation()" text>
-                              <v-icon left>mdi-cancel</v-icon>Cancel
+                         <v-btn to="/employees" text>
+                              <v-icon left>mdi-keyboard-return</v-icon>Back
                          </v-btn>
                          <v-btn v-if="userInfo.UserLevel != 5" @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor" dark>
                               <v-icon left>mdi-content-save</v-icon>Save
@@ -551,8 +551,8 @@ import datePicker from '@/components/datepicker'
 export default {
      data() {
           return {
-              
-               tab: null,         
+               tab: null,    
+               imgSource: null,     
                pageCount: 0,
                page: 1,
                disabled: false,
@@ -654,11 +654,15 @@ export default {
      },
      
      methods:{
+          setImageSource() {
+               this.imgSource = `${this.photo}/NoPic.jpg`
+          },
           loadInformation() {
                this.overlay = true
                this.information=[]
                this.axios.get(`${this.api}/employeeinfo/${this.emplcode}`).then(res => {
                     this.information = res.data[0]
+                    this.imgSource = `${this.photo}/${this.emplcode}.jpg`
                     this.loaddivsectionteam() 
                })
           },

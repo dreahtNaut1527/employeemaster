@@ -32,14 +32,15 @@
                     </v-list-item>
                </div>
                <div class="hidden-sm-and-down">
-                    <v-list three-line>
+                    <v-list>
                          <v-list-item class="px-2">
                               <v-list-item-avatar>                                       
                                    <img :src="`${photo}/${user.EmployeeCode}.jpg`" alt="nopic.jpg">
                               </v-list-item-avatar>
                               <v-list-item-content>
-                                   <v-list-title class="caption">{{user.EmployeeCode}}</v-list-title>
-                                   <v-list-subtitle class="caption">{{user.EmployeeName}}</v-list-subtitle>
+                                   <v-list-item-title>{{user.EmployeeCode}}</v-list-item-title>
+                                   <v-list-item-subtitle class="caption">{{user.EmployeeName}}</v-list-item-subtitle>
+                                   <v-list-item-subtitle class="caption">{{ user.DesignationName }}</v-list-item-subtitle>
                               </v-list-item-content>
                          </v-list-item>
                     </v-list>
@@ -112,18 +113,6 @@
                     </div>
                </div>
                <v-spacer></v-spacer>
-               <v-text-field
-                    v-if="this.userInfo.UserLevel > 0"
-                    :color="themeColor == '' ? 'primary' : themeColor"
-                    v-model="search"    
-                    append-icon="mdi-magnify"     
-                    placeholder="Search"
-                    @keyup="getSearchData()"
-                    hide-details
-                    outlined
-                    rounded
-                    dense
-               ></v-text-field>
                <notifications v-if="userInfo.UserLevel != 0" />     
                <v-btn @click="gotoHelp()" icon>
                     <v-icon >mdi-help-circle-outline</v-icon>
@@ -240,7 +229,6 @@ export default {
           }
      },
      created() {
-          this.$store.commit('CHANGE_SEARCHING', '')
           this.dark = this.darkMode
           this.user = this.userInfo
           this.themeColorVal = this.themeColor
@@ -259,9 +247,6 @@ export default {
                } else {
                     this.$router.push({path: page, query: {id: id}})
                }
-          },
-          getSearchData() {
-               this.$store.commit('CHANGE_SEARCHING', this.search)
           },
           changeTheme() {
                this.$vuetify.theme.dark = this.dark
@@ -435,18 +420,20 @@ export default {
           dark() {
                this.changeTheme()
           },
+          searchData(val) {
+               this.search = val
+          }
           // themeColorVal(val) {
           //      this.$store.commit('CHANGE_THEMECOLOR', val)
           // }
+          // <style scoped>
+          //      .v-navigation-drawer--mini-variant, .v-navigation-drawer {
+          //           overflow: visible !important;
+          //      }
+          // </style>
      },
      components: {
           notifications
      }
 }
 </script>
-
-<style scoped>
-     .v-navigation-drawer--mini-variant, .v-navigation-drawer {
-          overflow: visible !important;
-     }
-</style>

@@ -5,7 +5,7 @@
                <v-card>
                     <v-card-title>
                               <v-row  dense>
-                                    <v-col v-if="userInfo.UserLevel == 9 || userInfo.UserLevel == 5" cols="12" md="3">           
+                                    <v-col v-if="userInfo.UserLevel == 9 || userInfo.UserLevel == 5" cols="12" md="4">           
                                         <v-autocomplete
                                              v-model="department"
                                              :items="departmentList"
@@ -17,7 +17,7 @@
                                              dense
                                         ></v-autocomplete>
                                    </v-col>
-                                   <v-col cols="12" md="3">
+                                   <v-col cols="12" md="4">
                                         <v-autocomplete
                                              v-model="section"
                                              :items="sectionList"
@@ -29,7 +29,7 @@
                                              dense
                                         ></v-autocomplete>
                                    </v-col>
-                                   <v-col cols="12" md="3">
+                                   <v-col cols="12" md="4">
                                         <v-autocomplete
                                              v-model="team"
                                              :items="teamList"
@@ -41,16 +41,28 @@
                                              dense
                                         ></v-autocomplete>
                                    </v-col>
-                                   
+                                   <v-col cols="12" md="12">
+                                        <v-text-field
+                                             v-model="searchTable"
+                                             placeholder="Search Code, LastName, etc.."
+                                             append-icon="mdi-magnify"
+                                             :color="themeColor == '' ? 'primary' : themeColor"
+                                             hide-details
+                                             clearable
+                                             outlined
+                                             dense
+                                        ></v-text-field>
+                                   </v-col>
                               </v-row>
                     </v-card-title>
                <v-divider></v-divider>
                <v-data-table 
                     :headers="headers"
                     :items="filterData"
-                    :search="searchData"
+                    :search="searchTable"
                     :page.sync="page"
                     :loading="loading"
+                    :items-per-page="8"
                     loading-text="Loading Data. . .Please Wait"
                     @page-count="pageCount = $event"
                     hide-default-footer
@@ -88,6 +100,7 @@ export default {
                department: '',
                section: '',
                team: '',
+               searchTable: '',
                pageCount: 0,
                userRights: 0,
                page: 1,
@@ -215,6 +228,7 @@ export default {
                //  alert(val)
                store.commit('CHANGE_EMPLCODE', val)
                store.commit('CHANGE_EMP_EDIT', true)
+               store.commit('CHANGE_SEARCHING', null)
                 this.$router.push('/employeedetails')
                // location.replace('/employeedetails')
                // this.editedAccount = Object.assign({}, val)
@@ -226,7 +240,8 @@ export default {
                // alert(val)
                store.commit('CHANGE_EMPLCODE', val)
                store.commit('CHANGE_EMP_EDIT', false)
-                this.$router.push('/employeedetails')
+               store.commit('CHANGE_SEARCHING', null)
+               this.$router.push('/employeedetails')
                // location.replace('/employeedetails')
              
                // this.editedAccount = Object.assign({}, item)

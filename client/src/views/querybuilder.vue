@@ -102,7 +102,7 @@
                                     <v-toolbar flat>
                                         <v-toolbar-title>Arrange Fields</v-toolbar-title>
                                     </v-toolbar>
-                                    <v-list class="listFields" two-line dense>
+                                    <v-list class="listFields" v-bind:class="[selectedHeaders.length == 0 ? 'listImage' : '']" two-line dense>
                                         <draggable v-model="selectedHeaders" v-bind="dragOptions" :move="onMove">
                                             <v-list-item v-for="(item, i) in selectedHeaders" :key="i">
                                                 <v-list-item-content>
@@ -340,45 +340,47 @@ export default {
             )
         },   
         searchDataClick() {
-            if(this.$refs.form.validate()) {
-                this.loading = true
-                let searchVal = this.searchBy
-                let filter = this.selectedFilter
-                let operator = this.selectedOperator.value
-                let operatorName = this.selectedOperator.text
-                let dateFrom = this.dateFilterItems[0]
-                let dateTo = this.dateFilterItems[1]
+            if(this.selectedHeaders.length != 0) {
+                if(this.$refs.form.validate()) {
+                    this.loading = true
+                    let searchVal = this.searchBy
+                    let filter = this.selectedFilter
+                    let operator = this.selectedOperator.value
+                    let operatorName = this.selectedOperator.text
+                    let dateFrom = this.dateFilterItems[0]
+                    let dateTo = this.dateFilterItems[1]
 
-                switch (operator) {
-                    case '%':
-                        this.sqlWhereOuput = `${this.filterSearchQuery()} AND ${filter} ${operatorName} #${operator}${searchVal}${operator}#`
-                        break;
-                    case 'BETWEEN':
-                        this.sqlWhereOuput = `${this.filterSearchQuery()} AND ${filter} ${operator} #${dateFrom}# AND #${dateTo}#`
-                        break;
-                    default:
-                        this.sqlWhereOuput = `${this.filterSearchQuery()} AND ${filter} ${operator} #${searchVal == null ? dateFrom : searchVal}#`
-                        break;
-                }
-                
-                // call procedure
-                let body = {
-                    procedureName: 'ProcQueryData',
-                    values: [
-                        this.userInfo.CompanyCode,
-                        this.sqlWhereOuput,
-                        this.selectedFilter == 'TransferredDate' ? 1 : 0
-                    ]
-                }
-                this.axios.post(`${this.api}/executeselect`, {data: JSON.stringify(body)}).then(res => {
-                    this.loading = false
-                    if(Array.isArray(res.data)) {
-                        this.resultQuery = res.data
-                    } else {
-                        this.resultQuery = []
+                    switch (operator) {
+                        case '%':
+                            this.sqlWhereOuput = `${this.filterSearchQuery()} AND ${filter} ${operatorName} #${operator}${searchVal}${operator}#`
+                            break;
+                        case 'BETWEEN':
+                            this.sqlWhereOuput = `${this.filterSearchQuery()} AND ${filter} ${operator} #${dateFrom}# AND #${dateTo}#`
+                            break;
+                        default:
+                            this.sqlWhereOuput = `${this.filterSearchQuery()} AND ${filter} ${operator} #${searchVal == null ? dateFrom : searchVal}#`
+                            break;
                     }
-                })
-                this.displayDialog = true
+                    
+                    // call procedure
+                    let body = {
+                        procedureName: 'ProcQueryData',
+                        values: [
+                            this.userInfo.CompanyCode,
+                            this.sqlWhereOuput,
+                            this.selectedFilter == 'TransferredDate' ? 1 : 0
+                        ]
+                    }
+                    this.axios.post(`${this.api}/executeselect`, {data: JSON.stringify(body)}).then(res => {
+                        this.loading = false
+                        if(Array.isArray(res.data)) {
+                            this.resultQuery = res.data
+                        } else {
+                            this.resultQuery = []
+                        }
+                    })
+                    this.displayDialog = true
+                }
             }
         },
         getTableFields() {
@@ -492,10 +494,15 @@ export default {
 </script>
 
 <style scoped> 
-     .listFields{
+     .listFields {
           height: 380px;
           overflow-y: auto;
           overflow-x: hidden;
+     }
+     .listImage {
+        background: url('../assets/box.png') no-repeat center center;
+        background-size: 100px 100px;
+        opacity: 0.3;
      }
      .dragItem {
          cursor: grab;

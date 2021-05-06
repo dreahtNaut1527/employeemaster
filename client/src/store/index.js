@@ -13,7 +13,6 @@ export default new Vuex.Store({
     isConnect: true,
     profileBackground: null,
     appVersion: null,
-    searchData: '',
     emplcode: '',
     themeColor: '#1976d2',
   },
@@ -29,9 +28,6 @@ export default new Vuex.Store({
     },
     CHANGE_THEME: (state, data) => {
       state.darkMode = data
-    },
-    CHANGE_SEARCHING: (state, data) => {
-      state.searchData = data
     },
     CHANGE_EMPLCODE: (state, data) => {
       state.emplcode = data

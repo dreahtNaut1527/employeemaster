@@ -34,9 +34,9 @@
                     <v-tabs-items v-model="tab">
                          <v-tab-item value="tab-1">
                               <v-card>
-                                   <v-card-text>
-                                        <v-row class="mb-n8" dense>
-                                             <v-col cols="12" md="3">
+                                   <v-card-text class="mb-n8">
+                                        <v-row dense>
+                                             <v-col cols="12" md="2">
                                                   <datePicker
                                                        :menu="dateDialog"
                                                        dateLabel="Logtime Date"
@@ -65,7 +65,7 @@
                                                        dense
                                                   ></v-autocomplete>
                                              </v-col>
-                                             <v-col cols="12" md="3">
+                                             <v-col cols="12" md="2">
                                                   <v-autocomplete
                                                        v-model="team"
                                                        :items="teamList"
@@ -76,9 +76,17 @@
                                                        dense
                                                   ></v-autocomplete>
                                              </v-col>
-                                             <!-- <v-col cols="12" md="2">
-                                                  <v-btn @click="exportData()">try</v-btn>
-                                             </v-col> -->
+                                             <v-col cols="12" md="2">
+                                                  <v-text-field
+                                                       v-model="searchTable"
+                                                       placeholder="Search"
+                                                       append-icon="mdi-magnify"
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
+                                                       clearable
+                                                       outlined  
+                                                       dense
+                                                  ></v-text-field>
+                                             </v-col>
                                         </v-row>
                                    </v-card-text>
                                    <v-divider></v-divider>
@@ -86,7 +94,7 @@
                                         :headers="headers"
                                         :items="filterData"
                                         :loading="loading"
-                                        :search="searchData"
+                                        :search="searchTable"
                                         :items-per-page="6"
                                         :page.sync="page"
                                         loading-text="Loading Data. . .Please Wait"
@@ -139,6 +147,7 @@ export default {
                department: '',
                section: '',
                team: '',
+               searchTable: '',
                pageCount: 0,
                page: 1,
                logtime: [],
