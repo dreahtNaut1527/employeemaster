@@ -49,19 +49,32 @@
                     </v-col>
                </v-row>
                <v-card>
-                    <v-card-title>
-                         User Accounts
+                    <v-toolbar flat>
                          <v-spacer></v-spacer>
-                         <v-btn @click="dialog = !dialog" :color="themeColor == '' ? 'primary' : themeColor" dark>
+                         <v-row dense>
+                              <v-col class="ml-auto" cols="12" md="6">
+                                   <v-text-field
+                                        v-model="searchTable"
+                                        placeholder="Search Name, Code, etc..."
+                                        append-icon="mdi-magnify"
+                                        :color="themeColor == '' ? 'primary' : themeColor"
+                                        hide-details
+                                        clearable
+                                        outlined  
+                                        dense
+                                   ></v-text-field>
+                              </v-col>
+                         </v-row>
+                         <v-btn class="ml-3" @click="dialog = !dialog" :color="themeColor == '' ? 'primary' : themeColor" dark>
                               <v-icon left>mdi-plus</v-icon>New
                          </v-btn>
-                    </v-card-title>
+                    </v-toolbar>
                     <v-divider></v-divider>
                     <v-data-table 
                          :headers="headers" 
                          :items="filterData"
                          :loading="loading"
-                         :search="searchData"
+                         :search="searchTable"
                          :page.sync="page"
                          :items-per-page="9"
                          loading-text="Loading Data. . .Please Wait"
@@ -240,6 +253,7 @@ export default {
                pageCount: 0,
                page: 1,
                editMode: 0,
+               searchTable: '',
                newPassword: '',
                companies: '',
                departments: '',

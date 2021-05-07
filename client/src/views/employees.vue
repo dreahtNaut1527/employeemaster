@@ -53,6 +53,18 @@
                                              dense
                                         ></v-text-field>
                                    </v-col>
+                                   <!-- <v-col cols="12" md="4">
+                                        <v-autocomplete
+                                             v-model="remarks"
+                                             :items="filterStatus"
+                                             :color="themeColor == '' ? 'primary' : themeColor"
+                                             placeholder="Status"
+                                             hide-details
+                                             clearable
+                                             outlined
+                                             dense
+                                        ></v-autocomplete>
+                                   </v-col> -->
                               </v-row>
                     </v-card-title>
                <v-divider></v-divider>
@@ -126,7 +138,6 @@ export default {
      },
      created() {
           this.loadRights()
-          store.commit('CHANGE_EMPLCODE', {})
           store.commit('CHANGE_EMP_EDIT')          
      },
      sockets: {
@@ -143,7 +154,7 @@ export default {
                          rec.DepartmentName.includes(this.department || '') &&
                          rec.SectionName.includes(this.section || '') &&
                          rec.TeamName.includes(this.team || '') &&
-                         rec.EmployeeCode != this.userInfo.EmployeeCode                     
+                         rec.EmployeeCode != this.userInfo.EmployeeCode                
                     )
                })
           },
@@ -177,8 +188,6 @@ export default {
                     return rec.TeamName
                }).sort()
           },
-          
-
      },
      methods:{
           loadRights() {
@@ -217,37 +226,19 @@ export default {
                     this.loading = false
                })
           }, 
-          // loadEmpinfo(){
-          //      this.axios.get(`${this.api}/employees/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}`).then(res => {
-          //           // console.log("RES DATA", res.data);
-          //           this.getempInfos = res.data
-          //           // this.loadDesignations()
-          //      })     
-          // },
-          editRecord(val) {
-               //  alert(val)
-               store.commit('CHANGE_EMPLCODE', val)
+          editRecord(code) {
+               // store.commit('CHANGE_EMPLCODE', val)
                store.commit('CHANGE_EMP_EDIT', true)
-               store.commit('CHANGE_SEARCHING', null)
-                this.$router.push('/employeedetails')
+               //  this.$router.push('/employeedetails')
+               this.$router.push({name: 'employeedetails', query: {code: code}})
                // location.replace('/employeedetails')
-               // this.editedAccount = Object.assign({}, val)
-               // this.dialog = true
-               // this.disabled = false
            
           },
-           viewRecord(val) {
-               // alert(val)
-               store.commit('CHANGE_EMPLCODE', val)
+           viewRecord(code) {
+               // store.commit('CHANGE_EMPLCODE', val)
                store.commit('CHANGE_EMP_EDIT', false)
-               store.commit('CHANGE_SEARCHING', null)
-               this.$router.push('/employeedetails')
-               // location.replace('/employeedetails')
-             
-               // this.editedAccount = Object.assign({}, item)
-               // this.dialog = true
-               // this.disabled = false
-               // this.editMode = 1
+               // this.$router.push('/employeedetails')
+               this.$router.push({name: 'employeedetails', query: {code: code}})
           },
      }
 }

@@ -12,8 +12,8 @@
                     </v-card-title>
                     <v-divider></v-divider>
                     <v-card-title>
-                         <v-row class="mb-n6" dense>
-                              <v-col cols="12" md="2">
+                         <v-row dense>
+                              <v-col cols="12" md="3">
                                    <datePicker
                                         :menu="dateDialog"
                                         dateLabel="Effectivity Date"
@@ -26,6 +26,7 @@
                                         :items="loadDepartmentList"
                                         :color="themeColor == '' ? 'primary' : themeColor"
                                         placeholder="Department"
+                                        hide-details
                                         clearable
                                         outlined
                                         dense
@@ -37,6 +38,7 @@
                                         :items="loadSectionList"
                                         :color="themeColor == '' ? 'primary' : themeColor"
                                         placeholder="Section"
+                                        hide-details
                                         clearable
                                         outlined
                                         dense
@@ -48,10 +50,23 @@
                                         :items="loadTeamList"
                                         :color="themeColor == '' ? 'primary' : themeColor"
                                         placeholder="Team"
+                                        hide-details
                                         clearable
                                         outlined
                                         dense
                                    ></v-autocomplete>
+                              </v-col>
+                              <v-col cols="12" md="12">
+                                   <v-text-field
+                                        v-model="searchTable"
+                                        placeholder="Search Name, Code, etc..."
+                                        append-icon="mdi-magnify"
+                                        :color="themeColor == '' ? 'primary' : themeColor"
+                                        hide-details
+                                        clearable
+                                        outlined  
+                                        dense
+                                   ></v-text-field>
                               </v-col>
                          </v-row>
                     </v-card-title>
@@ -60,7 +75,7 @@
                          :headers="headers"
                          :items="filterData"
                          :loading="loading"
-                         :search="searchData"
+                         :search="searchTable"
                          :items-per-page="8"
                          :page.sync="page"
                          loading-text="Loading Data. . .Please Wait"
@@ -93,6 +108,7 @@ export default {
                department: '',
                section: '',
                team: '',
+               searchTable: '',
                pageCount: 0,
                userRights: 0,
                page: 1,

@@ -159,43 +159,21 @@
                                                   ></v-text-field>
                                              </v-col>
                                              <v-col cols="12" md="4">
-                                                <!-- <v-text-field
-                                                
-                                                       v-model="information.RetiredDate"
-                                                       label="Department Resigned"
-                                                       append-icon="mdi-calendar"
-                                                       :readonly="this.isEmpEdit == false"
-                                                       :filled="this.isEmpEdit == true"
-                                                       outlined
-                                                       clearable
-                                                       dense
-                                                  ></v-text-field>  -->
                                                   <datePicker
                                                        :menu="dateDialog"
-                                                       dateLabel="Department Separation Date"
-                                                       :dateValue.sync="information.RetiredDate" 
-                                                  ></datePicker>
-                                                  <!-- <v-text-field 
-                                                       v-model="information.RetiredDate"
-                                                       outlined
-                                                       v-mask="'####-##-##'" 
-                                                       dense
+                                                       dateLabel="Separation Date"
+                                                       :dateValue.sync="information.SeparationDate" 
+                                                  ></datePicker> 
+                                             </v-col>
+                                             <v-col cols="12" md="4">
+                                                  <v-text-field
+                                                       v-model="information.Remarks"
+                                                       :readonly="this.isEmpEdit == false"
                                                        :filled="this.isEmpEdit == true"
-                                                       label="Department Resigned"
-                                                       >
-
-                                                       <template v-slot:append>
-                                                       <dtPicker v-model="information.RetiredDate"             
-                                                       :menu="dateDialog"
-                                                       
-                                                       >
-                                                       
-                                                       </dtPicker> 
-                                                       </template>
-                                                   
-                                                  </v-text-field> -->
-                                                  
-                                                  
+                                                       label="Remarks"
+                                                       outlined
+                                                       dense
+                                                  ></v-text-field>
                                              </v-col>
                                         </v-row>
                                    </v-card-text>
@@ -536,12 +514,6 @@
 
                </v-card>
           </v-dialog>
-          <!-- <v-overlay :value="overlay">
-               <v-progress-circular
-                    :size="100"
-                    indeterminate
-               ></v-progress-circular>
-          </v-overlay> -->
      </v-main>
 </template>
 
@@ -563,6 +535,7 @@ export default {
                genderValue: '',
                information: '',
                dateBirth: '',
+               selectedDateTypes: '',
                transferHist: [],
                divsecteam:[],
                designationList: [],
@@ -603,7 +576,7 @@ export default {
                     {label: 'Widowed/Widower', value: 'W'},
                     {label: 'Separated', value: 'C'}
                ],
-                EmpHistoryHeader: [
+               EmpHistoryHeader: [
                     {text: 'Transferred Date', value: 'TransferredDate'},
                     {text: 'Department', value: 'DepartmentName'},
                     {text: 'Section', value: 'SectionName'},
@@ -660,16 +633,16 @@ export default {
           loadInformation() {
                this.overlay = true
                this.information=[]
-               this.axios.get(`${this.api}/employeeinfo/${this.emplcode}`).then(res => {
+               this.axios.get(`${this.api}/employeeinfo/${this.$route.query.code}`).then(res => {
                     this.information = res.data[0]
-                    this.imgSource = `${this.photo}/${this.emplcode}.jpg`
+                    this.imgSource = `${this.photo}/${this.$route.query.code}.jpg`
                     this.loaddivsectionteam() 
                })
           },
           loadTransferHist() {
                this.dialog=true
                this.overlay = true            
-               this.axios.get(`${this.api}/employeehistory/${this.emplcode}`).then(res => {      
+               this.axios.get(`${this.api}/employeehistory/${this.$route.query.code}`).then(res => {      
                // console.log('hist',res.data)
                this.transferHist = res.data
     
@@ -769,7 +742,8 @@ export default {
                                         this.information.ContractStatus,
                                         this.information.ContractHiredDate,
                                         this.information.RegularHiredDate,
-                                        this.information.RetiredDate,
+                                        this.information.SeparationDate,
+                                        this.information.Remarks.toUpperCase(),
                                         this.information.StaffCode,
                                         this.information.CPUNumber,
                                         this.information.IPAddress,
@@ -790,7 +764,9 @@ export default {
 
                          this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
                          this.swal.fire('Hooray!','Changes has been saved', 'success')
-                         this.loadInformation()
+                         setTimeout(() => {
+                              this.loadInformation()
+                         }, 1100);
                         
                     } else if(result.isDenied) {
                          this.swal.fire('Oh no!', 'Changes are not saved', 'info')
@@ -805,7 +781,7 @@ export default {
                // Format dates
                val.ContractHiredDate = val.ContractHiredDate ? this.moment(val.ContractHiredDate).format('YYYY-MM-DD') : ""
                val.RegularHiredDate = val.RegularHiredDate ? this.moment(val.RegularHiredDate).format('YYYY-MM-DD') : ""
-               val.RetiredDate = val.RetiredDate ? this.moment.utc(val.RetiredDate).format('YYYY-MM-DD') : ""
+               val.SeparationDate = val.SeparationDate ? this.moment.utc(val.SeparationDate).format('YYYY-MM-DD') : ""
                this.dateBirth = val.DateBirth ? this.moment(val.DateBirth).format('YYYY-MM-DD') : ""
                this.genderValue = val.Gender == 'M' ? 'Male' : 'Female'
                this.ageValue = this.moment().diff(this.dateBirth, 'years')
@@ -813,16 +789,11 @@ export default {
           transferHist() {
                return this.transferHist.map((rec)=>{
                     return   rec.TransferredDate = rec.TransferredDate ? this.moment(rec.TransferredDate).format('YYYY-MM-DD') : ""
-               })
-
-               // alert(val.TransferredDate)
-               // val.TransferredDate = val.TransferredDate ? this.moment(val.TransferredDate).format('YYYY-MM-DD') : ""     
-          },
+          })},
           dateBirth(val) {
                this.information.DateBirth = val
                this.ageValue = this.moment().diff(val, 'years')
           },
-         
      
      },
      components: {

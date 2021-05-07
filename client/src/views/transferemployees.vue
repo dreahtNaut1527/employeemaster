@@ -56,6 +56,17 @@
                                         dense
                                    ></v-autocomplete>
                               </v-col>
+                              <v-col cols="12" md="3">
+                                   <v-text-field
+                                        v-model="searchTable"
+                                        placeholder="Search Name, Code, etc..."
+                                        append-icon="mdi-magnify"
+                                        :color="themeColor == '' ? 'primary' : themeColor"
+                                        clearable
+                                        outlined  
+                                        dense
+                                   ></v-text-field>
+                              </v-col>
                          </v-row>
                     </v-card-title>
                     <v-divider></v-divider>
@@ -64,7 +75,7 @@
                          :headers="headers"
                          :items="filterData"
                          :loading="loading"
-                         :search="searchData"
+                         :search="searchTable"
                          :items-per-page="8"
                          :page.sync="page"
                          :single-select="singleSelect"
@@ -163,6 +174,7 @@ export default {
                departmentFilter: '',
                sectionFilter: '',
                teamFilter: '',
+               searchTable: '',
                divsecteam: [],
                pageCount: 0,
                userRights: 0,

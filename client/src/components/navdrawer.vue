@@ -3,8 +3,9 @@
           <v-navigation-drawer 
                v-model="navDrawerVal"
                :expand-on-hover="$vuetify.breakpoint.mdAndUp"
-               :absolute="$vuetify.breakpoint.smAndDown"
                :temporary="$vuetify.breakpoint.smAndDown"
+               :color="themeColor == '' ? 'primary' : themeColor"
+               dark
                app
           >   
                <!-- For Japanese -->
@@ -51,7 +52,7 @@
                          v-for="(item, i) in navDrawerList" :key="i"
                          v-model="item.active"    
                          :prepend-icon="item.icon"
-                         :color="themeColor == '' ? 'primary' : themeColor"
+                         color="white"
                          no-action
                     >
                          <template v-slot:activator>
@@ -72,7 +73,7 @@
                          <div v-if="i == 1">
                               <v-list-group
                                    v-for="(subGroup, i) in navDrawerSubGroup" :key="i"
-                                   :color="themeColor == '' ? 'primary' : themeColor"
+                                   color="white"
                                    no-action
                                    sub-group
                               >
@@ -113,35 +114,42 @@
                     </div>
                </div>
                <v-spacer></v-spacer>
-               <notifications v-if="userInfo.UserLevel != 0" />     
-               <v-btn @click="gotoHelp()" icon>
-                    <v-icon >mdi-help-circle-outline</v-icon>
-               </v-btn>
-               <v-btn @click="logout()" icon>
-                    <v-icon >mdi-logout</v-icon>
-               </v-btn> 
-               <v-btn 
-                    class="mt-15 mr-n5 rounded-l-lg" 
-                    style="background-color: rgb(0, 0, 0, 0.3)"
-                    @click="sideDrawer = !sideDrawer"  
-                    absolute 
-                    top 
-                    right>
-                    <v-icon v-if="!sideDrawer">mdi-cog-outline</v-icon>
-                    <v-icon v-else>mdi-close</v-icon>
+               <notifications v-if="userInfo.UserLevel != 0" />  
+               <v-btn @click="sideDrawer = !sideDrawer" icon>
+                    <v-icon>mdi-cog-outline</v-icon>
                </v-btn>  
+               <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                         <v-btn @click="logout()" v-bind="attrs" v-on="on" icon>
+                              <v-icon >mdi-logout</v-icon>
+                         </v-btn> 
+                    </template>
+                    <span>Logout</span>
+               </v-tooltip>
           </v-app-bar>
           <v-navigation-drawer
                v-model="sideDrawer"
                :disable-resize-watcher="true"
+               hide-overlay
+               temporary
                right
                app         
           >
                <v-list dense>
                     <v-list-item>
                          <v-list-item-content>
-                              <v-list-item-title class="grey--text">Themes</v-list-item-title>
+                              <v-list-item-title>Settings</v-list-item-title>
                          </v-list-item-content>
+                         <v-list-item-action>
+                              <v-tooltip bottom>
+                                   <template v-slot:activator="{ on, attrs }">
+                                        <v-btn @click="gotoHelp()" v-on="on" v-bind="attrs" icon>
+                                             <v-icon >mdi-help-circle-outline</v-icon>
+                                        </v-btn>
+                                   </template>
+                                   <span>Help</span>
+                              </v-tooltip>
+                         </v-list-item-action>
                     </v-list-item>
                     <v-divider></v-divider>
                     <v-list-item>
@@ -333,7 +341,7 @@ export default {
                          },
                          {
                               title: 'Maintenance',
-                              icon: 'mdi-cog',
+                              icon: 'mdi-tools',
                               items: [
                                    {text: 'User Accounts', to: '/accounts'},
                                    {text: 'System List', to: '/systemlist'},

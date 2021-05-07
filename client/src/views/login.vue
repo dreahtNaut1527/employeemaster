@@ -167,6 +167,7 @@ export default {
                                    if (!this.employeeDetails) { 
                                         this.alert = !this.alert
                                         this.alertText = 'User not found.'
+                                        this.loading = false 
                                    } else {
                                         this.userLoggedIn()
                                    }

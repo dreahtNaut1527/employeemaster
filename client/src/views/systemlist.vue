@@ -4,9 +4,23 @@
         <v-container>
             <v-card>
                 <v-toolbar flat>
-                    <v-toolbar-title>System Lists</v-toolbar-title>
+                    <!-- <v-toolbar-title>System Lists</v-toolbar-title> -->
                     <v-spacer></v-spacer>
-                    <v-btn @click="dialog = !dialog" :color="themeColor == '' ? 'primary' : themeColor" dark>
+                    <v-row dense>
+                        <v-col class="ml-auto" cols="12" md="6">
+                            <v-text-field
+                                v-model="searchTable"
+                                placeholder="Search System"
+                                append-icon="mdi-magnify"
+                                :color="themeColor == '' ? 'primary' : themeColor"
+                                hide-details
+                                clearable
+                                outlined  
+                                dense
+                            ></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-btn class="ml-3" @click="dialog = !dialog" :color="themeColor == '' ? 'primary' : themeColor" dark>
                         <v-icon left>mdi-plus</v-icon>New
                     </v-btn>
                 </v-toolbar>
@@ -15,7 +29,7 @@
                         :headers="headers" 
                         :items="systemLists"
                         :loading="loading"
-                        :search="searchData"
+                        :search="searchTable"
                         :page.sync="page"
                         loading-text="Loading Data. . .Please Wait"
                         @page-count="pageCount = $event"
@@ -216,6 +230,7 @@ export default {
             editMode: 0,
             pageCount: 0,
             page: 1,
+            searchTable: '',
             systemLists: [],
             systemProcess: [],
             processRights: [],

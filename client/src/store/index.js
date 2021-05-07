@@ -13,7 +13,6 @@ export default new Vuex.Store({
     isConnect: true,
     profileBackground: null,
     appVersion: null,
-    emplcode: '',
     themeColor: '#1976d2',
   },
   plugins: [
@@ -28,9 +27,6 @@ export default new Vuex.Store({
     },
     CHANGE_THEME: (state, data) => {
       state.darkMode = data
-    },
-    CHANGE_EMPLCODE: (state, data) => {
-      state.emplcode = data
     },
     CHANGE_EMP_EDIT: (state, data) => {
       state.isEmpEdit = data
