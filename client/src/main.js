@@ -6,17 +6,13 @@ import moment from 'moment'
 import socketio from 'socket.io-client'
 import VueSocketIO from 'vue-socket.io'
 import Vuemask from 'v-mask'
-import jsfiledownload from 'js-file-download'
+import printreport from './plugins/printreportpdf'
 import App from './App.vue'
 import './registerServiceWorker'
 import router from './router'
 import store from './store'
-import printreport from './plugins/printreport'
 import vuetify from './plugins/vuetify'
 import mixins from './plugins/mixins'
-
-// const url = process.env.VUE_APP_LOCAL_SERVER
-// const url = process.env.VUE_APP_SERVER
 
 const url = process.env.NODE_ENV == 'production' ? process.env.VUE_APP_SERVER : process.env.VUE_APP_LOCAL_SERVER
 
@@ -31,7 +27,6 @@ Vue.prototype.swal = swal
 Vue.prototype.md5 = md5
 Vue.prototype.moment = moment
 Vue.prototype.printreport = printreport
-Vue.prototype.jsfiledownload = jsfiledownload
 
 // Vue Use
 Vue.use(mixins)

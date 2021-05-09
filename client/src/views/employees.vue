@@ -42,16 +42,33 @@
                                         ></v-autocomplete>
                                    </v-col>
                                    <v-col cols="12" md="12">
-                                        <v-text-field
-                                             v-model="searchTable"
-                                             placeholder="Search Code, LastName, etc.."
-                                             append-icon="mdi-magnify"
-                                             :color="themeColor == '' ? 'primary' : themeColor"
-                                             hide-details
-                                             clearable
-                                             outlined
-                                             dense
-                                        ></v-text-field>
+                                        <v-card-actions class="pa-0">
+                                             <v-text-field
+                                                  v-model="searchTable"
+                                                  placeholder="Search Code, LastName, etc.."
+                                                  append-icon="mdi-magnify"
+                                                  :color="themeColor == '' ? 'primary' : themeColor"
+                                                  hide-details
+                                                  clearable
+                                                  outlined
+                                                  dense
+                                             ></v-text-field>
+                                             <v-tooltip bottom>
+                                                  <template v-slot:activator="{ on, attrs }">
+                                                       <v-btn 
+                                                            class="mx-3"
+                                                            @click="printDialog = !printDialog" 
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            v-bind="attrs"
+                                                            v-on="on"
+                                                            icon
+                                                       >
+                                                            <v-icon large>mdi-file-download</v-icon>
+                                                       </v-btn>
+                                                  </template>
+                                                  <span>Download</span>
+                                             </v-tooltip>
+                                        </v-card-actions>
                                    </v-col>
                                    <!-- <v-col cols="12" md="4">
                                         <v-autocomplete
@@ -89,7 +106,6 @@
                               <v-icon>mdi-pencil</v-icon>
                          </v-btn>
                     </template>
-
                </v-data-table>
                 <v-pagination
                     v-model="page"
@@ -100,15 +116,67 @@
                <v-card-text class="caption">Total Record(s): {{filterData.length}}</v-card-text>
                </v-card>
           </v-container>
+          <v-dialog v-model="printDialog" width="500" persistent>
+               <v-card>
+                    <v-container>
+                         <v-card outlined>
+                              <v-container>
+                                   <v-text-field
+                                        v-model="fileName"
+                                        label="Filename"
+                                        append-icon="mdi-file"
+                                        :color="themeColor == '' ? 'primary' : themeColor"
+                                        :disabled="selectedFileExtension == 'pdf'"
+                                        hide-details
+                                        clearable
+                                        outlined
+                                        dense
+                                   ></v-text-field>
+                                   <v-radio-group 
+                                        v-model="selectedFileExtension" 
+                                        hide-details
+                                        dense 
+                                        row
+                                   >
+                                        <template v-slot:label>
+                                             <v-subheader class="font-weight-bold caption">Print As:</v-subheader>
+                                        </template>
+                                        <v-radio 
+                                             v-for="(item, i) in fileExtension" :key="i" 
+                                             :color="themeColor == '' ? 'primary' : themeColor"
+                                             :value="item.value" 
+                                             :label="item.text"
+                                        ></v-radio>
+                                   </v-radio-group>
+                                   <v-card-actions>
+                                        <v-subheader v-if="selectedFileExtension == 'xls'" class="font-italic text-caption red--text text--darken-1">Note: You need to have a higher version of Excel</v-subheader>
+                                        <v-spacer></v-spacer>
+                                        <v-btn @click="printDialog = !printDialog" text>
+                                             <v-icon left>mdi-cancel</v-icon>Cancel
+                                        </v-btn>
+                                        <v-btn :color="themeColor == '' ? 'primary' : themeColor" @click="printData()" dark>
+                                             <v-icon left>mdi-download</v-icon>Download
+                                        </v-btn>
+                                   </v-card-actions>
+                              </v-container>
+                         </v-card>
+                    </v-container>
+               </v-card>
+          </v-dialog>
      </v-main>
 </template>
 
 <script>
+import printemployees from '../plugins/printemployees'
 import store from '@/store'
+
 export default {
      data() {
           return {
+               fileName: null,
+               selectedFileExtension: null,
                loading: true,
+               printDialog: false,
                department: '',
                section: '',
                team: '',
@@ -116,6 +184,11 @@ export default {
                pageCount: 0,
                userRights: 0,
                page: 1,
+               fileExtension: [
+                    {text: 'Excel', value: 'xls'},
+                    {text: 'CSV', value: 'csv'},
+                    {text: 'PDF', value: 'pdf'}
+               ],
                breadCrumbsItems: [
                     {text: 'Main Data', disabled: false, href: '#'},
                     {text: 'Employees', disabled: true, href: '#'}
@@ -179,7 +252,6 @@ export default {
                      return this.getempInfos.map(rec => {
                          return rec.SectionName   
                     }).sort()     
-
                 }
        
           },
@@ -190,6 +262,38 @@ export default {
           },
      },
      methods:{
+          printData() {
+               let records = []
+               this.filterData.forEach(rec => {
+                    records.push({
+                         Code: rec.EmployeeCode,
+                         Name: rec.EmployeeName,
+                         Department: rec.DepartmentName,
+                         Section: rec.SectionName,
+                         Team: rec.TeamName,
+                         Position: rec.DesignationName
+                    })
+               })
+
+               if(this.selectedFileExtension && this.fileName) {
+                    if(this.selectedFileExtension == 'pdf') {
+                         let headers = []
+                         let objectKeys = Object.keys(records[0])
+                         objectKeys.forEach(rec => {
+                              headers.push({
+                                   text: rec,
+                                   value: rec
+                              })
+                         })
+                         this.printreport(headers, records)
+                    } else {
+                         printemployees(records, this.fileName, this.selectedFileExtension)
+                    }
+                    this.fileName = null,
+                    this.selectedFileExtension = null
+                    this.printDialog = !this.printDialog
+               }
+          },
           loadRights() {
                if(this.userInfo.UserLevel != 9) {
                     this.axios.get(`${this.api}/processrights/${this.userInfo.EmployeeCode}/EM01/${this.$route.query.id}`).then(res => {
@@ -227,17 +331,12 @@ export default {
                })
           }, 
           editRecord(code) {
-               // store.commit('CHANGE_EMPLCODE', val)
                store.commit('CHANGE_EMP_EDIT', true)
-               //  this.$router.push('/employeedetails')
                this.$router.push({name: 'employeedetails', query: {code: code}})
-               // location.replace('/employeedetails')
            
           },
-           viewRecord(code) {
-               // store.commit('CHANGE_EMPLCODE', val)
+          viewRecord(code) {
                store.commit('CHANGE_EMP_EDIT', false)
-               // this.$router.push('/employeedetails')
                this.$router.push({name: 'employeedetails', query: {code: code}})
           },
      }

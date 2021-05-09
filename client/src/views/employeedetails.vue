@@ -488,8 +488,17 @@
                               <v-icon left>mdi-content-save</v-icon>Save
                          </v-btn>
                     </v-card-actions>
+                    <v-overlay
+                         :value="loading"
+                         absolute
+                    >
+                         <v-progress-circular
+                              :size="64"
+                              indeterminate
+                              dark
+                         ></v-progress-circular>
+                    </v-overlay>
                </v-card>
-              
           </v-container>
           <v-dialog v-model="dialog" width="800">
                <v-card>
@@ -530,7 +539,7 @@ export default {
                disabled: false,
                dialog:false,
                dateDialog: false,
-               overlay: true,
+               loading: true,
                ageValue: 0,
                genderValue: '',
                information: '',
@@ -631,17 +640,17 @@ export default {
                this.imgSource = `${this.photo}/NoPic.jpg`
           },
           loadInformation() {
-               this.overlay = true
+               this.loading = true
                this.information=[]
                this.axios.get(`${this.api}/employeeinfo/${this.$route.query.code}`).then(res => {
                     this.information = res.data[0]
                     this.imgSource = `${this.photo}/${this.$route.query.code}.jpg`
                     this.loaddivsectionteam() 
+                    this.loading = false
                })
           },
           loadTransferHist() {
-               this.dialog=true
-               this.overlay = true            
+               this.dialog=true         
                this.axios.get(`${this.api}/employeehistory/${this.$route.query.code}`).then(res => {      
                // console.log('hist',res.data)
                this.transferHist = res.data

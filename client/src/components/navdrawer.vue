@@ -154,6 +154,7 @@
                     <v-divider></v-divider>
                     <v-list-item>
                          <v-list-item-content>
+                              <v-subheader>Theme Color</v-subheader>
                               <v-color-picker 
                                    v-model="themeColorVal"
                                    mode="hexa" 
