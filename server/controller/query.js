@@ -10,6 +10,17 @@ router.get('/appversion', (req, res) => {
      res.send(JSON.stringify(require('../package.json').version))
 })
 
+router.get('/separatedreasons', (req, res) => {
+     let sqlQuery = `SELECT * FROM SeparatedReasons`
+     config.connect(err => {
+          if(err) return res.send(err)
+          const request = new mssql.Request(config)
+          request.query(sqlQuery, (err, results) => {
+               if(err) return res.send(err)
+               res.send(results.recordset)
+          })
+     })
+})
 
 router.get('/systemlist', (req, res) => {
      let sqlQuery = `SELECT * FROM SystemLists`

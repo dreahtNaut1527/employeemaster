@@ -281,7 +281,7 @@ export default {
                 {text: 'Permanent Address', value: 'PermanentAddress'},
                 {text: 'Birthday', value: 'DateBirth'},
                 {text: 'Hired Date', value: 'ContractHiredDate'},
-                {text: 'Resigned Date', value: 'RetiredDate'},
+                {text: 'Separation Date', value: 'SeparationDate'},
                 {text: 'Transferred Date', value: 'TransferredDate'}
             ]
         }
@@ -456,7 +456,7 @@ export default {
             switch (val) {
                 case 'DateBirth':
                 case 'ContractHiredDate':
-                case 'RetiredDate':
+                case 'SeparationDate':
                 case 'TransferredDate':
                     this.showPickerFrom = 1
                     this.operatorItems = [

@@ -166,14 +166,18 @@
                                                   ></datePicker> 
                                              </v-col>
                                              <v-col cols="12" md="4">
-                                                  <v-text-field
+                                                  <v-autocomplete
                                                        v-model="information.Remarks"
                                                        :readonly="this.isEmpEdit == false"
                                                        :filled="this.isEmpEdit == true"
+                                                       :items="separatedReasons"
+                                                       item-value="ReasonDesc"
+                                                       item-text="ReasonDesc"
                                                        label="Remarks"
+                                                       clearable
                                                        outlined
                                                        dense
-                                                  ></v-text-field>
+                                                  ></v-autocomplete>
                                              </v-col>
                                         </v-row>
                                    </v-card-text>
@@ -481,7 +485,7 @@
                     </v-card-text>
                     <v-card-actions v-if="this.isEmpEdit == true">
                          <v-spacer></v-spacer>
-                         <v-btn to="/employees" text>
+                         <v-btn :to="userInfo.UserLevel == 9 ? '/employees' : '/employees?id=EM01-01'" text>
                               <v-icon left>mdi-keyboard-return</v-icon>Back
                          </v-btn>
                          <v-btn v-if="userInfo.UserLevel != 5" @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor" dark>
@@ -545,6 +549,7 @@ export default {
                information: '',
                dateBirth: '',
                selectedDateTypes: '',
+               separatedReasons: [],
                transferHist: [],
                divsecteam:[],
                designationList: [],
@@ -646,15 +651,20 @@ export default {
                     this.information = res.data[0]
                     this.imgSource = `${this.photo}/${this.$route.query.code}.jpg`
                     this.loaddivsectionteam() 
+                    this.loadSeparatedReasons()
                     this.loading = false
+               })
+          },
+          loadSeparatedReasons() {         
+               this.axios.get(`${this.api}/separatedreasons`).then(res => {
+                    this.separatedReasons = res.data
                })
           },
           loadTransferHist() {
                this.dialog=true         
                this.axios.get(`${this.api}/employeehistory/${this.$route.query.code}`).then(res => {      
-               // console.log('hist',res.data)
-               this.transferHist = res.data
-    
+                    // console.log('hist',res.data)
+                    this.transferHist = res.data
                })
           },
           loaddivsectionteam(){
