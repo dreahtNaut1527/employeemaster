@@ -1,165 +1,167 @@
 <template>
      <v-main>
           <v-breadcrumbs :items="breadCrumbsItems" divider="/"></v-breadcrumbs>
-          <v-container>
-               <v-card>
-                    <v-card-title>
-                         <v-row dense>
-                              <v-col>
-                                   <v-card-text class="pa-0 headline">Transfer Employees</v-card-text>
-                              </v-col>
-                              <v-spacer></v-spacer>
-                              <v-btn 
-                                   v-if="userRights > 1 || userInfo.UserLevel == 9 || userInfo.UserLevel == 4"
-                                   :color="themeColor == '' ? 'primary' : themeColor" 
-                                   @click="transferEmployees()" 
-                                   :disabled="selected.length <= 0" 
-                                   dark
-                              >
-                                   <v-icon left>mdi-transit-transfer</v-icon>Proceed
-                              </v-btn>
-                         </v-row>
-                    </v-card-title>
-                    <v-divider></v-divider>
-                    <v-card-title>
-                         <v-row class="mb-n6" dense>
-                              <v-col cols="12" md="3">
-                                   <v-autocomplete
-                                        v-model="departmentFilter"
-                                        :items="loadDepartmentFilter"
-                                        :color="themeColor == '' ? 'primary' : themeColor"
-                                        placeholder="Department"
-                                        clearable
-                                        outlined
-                                        dense
-                                   ></v-autocomplete>
-                              </v-col>
-                              <v-col cols="12" md="3">
-                                   <v-autocomplete
-                                        v-model="sectionFilter"
-                                        :items="loadSectionFilter"
-                                        :color="themeColor == '' ? 'primary' : themeColor"
-                                        placeholder="Section"
-                                        clearable
-                                        outlined
-                                        dense
-                                   ></v-autocomplete>
-                              </v-col>
-                              <v-col cols="12" md="3">
-                                   <v-autocomplete
-                                        v-model="teamFilter"
-                                        :items="loadTeamFilter"
-                                        :color="themeColor == '' ? 'primary' : themeColor"
-                                        placeholder="Team"
-                                        clearable
-                                        outlined
-                                        dense
-                                   ></v-autocomplete>
-                              </v-col>
-                              <v-col cols="12" md="3">
-                                   <v-text-field
-                                        v-model="searchTable"
-                                        placeholder="Search Name, Code, etc..."
-                                        append-icon="mdi-magnify"
-                                        :color="themeColor == '' ? 'primary' : themeColor"
-                                        clearable
-                                        outlined  
-                                        dense
-                                   ></v-text-field>
-                              </v-col>
-                         </v-row>
-                    </v-card-title>
-                    <v-divider></v-divider>
-                    <v-data-table
-                         v-model="selected"
-                         :headers="headers"
-                         :items="filterData"
-                         :loading="loading"
-                         :search="searchTable"
-                         :items-per-page="8"
-                         :page.sync="page"
-                         :single-select="singleSelect"
-                         item-key="EmployeeCode"
-                         loading-text="Loading Data. . .Please Wait"
-                         @page-count="pageCount = $event"
-                         show-select
-                         hide-default-footer>
-                         
-                              <v-progress-linear v-show="loading" slot="progress" :color="themeColor == '' ? 'primary' : themeColor" indeterminate></v-progress-linear>
-                    </v-data-table>
-                    <v-pagination
-                         v-model="page"
-                         :length="pageCount"
-                         :total-visible="10"
-                         :color="themeColor == '' ? 'primary' : themeColor"
-                    ></v-pagination>
-                    <v-card-text class="caption">Total Record(s): {{filterData.length}}</v-card-text>
-               </v-card>
-               <v-dialog v-model="dialog" width="500" persistent>
+          <v-lazy transition="scroll-y-transition" :options="{ threshold: 0.8 }">
+               <v-container>
                     <v-card>
-                         <v-toolbar :color="themeColor == '' ? 'primary' : themeColor" dark flat>
-                              <v-toolbar-title>Transfer Employees</v-toolbar-title>
-                         </v-toolbar>
-                         <v-card-text>
-                              <v-container>
-                                   <v-form ref="form" v-model="valid" lazy-validation>
-                                        <v-row align="center" justify="center" dense>
-                                             <v-col cols="12" md="12">     
-                                                  <datePicker
-                                                       :menu="dateDialog"
-                                                       dateLabel="Effectivity Date"
-                                                       :dateValue.sync="transdivsecteam.EffectivityDate"
-                                                  ></datePicker>
-                                                  <v-autocomplete
-                                                       v-model="transdivsecteam.DepartmentCode"
-                                                       :items="departmentList"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       item-value="DepartmentCode"
-                                                       item-text="DepartmentName"
-                                                       placeholder="Department"
-                                                       clearable
-                                                       outlined
-                                                       dense
-                                                  ></v-autocomplete>
-                                                  <v-autocomplete
-                                                       v-model="transdivsecteam.SectionCode"
-                                                       :items="sectionList"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       item-value="SectionCode"
-                                                       item-text="SectionName"
-                                                       placeholder="Section"
-                                                       clearable
-                                                       outlined
-                                                       dense
-                                                  ></v-autocomplete>
-                                                  <v-autocomplete
-                                                       v-model="transdivsecteam.TeamCode"
-                                                       :items="teamList"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       item-value="TeamCode"
-                                                       item-text="TeamName"
-                                                       placeholder="Team"
-                                                       clearable
-                                                       outlined
-                                                       dense
-                                                  ></v-autocomplete>
-                                             </v-col>
-                                        </v-row>
-                                   </v-form>
-                              </v-container>
-                              <v-card-actions>
+                         <v-card-title>
+                              <v-row dense>
+                                   <v-col>
+                                        <v-card-text class="pa-0 headline">Transfer Employees</v-card-text>
+                                   </v-col>
                                    <v-spacer></v-spacer>
-                                   <v-btn @click="dialog = !dialog" text>
-                                        <v-icon left>mdi-cancel</v-icon>Cancel
+                                   <v-btn 
+                                        v-if="userRights > 1 || userInfo.UserLevel == 9 || userInfo.UserLevel == 4"
+                                        :color="themeColor == '' ? 'primary' : themeColor" 
+                                        @click="transferEmployees()" 
+                                        :disabled="selected.length <= 0" 
+                                        dark
+                                   >
+                                        <v-icon left>mdi-transit-transfer</v-icon>Proceed
                                    </v-btn>
-                                   <v-btn @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor" dark>
-                                        <v-icon left>mdi-content-save</v-icon>Save
-                                   </v-btn>
-                              </v-card-actions>
-                         </v-card-text>
+                              </v-row>
+                         </v-card-title>
+                         <v-divider></v-divider>
+                         <v-card-title>
+                              <v-row class="mb-n6" dense>
+                                   <v-col cols="12" md="3">
+                                        <v-autocomplete
+                                             v-model="departmentFilter"
+                                             :items="loadDepartmentFilter"
+                                             :color="themeColor == '' ? 'primary' : themeColor"
+                                             placeholder="Department"
+                                             clearable
+                                             outlined
+                                             dense
+                                        ></v-autocomplete>
+                                   </v-col>
+                                   <v-col cols="12" md="3">
+                                        <v-autocomplete
+                                             v-model="sectionFilter"
+                                             :items="loadSectionFilter"
+                                             :color="themeColor == '' ? 'primary' : themeColor"
+                                             placeholder="Section"
+                                             clearable
+                                             outlined
+                                             dense
+                                        ></v-autocomplete>
+                                   </v-col>
+                                   <v-col cols="12" md="3">
+                                        <v-autocomplete
+                                             v-model="teamFilter"
+                                             :items="loadTeamFilter"
+                                             :color="themeColor == '' ? 'primary' : themeColor"
+                                             placeholder="Team"
+                                             clearable
+                                             outlined
+                                             dense
+                                        ></v-autocomplete>
+                                   </v-col>
+                                   <v-col cols="12" md="3">
+                                        <v-text-field
+                                             v-model="searchTable"
+                                             placeholder="Search Name, Code, etc..."
+                                             append-icon="mdi-magnify"
+                                             :color="themeColor == '' ? 'primary' : themeColor"
+                                             clearable
+                                             outlined  
+                                             dense
+                                        ></v-text-field>
+                                   </v-col>
+                              </v-row>
+                         </v-card-title>
+                         <v-divider></v-divider>
+                         <v-data-table
+                              v-model="selected"
+                              :headers="headers"
+                              :items="filterData"
+                              :loading="loading"
+                              :search="searchTable"
+                              :items-per-page="8"
+                              :page.sync="page"
+                              :single-select="singleSelect"
+                              item-key="EmployeeCode"
+                              loading-text="Loading Data. . .Please Wait"
+                              @page-count="pageCount = $event"
+                              show-select
+                              hide-default-footer>
+                              
+                                   <v-progress-linear v-show="loading" slot="progress" :color="themeColor == '' ? 'primary' : themeColor" indeterminate></v-progress-linear>
+                         </v-data-table>
+                         <v-pagination
+                              v-model="page"
+                              :length="pageCount"
+                              :total-visible="10"
+                              :color="themeColor == '' ? 'primary' : themeColor"
+                         ></v-pagination>
+                         <v-card-text class="caption">Total Record(s): {{filterData.length}}</v-card-text>
                     </v-card>
-               </v-dialog>
-          </v-container>
+                    <v-dialog v-model="dialog" width="500" persistent>
+                         <v-card>
+                              <v-toolbar :color="themeColor == '' ? 'primary' : themeColor" dark flat>
+                                   <v-toolbar-title>Transfer Employees</v-toolbar-title>
+                              </v-toolbar>
+                              <v-card-text>
+                                   <v-container>
+                                        <v-form ref="form" v-model="valid" lazy-validation>
+                                             <v-row align="center" justify="center" dense>
+                                                  <v-col cols="12" md="12">     
+                                                       <datePicker
+                                                            :menu="dateDialog"
+                                                            dateLabel="Effectivity Date"
+                                                            :dateValue.sync="transdivsecteam.EffectivityDate"
+                                                       ></datePicker>
+                                                       <v-autocomplete
+                                                            v-model="transdivsecteam.DepartmentCode"
+                                                            :items="departmentList"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            item-value="DepartmentCode"
+                                                            item-text="DepartmentName"
+                                                            placeholder="Department"
+                                                            clearable
+                                                            outlined
+                                                            dense
+                                                       ></v-autocomplete>
+                                                       <v-autocomplete
+                                                            v-model="transdivsecteam.SectionCode"
+                                                            :items="sectionList"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            item-value="SectionCode"
+                                                            item-text="SectionName"
+                                                            placeholder="Section"
+                                                            clearable
+                                                            outlined
+                                                            dense
+                                                       ></v-autocomplete>
+                                                       <v-autocomplete
+                                                            v-model="transdivsecteam.TeamCode"
+                                                            :items="teamList"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            item-value="TeamCode"
+                                                            item-text="TeamName"
+                                                            placeholder="Team"
+                                                            clearable
+                                                            outlined
+                                                            dense
+                                                       ></v-autocomplete>
+                                                  </v-col>
+                                             </v-row>
+                                        </v-form>
+                                   </v-container>
+                                   <v-card-actions>
+                                        <v-spacer></v-spacer>
+                                        <v-btn @click="dialog = !dialog" text>
+                                             <v-icon left>mdi-cancel</v-icon>Cancel
+                                        </v-btn>
+                                        <v-btn @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor" dark>
+                                             <v-icon left>mdi-content-save</v-icon>Save
+                                        </v-btn>
+                                   </v-card-actions>
+                              </v-card-text>
+                         </v-card>
+                    </v-dialog>
+               </v-container>
+          </v-lazy>
      </v-main>
 </template>
 

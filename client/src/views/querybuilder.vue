@@ -1,143 +1,145 @@
 <template>
     <v-main>
         <v-breadcrumbs :items="breadCrumbsItems" divider="/"></v-breadcrumbs>
-        <v-container class="mt-n3">
-            <v-card>
-                <v-toolbar :color="themeColor == '' ? 'primary' : themeColor" dark>
-                    <v-toolbar-title>Query Builder</v-toolbar-title>
-                </v-toolbar>
-                <v-card-text>
-                    <v-form v-model="valid" ref="form" lazy-validation>
-                        <v-row dense>
-                            <v-col cols="12" md="3">
-                                <v-autocomplete
-                                    v-model="selectedFilter"
-                                    :items="filterByItems"
-                                    :rules="[v => !!v || 'Filter is required']"
-                                    :color="themeColor == '' ? 'primary' : themeColor"
-                                    label="Filter By"
-                                    clearable
-                                    outlined
-                                    dense
-                                ></v-autocomplete>
+        <v-lazy transition="scroll-y-transition" :options="{ threshold: 0.8 }">
+            <v-container class="mt-n3">
+                <v-card>
+                    <v-toolbar :color="themeColor == '' ? 'primary' : themeColor" dark>
+                        <v-toolbar-title>Query Builder</v-toolbar-title>
+                    </v-toolbar>
+                    <v-card-text>
+                        <v-form v-model="valid" ref="form" lazy-validation>
+                            <v-row dense>
+                                <v-col cols="12" md="3">
+                                    <v-autocomplete
+                                        v-model="selectedFilter"
+                                        :items="filterByItems"
+                                        :rules="[v => !!v || 'Filter is required']"
+                                        :color="themeColor == '' ? 'primary' : themeColor"
+                                        label="Filter By"
+                                        clearable
+                                        outlined
+                                        dense
+                                    ></v-autocomplete>
+                                </v-col>
+                                <v-col cols="12" md="3">
+                                    <v-select
+                                        v-model="selectedOperator"
+                                        :items="operatorItems"
+                                        :rules="[v => !!v || 'Operator is required']"
+                                        :color="themeColor == '' ? 'primary' : themeColor"
+                                        label="Operator"
+                                        return-object
+                                        clearable
+                                        outlined
+                                        dense
+                                    ></v-select>
+                                </v-col>
+                                <v-col v-if="showPickerFrom == 0" cols="12" md="6">
+                                    <v-text-field
+                                        v-model="searchBy"
+                                        :rules="[v => !!v || 'This field is required']"
+                                        :color="themeColor == '' ? 'primary' : themeColor"
+                                        label="Search"
+                                        append-icon="mdi-magnify"
+                                        clearable
+                                        outlined
+                                        dense
+                                    ></v-text-field>
+                                </v-col>
+                                <v-col v-if="showPickerFrom > 0" cols="12" md="3">
+                                    <datePicker
+                                        :menu="dateDialog"
+                                        dateLabel="From"
+                                        :dateValue.sync="dateFilterItems[0]"
+                                    ></datePicker>
+                                </v-col>
+                                <v-col v-if="showPickerTo > 0" cols="12" md="3">
+                                    <datePicker
+                                        :menu="dateDialog"
+                                        dateLabel="To"
+                                        :dateValue.sync="dateFilterItems[1]"
+                                    ></datePicker>
+                                </v-col>
+                            </v-row>
+                        </v-form>
+                        <v-row>
+                            <v-col cols="12" md="6">
+                                <v-card outlined>
+                                    <v-container>
+                                        <v-toolbar flat>
+                                            <v-toolbar-title>Fields to Show</v-toolbar-title>
+                                            <!-- <v-spacer></v-spacer>
+                                            <v-text-field
+                                                v-model="searchFields"
+                                                class="mt-7"
+                                                label="Search"
+                                                append-icon="mdi-magnify"
+                                                outlined
+                                                dense
+                                            ></v-text-field> -->
+                                        </v-toolbar>
+                                        <v-list class="listFields" two-line dense>
+                                            <draggable v-model="headers" v-bind="dragOptions" :move="onMove">
+                                                <v-list-item v-for="item in headers" :key="item.id">
+                                                    <v-list-item-content>
+                                                        <v-card class="dragItem" outlined>
+                                                            <v-card-actions class="ma-0 pa-0">
+                                                                <v-card-text>{{item.text}}</v-card-text>
+                                                                <v-spacer></v-spacer>
+                                                                <v-icon class="mx-3">mdi-resize-bottom-right</v-icon>
+                                                            </v-card-actions>
+                                                        </v-card>
+                                                    </v-list-item-content>
+                                                </v-list-item>
+                                            </draggable>
+                                        </v-list>   
+                                    </v-container>
+                                </v-card>
                             </v-col>
-                            <v-col cols="12" md="3">
-                                <v-select
-                                    v-model="selectedOperator"
-                                    :items="operatorItems"
-                                    :rules="[v => !!v || 'Operator is required']"
-                                    :color="themeColor == '' ? 'primary' : themeColor"
-                                    label="Operator"
-                                    return-object
-                                    clearable
-                                    outlined
-                                    dense
-                                ></v-select>
-                            </v-col>
-                            <v-col v-if="showPickerFrom == 0" cols="12" md="6">
-                                <v-text-field
-                                    v-model="searchBy"
-                                    :rules="[v => !!v || 'This field is required']"
-                                    :color="themeColor == '' ? 'primary' : themeColor"
-                                    label="Search"
-                                    append-icon="mdi-magnify"
-                                    clearable
-                                    outlined
-                                    dense
-                                ></v-text-field>
-                            </v-col>
-                            <v-col v-if="showPickerFrom > 0" cols="12" md="3">
-                                <datePicker
-                                    :menu="dateDialog"
-                                    dateLabel="From"
-                                    :dateValue.sync="dateFilterItems[0]"
-                                ></datePicker>
-                            </v-col>
-                            <v-col v-if="showPickerTo > 0" cols="12" md="3">
-                                <datePicker
-                                    :menu="dateDialog"
-                                    dateLabel="To"
-                                    :dateValue.sync="dateFilterItems[1]"
-                                ></datePicker>
+                            <v-col cols="12" md="6">
+                                <v-card outlined>
+                                    <v-container>
+                                        <v-toolbar flat>
+                                            <v-toolbar-title>Arrange Fields</v-toolbar-title>
+                                        </v-toolbar>
+                                        <v-list class="listFields" v-bind:class="[selectedHeaders.length == 0 ? 'listImage' : '']" two-line dense>
+                                            <draggable v-model="selectedHeaders" v-bind="dragOptions" :move="onMove">
+                                                <v-list-item v-for="(item, i) in selectedHeaders" :key="i">
+                                                    <v-list-item-content>
+                                                        <v-card class="dragItem" outlined>
+                                                            <v-card-actions class="ma-0 pa-0">
+                                                                <v-card-text>{{item.text}}</v-card-text>
+                                                                <v-spacer></v-spacer>
+                                                                <v-btn 
+                                                                    class="mx-3" 
+                                                                    @click="removeItem(item)" icon
+                                                                >
+                                                                    <v-icon>mdi-trash-can</v-icon>
+                                                                </v-btn>
+                                                            </v-card-actions>
+                                                        </v-card>
+                                                    </v-list-item-content>
+                                                </v-list-item>
+                                            </draggable>
+                                        </v-list>   
+                                    </v-container>
+                                </v-card>
                             </v-col>
                         </v-row>
-                    </v-form>
-                    <v-row>
-                        <v-col cols="12" md="6">
-                            <v-card outlined>
-                                <v-container>
-                                    <v-toolbar flat>
-                                        <v-toolbar-title>Fields to Show</v-toolbar-title>
-                                        <!-- <v-spacer></v-spacer>
-                                        <v-text-field
-                                            v-model="searchFields"
-                                            class="mt-7"
-                                            label="Search"
-                                            append-icon="mdi-magnify"
-                                            outlined
-                                            dense
-                                        ></v-text-field> -->
-                                    </v-toolbar>
-                                    <v-list class="listFields" two-line dense>
-                                        <draggable v-model="headers" v-bind="dragOptions" :move="onMove">
-                                            <v-list-item v-for="item in headers" :key="item.id">
-                                                <v-list-item-content>
-                                                    <v-card class="dragItem" outlined>
-                                                        <v-card-actions class="ma-0 pa-0">
-                                                            <v-card-text>{{item.text}}</v-card-text>
-                                                            <v-spacer></v-spacer>
-                                                            <v-icon class="mx-3">mdi-resize-bottom-right</v-icon>
-                                                        </v-card-actions>
-                                                    </v-card>
-                                                </v-list-item-content>
-                                            </v-list-item>
-                                        </draggable>
-                                    </v-list>   
-                                </v-container>
-                            </v-card>
-                        </v-col>
-                        <v-col cols="12" md="6">
-                            <v-card outlined>
-                                <v-container>
-                                    <v-toolbar flat>
-                                        <v-toolbar-title>Arrange Fields</v-toolbar-title>
-                                    </v-toolbar>
-                                    <v-list class="listFields" v-bind:class="[selectedHeaders.length == 0 ? 'listImage' : '']" two-line dense>
-                                        <draggable v-model="selectedHeaders" v-bind="dragOptions" :move="onMove">
-                                            <v-list-item v-for="(item, i) in selectedHeaders" :key="i">
-                                                <v-list-item-content>
-                                                    <v-card class="dragItem" outlined>
-                                                        <v-card-actions class="ma-0 pa-0">
-                                                            <v-card-text>{{item.text}}</v-card-text>
-                                                            <v-spacer></v-spacer>
-                                                            <v-btn 
-                                                                class="mx-3" 
-                                                                @click="removeItem(item)" icon
-                                                            >
-                                                                <v-icon>mdi-trash-can</v-icon>
-                                                            </v-btn>
-                                                        </v-card-actions>
-                                                    </v-card>
-                                                </v-list-item-content>
-                                            </v-list-item>
-                                        </draggable>
-                                    </v-list>   
-                                </v-container>
-                            </v-card>
-                        </v-col>
-                    </v-row>
-                </v-card-text>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn @click="clearVariables()" text>
-                        <v-icon left>mdi-close</v-icon>Clear
-                    </v-btn>
-                    <v-btn :color="themeColor == '' ? 'primary' : themeColor" @click="searchDataClick()" dark>
-                        <v-icon left>mdi-play</v-icon>Run Query
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn @click="clearVariables()" text>
+                            <v-icon left>mdi-close</v-icon>Clear
+                        </v-btn>
+                        <v-btn :color="themeColor == '' ? 'primary' : themeColor" @click="searchDataClick()" dark>
+                            <v-icon left>mdi-play</v-icon>Run Query
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-container>
+        </v-lazy>
         <v-dialog v-model="displayDialog" persistent>
             <v-card>
                 <v-toolbar :color="themeColor == '' ? 'primary' : themeColor" flat dark>

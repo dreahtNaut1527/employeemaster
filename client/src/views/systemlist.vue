@@ -1,81 +1,83 @@
 <template>
     <v-main>
         <v-breadcrumbs :items="breadCrumbsItems" divider="/"></v-breadcrumbs> 
-        <v-container>
-            <v-card>
-                <v-toolbar flat>
-                    <!-- <v-toolbar-title>System Lists</v-toolbar-title> -->
-                    <v-spacer></v-spacer>
-                    <v-row dense>
-                        <v-col class="ml-auto" cols="12" md="6">
-                            <v-text-field
-                                v-model="searchTable"
-                                placeholder="Search System"
-                                append-icon="mdi-magnify"
-                                :color="themeColor == '' ? 'primary' : themeColor"
-                                hide-details
-                                clearable
-                                outlined  
-                                dense
-                            ></v-text-field>
-                        </v-col>
-                    </v-row>
-                    <v-btn class="ml-3" @click="dialog = !dialog" :color="themeColor == '' ? 'primary' : themeColor" dark>
-                        <v-icon left>mdi-plus</v-icon>New
-                    </v-btn>
-                </v-toolbar>
-                <v-divider></v-divider>
-                <v-data-table 
-                        :headers="headers" 
-                        :items="systemLists"
-                        :loading="loading"
-                        :search="searchTable"
-                        :page.sync="page"
-                        loading-text="Loading Data. . .Please Wait"
-                        @page-count="pageCount = $event"
-                        hide-default-footer
-                >
-                
-                    <v-progress-linear v-show="loading" slot="progress" :color="themeColor == '' ? 'primary' : themeColor" indeterminate></v-progress-linear>
-                    <template v-slot:item="props">
-                        <tr>
-                            <td>{{props.item.SystemCode}}</td>
-                            <td>{{props.item.SystemDesc}}</td>
-                            <td>
-                                <v-avatar :color="props.item.DeletedDate == null ? 'success' : 'error'" :size="24">
-                                    <span></span>
-                                </v-avatar>
-                            </td>
-                            <td>
-                                <v-tooltip bottom>
-                                    <template v-slot:activator="{ on, attrs }">
-                                        <v-btn @click="editRecord(props.item)" v-bind="attrs" v-on="on" icon>
-                                            <v-icon>mdi-pencil</v-icon>
-                                        </v-btn>
-                                    </template>
-                                    <span>Edit</span>
-                                </v-tooltip>
-                                <v-tooltip bottom>
-                                    <template v-slot:activator="{ on, attrs }">
-                                        <v-btn @click="saveRecord(props.item, 0)" v-bind="attrs" v-on="on" icon>
-                                            <v-icon>mdi-delete</v-icon>
-                                        </v-btn>
-                                    </template>
-                                    <span>Delete</span>
-                                </v-tooltip>
-                            </td>
-                        </tr>
-                    </template>
-                </v-data-table>
-                <v-pagination
-                        v-model="page"
-                        :length="pageCount"
-                        :total-visible="10"
-                        :color="themeColor == '' ? 'primary' : themeColor"
-                ></v-pagination>
-                <v-card-text class="caption">Total Record(s): {{systemLists.length}}</v-card-text>
-            </v-card>
-        </v-container>
+        <v-lazy transition="scroll-y-transition" :options="{ threshold: 0.8 }">
+            <v-container>
+                <v-card>
+                    <v-toolbar flat>
+                        <!-- <v-toolbar-title>System Lists</v-toolbar-title> -->
+                        <v-spacer></v-spacer>
+                        <v-row dense>
+                            <v-col class="ml-auto" cols="12" md="6">
+                                <v-text-field
+                                    v-model="searchTable"
+                                    placeholder="Search System"
+                                    append-icon="mdi-magnify"
+                                    :color="themeColor == '' ? 'primary' : themeColor"
+                                    hide-details
+                                    clearable
+                                    outlined  
+                                    dense
+                                ></v-text-field>
+                            </v-col>
+                        </v-row>
+                        <v-btn class="ml-3" @click="dialog = !dialog" :color="themeColor == '' ? 'primary' : themeColor" dark>
+                            <v-icon left>mdi-plus</v-icon>New
+                        </v-btn>
+                    </v-toolbar>
+                    <v-divider></v-divider>
+                    <v-data-table 
+                            :headers="headers" 
+                            :items="systemLists"
+                            :loading="loading"
+                            :search="searchTable"
+                            :page.sync="page"
+                            loading-text="Loading Data. . .Please Wait"
+                            @page-count="pageCount = $event"
+                            hide-default-footer
+                    >
+                    
+                        <v-progress-linear v-show="loading" slot="progress" :color="themeColor == '' ? 'primary' : themeColor" indeterminate></v-progress-linear>
+                        <template v-slot:item="props">
+                            <tr>
+                                <td>{{props.item.SystemCode}}</td>
+                                <td>{{props.item.SystemDesc}}</td>
+                                <td>
+                                    <v-avatar :color="props.item.DeletedDate == null ? 'success' : 'error'" :size="24">
+                                        <span></span>
+                                    </v-avatar>
+                                </td>
+                                <td>
+                                    <v-tooltip bottom>
+                                        <template v-slot:activator="{ on, attrs }">
+                                            <v-btn @click="editRecord(props.item)" v-bind="attrs" v-on="on" icon>
+                                                <v-icon>mdi-pencil</v-icon>
+                                            </v-btn>
+                                        </template>
+                                        <span>Edit</span>
+                                    </v-tooltip>
+                                    <v-tooltip bottom>
+                                        <template v-slot:activator="{ on, attrs }">
+                                            <v-btn @click="saveRecord(props.item, 0)" v-bind="attrs" v-on="on" icon>
+                                                <v-icon>mdi-delete</v-icon>
+                                            </v-btn>
+                                        </template>
+                                        <span>Delete</span>
+                                    </v-tooltip>
+                                </td>
+                            </tr>
+                        </template>
+                    </v-data-table>
+                    <v-pagination
+                            v-model="page"
+                            :length="pageCount"
+                            :total-visible="10"
+                            :color="themeColor == '' ? 'primary' : themeColor"
+                    ></v-pagination>
+                    <v-card-text class="caption">Total Record(s): {{systemLists.length}}</v-card-text>
+                </v-card>
+            </v-container>
+        </v-lazy>
         <v-dialog v-model="dialog" width="900" persistent>
             <v-card>
                 <v-toolbar :color="themeColor == '' ? 'primary' : themeColor" dark>

@@ -1,47 +1,72 @@
 <template>
     <v-main>
         <v-breadcrumbs :items="breadCrumbsItems" divider="/"></v-breadcrumbs>
-        <v-container>
-            <v-card>
-                <v-toolbar :color="themeColor == '' ? 'primary' : themeColor" dark>
-                    <v-toolbar-title>Account Rights</v-toolbar-title>
-                </v-toolbar>
-                <v-list>
-                    <v-list-item three-line>
-                        <v-list-item-avatar :size="50">
-                            <v-img :src="`${photo}/${employeeDetails.EmployeeCode}.jpg`"></v-img>
-                        </v-list-item-avatar>
-                        <v-list-item-content>
-                            <v-list-item-title class="font-weight-bold">{{employeeDetails.EmployeeName}} ({{employeeDetails.EmployeeCode}})</v-list-item-title>
-                            <v-list-item-subtitle>{{employeeDetails.DepartmentName}}</v-list-item-subtitle>
-                            <v-list-item-subtitle>{{employeeDetails.SectionName}}</v-list-item-subtitle>
-                        </v-list-item-content>
-                    </v-list-item>
-                </v-list>
-                <v-divider class="mx-3"></v-divider>
-                <v-container>
-                    <v-row dense>   
-                        <v-col cols="12" md="4">
-                            <v-autocomplete
-                                v-model="selectedSystem"
-                                label="System"
-                                :color="themeColor == '' ? 'primary' : themeColor"
-                                :items="systemList"
-                                item-value="SystemCode"
-                                item-text="SystemDesc"
-                                @change="loadSystemProcess(selectedSystem)"
-                                hide-details
-                                clearable
-                                outlined
-                                dense
-                            ></v-autocomplete>
-                        </v-col>
-                        <v-spacer></v-spacer>
-                        <v-col cols="12" md="6">
-                            <v-radio-group class="mt-2" v-model="userRightsAll" hide-details dense row>
-                                <template v-slot:label>
-                                    <div class="font-weight-bold">Set Rights All:</div>
-                                </template>
+        <v-lazy transition="scroll-y-transition" :options="{ threshold: 0.2 }">
+            <v-container>
+                <v-card>
+                    <v-toolbar :color="themeColor == '' ? 'primary' : themeColor" dark>
+                        <v-toolbar-title>Account Rights</v-toolbar-title>
+                    </v-toolbar>
+                    <v-list>
+                        <v-list-item three-line>
+                            <v-list-item-avatar :size="50">
+                                <v-img :src="`${photo}/${employeeDetails.EmployeeCode}.jpg`"></v-img>
+                            </v-list-item-avatar>
+                            <v-list-item-content>
+                                <v-list-item-title class="font-weight-bold">{{employeeDetails.EmployeeName}} ({{employeeDetails.EmployeeCode}})</v-list-item-title>
+                                <v-list-item-subtitle>{{employeeDetails.DepartmentName}}</v-list-item-subtitle>
+                                <v-list-item-subtitle>{{employeeDetails.SectionName}}</v-list-item-subtitle>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </v-list>
+                    <v-divider class="mx-3"></v-divider>
+                    <v-container>
+                        <v-row dense>   
+                            <v-col cols="12" md="4">
+                                <v-autocomplete
+                                    v-model="selectedSystem"
+                                    label="System"
+                                    :color="themeColor == '' ? 'primary' : themeColor"
+                                    :items="systemList"
+                                    item-value="SystemCode"
+                                    item-text="SystemDesc"
+                                    @change="loadSystemProcess(selectedSystem)"
+                                    hide-details
+                                    clearable
+                                    outlined
+                                    dense
+                                ></v-autocomplete>
+                            </v-col>
+                            <v-spacer></v-spacer>
+                            <v-col cols="12" md="6">
+                                <v-radio-group class="mt-2" v-model="userRightsAll" hide-details dense row>
+                                    <template v-slot:label>
+                                        <div class="font-weight-bold">Set Rights All:</div>
+                                    </template>
+                                    <v-radio
+                                        v-for="(item, i) in userRights" :key="i"
+                                        :label="item.text"
+                                        :value="item.value"
+                                        :color="themeColor == '' ? 'primary' : themeColor"
+                                    ></v-radio>
+                                </v-radio-group>
+                            </v-col>
+                        </v-row>
+                    </v-container>
+                    <v-divider></v-divider>
+                    <v-data-table
+                        v-model="selectedProcess"
+                        item-key="ProcessId"
+                        :headers="headers"
+                        :items="systemProcessLists"
+                        :items-per-page="6"
+                        :page.sync="page"
+                        @page-count="pageCount = $event"
+                        hide-default-footer
+                        show-select
+                    >                        
+                        <template v-slot:[`item.Rights`]="{ item }">
+                            <v-radio-group class="mt-n2" v-model="item.Rights" hide-details dense row>
                                 <v-radio
                                     v-for="(item, i) in userRights" :key="i"
                                     :label="item.text"
@@ -49,60 +74,37 @@
                                     :color="themeColor == '' ? 'primary' : themeColor"
                                 ></v-radio>
                             </v-radio-group>
-                        </v-col>
-                    </v-row>
-                </v-container>
-                <v-divider></v-divider>
-                <v-data-table
-                    v-model="selectedProcess"
-                    item-key="ProcessId"
-                    :headers="headers"
-                    :items="systemProcessLists"
-                    :items-per-page="6"
-                    :page.sync="page"
-                    @page-count="pageCount = $event"
-                    hide-default-footer
-                    show-select
-                >                        
-                    <template v-slot:[`item.Rights`]="{ item }">
-                        <v-radio-group class="mt-n2" v-model="item.Rights" hide-details dense row>
-                            <v-radio
-                                v-for="(item, i) in userRights" :key="i"
-                                :label="item.text"
-                                :value="item.value"
-                                :color="themeColor == '' ? 'primary' : themeColor"
-                            ></v-radio>
-                        </v-radio-group>
-                    </template>
-                </v-data-table>
-                <v-pagination
-                    v-model="page"
-                    :length="pageCount"
-                    :total-visible="10"
-                    :color="themeColor == '' ? 'primary' : themeColor"
-                ></v-pagination>
-                <v-card-actions>
-                    <v-card-text class="caption">Total Record(s): {{systemProcessLists.length}}</v-card-text>
-                    <v-spacer></v-spacer>
-                    <v-btn to="/accounts" class="mx-3" text>
-                        <v-icon left>mdi-keyboard-return</v-icon>Back
-                    </v-btn>
-                    <v-btn @click="saveUserRights()" :color="themeColor == '' ? 'primary' : themeColor" dark>
-                        <v-icon left>mdi-content-save</v-icon>Save
-                    </v-btn>
-                </v-card-actions>
-                <v-overlay
-                    :value="loading"
-                    absolute
-                >
-                    <v-progress-circular
-                        :size="64"
-                        indeterminate
-                        dark
-                    ></v-progress-circular>
-                </v-overlay>
-            </v-card>
-        </v-container>
+                        </template>
+                    </v-data-table>
+                    <v-pagination
+                        v-model="page"
+                        :length="pageCount"
+                        :total-visible="10"
+                        :color="themeColor == '' ? 'primary' : themeColor"
+                    ></v-pagination>
+                    <v-card-actions>
+                        <v-card-text class="caption">Total Record(s): {{systemProcessLists.length}}</v-card-text>
+                        <v-spacer></v-spacer>
+                        <v-btn to="/accounts" class="mx-3" text>
+                            <v-icon left>mdi-keyboard-return</v-icon>Back
+                        </v-btn>
+                        <v-btn @click="saveUserRights()" :color="themeColor == '' ? 'primary' : themeColor" dark>
+                            <v-icon left>mdi-content-save</v-icon>Save
+                        </v-btn>
+                    </v-card-actions>
+                    <v-overlay
+                        :value="loading"
+                        absolute
+                    >
+                        <v-progress-circular
+                            :size="64"
+                            indeterminate
+                            dark
+                        ></v-progress-circular>
+                    </v-overlay>
+                </v-card>
+            </v-container>
+        </v-lazy>
     </v-main>
 </template>
 

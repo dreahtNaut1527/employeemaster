@@ -5,7 +5,7 @@
           :nudge-width="300"
           offset-y
           origin="center center"
-          transition="scroll-y-reverse-transition"
+          transition="scroll-y-transition"
      >
           <template v-slot:activator="{ on, attrs }">
                <v-btn 

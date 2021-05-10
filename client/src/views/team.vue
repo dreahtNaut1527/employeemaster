@@ -1,6 +1,7 @@
 <template>
      <v-main>
           <v-breadcrumbs :items="breadCrumbsItems" divider="/"></v-breadcrumbs>
+          <v-lazy transition="scroll-y-transition" :options="{ threshold: 0.8 }">
                <v-container>
                     <v-card>
                          <v-toolbar flat>         
@@ -76,33 +77,37 @@
                          <v-card-text class="caption">Total Record(s): {{teams.length}}</v-card-text>
                     </v-card>
                </v-container>
-               <v-dialog v-model="dialog" width="500" persistent>
-                    <v-card>
-                         <v-toolbar :color="themeColor == '' ? 'primary' : themeColor" flat dark>{{editmode==1? "Edit Record":"New Record"}}</v-toolbar>
-                         <v-container>
-                              <v-form ref="form" v-model="valid" lazy-validation>
-                                   <v-row align="center" justify="center" dense>
-                                        <v-col cols="12" md="12">
-                                             <v-text-field
-                                                  v-model="editTeam.TeamName"
-                                                  label="Team Name"
-                                                  outlined
-                                                  dense
-                                                  :rules="[v => !!v || 'SectionName is required']"
-                                                  :readonly="userInfo.UserLevel!=4 && userInfo.UserLevel!=9 || userRights == 1"
-                                                  :color="themeColor == '' ? 'primary' : themeColor"
-                                             ></v-text-field>
-                                        </v-col>
-                                   </v-row>
-                              </v-form>
-                         </v-container>
-                         <v-card-actions>
-                              <v-spacer></v-spacer>
-                              <v-btn @click="clearVariables()" text><v-icon left>mdi-cancel</v-icon>Cancel</v-btn>
-                              <v-btn v-if="userInfo.UserLevel==4 || userInfo.UserLevel==9 || userRights > 1" @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor" dark><v-icon left>mdi-content-save</v-icon>Save</v-btn>
-                         </v-card-actions>
-                    </v-card>
-               </v-dialog>               
+          </v-lazy>
+          <v-dialog v-model="dialog" width="500" persistent>
+               <v-card>
+                    <v-toolbar :color="themeColor == '' ? 'primary' : themeColor" flat dark>
+                         <v-toolbar-title>{{editmode==1? "Edit Record":"New Record"}}</v-toolbar-title>
+                    </v-toolbar>
+                    <v-container>
+                         <v-form ref="form" v-model="valid" lazy-validation>
+                              <v-row align="center" justify="center" dense>
+                                   <v-col cols="12" md="12">
+                                        <v-text-field
+                                             v-model="editTeam.TeamName"
+                                             label="Team Name"
+                                             outlined
+                                             dense
+                                             :rules="[v => !!v || 'SectionName is required']"
+                                             :readonly="userInfo.UserLevel!=4 && userInfo.UserLevel!=9 || userRights == 1"
+                                             :color="themeColor == '' ? 'primary' : themeColor"
+                                             hide-details
+                                        ></v-text-field>
+                                   </v-col>
+                              </v-row>
+                         </v-form>
+                    </v-container>
+                    <v-card-actions>
+                         <v-spacer></v-spacer>
+                         <v-btn @click="clearVariables()" text><v-icon left>mdi-cancel</v-icon>Cancel</v-btn>
+                         <v-btn v-if="userInfo.UserLevel==4 || userInfo.UserLevel==9 || userRights > 1" @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor" dark><v-icon left>mdi-content-save</v-icon>Save</v-btn>
+                    </v-card-actions>
+               </v-card>
+          </v-dialog>               
      </v-main>
 </template>
 
@@ -193,7 +198,7 @@ export default {
                this.editmode=1
           },
           newRecord(){
-               this.loadteams()
+               // this.loadteams()
                this.dialog=true
                this.editTeam.CompanyCode=this.userInfo.CompanyCode
           },

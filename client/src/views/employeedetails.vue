@@ -1,509 +1,511 @@
 <template>
      <v-main>
           <v-breadcrumbs :items="breadCrumbsItems" divider="/"></v-breadcrumbs>
-          <v-container>
-               <v-card class="mx-auto" tile>
-                    <v-col cols="12">
-                         <v-avatar size="70">
-                              <v-img :src="imgSource" @error="setImageSource"></v-img>
-                         </v-avatar>
-                    </v-col>
-                    
+          <v-lazy transition="scroll-y-transition" :options="{ threshold: 0.8 }">
+               <v-container>
+                    <v-card class="mx-auto" tile>
+                         <v-col cols="12">
+                              <v-avatar size="70">
+                                   <v-img :src="imgSource" @error="setImageSource"></v-img>
+                              </v-avatar>
+                         </v-col>
+                         
 
-                     <v-list-item class="mt-1">
-                         <v-list-item-content>
-                              <v-list-item-title>
-                                   {{`${information.EmployeeName} (${information.EmployeeCode})`}}
-                              </v-list-item-title>
-                              <v-list-item-subtitle>{{information.DesignationName}}</v-list-item-subtitle>
-                              <!-- <v-list-item-subtitle>{{information.WorkEmailAddress}}</v-list-item-subtitle> -->
-                              
-                         </v-list-item-content>
-                         <v-list-item-action>
-                              <v-btn @click="loadTransferHist()" :color="themeColor == '' ? 'primary' : themeColor" dark>History</v-btn>
-                         </v-list-item-action>                    
-                    </v-list-item>
-                    <v-divider class="mx-3"></v-divider>
-                    <v-card-text>
-                         <v-tabs v-model="tab" :color="themeColor == '' ? 'primary' : themeColor" centered icons-and-text grow>
-                              <v-tabs-slider></v-tabs-slider>
-                              <v-tab v-for="(item, i) in tabsHeader" :key="i" :href="`#${item.value}`">
-                                    {{item.label}} <v-icon left>{{item.icon}}</v-icon>
-                              </v-tab>
-                         </v-tabs>
-                         <v-tabs-items v-model="tab">
-                              <v-tab-item value="1">
-                                   <v-card-text>
-                                        <v-row align="center" justify="center" dense>
-                                             <v-col cols="12" md="4">
-                                                  <v-text-field
-                                                       v-model="information.LastName"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       label="Last Name"
-                                                       readonly
-                                                       outlined
-                                                       dense
-                                                  ></v-text-field>
-                                             </v-col>
-                                             <v-col cols="12" md="4">
-                                                  <v-text-field
-                                                       v-model="information.FirstName"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       label="First Name"
-                                                       readonly
-                                                       outlined
-                                                       dense
-                                                  ></v-text-field>
-                                             </v-col>
-                                             <v-col cols="12" md="4">
-                                                  <v-text-field
-                                                       v-model="information.MiddleName"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       label="Middle Name"
-                                                       readonly
-                                                       outlined
-                                                       dense
-                                                  ></v-text-field>
-                                             </v-col>
-                                        </v-row>
-                                        <v-row dense>
-                                             <v-col cols="12" md="4">
-                                                  <v-autocomplete
-                                                       v-model="information.DepartmentCode"
-                                                       :items="departmentList"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       item-text="DepartmentName"
-                                                       item-value="DepartmentCode"
-                                                       label="Department"
-                                                       readonly
-                                                       outlined
-                                                       dense
-                                                  ></v-autocomplete>
-                                             </v-col>
-                                             <v-col cols="12" md="4">
-                                                  <v-autocomplete
-                                                       v-model="information.SectionCode"
-                                                       :items="sectionList"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       item-text="SectionName"
-                                                       item-value="SectionCode"
-                                                       readonly
-                                                       label="Section"
-                                                     
-                                                       outlined
-                                                       dense
-                                                  ></v-autocomplete>
-                                             </v-col>
-                                             <v-col cols="12" md="4">
-                                                  <v-autocomplete
-                                                       v-model="information.TeamCode"
-                                                       :items="teamList"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       item-text="TeamName"
-                                                       item-value="TeamCode"
-                                                       readonly
-                                                       label="Team"                
-                                                       outlined
-                                                       dense
-                                                  ></v-autocomplete>
-                                             </v-col>
-                                             <v-col cols="12" md="4">
-                                                  <v-autocomplete
-                                                       v-model="information.PositionCode"
-                                                       label="Designation"
-                                                       :items="positionList"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       item-text="PositionName"
-                                                       item-value="PositionCode"
-                                                       readonly    
-                                                       outlined
-                                                       dense
-                                                  ></v-autocomplete>
-                                             </v-col>
-                                              <v-col cols="12" md="4">
-                                                  <v-autocomplete
-                                                       v-model="information.DesignationCode"
-                                                       label="Position"
-                                                       :items="designationList"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       item-text="DesignationName"
-                                                       item-value="DesignationCode"  
-                                                       readonly                                               
-                                                       outlined
-                                                       dense
-                                                  ></v-autocomplete>
-                                             </v-col>
-                                      
-                                              <v-col cols="12" md="4">
-                                                  <v-autocomplete
-                                                       v-model="information.ShiftID"
-                                                       :items="shiftList"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       item-text="ShiftTime"
-                                                       item-value="ShiftID"
-                                                       label="Shift"
-                                                       :readonly="this.isEmpEdit == false"
-                                                       outlined
-                                                       dense
-                                                  ></v-autocomplete>
-                                             </v-col>
-                                             <v-col cols="12" md="4">
-                                                  <v-text-field
-                                                       v-model="information.ContractHiredDate"
-                                                       label="Date Hired"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       append-icon="mdi-calendar"
-                                                       readonly
-                                                       outlined
-                                                       dense
-                                                  ></v-text-field>
-                                             </v-col>
-                                             <v-col cols="12" md="4">
-                                                  <datePicker
-                                                       :menu="dateDialog"
-                                                       dateLabel="Separation Date"
-                                                       :dateValue.sync="information.SeparationDate" 
-                                                  ></datePicker> 
-                                             </v-col>
-                                             <v-col cols="12" md="4">
-                                                  <v-autocomplete
-                                                       v-model="information.Remarks"
-                                                       :readonly="this.isEmpEdit == false"
-                                                       :filled="this.isEmpEdit == true"
-                                                       :items="separatedReasons"
-                                                       item-value="ReasonDesc"
-                                                       item-text="ReasonDesc"
-                                                       label="Remarks"
-                                                       clearable
-                                                       outlined
-                                                       dense
-                                                  ></v-autocomplete>
-                                             </v-col>
-                                        </v-row>
-                                   </v-card-text>
-                              </v-tab-item>
-                                        <v-tab-item value="2">
-                                   <v-card-text>
-                                        <v-row align="center" justify="center" dense>
-                                             <v-col cols="12" md="7">
-                                                  <v-text-field
-                                                       v-model="information.NickName"
-                                                       label="Nick Name"
-                                                       :readonly="this.isEmpEdit == false"
-                                                       :filled="this.isEmpEdit == true"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       outlined
-                                                       dense
-                                                  ></v-text-field>
-                                             </v-col>
-                                             <v-col cols="12" md="2">
-                                                  <v-text-field
-                                                       v-model="dateBirth"
-                                                       label="Date of Birth"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       readonly
-                                                       outlined
-                                                       dense
-                                                  ></v-text-field>
-                                             </v-col>
-                                             <v-col cols="12" md="1">
-                                                  <v-text-field
-                                                       v-model="ageValue"
-                                                       label="Age"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       readonly
-                                                       outlined
-                                                       dense
-                                                  ></v-text-field>
-                                             </v-col>
-                                             <v-col cols="12" md="2">
-                                                  <v-text-field
-                                                       v-model="genderValue"
-                                                       label="Gender"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       outlined
-                                                       readonly
-                                                       dense
-                                                  ></v-text-field>
-                                             </v-col>
-                                              <v-col cols="12" md="6">
-                                                  <v-text-field
-                                                       v-model="information.Course"
-                                                       label="Course"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       readonly
-                                                       outlined
-                                                       dense
-                                                  ></v-text-field>
-                                             </v-col>
-                                             <v-col cols="12" md="6">
-                                                  <v-autocomplete
-                                                       v-model="information.EducCode"
-                                                       :items="educationList"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       item-text="EducDesc"
-                                                       item-value="EducCode"
-                                                       label="Educational Attainment"
-                                                       readonly
-                                                       outlined
-                                                       dense
-                                                  ></v-autocomplete>
-                                             </v-col>
-                                             <v-col cols="12" md="6">
-                                                  <v-text-field
-                                                       v-model="information.Phone"
-                                                       append-icon="mdi-phone"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       label="Telephone"
-                                                       v-mask="'(###)-###-####'"                                                    
-                                                       hint="(###)-###-####"
-                                                       :readonly="this.isEmpEdit == false"
-                                                       :filled="this.isEmpEdit == true"
-                                                       outlined
-                                                       dense
-                                                  ></v-text-field>
-                                             </v-col>
-                                             <v-col cols="12" md="6">
-                                                  <v-text-field
-                                                       v-model="information.Cellphone"
-                                                       append-icon="mdi-cellphone"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       label="Cellphone"
-                                                       v-mask="'####-###-####'"
-                                                       :readonly="this.isEmpEdit == false"
-                                                       hint="####-###-####"
-                                                        :filled="this.isEmpEdit == true"
-                                                       outlined
-                                                       dense
-                                                  ></v-text-field>
-                                             </v-col>
-                                             <v-col cols="12" md="7">
-                                                  <v-textarea
-                                                       v-model="information.PresentAddress"
-                                                       label="Present Address"
-                                                       :readonly="this.isEmpEdit == false"
-                                                       :filled="this.isEmpEdit == true"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       outlined
-                                                       dense
-                                                  ></v-textarea>
-                                             </v-col>
-                                             <v-col cols="12" md="5">
-                                                  <v-textarea
-                                                       v-model="information.PermanentAddress"
-                                                       label="Permanent Address"
-                                                       :readonly="this.isEmpEdit == false"
-                                                       :filled="this.isEmpEdit == true"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       outlined
-                                                       dense
-                                                  ></v-textarea>
-                                             </v-col>
-                                        </v-row>
-                                   </v-card-text>
-                              </v-tab-item>
-                              <v-tab-item value="3">
-                                   <v-card-text>
-                                        <v-row align="center" justify="center" dense>
-                                             <v-col cols="12" md="12">
-                                                  <v-text-field
-                                                       v-model="information.ConPerson"
-                                                       label="Contact Person"
-                                                       :readonly="this.isEmpEdit == false"
-                                                       :filled="this.isEmpEdit == true"  
-                                                       :color="themeColor == '' ? 'primary' : themeColor"                                             
-                                                       outlined
-                                                       dense
-                                                  ></v-text-field>
-                                             </v-col>
-                                             <v-col cols="12" md="12">
-                                                  <v-text-field
-                                                       v-model="information.ConRelationship"
-                                                       label="Relationship"
-                                                       :readonly="this.isEmpEdit == false"
-                                                       :filled="this.isEmpEdit == true"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       outlined
-                                                       dense
-                                                  ></v-text-field>
-                                             </v-col>
-                                             <v-col cols="12" md="12">
-                                                  <v-textarea
-                                                       v-model="information.ConAddress"
-                                                       label="Contact Address"
-                                                       :readonly="this.isEmpEdit == false"
-                                                       :filled="this.isEmpEdit == true"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       outlined
-                                                       dense
-                                                  ></v-textarea>
-                                             </v-col>
-                                             <v-col cols="12" md="12">
-                                                  <v-text-field
-                                                       v-model="information.ConNumber"
-                                                       append-icon="mdi-phone"
-                                                       label="Contact Phone No."
-                                                       :readonly="this.isEmpEdit == false"
-                                                       :filled="this.isEmpEdit == true"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       outlined
-                                                       dense
-                                                  ></v-text-field>
-                                             </v-col>
-                                        </v-row>
-                                   </v-card-text>
-                              </v-tab-item>
-                              <v-tab-item value="4">
-                                   <v-card-text>
-                                        <v-row align="center" justify="center" dense>
-                                             <v-col cols="12" md="6">
-                                                  <v-text-field
-                                                       v-model="information.CPUNumber"
-                                                       append-icon="mdi-desktop-classic"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       label="CPU Number"
-                                                       readonly
-                                                       outlined
-                                                       dense
-                                                  ></v-text-field>
-                                             </v-col>
-                                             <v-col cols="12" md="6">
-                                                  <v-text-field
-                                                       v-model="information.IPAddress"
-                                                       append-icon="mdi-ip"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       label="IP Address"
-                                                       readonly
-                                                       outlined
-                                                       dense
-                                                  ></v-text-field>
-                                             </v-col>
-                                             <v-col cols="12" md="6">
-                                                  <v-text-field
-                                                       v-model="information.CompUserName"
-                                                       append-icon="mdi-account"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       label="Computer Username"
-                                                       readonly
-                                                       outlined
-                                                       dense
-                                                  ></v-text-field>
-                                             </v-col>
-                                             <v-col cols="12" md="6">
-                                                  <v-text-field
-                                                       v-model="information.CompPassword"
-                                                       append-icon="mdi-lock"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       label="Computer Password"
-                                                       type="password"
-                                                       readonly
-                                                       outlined
-                                                       dense
-                                                  ></v-text-field>
-                                             </v-col>
-                                             <v-col cols="12" md="6">
-                                                  <v-text-field
-                                                       v-model="information.LocalNumber"
-                                                       append-icon="mdi-phone-classic"
-                                                       label="Local No."
-                                                       v-mask="'####-###'"
-                                                       :readonly="this.isEmpEdit == false"
-                                                       :filled="this.isEmpEdit == true"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       hint="####-###"
-                                                       outlined
-                                                       dense
-                                                  ></v-text-field>
-                                             </v-col>
-                                             <v-col cols="12" md="6">
-                                                  <v-text-field
-                                                       v-model="information.WorkEmailAddress"
-                                                       append-icon="mdi-email"
-                                                       label="Work Email Address"
-                                                       :readonly="this.isEmpEdit == false"
-                                                       :filled="this.isEmpEdit == true"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       outlined
-                                                       dense
-                                                  ></v-text-field>
-                                             </v-col>
-                                             <v-col cols="12" md="6">
-                                                  <v-text-field
-                                                       v-model="information.WorkLocation"
-                                                       append-icon="mdi-map-marker"
-                                                       label="Work Location"
-                                                        :readonly="this.isEmpEdit == false"
-                                                       :filled="this.isEmpEdit == true"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       outlined
-                                                       dense
-                                                  ></v-text-field>
-                                             </v-col>
-                                              <v-col cols="12" md="6">
-                                                  <v-text-field
-                                                       v-model="information.StaffCode"
-                                                       label="Staff Code"
-                                                       :readonly="this.isEmpEdit == false"
-                                                       :filled="this.isEmpEdit == true"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       outlined
-                                                       dense
-                                                  ></v-text-field>
-                                             </v-col>
-                                             <v-col cols="12" md="6">
-                                                  <v-autocomplete
-                                                       v-model="information.JobAssignmentCode"
-                                                       :items="jobassignments"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       item-text="JobAssignmentDesc"
-                                                       item-value="JobAssignmentCode"
-                                                       label="Job Assignment"
-                                                       outlined
-                                                       dense
-                                                       clearable
-                                                       :filled="this.isEmpEdit == true"
-                                                  ></v-autocomplete>
-                                             </v-col>
-                                             <v-col cols="12" md="6">
-                                                  <v-autocomplete
-                                                       v-model="information.CategoryCode"
-                                                       :items="category"
-                                                       :color="themeColor == '' ? 'primary' : themeColor"
-                                                       item-text="label"
-                                                       item-value="value"
-                                                       label="Category"
-                                                       outlined
-                                                       dense
-                                                       clearable
-                                                       :filled="this.isEmpEdit == true"
-                                                  ></v-autocomplete>
-                                             </v-col>
-                                        </v-row>
-                                   </v-card-text>
-                              </v-tab-item>
-                         </v-tabs-items>
-                    </v-card-text>
-                    <v-card-actions v-if="this.isEmpEdit == true">
-                         <v-spacer></v-spacer>
-                         <v-btn :to="userInfo.UserLevel == 9 ? '/employees' : '/employees?id=EM01-01'" text>
-                              <v-icon left>mdi-keyboard-return</v-icon>Back
-                         </v-btn>
-                         <v-btn v-if="userInfo.UserLevel != 5" @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor" dark>
-                              <v-icon left>mdi-content-save</v-icon>Save
-                         </v-btn>
-                    </v-card-actions>
-                    <v-overlay
-                         :value="loading"
-                         absolute
-                    >
-                         <v-progress-circular
-                              :size="64"
-                              indeterminate
-                              dark
-                         ></v-progress-circular>
-                    </v-overlay>
-               </v-card>
-          </v-container>
+                         <v-list-item class="mt-1">
+                              <v-list-item-content>
+                                   <v-list-item-title>
+                                        {{`${information.EmployeeName} (${information.EmployeeCode})`}}
+                                   </v-list-item-title>
+                                   <v-list-item-subtitle>{{information.DesignationName}}</v-list-item-subtitle>
+                                   <!-- <v-list-item-subtitle>{{information.WorkEmailAddress}}</v-list-item-subtitle> -->
+                                   
+                              </v-list-item-content>
+                              <v-list-item-action>
+                                   <v-btn @click="loadTransferHist()" :color="themeColor == '' ? 'primary' : themeColor" dark>History</v-btn>
+                              </v-list-item-action>                    
+                         </v-list-item>
+                         <v-divider class="mx-3"></v-divider>
+                         <v-card-text>
+                              <v-tabs v-model="tab" :color="themeColor == '' ? 'primary' : themeColor" centered icons-and-text grow>
+                                   <v-tabs-slider></v-tabs-slider>
+                                   <v-tab v-for="(item, i) in tabsHeader" :key="i" :href="`#${item.value}`">
+                                        {{item.label}} <v-icon left>{{item.icon}}</v-icon>
+                                   </v-tab>
+                              </v-tabs>
+                              <v-tabs-items v-model="tab">
+                                   <v-tab-item value="1">
+                                        <v-card-text>
+                                             <v-row align="center" justify="center" dense>
+                                                  <v-col cols="12" md="4">
+                                                       <v-text-field
+                                                            v-model="information.LastName"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            label="Last Name"
+                                                            readonly
+                                                            outlined
+                                                            dense
+                                                       ></v-text-field>
+                                                  </v-col>
+                                                  <v-col cols="12" md="4">
+                                                       <v-text-field
+                                                            v-model="information.FirstName"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            label="First Name"
+                                                            readonly
+                                                            outlined
+                                                            dense
+                                                       ></v-text-field>
+                                                  </v-col>
+                                                  <v-col cols="12" md="4">
+                                                       <v-text-field
+                                                            v-model="information.MiddleName"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            label="Middle Name"
+                                                            readonly
+                                                            outlined
+                                                            dense
+                                                       ></v-text-field>
+                                                  </v-col>
+                                             </v-row>
+                                             <v-row dense>
+                                                  <v-col cols="12" md="4">
+                                                       <v-autocomplete
+                                                            v-model="information.DepartmentCode"
+                                                            :items="departmentList"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            item-text="DepartmentName"
+                                                            item-value="DepartmentCode"
+                                                            label="Department"
+                                                            readonly
+                                                            outlined
+                                                            dense
+                                                       ></v-autocomplete>
+                                                  </v-col>
+                                                  <v-col cols="12" md="4">
+                                                       <v-autocomplete
+                                                            v-model="information.SectionCode"
+                                                            :items="sectionList"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            item-text="SectionName"
+                                                            item-value="SectionCode"
+                                                            readonly
+                                                            label="Section"
+                                                       
+                                                            outlined
+                                                            dense
+                                                       ></v-autocomplete>
+                                                  </v-col>
+                                                  <v-col cols="12" md="4">
+                                                       <v-autocomplete
+                                                            v-model="information.TeamCode"
+                                                            :items="teamList"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            item-text="TeamName"
+                                                            item-value="TeamCode"
+                                                            readonly
+                                                            label="Team"                
+                                                            outlined
+                                                            dense
+                                                       ></v-autocomplete>
+                                                  </v-col>
+                                                  <v-col cols="12" md="4">
+                                                       <v-autocomplete
+                                                            v-model="information.PositionCode"
+                                                            label="Designation"
+                                                            :items="positionList"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            item-text="PositionName"
+                                                            item-value="PositionCode"
+                                                            readonly    
+                                                            outlined
+                                                            dense
+                                                       ></v-autocomplete>
+                                                  </v-col>
+                                                  <v-col cols="12" md="4">
+                                                       <v-autocomplete
+                                                            v-model="information.DesignationCode"
+                                                            label="Position"
+                                                            :items="designationList"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            item-text="DesignationName"
+                                                            item-value="DesignationCode"  
+                                                            readonly                                               
+                                                            outlined
+                                                            dense
+                                                       ></v-autocomplete>
+                                                  </v-col>
+                                        
+                                                  <v-col cols="12" md="4">
+                                                       <v-autocomplete
+                                                            v-model="information.ShiftID"
+                                                            :items="shiftList"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            item-text="ShiftTime"
+                                                            item-value="ShiftID"
+                                                            label="Shift"
+                                                            :readonly="this.isEmpEdit == false"
+                                                            outlined
+                                                            dense
+                                                       ></v-autocomplete>
+                                                  </v-col>
+                                                  <v-col cols="12" md="4">
+                                                       <v-text-field
+                                                            v-model="information.ContractHiredDate"
+                                                            label="Date Hired"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            append-icon="mdi-calendar"
+                                                            readonly
+                                                            outlined
+                                                            dense
+                                                       ></v-text-field>
+                                                  </v-col>
+                                                  <v-col cols="12" md="4">
+                                                       <datePicker
+                                                            :menu="dateDialog"
+                                                            dateLabel="Separation Date"
+                                                            :dateValue.sync="information.SeparationDate" 
+                                                       ></datePicker> 
+                                                  </v-col>
+                                                  <v-col cols="12" md="4">
+                                                       <v-autocomplete
+                                                            v-model="information.Remarks"
+                                                            :readonly="this.isEmpEdit == false"
+                                                            :filled="this.isEmpEdit == true"
+                                                            :items="separatedReasons"
+                                                            item-value="ReasonDesc"
+                                                            item-text="ReasonDesc"
+                                                            label="Remarks"
+                                                            clearable
+                                                            outlined
+                                                            dense
+                                                       ></v-autocomplete>
+                                                  </v-col>
+                                             </v-row>
+                                        </v-card-text>
+                                   </v-tab-item>
+                                             <v-tab-item value="2">
+                                        <v-card-text>
+                                             <v-row align="center" justify="center" dense>
+                                                  <v-col cols="12" md="7">
+                                                       <v-text-field
+                                                            v-model="information.NickName"
+                                                            label="Nick Name"
+                                                            :readonly="this.isEmpEdit == false"
+                                                            :filled="this.isEmpEdit == true"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            outlined
+                                                            dense
+                                                       ></v-text-field>
+                                                  </v-col>
+                                                  <v-col cols="12" md="2">
+                                                       <v-text-field
+                                                            v-model="dateBirth"
+                                                            label="Date of Birth"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            readonly
+                                                            outlined
+                                                            dense
+                                                       ></v-text-field>
+                                                  </v-col>
+                                                  <v-col cols="12" md="1">
+                                                       <v-text-field
+                                                            v-model="ageValue"
+                                                            label="Age"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            readonly
+                                                            outlined
+                                                            dense
+                                                       ></v-text-field>
+                                                  </v-col>
+                                                  <v-col cols="12" md="2">
+                                                       <v-text-field
+                                                            v-model="genderValue"
+                                                            label="Gender"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            outlined
+                                                            readonly
+                                                            dense
+                                                       ></v-text-field>
+                                                  </v-col>
+                                                  <v-col cols="12" md="6">
+                                                       <v-text-field
+                                                            v-model="information.Course"
+                                                            label="Course"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            readonly
+                                                            outlined
+                                                            dense
+                                                       ></v-text-field>
+                                                  </v-col>
+                                                  <v-col cols="12" md="6">
+                                                       <v-autocomplete
+                                                            v-model="information.EducCode"
+                                                            :items="educationList"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            item-text="EducDesc"
+                                                            item-value="EducCode"
+                                                            label="Educational Attainment"
+                                                            readonly
+                                                            outlined
+                                                            dense
+                                                       ></v-autocomplete>
+                                                  </v-col>
+                                                  <v-col cols="12" md="6">
+                                                       <v-text-field
+                                                            v-model="information.Phone"
+                                                            append-icon="mdi-phone"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            label="Telephone"
+                                                            v-mask="'(###)-###-####'"                                                    
+                                                            hint="(###)-###-####"
+                                                            :readonly="this.isEmpEdit == false"
+                                                            :filled="this.isEmpEdit == true"
+                                                            outlined
+                                                            dense
+                                                       ></v-text-field>
+                                                  </v-col>
+                                                  <v-col cols="12" md="6">
+                                                       <v-text-field
+                                                            v-model="information.Cellphone"
+                                                            append-icon="mdi-cellphone"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            label="Cellphone"
+                                                            v-mask="'####-###-####'"
+                                                            :readonly="this.isEmpEdit == false"
+                                                            hint="####-###-####"
+                                                            :filled="this.isEmpEdit == true"
+                                                            outlined
+                                                            dense
+                                                       ></v-text-field>
+                                                  </v-col>
+                                                  <v-col cols="12" md="7">
+                                                       <v-textarea
+                                                            v-model="information.PresentAddress"
+                                                            label="Present Address"
+                                                            :readonly="this.isEmpEdit == false"
+                                                            :filled="this.isEmpEdit == true"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            outlined
+                                                            dense
+                                                       ></v-textarea>
+                                                  </v-col>
+                                                  <v-col cols="12" md="5">
+                                                       <v-textarea
+                                                            v-model="information.PermanentAddress"
+                                                            label="Permanent Address"
+                                                            :readonly="this.isEmpEdit == false"
+                                                            :filled="this.isEmpEdit == true"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            outlined
+                                                            dense
+                                                       ></v-textarea>
+                                                  </v-col>
+                                             </v-row>
+                                        </v-card-text>
+                                   </v-tab-item>
+                                   <v-tab-item value="3">
+                                        <v-card-text>
+                                             <v-row align="center" justify="center" dense>
+                                                  <v-col cols="12" md="12">
+                                                       <v-text-field
+                                                            v-model="information.ConPerson"
+                                                            label="Contact Person"
+                                                            :readonly="this.isEmpEdit == false"
+                                                            :filled="this.isEmpEdit == true"  
+                                                            :color="themeColor == '' ? 'primary' : themeColor"                                             
+                                                            outlined
+                                                            dense
+                                                       ></v-text-field>
+                                                  </v-col>
+                                                  <v-col cols="12" md="12">
+                                                       <v-text-field
+                                                            v-model="information.ConRelationship"
+                                                            label="Relationship"
+                                                            :readonly="this.isEmpEdit == false"
+                                                            :filled="this.isEmpEdit == true"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            outlined
+                                                            dense
+                                                       ></v-text-field>
+                                                  </v-col>
+                                                  <v-col cols="12" md="12">
+                                                       <v-textarea
+                                                            v-model="information.ConAddress"
+                                                            label="Contact Address"
+                                                            :readonly="this.isEmpEdit == false"
+                                                            :filled="this.isEmpEdit == true"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            outlined
+                                                            dense
+                                                       ></v-textarea>
+                                                  </v-col>
+                                                  <v-col cols="12" md="12">
+                                                       <v-text-field
+                                                            v-model="information.ConNumber"
+                                                            append-icon="mdi-phone"
+                                                            label="Contact Phone No."
+                                                            :readonly="this.isEmpEdit == false"
+                                                            :filled="this.isEmpEdit == true"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            outlined
+                                                            dense
+                                                       ></v-text-field>
+                                                  </v-col>
+                                             </v-row>
+                                        </v-card-text>
+                                   </v-tab-item>
+                                   <v-tab-item value="4">
+                                        <v-card-text>
+                                             <v-row align="center" justify="center" dense>
+                                                  <v-col cols="12" md="6">
+                                                       <v-text-field
+                                                            v-model="information.CPUNumber"
+                                                            append-icon="mdi-desktop-classic"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            label="CPU Number"
+                                                            readonly
+                                                            outlined
+                                                            dense
+                                                       ></v-text-field>
+                                                  </v-col>
+                                                  <v-col cols="12" md="6">
+                                                       <v-text-field
+                                                            v-model="information.IPAddress"
+                                                            append-icon="mdi-ip"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            label="IP Address"
+                                                            readonly
+                                                            outlined
+                                                            dense
+                                                       ></v-text-field>
+                                                  </v-col>
+                                                  <v-col cols="12" md="6">
+                                                       <v-text-field
+                                                            v-model="information.CompUserName"
+                                                            append-icon="mdi-account"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            label="Computer Username"
+                                                            readonly
+                                                            outlined
+                                                            dense
+                                                       ></v-text-field>
+                                                  </v-col>
+                                                  <v-col cols="12" md="6">
+                                                       <v-text-field
+                                                            v-model="information.CompPassword"
+                                                            append-icon="mdi-lock"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            label="Computer Password"
+                                                            type="password"
+                                                            readonly
+                                                            outlined
+                                                            dense
+                                                       ></v-text-field>
+                                                  </v-col>
+                                                  <v-col cols="12" md="6">
+                                                       <v-text-field
+                                                            v-model="information.LocalNumber"
+                                                            append-icon="mdi-phone-classic"
+                                                            label="Local No."
+                                                            v-mask="'####-###'"
+                                                            :readonly="this.isEmpEdit == false"
+                                                            :filled="this.isEmpEdit == true"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            hint="####-###"
+                                                            outlined
+                                                            dense
+                                                       ></v-text-field>
+                                                  </v-col>
+                                                  <v-col cols="12" md="6">
+                                                       <v-text-field
+                                                            v-model="information.WorkEmailAddress"
+                                                            append-icon="mdi-email"
+                                                            label="Work Email Address"
+                                                            :readonly="this.isEmpEdit == false"
+                                                            :filled="this.isEmpEdit == true"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            outlined
+                                                            dense
+                                                       ></v-text-field>
+                                                  </v-col>
+                                                  <v-col cols="12" md="6">
+                                                       <v-text-field
+                                                            v-model="information.WorkLocation"
+                                                            append-icon="mdi-map-marker"
+                                                            label="Work Location"
+                                                            :readonly="this.isEmpEdit == false"
+                                                            :filled="this.isEmpEdit == true"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            outlined
+                                                            dense
+                                                       ></v-text-field>
+                                                  </v-col>
+                                                  <v-col cols="12" md="6">
+                                                       <v-text-field
+                                                            v-model="information.StaffCode"
+                                                            label="Staff Code"
+                                                            :readonly="this.isEmpEdit == false"
+                                                            :filled="this.isEmpEdit == true"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            outlined
+                                                            dense
+                                                       ></v-text-field>
+                                                  </v-col>
+                                                  <v-col cols="12" md="6">
+                                                       <v-autocomplete
+                                                            v-model="information.JobAssignmentCode"
+                                                            :items="jobassignments"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            item-text="JobAssignmentDesc"
+                                                            item-value="JobAssignmentCode"
+                                                            label="Job Assignment"
+                                                            outlined
+                                                            dense
+                                                            clearable
+                                                            :filled="this.isEmpEdit == true"
+                                                       ></v-autocomplete>
+                                                  </v-col>
+                                                  <v-col cols="12" md="6">
+                                                       <v-autocomplete
+                                                            v-model="information.CategoryCode"
+                                                            :items="category"
+                                                            :color="themeColor == '' ? 'primary' : themeColor"
+                                                            item-text="label"
+                                                            item-value="value"
+                                                            label="Category"
+                                                            outlined
+                                                            dense
+                                                            clearable
+                                                            :filled="this.isEmpEdit == true"
+                                                       ></v-autocomplete>
+                                                  </v-col>
+                                             </v-row>
+                                        </v-card-text>
+                                   </v-tab-item>
+                              </v-tabs-items>
+                         </v-card-text>
+                         <v-card-actions v-if="this.isEmpEdit == true">
+                              <v-spacer></v-spacer>
+                              <v-btn :to="userInfo.UserLevel == 9 ? '/employees' : '/employees?id=EM01-01'" text>
+                                   <v-icon left>mdi-keyboard-return</v-icon>Back
+                              </v-btn>
+                              <v-btn v-if="userInfo.UserLevel != 5" @click="saveRecord()" :color="themeColor == '' ? 'primary' : themeColor" dark>
+                                   <v-icon left>mdi-content-save</v-icon>Save
+                              </v-btn>
+                         </v-card-actions>
+                         <v-overlay
+                              :value="loading"
+                              absolute
+                         >
+                              <v-progress-circular
+                                   :size="64"
+                                   indeterminate
+                                   dark
+                              ></v-progress-circular>
+                         </v-overlay>
+                    </v-card>
+               </v-container>
+          </v-lazy>
           <v-dialog v-model="dialog" width="800">
                <v-card>
                     <v-toolbar :color="themeColor == '' ? 'primary' : themeColor" dark flat>

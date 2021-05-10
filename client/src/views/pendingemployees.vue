@@ -1,98 +1,100 @@
 <template>
      <v-main>
           <v-breadcrumbs :items="breadCrumbsItems" divider="/"></v-breadcrumbs>
-          <v-container>
-               <v-card>
-                    <v-card-title>
-                         <v-row dense>
-                              <v-col>
-                                   <v-card-text class="pa-0 headline">Pending Employees</v-card-text>
-                              </v-col>
-                         </v-row>
-                    </v-card-title>
-                    <v-divider></v-divider>
-                    <v-card-title>
-                         <v-row dense>
-                              <v-col cols="12" md="3">
-                                   <datePicker
-                                        :menu="dateDialog"
-                                        dateLabel="Effectivity Date"
-                                        :dateValue.sync="EffectivityDate"
-                                   ></datePicker>
-                              </v-col>
-                              <v-col v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 5 || userInfo.UserLevel == 9" cols="12" md="3">
-                                   <v-autocomplete
-                                        v-model="department"
-                                        :items="loadDepartmentList"
-                                        :color="themeColor == '' ? 'primary' : themeColor"
-                                        placeholder="Department"
-                                        hide-details
-                                        clearable
-                                        outlined
-                                        dense
-                                   ></v-autocomplete>
-                              </v-col>
-                              <v-col cols="12" md="3">
-                                   <v-autocomplete
-                                        v-model="section"
-                                        :items="loadSectionList"
-                                        :color="themeColor == '' ? 'primary' : themeColor"
-                                        placeholder="Section"
-                                        hide-details
-                                        clearable
-                                        outlined
-                                        dense
-                                   ></v-autocomplete>
-                              </v-col>
-                              <v-col cols="12" md="3">
-                                   <v-autocomplete
-                                        v-model="team"
-                                        :items="loadTeamList"
-                                        :color="themeColor == '' ? 'primary' : themeColor"
-                                        placeholder="Team"
-                                        hide-details
-                                        clearable
-                                        outlined
-                                        dense
-                                   ></v-autocomplete>
-                              </v-col>
-                              <v-col cols="12" md="12">
-                                   <v-text-field
-                                        v-model="searchTable"
-                                        placeholder="Search Name, Code, etc..."
-                                        append-icon="mdi-magnify"
-                                        :color="themeColor == '' ? 'primary' : themeColor"
-                                        hide-details
-                                        clearable
-                                        outlined  
-                                        dense
-                                   ></v-text-field>
-                              </v-col>
-                         </v-row>
-                    </v-card-title>
-                    <v-divider></v-divider>
-                    <v-data-table
-                         :headers="headers"
-                         :items="filterData"
-                         :loading="loading"
-                         :search="searchTable"
-                         :items-per-page="8"
-                         :page.sync="page"
-                         loading-text="Loading Data. . .Please Wait"
-                         @page-count="pageCount = $event"
-                         hide-default-footer>
-                         
-                              <v-progress-linear v-show="loading" slot="progress" :color="themeColor == '' ? 'primary' : themeColor" indeterminate></v-progress-linear>
-                    </v-data-table>
-                    <v-pagination
-                         v-model="page"
-                         :length="pageCount"
-                         :total-visible="10"
-                         :color="themeColor == '' ? 'primary' : themeColor"
-                    ></v-pagination>
-                    <v-card-text class="caption">Total Record(s): {{filterData.length}}</v-card-text>
-               </v-card>
-          </v-container>
+          <v-lazy transition="scroll-y-transition" :options="{ threshold: 0.8 }">
+               <v-container>
+                    <v-card>
+                         <v-card-title>
+                              <v-row dense>
+                                   <v-col>
+                                        <v-card-text class="pa-0 headline">Pending Employees</v-card-text>
+                                   </v-col>
+                              </v-row>
+                         </v-card-title>
+                         <v-divider></v-divider>
+                         <v-card-title>
+                              <v-row dense>
+                                   <v-col cols="12" md="3">
+                                        <datePicker
+                                             :menu="dateDialog"
+                                             dateLabel="Effectivity Date"
+                                             :dateValue.sync="EffectivityDate"
+                                        ></datePicker>
+                                   </v-col>
+                                   <v-col v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 5 || userInfo.UserLevel == 9" cols="12" md="3">
+                                        <v-autocomplete
+                                             v-model="department"
+                                             :items="loadDepartmentList"
+                                             :color="themeColor == '' ? 'primary' : themeColor"
+                                             placeholder="Department"
+                                             hide-details
+                                             clearable
+                                             outlined
+                                             dense
+                                        ></v-autocomplete>
+                                   </v-col>
+                                   <v-col cols="12" md="3">
+                                        <v-autocomplete
+                                             v-model="section"
+                                             :items="loadSectionList"
+                                             :color="themeColor == '' ? 'primary' : themeColor"
+                                             placeholder="Section"
+                                             hide-details
+                                             clearable
+                                             outlined
+                                             dense
+                                        ></v-autocomplete>
+                                   </v-col>
+                                   <v-col cols="12" md="3">
+                                        <v-autocomplete
+                                             v-model="team"
+                                             :items="loadTeamList"
+                                             :color="themeColor == '' ? 'primary' : themeColor"
+                                             placeholder="Team"
+                                             hide-details
+                                             clearable
+                                             outlined
+                                             dense
+                                        ></v-autocomplete>
+                                   </v-col>
+                                   <v-col cols="12" md="12">
+                                        <v-text-field
+                                             v-model="searchTable"
+                                             placeholder="Search Name, Code, etc..."
+                                             append-icon="mdi-magnify"
+                                             :color="themeColor == '' ? 'primary' : themeColor"
+                                             hide-details
+                                             clearable
+                                             outlined  
+                                             dense
+                                        ></v-text-field>
+                                   </v-col>
+                              </v-row>
+                         </v-card-title>
+                         <v-divider></v-divider>
+                         <v-data-table
+                              :headers="headers"
+                              :items="filterData"
+                              :loading="loading"
+                              :search="searchTable"
+                              :items-per-page="8"
+                              :page.sync="page"
+                              loading-text="Loading Data. . .Please Wait"
+                              @page-count="pageCount = $event"
+                              hide-default-footer>
+                              
+                                   <v-progress-linear v-show="loading" slot="progress" :color="themeColor == '' ? 'primary' : themeColor" indeterminate></v-progress-linear>
+                         </v-data-table>
+                         <v-pagination
+                              v-model="page"
+                              :length="pageCount"
+                              :total-visible="10"
+                              :color="themeColor == '' ? 'primary' : themeColor"
+                         ></v-pagination>
+                         <v-card-text class="caption">Total Record(s): {{filterData.length}}</v-card-text>
+                    </v-card>
+               </v-container>
+          </v-lazy>
      </v-main>
 </template>
 

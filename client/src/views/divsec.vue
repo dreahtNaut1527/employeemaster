@@ -1,110 +1,114 @@
 <template>
      <v-main>
           <v-breadcrumbs :items="breadCrumbsItems" divider="/"></v-breadcrumbs>
-          <v-container>
-              <v-card>
-                    <v-toolbar flat>          
-                         <v-spacer></v-spacer>                         
-                         <v-row dense>
-                              <v-col class="ml-auto" cols="12" md="6">
-                                   <!-- <v-card-text class="pa-0 headline">Department-Section-Team</v-card-text> -->
-                                   <v-text-field
-                                        v-model="searchTable"
-                                        placeholder="Search Department, Section. . ."
-                                        append-icon="mdi-magnify"
+          <v-lazy transition="scroll-y-transition" :options="{ threshold: 0.8 }">
+               <v-container>
+               <v-card>
+                         <v-toolbar flat>          
+                              <v-spacer></v-spacer>                         
+                              <v-row dense>
+                                   <v-col class="ml-auto" cols="12" md="6">
+                                        <!-- <v-card-text class="pa-0 headline">Department-Section-Team</v-card-text> -->
+                                        <v-text-field
+                                             v-model="searchTable"
+                                             placeholder="Search Department, Section. . ."
+                                             append-icon="mdi-magnify"
+                                             :color="themeColor == '' ? 'primary' : themeColor"
+                                             hide-details
+                                             clearable
+                                             outlined  
+                                             dense
+                                        ></v-text-field>
+                                   </v-col>
+                              </v-row>
+                              <v-btn 
+                                   class="ml-3"
+                                   v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9 || userRights == 3" 
+                                   @click="newRecord()" 
+                                   :color="themeColor == '' ? 'primary' : themeColor" 
+                                   dark
+                              >
+                                   <v-icon left>mdi-plus</v-icon>New
+                              </v-btn>
+                         </v-toolbar>
+                         <v-divider></v-divider>
+                         <v-card-title>
+                              <v-row dense>
+                                   <v-col cols="4">
+                                        <v-autocomplete
+                                        v-model="departmentfilter"
+                                        :items="departmentlistfilter"
                                         :color="themeColor == '' ? 'primary' : themeColor"
+                                        label="Department"    
                                         hide-details
-                                        clearable
-                                        outlined  
+                                        clearable                                 
+                                        outlined
                                         dense
-                                   ></v-text-field>
-                              </v-col>
-                         </v-row>
-                         <v-btn 
-                              class="ml-3"
-                              v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9 || userRights == 3" 
-                              @click="newRecord()" 
-                              :color="themeColor == '' ? 'primary' : themeColor" 
-                              dark
+                                        ></v-autocomplete>
+                                   </v-col>
+                                   <v-col cols="4">
+                                        <v-autocomplete 
+                                        v-model="sectionfilter"
+                                        :items="sectionlistfilter"
+                                        :color="themeColor == '' ? 'primary' : themeColor"
+                                        label="Section"  
+                                        hide-details 
+                                        clearable    
+                                        outlined
+                                        dense
+                                        ></v-autocomplete>
+                                   </v-col>
+                                   <v-col cols="4">
+                                        <v-autocomplete 
+                                        v-model="teamfilter"
+                                        :items="teamlistfilter"
+                                        :color="themeColor == '' ? 'primary' : themeColor"
+                                        label="Team" 
+                                        hide-details
+                                        clearable    
+                                        outlined
+                                        dense
+                                        ></v-autocomplete>
+                                   </v-col>
+                              </v-row>
+                         </v-card-title>   
+                         <v-divider></v-divider>  
+                         <v-data-table
+                              :headers="headers"
+                              :items="filterData"
+                              :search="searchTable"
+                              :page.sync="page"
+                              :items-per-page="8"
+                              loading-text="Loading Data. . .Please Wait"
+                              :loading="loading"
+                              @page-count="pageCount = $event"
+                                   hide-default-footer
                          >
-                              <v-icon left>mdi-plus</v-icon>New
-                         </v-btn>
-                    </v-toolbar>
-                    <v-divider></v-divider>
-                    <v-card-title>
-                         <v-row dense>
-                              <v-col cols="4">
-                                   <v-autocomplete
-                                   v-model="departmentfilter"
-                                   :items="departmentlistfilter"
-                                   :color="themeColor == '' ? 'primary' : themeColor"
-                                   label="Department"    
-                                   hide-details
-                                   clearable                                 
-                                   outlined
-                                   dense
-                                   ></v-autocomplete>
-                              </v-col>
-                              <v-col cols="4">
-                                   <v-autocomplete 
-                                   v-model="sectionfilter"
-                                   :items="sectionlistfilter"
-                                   :color="themeColor == '' ? 'primary' : themeColor"
-                                   label="Section"  
-                                   hide-details 
-                                   clearable    
-                                   outlined
-                                   dense
-                                   ></v-autocomplete>
-                              </v-col>
-                              <v-col cols="4">
-                                   <v-autocomplete 
-                                   v-model="teamfilter"
-                                   :items="teamlistfilter"
-                                   :color="themeColor == '' ? 'primary' : themeColor"
-                                   label="Team" 
-                                   hide-details
-                                   clearable    
-                                   outlined
-                                   dense
-                                   ></v-autocomplete>
-                              </v-col>
-                         </v-row>
-                    </v-card-title>   
-                    <v-divider></v-divider>  
-                    <v-data-table
-                         :headers="headers"
-                         :items="filterData"
-                         :search="searchTable"
-                         :page.sync="page"
-                         :items-per-page="8"
-                         loading-text="Loading Data. . .Please Wait"
-                         :loading="loading"
-                         @page-count="pageCount = $event"
-                              hide-default-footer
-                    >
-                         
-                         <v-progress-linear v-show="loading" slot="progress" :color="themeColor == '' ? 'primary' : themeColor" indeterminate></v-progress-linear>
-                         <template v-slot:item="props">                             
-                              <tr>
-                                   <td>{{props.item.DepartmentName}}</td>                              
-                                   <td>{{props.item.SectionName}}</td>   
-                                   <td>{{props.item.TeamName}}</td>                                   
-                              </tr>                              
-                         </template>
-                    </v-data-table>
-                    <v-pagination
-                         v-model="page"
-                         :length="pageCount"
-                         :total-visible="10"
-                         :color="themeColor == '' ? 'primary' : themeColor"
-                    ></v-pagination>
-                    <v-card-text class="caption">Total Record(s): {{filterData.length}}</v-card-text>
-              </v-card>
-          </v-container>
+                              
+                              <v-progress-linear v-show="loading" slot="progress" :color="themeColor == '' ? 'primary' : themeColor" indeterminate></v-progress-linear>
+                              <template v-slot:item="props">                             
+                                   <tr>
+                                        <td>{{props.item.DepartmentName}}</td>                              
+                                        <td>{{props.item.SectionName}}</td>   
+                                        <td>{{props.item.TeamName}}</td>                                   
+                                   </tr>                              
+                              </template>
+                         </v-data-table>
+                         <v-pagination
+                              v-model="page"
+                              :length="pageCount"
+                              :total-visible="10"
+                              :color="themeColor == '' ? 'primary' : themeColor"
+                         ></v-pagination>
+                         <v-card-text class="caption">Total Record(s): {{filterData.length}}</v-card-text>
+               </v-card>
+               </v-container>
+          </v-lazy>
           <v-dialog v-model="dialog" width="500" persistent>
                <v-card>
-                    <v-toolbar :color="themeColor == '' ? 'primary' : themeColor" flat dark>New Record</v-toolbar>
+                    <v-toolbar :color="themeColor == '' ? 'primary' : themeColor" flat dark>
+                         <v-toolbar-title>New Record</v-toolbar-title>
+                    </v-toolbar>
                     <v-container>
                          <v-form ref="form"  lazy-validation>
                               <v-row align="center" justify="center" dense>
@@ -116,23 +120,29 @@
                                              item-value="DepartmentCode"
                                              item-text="DepartmentName"
                                              label="Department"   
+                                             hide-details
                                              clearable    
                                              outlined
                                              dense
                                              :rules="[v => !!v || 'Department is required']"
-                                        ></v-autocomplete>        
+                                        ></v-autocomplete>                                         
+                                   </v-col>
+                                   <v-col cols="12" md="12">      
                                         <v-autocomplete 
                                              v-model="editdivsecteam.SectionCode"
                                              :items="sectionlist"
                                              :color="themeColor == '' ? 'primary' : themeColor"
                                              item-value="SectionCode"
                                              item-text="SectionName"
-                                             label="Section"   
+                                             label="Section" 
+                                             hide-details  
                                              clearable    
                                              outlined
                                              dense
                                              :rules="[v => !!v || 'Section is required']"
-                                        ></v-autocomplete>                           
+                                        ></v-autocomplete>       
+                                   </v-col>
+                                   <v-col cols="12" md="12">                       
                                         <v-autocomplete 
                                              v-model="editdivsecteam.TeamCode"
                                              :items="teamlist"
@@ -140,11 +150,12 @@
                                              item-value="TeamCode"
                                              item-text="TeamName"
                                              label="Team" 
+                                             hide-details
                                              clearable    
                                              outlined
                                              dense
                                              :rules="[v => !!v || 'Team is required']"
-                                        ></v-autocomplete>                                   
+                                        ></v-autocomplete>  
                                    </v-col>
                               </v-row>
                          </v-form>                         

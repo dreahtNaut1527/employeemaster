@@ -1,139 +1,141 @@
 <template>
      <v-main>
           <v-breadcrumbs :items="breadCrumbsItems" divider="/"></v-breadcrumbs>
-          <v-container>
-               <v-row class="mb-n6" dense>
-                    <v-col cols="12" md="2">
-                         <v-select
-                              v-model="companies"
-                              :items="companyList"
-                              :readonly="userInfo.UserLevel < 9"
+          <v-lazy transition="scroll-y-transition" :options="{ threshold: 0.2 }">
+               <v-container>
+                    <v-row class="mb-n6" dense>
+                         <v-col cols="12" md="2">
+                              <v-select
+                                   v-model="companies"
+                                   :items="companyList"
+                                   :readonly="userInfo.UserLevel < 9"
+                                   :color="themeColor == '' ? 'primary' : themeColor"
+                                   placeholder="Company"
+                                   outlined
+                                   dense
+                              ></v-select>
+                         </v-col>
+                         <v-col cols="12" md="4">
+                              <v-select
+                                   v-model="departments"
+                                   :items="departmentList"
+                                   :color="themeColor == '' ? 'primary' : themeColor"
+                                   placeholder="Department"
+                                   clearable
+                                   outlined
+                                   dense
+                              ></v-select>
+                         </v-col>
+                         <v-col cols="12" md="3">
+                              <v-select
+                                   v-model="sections"
+                                   :items="sectionList"
+                                   :color="themeColor == '' ? 'primary' : themeColor"
+                                   placeholder="Section"
+                                   clearable
+                                   outlined
+                                   dense
+                              ></v-select>
+                         </v-col>
+                         <v-col cols="12" md="3">
+                              <v-select
+                                   v-model="teams"
+                                   :items="teamList"
+                                   :color="themeColor == '' ? 'primary' : themeColor"
+                                   placeholder="Team"
+                                   clearable
+                                   outlined
+                                   dense
+                              ></v-select>
+                         </v-col>
+                    </v-row>
+                    <v-card>
+                         <v-toolbar flat>
+                              <v-spacer></v-spacer>
+                              <v-row dense>
+                                   <v-col class="ml-auto" cols="12" md="6">
+                                        <v-text-field
+                                             v-model="searchTable"
+                                             placeholder="Search Name, Code, etc..."
+                                             append-icon="mdi-magnify"
+                                             :color="themeColor == '' ? 'primary' : themeColor"
+                                             hide-details
+                                             clearable
+                                             outlined  
+                                             dense
+                                        ></v-text-field>
+                                   </v-col>
+                              </v-row>
+                              <v-btn class="ml-3" @click="dialog = !dialog" :color="themeColor == '' ? 'primary' : themeColor" dark>
+                                   <v-icon left>mdi-plus</v-icon>New
+                              </v-btn>
+                         </v-toolbar>
+                         <v-divider></v-divider>
+                         <v-data-table 
+                              :headers="headers" 
+                              :items="filterData"
+                              :loading="loading"
+                              :search="searchTable"
+                              :page.sync="page"
+                              :items-per-page="9"
+                              loading-text="Loading Data. . .Please Wait"
+                              @page-count="pageCount = $event"
+                              hide-default-footer
+                         >
+                              <v-progress-linear v-show="loading" slot="progress" :color="themeColor == '' ? 'primary' : themeColor" indeterminate></v-progress-linear>
+                              <template v-slot:[`item.rights`]="{ item }">
+                                   <v-tooltip bottom>
+                                        <template v-slot:activator="{ on, attrs }">
+                                             <v-btn :disabled="item.Status == 0" @click="gotoProcessRights(item.EmployeeCode)" v-on="on" v-bind="attrs" :color="themeColor == '' ? 'primary' : themeColor" elevation="3" outlined icon>
+                                                  <v-icon>mdi-card-account-details</v-icon>
+                                             </v-btn>
+                                        </template>
+                                        <span>Account Rights</span>
+                                   </v-tooltip>
+                              </template>
+                              <template v-slot:[`item.actions`]="{ item }">
+                                   <v-tooltip bottom>
+                                        <template v-slot:activator="{ on, attrs }">
+                                             <v-btn @click="editRecord(item)" v-on="on" v-bind="attrs" icon>
+                                                  <v-icon>mdi-pencil</v-icon>
+                                             </v-btn>
+                                        </template>
+                                        <span>Edit</span>
+                                   </v-tooltip>
+                                   <v-tooltip bottom>
+                                        <template v-slot:activator="{ on, attrs }">
+                                             <v-btn @click="deleteRecord(item)" v-on="on" v-bind="attrs" icon>
+                                                  <v-icon v-if="item.Status == 1">mdi-delete</v-icon>
+                                                  <v-icon v-else>mdi-restore</v-icon>
+                                             </v-btn>
+                                        </template>
+                                        <span v-if="item.Status == 1">Deactivate</span>
+                                        <span v-else>Restore</span>
+                                   </v-tooltip>
+                                   <v-tooltip bottom>
+                                        <template v-slot:activator="{ on, attrs }">
+                                             <v-btn @click="resetRecord(item)"  v-on="on" v-bind="attrs" icon>
+                                                  <v-icon>mdi-lock-reset</v-icon>
+                                             </v-btn>
+                                        </template>
+                                        <span>Reset</span>
+                                   </v-tooltip>
+                              </template>
+                              <template v-slot:[`item.Status`]="{ item }">
+                                   <v-avatar :color="item.Status == 1 ? 'success' : 'error'" :size="24">
+                                   </v-avatar>
+                              </template>
+                         </v-data-table>
+                         <v-pagination
+                              v-model="page"
+                              :length="pageCount"
+                              :total-visible="10"
                               :color="themeColor == '' ? 'primary' : themeColor"
-                              placeholder="Company"
-                              outlined
-                              dense
-                         ></v-select>
-                    </v-col>
-                    <v-col cols="12" md="4">
-                         <v-select
-                              v-model="departments"
-                              :items="departmentList"
-                              :color="themeColor == '' ? 'primary' : themeColor"
-                              placeholder="Department"
-                              clearable
-                              outlined
-                              dense
-                         ></v-select>
-                    </v-col>
-                    <v-col cols="12" md="3">
-                         <v-select
-                              v-model="sections"
-                              :items="sectionList"
-                              :color="themeColor == '' ? 'primary' : themeColor"
-                              placeholder="Section"
-                              clearable
-                              outlined
-                              dense
-                         ></v-select>
-                    </v-col>
-                    <v-col cols="12" md="3">
-                         <v-select
-                              v-model="teams"
-                              :items="teamList"
-                              :color="themeColor == '' ? 'primary' : themeColor"
-                              placeholder="Team"
-                              clearable
-                              outlined
-                              dense
-                         ></v-select>
-                    </v-col>
-               </v-row>
-               <v-card>
-                    <v-toolbar flat>
-                         <v-spacer></v-spacer>
-                         <v-row dense>
-                              <v-col class="ml-auto" cols="12" md="6">
-                                   <v-text-field
-                                        v-model="searchTable"
-                                        placeholder="Search Name, Code, etc..."
-                                        append-icon="mdi-magnify"
-                                        :color="themeColor == '' ? 'primary' : themeColor"
-                                        hide-details
-                                        clearable
-                                        outlined  
-                                        dense
-                                   ></v-text-field>
-                              </v-col>
-                         </v-row>
-                         <v-btn class="ml-3" @click="dialog = !dialog" :color="themeColor == '' ? 'primary' : themeColor" dark>
-                              <v-icon left>mdi-plus</v-icon>New
-                         </v-btn>
-                    </v-toolbar>
-                    <v-divider></v-divider>
-                    <v-data-table 
-                         :headers="headers" 
-                         :items="filterData"
-                         :loading="loading"
-                         :search="searchTable"
-                         :page.sync="page"
-                         :items-per-page="9"
-                         loading-text="Loading Data. . .Please Wait"
-                         @page-count="pageCount = $event"
-                         hide-default-footer
-                    >
-                         <v-progress-linear v-show="loading" slot="progress" :color="themeColor == '' ? 'primary' : themeColor" indeterminate></v-progress-linear>
-                         <template v-slot:[`item.rights`]="{ item }">
-                              <v-tooltip bottom>
-                                   <template v-slot:activator="{ on, attrs }">
-                                        <v-btn :disabled="item.Status == 0" @click="gotoProcessRights(item.EmployeeCode)" v-on="on" v-bind="attrs" :color="themeColor == '' ? 'primary' : themeColor" elevation="3" outlined icon>
-                                             <v-icon>mdi-card-account-details</v-icon>
-                                        </v-btn>
-                                   </template>
-                                   <span>Account Rights</span>
-                              </v-tooltip>
-                         </template>
-                         <template v-slot:[`item.actions`]="{ item }">
-                              <v-tooltip bottom>
-                                   <template v-slot:activator="{ on, attrs }">
-                                        <v-btn @click="editRecord(item)" v-on="on" v-bind="attrs" icon>
-                                             <v-icon>mdi-pencil</v-icon>
-                                        </v-btn>
-                                   </template>
-                                   <span>Edit</span>
-                              </v-tooltip>
-                              <v-tooltip bottom>
-                                   <template v-slot:activator="{ on, attrs }">
-                                        <v-btn @click="deleteRecord(item)" v-on="on" v-bind="attrs" icon>
-                                             <v-icon v-if="item.Status == 1">mdi-delete</v-icon>
-                                             <v-icon v-else>mdi-restore</v-icon>
-                                        </v-btn>
-                                   </template>
-                                   <span v-if="item.Status == 1">Deactivate</span>
-                                   <span v-else>Restore</span>
-                              </v-tooltip>
-                              <v-tooltip bottom>
-                                   <template v-slot:activator="{ on, attrs }">
-                                        <v-btn @click="resetRecord(item)"  v-on="on" v-bind="attrs" icon>
-                                             <v-icon>mdi-lock-reset</v-icon>
-                                        </v-btn>
-                                   </template>
-                                   <span>Reset</span>
-                              </v-tooltip>
-                         </template>
-                         <template v-slot:[`item.Status`]="{ item }">
-                              <v-avatar :color="item.Status == 1 ? 'success' : 'error'" :size="24">
-                              </v-avatar>
-                         </template>
-                    </v-data-table>
-                    <v-pagination
-                         v-model="page"
-                         :length="pageCount"
-                         :total-visible="10"
-                         :color="themeColor == '' ? 'primary' : themeColor"
-                    ></v-pagination>
-                    <v-card-text class="caption">Total Record(s): {{filterData.length}}</v-card-text>
-               </v-card>
-          </v-container>
+                         ></v-pagination>
+                         <v-card-text class="caption">Total Record(s): {{filterData.length}}</v-card-text>
+                    </v-card>
+               </v-container>
+          </v-lazy>
           <v-dialog v-model="dialog" width="500" persistent>
                <v-card>
                     <v-toolbar :color="themeColor == '' ? 'primary' : themeColor" dark flat>
