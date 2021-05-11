@@ -14,6 +14,7 @@
     "core-js": "^3.7.0",
     "exceljs": "^4.2.1",
     "file-saver": "^2.0.5",
+    "image-to-base64": "^2.2.0",
     "jsbarcode": "^3.11.3",
     "json2csv": "^5.0.6",
     "md5": "^2.3.0",

@@ -561,6 +561,7 @@ export default {
                shiftList: [],
                operatingSystem: [],
                jobassignments: [],
+               breadCrumbsItems: [],
                category: [
                     {label: 'Direct', value: 'D'},
                     {label: 'Indirect', value: 'I'}
@@ -574,12 +575,6 @@ export default {
                     confirmButtonText: 'Save',
                     denyButtonText: `Don't Save`
                },
-               breadCrumbsItems: [
-                    {text: 'Main Data', disabled: false, href: '#'},
-                    {text: 'Employees', disabled: false, href: '/employeemaster/employees'},
-                    {text: 'Details', disabled: true, href: '#'},
-                  
-               ],
                tabsHeader: [
                     {label: 'Employee Information', icon:'mdi-account', value: 1},
                     {label: 'Other Information', icon:'mdi-card-bulleted', value: 2},
@@ -646,6 +641,23 @@ export default {
           setImageSource() {
                this.imgSource = `${this.photo}/NoPic.jpg`
           },
+          loadBreadCrumbsItems() {
+               if(this.userInfo.UserLevel == 9) {
+                    this.breadCrumbsItems = [
+                         {text: 'Main Data', disabled: false, href: '#'},
+                         {text: 'Employees', disabled: false, href: '/employeemaster/employees'},
+                         {text: 'Details', disabled: true, href: '#'},
+                    
+                    ]
+               } else {
+                    this.breadCrumbsItems = [
+                         {text: 'Main Data', disabled: false, href: '#'},
+                         {text: 'Employees', disabled: false, href: '/employeemaster/employees?id=EM01-01'},
+                         {text: 'Details', disabled: true, href: '#'},
+                    
+                    ]
+               }
+          },
           loadInformation() {
                this.loading = true
                this.information=[]
@@ -654,6 +666,7 @@ export default {
                     this.imgSource = `${this.photo}/${this.$route.query.code}.jpg`
                     this.loaddivsectionteam() 
                     this.loadSeparatedReasons()
+                    this.loadBreadCrumbsItems()
                     this.loading = false
                })
           },

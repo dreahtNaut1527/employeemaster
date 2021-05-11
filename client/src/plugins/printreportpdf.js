@@ -1,3 +1,5 @@
+// import imageToBase64 from 'image-to-base64/browser'
+
 function printData(header, data) {
     let headerFields = []
     let detailsBody = []
@@ -7,6 +9,11 @@ function printData(header, data) {
         let pdfFonts = require('pdfmake/build/vfs_fonts.js')
         pdfMake.vfs = pdfFonts.pdfMake.vfs;
     }
+
+    // let image = null
+    // imageToBase64(`${this.photo}/33959.jpg`).then(res => {
+    //     image = `data:image/jpeg;base64,${res}`
+    // })
 
     // Format headers
     header.forEach(rec => {
@@ -32,7 +39,12 @@ function printData(header, data) {
                         headerFields
                     ]
                 }
-            }
+            },
+            // {
+            //   image: image,
+            //   width: 150,
+            //   height: 150
+            // },
         ],
         styles: {
             header: {
