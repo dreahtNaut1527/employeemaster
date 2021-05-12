@@ -147,75 +147,95 @@
                     <v-spacer></v-spacer>
                     <v-btn @click="displayDialog = !displayDialog" icon><v-icon>mdi-close</v-icon></v-btn>
                 </v-toolbar>
-                <v-container>
-                    <v-row>
-                        <v-col v-if="userInfo.UserLevel == 9" cols="12" md="3">
-                            <v-autocomplete
-                                v-model="selectedDepartment"
-                                :items="filterDepartments"
-                                :color="themeColor == '' ? 'primary' : themeColor"
-                                label="Department"
-                                clearable
-                                outlined
-                                dense
-                            ></v-autocomplete>
-                        </v-col>
-                        <v-col cols="12" md="3">
-                            <v-autocomplete
-                                v-model="selectedSection"
-                                :items="filterSection"
-                                :color="themeColor == '' ? 'primary' : themeColor"
-                                label="Section"
-                                clearable
-                                outlined
-                                dense
-                            ></v-autocomplete>
-                        </v-col>
-                        <v-col cols="12" md="3">
-                            <v-autocomplete
-                                v-model="selectedTeam"
-                                :items="filterTeam"
-                                :color="themeColor == '' ? 'primary' : themeColor"
-                                label="Team"
-                                clearable
-                                outlined
-                                dense
-                            ></v-autocomplete>
-                        </v-col>
-                        <v-col cols="12" md="3">
-                            <v-text-field
-                                v-model="searchVal"
-                                :color="themeColor == '' ? 'primary' : themeColor"
-                                label="Search"
-                                append-icon="mdi-magnify"
-                                clearable
-                                outlined
-                                dense
-                            ></v-text-field>
-                        </v-col>
-                    </v-row>
-                </v-container>
-                <v-divider></v-divider>
-                <v-data-table
-                    :headers="selectedHeaders"
-                    :items="filterDataTable"
-                    :search="searchVal"
-                    :page.sync="page"
-                    :loading="loading"
-                    @page-count="pageCount = $event"
-                    :items-per-page="7"
-                    loading-text="Loading Data. . .Please Wait"
-                    hide-default-footer
-                >
-                
-                    <v-progress-linear v-show="loading" slot="progress" :color="themeColor == '' ? 'primary' : themeColor" indeterminate></v-progress-linear>
-                </v-data-table>
-                <v-pagination
-                    v-model="page"
-                    :length="pageCount"
-                    :total-visible="10"
-                    :color="themeColor == '' ? 'primary' : themeColor"
-                ></v-pagination>
+                <v-tabs v-model="tab" :color="themeColor == '' ? 'primary' : themeColor" centered icons-and-text grow>
+                    <v-tabs-slider></v-tabs-slider>
+                    <v-tab v-for="(item, i) in tabHeaders" :key="i" :href="`#${item.value}`">
+                        {{item.text}}<v-icon>{{item.icon}}</v-icon>
+                    </v-tab>
+                </v-tabs>
+                <v-tabs-items v-model="tab">
+                    <!-- Begin Tab 1 -->
+                    <v-tab-item value="tab-1">
+                        <v-container>
+                            <v-row dense>
+                                <v-col v-if="userInfo.UserLevel == 9" cols="12" md="3">
+                                    <v-autocomplete
+                                        v-model="selectedDepartment"
+                                        :items="filterDepartments"
+                                        :color="themeColor == '' ? 'primary' : themeColor"
+                                        label="Department"
+                                        hide-details
+                                        clearable
+                                        outlined
+                                        dense
+                                    ></v-autocomplete>
+                                </v-col>
+                                <v-col cols="12" md="3">
+                                    <v-autocomplete
+                                        v-model="selectedSection"
+                                        :items="filterSection"
+                                        :color="themeColor == '' ? 'primary' : themeColor"
+                                        label="Section"
+                                        hide-details
+                                        clearable
+                                        outlined
+                                        dense
+                                    ></v-autocomplete>
+                                </v-col>
+                                <v-col cols="12" md="3">
+                                    <v-autocomplete
+                                        v-model="selectedTeam"
+                                        :items="filterTeam"
+                                        :color="themeColor == '' ? 'primary' : themeColor"
+                                        label="Team"
+                                        hide-details
+                                        clearable
+                                        outlined
+                                        dense
+                                    ></v-autocomplete>
+                                </v-col>
+                                <v-col cols="12" md="3">
+                                    <v-text-field
+                                        v-model="searchVal"
+                                        :color="themeColor == '' ? 'primary' : themeColor"
+                                        label="Search"
+                                        append-icon="mdi-magnify"
+                                        hide-details
+                                        clearable
+                                        outlined
+                                        dense
+                                    ></v-text-field>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                        <v-divider></v-divider>
+                        <v-data-table
+                            :headers="selectedHeaders"
+                            :items="filterDataTable"
+                            :search="searchVal"
+                            :page.sync="page"
+                            :loading="loading"
+                            @page-count="pageCount = $event"
+                            :items-per-page="7"
+                            loading-text="Loading Data. . .Please Wait"
+                            hide-default-footer
+                            dense
+                        >
+                        
+                            <v-progress-linear v-show="loading" slot="progress" :color="themeColor == '' ? 'primary' : themeColor" indeterminate></v-progress-linear>
+                        </v-data-table>
+                        <v-pagination
+                            v-model="page"
+                            :length="pageCount"
+                            :total-visible="10"
+                            :color="themeColor == '' ? 'primary' : themeColor"
+                        ></v-pagination>
+                    </v-tab-item>
+                    <!-- End of Tab 1 -->
+                    <v-tab-item value="tab-2">
+                        summary
+                    </v-tab-item>
+                </v-tabs-items>
                 <v-card-actions>
                     <v-card-text class="caption">Total Record(s): {{filterDataTable.length}}</v-card-text>
                     <v-spacer></v-spacer>
@@ -235,6 +255,7 @@ import datePicker from '@/components/datepicker'
 export default {
     data() {
         return {
+            tab: null,
             valid: true,
             loading: false,
             displayDialog: false,
@@ -269,6 +290,10 @@ export default {
             breadCrumbsItems: [ 
                 {text: 'Main Data', disabled: false, href: '#'},
                 {text: 'Query Builder', disabled: true, href: '#'}
+            ],
+            tabHeaders: [
+                {text: 'Lists', icon: 'mdi-format-list-bulleted', value: 'tab-1'},
+                {text: 'Summary', icon: 'mdi-poll-box-outline', value: 'tab-2'}
             ],
             filterByItems: [
                 {text: 'Employee Code', value: 'EmployeeCode'},
@@ -434,7 +459,7 @@ export default {
             return query
         },
         printPreview() {
-            this.printreport(this.selectedHeaders, this.filterDataTable)
+            this.printreportpdf(this.selectedHeaders, this.filterDataTable, null)
         },
         clearVariables() {
             this.showPickerFrom = 0

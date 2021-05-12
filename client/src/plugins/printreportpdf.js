@@ -1,6 +1,4 @@
-// import imageToBase64 from 'image-to-base64/browser'
-
-function printData(header, data) {
+function printData(header, data, image) {
     let headerFields = []
     let detailsBody = []
     let docDefinition = {}
@@ -9,12 +7,7 @@ function printData(header, data) {
         let pdfFonts = require('pdfmake/build/vfs_fonts.js')
         pdfMake.vfs = pdfFonts.pdfMake.vfs;
     }
-
-    // let image = null
-    // imageToBase64(`${this.photo}/33959.jpg`).then(res => {
-    //     image = `data:image/jpeg;base64,${res}`
-    // })
-
+    
     // Format headers
     header.forEach(rec => {
         headerFields.push({
@@ -40,11 +33,6 @@ function printData(header, data) {
                     ]
                 }
             },
-            // {
-            //   image: image,
-            //   width: 150,
-            //   height: 150
-            // },
         ],
         styles: {
             header: {
@@ -62,7 +50,7 @@ function printData(header, data) {
             },
             tableHeader: {
                 bold: true,
-                fontSize: 13,
+                fontSize: 10,
                 color: 'black'
             }
         },
@@ -76,6 +64,15 @@ function printData(header, data) {
         docDefinition.content[1].table.body.push(detailsBody)
         detailsBody = []
     })
+
+    // Insert Chart 
+    if(image) {
+        docDefinition.content.push({
+            image: image,
+            width: 750,
+            height: 310
+        })
+    }
 
     window.open(pdfMake.createPdf(docDefinition).open(), '_blank')
 }

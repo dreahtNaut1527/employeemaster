@@ -6,7 +6,8 @@ import moment from 'moment'
 import socketio from 'socket.io-client'
 import VueSocketIO from 'vue-socket.io'
 import Vuemask from 'v-mask'
-import printreport from './plugins/printreportpdf'
+import printreport from './plugins/printreport'
+import printreportpdf from './plugins/printreportpdf'
 import App from './App.vue'
 import './registerServiceWorker'
 import router from './router'
@@ -27,6 +28,7 @@ Vue.prototype.swal = swal
 Vue.prototype.md5 = md5
 Vue.prototype.moment = moment
 Vue.prototype.printreport = printreport
+Vue.prototype.printreportpdf = printreportpdf
 
 // Vue Use
 Vue.use(mixins)

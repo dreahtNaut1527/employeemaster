@@ -6,9 +6,6 @@ const router = express.Router()
 // =====================================================================
 // ======================= Select Query (MSSQL)=========================
 // =====================================================================
-router.get('/appversion', (req, res) => {
-     res.send(JSON.stringify(require('../package.json').version))
-})
 
 router.get('/separatedreasons', (req, res) => {
      let sqlQuery = `SELECT * FROM SeparatedReasons`
@@ -104,8 +101,9 @@ router.get('/basicinfo/:code', (req, res) => {
 
 router.get('/employees/:company', (req, res) => {
      let company = req.params.company
-     let sql = `SELECT * FROM EmployeeBasicInfoView WHERE lower(ShortName) = lower('${company}')
-                ORDER BY EmployeeCode`
+     let sql = `SELECT * FROM EmployeeBasicInfoView 
+               WHERE (lower(ShortName) = lower('${company}') OR CompanyCode = '${company}')
+               ORDER BY EmployeeCode`
      config.connect(err => {
           if(err) return res.send(err)
           const request = new mssql.Request(config)
@@ -130,10 +128,11 @@ router.get('/employees/:compname/:department', (req, res) => {
           })
           sqlwhere = ` AND DepartmentName IN (${sqlwhere.slice(0, -1)})`
      } else {
-          sqlwhere = ` AND lower(DepartmentName) = lower('${department}')`
+          sqlwhere = ` AND (lower(DepartmentName) = lower('${department}') OR DepartmentCode = '${department}')`
      }
 
-     let sql = `SELECT * FROM EmployeeBasicInfoView WHERE lower(ShortName) = lower('${compname}') 
+     let sql = `SELECT * FROM EmployeeBasicInfoView 
+               WHERE (lower(ShortName) = lower('${compname}') OR CompanyCode = '${compname}')
                ${sqlwhere} ORDER BY EmployeeCode`
      config.connect(err => {
           if(err) return res.send(err)
@@ -149,9 +148,10 @@ router.get('/employees/:compname/:department/:section', (req, res) => {
      let compname = req.params.compname
      let department = req.params.department
      let section = req.params.section
-     let sql = `SELECT * FROM EmployeeBasicInfoView WHERE lower(ShortName) = lower('${compname}')
-               AND lower(DepartmentName) = lower('${department}')
-               AND lower(SectionName) = lower('${section}')`
+     let sql = `SELECT * FROM EmployeeBasicInfoView 
+               WHERE (lower(ShortName) = lower('${compname}') OR CompanyCode = '${compname}')
+               AND (lower(DepartmentName) = lower('${department}') OR DepartmentCode = '${department}')
+               AND (lower(SectionName) = lower('${section}') OR SectionCode = '${section}')`
      config.connect(err => {
           if(err) return res.send(err)
           const request = new mssql.Request(config)
@@ -167,11 +167,11 @@ router.get('/employees/:compname/:department/:section/:team', (req, res) => {
      let department = req.params.department
      let section = req.params.section
      let team = req.params.team
-     let sql = `SELECT * FROM EmployeeBasicInfoView WHERE lower(ShortName) = lower('${compname}')
-               AND lower(DepartmentName) = lower('${department}')
-               AND lower(SectionName) = lower('${section}')
-               AND lower(TeamName) = lower('${team}')`
-
+     let sql = `SELECT * FROM EmployeeBasicInfoView 
+               WHERE (lower(ShortName) = lower('${compname}') OR CompanyCode = '${compname}')
+               AND (lower(DepartmentName) = lower('${department}') OR DepartmentCode = '${department}')
+               AND (lower(SectionName) = lower('${section}') OR SectionCode = '${section}')
+               AND (lower(TeamName) = lower('${team}') OR TeamCode = '${team}')`
      config.connect(err => {
           if(err) return res.send(err)
           const request = new mssql.Request(config)
@@ -185,7 +185,7 @@ router.get('/employees/:compname/:department/:section/:team', (req, res) => {
 router.get('/company/department/:compname', (req, res) => {
      let compname = req.params.compname
      let sql = `SELECT * FROM DepartmentView 
-                    WHERE lower(ShortName) = lower('${compname}')
+                    WHERE (lower(ShortName) = lower('${compname}') OR CompanyCode = '${compname}')
                     ORDER BY DepartmentName`
      config.connect(err => {
           if(err) return res.send(err)
@@ -200,7 +200,7 @@ router.get('/company/department/:compname', (req, res) => {
 router.get('/company/section/:compname', (req, res) => {
      let compname = req.params.compname
      let sql = `SELECT * FROM SectionView 
-                    WHERE lower(ShortName) = lower('${compname}')
+                    WHERE (lower(ShortName) = lower('${compname}') OR CompanyCode = '${compname}')
                     ORDER BY SectionName`
      config.connect(err => {
           if(err) return res.send(err)
@@ -215,7 +215,7 @@ router.get('/company/section/:compname', (req, res) => {
 router.get('/company/team/:compname', (req, res) => {
      let compname = req.params.compname
      let sql = `SELECT * FROM TeamView 
-                    WHERE lower(ShortName) = lower('${compname}')
+                    WHERE (lower(ShortName) = lower('${compname}') OR CompanyCode = '${compname}')
                     ORDER BY TeamName`
      config.connect(err => {
           if(err) return res.send(err)
@@ -229,7 +229,8 @@ router.get('/company/team/:compname', (req, res) => {
 
 router.get('/company/department/section/:compname', (req, res) => {
      let compname = req.params.compname
-     let sql = `SELECT * FROM DepartmentSectionRelationView WHERE lower(ShortName) = lower('${compname}')`
+     let sql = `SELECT * FROM DepartmentSectionRelationView 
+                    WHERE (lower(ShortName) = lower('${compname}') OR CompanyCode = '${compname}')`
 
      config.connect(err => {
           if(err) return res.send(err)
@@ -243,7 +244,8 @@ router.get('/company/department/section/:compname', (req, res) => {
 
 router.get('/company/department/section/team/:compname', (req, res) => {
      let compname = req.params.compname
-     let sql = `SELECT * FROM SectionTeamRelationView WHERE lower(ShortName) = lower('${compname}')`
+     let sql = `SELECT * FROM SectionTeamRelationView 
+                    WHERE (lower(ShortName) = lower('${compname}') OR CompanyCode = '${compname}')`
 
      config.connect(err => {
           if(err) return res.send(err)
@@ -257,7 +259,8 @@ router.get('/company/department/section/team/:compname', (req, res) => {
 
 router.get('/company/designation/:compname', (req, res) => {
      let compname = req.params.compname
-     let sql = `SELECT * FROM DesignationView WHERE lower(ShortName) = lower('${compname}')`
+     let sql = `SELECT * FROM DesignationView
+                    WHERE (lower(ShortName) = lower('${compname}') OR CompanyCode = '${compname}')`
 
      config.connect(err => {
           if(err) return res.send(err)
@@ -271,7 +274,8 @@ router.get('/company/designation/:compname', (req, res) => {
 
 router.get('/company/position/:compname', (req, res) => {
      let compname = req.params.compname
-     let sql = `SELECT * FROM PositionView WHERE lower(ShortName) = lower('${compname}')`
+     let sql = `SELECT * FROM PositionView 
+                    WHERE (lower(ShortName) = lower('${compname}') OR CompanyCode = '${compname}')`
 
      config.connect(err => {
           if(err) return res.send(err)
@@ -298,7 +302,8 @@ router.get('/education', (req, res) => {
 
 router.get('/shift/:compname', (req, res) => {
      let compname = req.params.compname
-     let sql = `SELECT * FROM ShiftView WHERE lower(ShortName) = lower('${compname}')`
+     let sql = `SELECT * FROM ShiftView
+               WHERE (lower(ShortName) = lower('${compname}') OR CompanyCode = '${compname}')`
 
      config.connect(err => {
           if(err) return res.send(err)
@@ -389,7 +394,8 @@ router.post('/shifts/:company', (req, res) => {
 
 router.get('/history/:company', (req, res) => {
      let company = req.params.company
-     let sql = `SELECT * FROM EmployeeHistoryDataView WHERE lower(ShortName) = lower('${company}')`
+     let sql = `SELECT * FROM EmployeeHistoryDataView 
+               WHERE (lower(ShortName) = lower('${company}') OR CompanyCode = '${company}')`
 
      config.connect(err => {
           if(err) return res.send(err)
@@ -419,8 +425,8 @@ router.get('/history/:company/:department', (req, res) => {
      }
 
      let sql = `SELECT * FROM EmployeeHistoryDataView  
-                         WHERE lower(ShortName) = lower('${company}')
-                         ${sqlwhere} ORDER BY EmployeeCode`
+                    WHERE (lower(ShortName) = lower('${company}') OR CompanyCode = '${company}')
+                    ${sqlwhere} ORDER BY EmployeeCode`
 
      config.connect(err => {
           if(err) return res.send(err)
@@ -436,7 +442,8 @@ router.get('/history/:company/:department/:section', (req, res) => {
      let company = req.params.company
      let department = req.params.department
      let section = req.params.section
-     let sql = `SELECT * FROM EmployeeHistoryDataView WHERE lower(ShortName) = lower('${company}')
+     let sql = `SELECT * FROM EmployeeHistoryDataView 
+               WHERE (lower(ShortName) = lower('${company}') OR CompanyCode = '${company}')
                AND lower(DepartmentName) = lower('${department}')
                AND lower(SectionName) = lower('${section}')`
 
@@ -645,8 +652,8 @@ router.get('/departmentcategory/:compname', (req, res) => {
                Companies.CompanyName,
                Companies.ShortName, 
                DepartmentCategories.* FROM DepartmentCategories 
-               INNER JOIN Companies on DepartmentCategories.CompanyCode = COmpanies.CompanyCode
-               WHERE lower(ShortName) = lower('${compname}') 
+               INNER JOIN Companies on DepartmentCategories.CompanyCode = Companies.CompanyCode
+               WHERE (lower(Companies.ShortName) = lower('${compname}') OR DepartmentCategories.CompanyCode = '${compname}')
                ${sqlwhere} ORDER BY DepartmentCategoryDesc`
             
      config.connect(err => {

@@ -6,6 +6,7 @@ const plugins = {
           Vue.mixin({
                data: () => ({
                     api: null,
+                    server: process.env.VUE_APP_SERVER,
                     api_jap: process.env.VUE_APP_JAP_URL,
                     asd_sql: process.env.VUE_APP_ASD_SQL,
                     photo: process.env.VUE_APP_PHOTO,
@@ -13,11 +14,7 @@ const plugins = {
                }),
                created() {
                     this.api = process.env.NODE_ENV == 'production' ? process.env.VUE_APP_URL : process.env.VUE_APP_LOCAL_URL
-                    if(store.state.EmployeeCode == undefined) {
-                         this.axios.defaults.headers.common['x-api-key'] = process.env.VUE_APP_AWS_KEY
-                    } else {
-                         this.axios.defaults.headers.common['master-api'] = process.env.VUE_APP_URL_KEY
-                    }
+                    this.setHeaders()
                },
                computed: {
                     ...mapState([
@@ -77,18 +74,25 @@ const plugins = {
                     gotoHelp() {
                          window.open('http://10.169.141.8:5050/JaeAnn/employeemaster/-/wikis/Manual', '_blank')
                     },
+                    setHeaders() {
+                         if(store.state.userInfo.EmployeeCode == undefined) {
+                              this.axios.defaults.headers.common['x-api-key'] = process.env.VUE_APP_AWS_KEY
+                         } else {
+                              this.axios.defaults.headers.common['master-api'] = process.env.VUE_APP_URL_KEY
+                         }
+                    },
                     checkAppVersion() {
                          let version = null
-                         this.axios.get(`${this.api}/appversion`).then(res => {
+                         this.axios.get(`${this.server}/appversion`).then(res => {
                               version = res.data
                               if(version != this.appVersion) {
-                                   this.$store.commit('CHANGE_APP_VERSION', version)
-                                   this.$store.commit('CHANGE_CONNECTION', true)
-                                   this.$store.commit('CHANGE_USER_INFO', {})
-                                   this.$store.commit('CHANGE_USER_LOGGING', false)
-                                   this.$store.commit('CHANGE_PROFILE_BACKGROUND', null)
-                                   this.$store.commit('CHANGE_THEMECOLOR', '#1976d2')
-                                   this.$store.commit('CHANGE_THEME', null)
+                                   store.commit('CHANGE_APP_VERSION', version)
+                                   store.commit('CHANGE_CONNECTION', true)
+                                   store.commit('CHANGE_USER_INFO', {})
+                                   store.commit('CHANGE_USER_LOGGING', false)
+                                   store.commit('CHANGE_PROFILE_BACKGROUND', null)
+                                   store.commit('CHANGE_THEMECOLOR', '#1976d2')
+                                   store.commit('CHANGE_THEME', null)
                                    if(this.$route.name != 'login') {
                                         this.$router.push('/')
                                    }

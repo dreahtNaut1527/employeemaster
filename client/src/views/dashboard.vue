@@ -112,7 +112,26 @@
                               </v-tab-item>
                               <v-tab-item value="tab-2">
                                    <v-container>
-                                        <barGraph></barGraph>
+                                        <v-card-actions>
+                                             <v-spacer></v-spacer>
+                                             <v-tooltip bottom>
+                                                  <template v-slot:activator="{ on, attrs }">
+                                                       <v-btn 
+                                                            @click="prinSummary()" 
+                                                            v-bind="attrs"
+                                                            v-on="on"
+                                                            elevation="7" 
+                                                            :color="themeColor == '' ? 'primary' : themeColor" 
+                                                            outlined 
+                                                            icon
+                                                       >
+                                                            <v-icon>mdi-download</v-icon>
+                                                       </v-btn>
+                                                  </template>
+                                                  <span>Download PDF</span>
+                                             </v-tooltip>
+                                        </v-card-actions>
+                                        <barGraph :imageChartBase64.sync="imageBase64Val" :chartRecord.sync="chartData"></barGraph>
                                    </v-container>
                               </v-tab-item>
                          </v-tabs-items>
@@ -129,6 +148,7 @@ export default {
      data() {
           return {
                tab: null,
+               imageBase64Val: null,
                loading: true,
                department: '',
                section: '',
@@ -136,6 +156,7 @@ export default {
                searchTable: '',
                pageCount: 0,
                page: 1,
+               chartData: [],
                employeeLists: [],
                headers: [
                     {text: 'Code', value: 'EmployeeCode'},
@@ -220,14 +241,6 @@ export default {
           }
      },
      methods: {
-          exportData() {
-               let body = ''
-               let value = this.filterData
-               value.forEach((rec) => {
-                    body += `value=${JSON.stringify(rec)}&`
-               })
-               window.open(`${this.api}/exportexcel?${body}`, '_blank')
-          },
           loadLogtime() {
                let url = ''
                this.loading = true
@@ -262,6 +275,17 @@ export default {
                this.$store.commit('CHANGE_EMP_EDIT', false)
                this.$router.push({name: 'employeedetails', query: {code: code}})
           },
+          prinSummary() {
+               let headers = []
+               let objectKeys = Object.keys(this.chartData[0])
+               objectKeys.forEach(rec => {
+                    headers.push({
+                         text: rec,
+                         value: rec
+                    })
+               })
+               this.printreportpdf(headers, this.chartData, this.imageBase64Val)
+          }
      },
      components: {
           barGraph

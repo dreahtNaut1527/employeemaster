@@ -167,7 +167,6 @@
 </template>
 
 <script>
-import printemployees from '../plugins/printemployees'
 import store from '@/store'
 
 export default {
@@ -285,10 +284,10 @@ export default {
                                    value: rec
                               })
                          })
-                         this.printreport(headers, records)
+                         this.printreportpdf(headers, records, null)
                     } else {
                          if(this.fileName) {
-                              printemployees(records, this.fileName, this.selectedFileExtension)
+                              this.printreport(records, this.fileName, this.selectedFileExtension)
                          }
                     }
                     this.fileName = null,

@@ -3,7 +3,7 @@ import { Bar } from 'vue-chartjs'
 
 export default {
      extends: Bar,
-     // props: ['chartLabels', 'chartDatas', 'chartText'],
+     props: ['imageChartBase64', 'chartRecord'],
      data () {
           return {
                chartData: {},
@@ -27,11 +27,16 @@ export default {
                          display: true
                     },
                     responsive: true,
-                    maintainAspectRatio: false
+                    maintainAspectRatio: false,
+                    animation: {
+                         onComplete: function(animation) {
+                              this.getImageBase(animation.chartInstance.toBase64Image())
+                         }.bind(this)
+                    }
                },
                summaryRecords: [],
                summaryLabel: [],
-               summaryData: []
+               summaryData: [],
           }
      },
      created() {
@@ -70,12 +75,13 @@ export default {
                               }
                          ]
                     }
+                    // Convert chart to image base 64 for report
                     this.renderChart(this.chartData, this.options)
-               }).catch(err => {
-                    if(err) {
-                         this.$router.push('*')
-                    }
                })
+          },
+          getImageBase(val) {
+               this.$emit('update:imageChartBase64', val)
+               this.$emit('update:chartRecord', this.summaryRecords)
           }
      }
   }
