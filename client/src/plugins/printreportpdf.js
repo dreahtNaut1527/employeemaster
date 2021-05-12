@@ -46,6 +46,7 @@ function printData(header, data, image) {
                 margin: [0, 10, 0, 5]
             },
             tableExample: {
+                fontSize: 10,
                 margin: [0, 5, 0, 15]
             },
             tableHeader: {
@@ -70,7 +71,7 @@ function printData(header, data, image) {
         docDefinition.content.push({
             image: image,
             width: 750,
-            height: 310
+            height: 350
         })
     }
 

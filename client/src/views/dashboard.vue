@@ -122,6 +122,7 @@
                                                             v-on="on"
                                                             elevation="7" 
                                                             :color="themeColor == '' ? 'primary' : themeColor" 
+                                                            :disabled="!imageBase64Val"
                                                             outlined 
                                                             icon
                                                        >
