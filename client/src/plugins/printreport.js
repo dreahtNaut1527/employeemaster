@@ -50,7 +50,7 @@ function printExcel(data, filename, options) {
      switch (options) {
           case 'xls':
                workbook.xlsx.writeBuffer().then(data => {
-                    let blob = new Blob([data], {type: "application/vnd.ms-excel"})
+                    let blob = new Blob([data], {type: "application/vnd.ms-excel;charset=utf-8"})
                     saveAs(blob, filename)
                })
                break;
