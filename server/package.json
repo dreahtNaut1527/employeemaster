@@ -1,6 +1,6 @@
 {
   "name": "groupcompanyinformation",
-  "version": "2.1.15",
+  "version": "2.1.17",
   "description": "API for GroupCompanyInformation",
   "main": "app.js",
   "scripts": {

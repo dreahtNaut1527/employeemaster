@@ -777,7 +777,7 @@ export default {
                                         this.information.ContractHiredDate,
                                         this.information.RegularHiredDate,
                                         this.information.SeparationDate,
-                                        this.information.Remarks.toUpperCase(),
+                                        this.information.Remarks,
                                         this.information.StaffCode,
                                         this.information.CPUNumber,
                                         this.information.IPAddress,

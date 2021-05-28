@@ -14,6 +14,7 @@ export default new Vuex.Store({
     profileBackground: null,
     appVersion: null,
     themeColor: '#1976d2',
+    serverDateTime: ''
   },
   plugins: [
     createPersistedState() 
@@ -42,6 +43,9 @@ export default new Vuex.Store({
     },
     CHANGE_APP_VERSION: (state, data) => {
       state.appVersion = data
+    },
+    CHANGE_SERVERDATETTIME: (state, data) => {
+      state.serverDateTime = data
     }
   },
   actions: {
