@@ -156,14 +156,17 @@ export default {
                     procedureName: 'ProcGetUserAccount',
                     values: [this.username]
                }
+               // console.log(body);
                if (this.username) {  
                     // check if Japanese
                     this.clearHeaders(0)
                     this.axios.get(`${this.api_jap}/${this.username}`).then(res => {
+                         // console.log(res.data);
                          this.employeeDetails = JSON.parse(JSON.stringify(res.data))
                          if(this.employeeDetails == '') {
                               this.clearHeaders(1)
                               this.axios.post(`${this.api}/executeselect`, {data: JSON.stringify(body)}).then(res => {
+                                   // console.log(res.data);
                                    this.employeeDetails = res.data[0]
                                    if (!this.employeeDetails) { 
                                         this.alert = !this.alert
@@ -180,6 +183,7 @@ export default {
                                    UserLevel: 5,
                               })
                               this.employeeDetails.AssignDepartments.push(this.employeeDetails.LocalDepartments)
+                              console.log(this.employeeDetails);
                               if(this.employeeDetails.Comp_Name == 'SCAD') {
                                    this.employeeDetails.Comp_Name = 'SCD'
                               } else if(this.employeeDetails.Comp_Name == 'WUKONG') {

@@ -210,7 +210,8 @@ export default {
      },
      methods: {
           loadRights() {
-               if(this.userInfo.UserLevel != 9) {
+               let level = this.userInfo.UserLevel
+               if(level != 9 && level != 5 ) {
                     this.axios.get(`${this.api}/processrights/${this.userInfo.EmployeeCode}/EM01/${this.$route.query.id}`).then(res => {
                          this.userRights = res.data[0].Rights
                          this.loadDepartments()

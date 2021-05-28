@@ -8,8 +8,8 @@
                dark
                app
           >   
-               <!-- For Japanese -->
                <div class="hidden-md-and-up">
+                    <!-- For Japanese -->
                     <v-list-item v-if="user.UserLevel == 5">
                          <v-list-item-content class="ma-2 text-center">
                               <v-list-item-avatar size="112">                                        
@@ -34,7 +34,20 @@
                </div>
                <div class="hidden-sm-and-down">
                     <v-list>
-                         <v-list-item class="px-2">
+                         <!-- For Japanese -->
+                         <v-list-item v-if="user.UserLevel == 5" class="px-2">
+                              <v-list-item-avatar>                                        
+                                   <img :src="`${photo_jap}/${user.id}.jpg`" alt="nopic.jpg">
+                              </v-list-item-avatar>
+                              <v-list-item-content>
+                                   <v-list-item-title>{{ user.id }}</v-list-item-title>
+                                   <v-list-item-subtitle class="caption">{{ user.LastNameEng }} {{user.FirstNameEng}}</v-list-item-subtitle>
+                                   <v-list-item-subtitle class="caption">( {{ user.LastName}} {{ user.FirstName }} )</v-list-item-subtitle>
+                              </v-list-item-content>
+                         </v-list-item>
+                         
+                         <!-- For Non-Japanese -->
+                         <v-list-item v-else class="px-2">
                               <v-list-item-avatar>                                       
                                    <img :src="`${photo}/${user.EmployeeCode}.jpg`" alt="nopic.jpg">
                               </v-list-item-avatar>

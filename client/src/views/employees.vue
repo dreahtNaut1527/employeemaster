@@ -97,8 +97,7 @@
                     >
                          <v-progress-linear v-show="loading" slot="progress" :color="themeColor == '' ? 'primary' : themeColor" indeterminate></v-progress-linear>
                          <template v-slot:[`item.actions`]="{ item }">
-                              <v-btn v-if="userRights == 3 || userRights == 1" @click="viewRecord(item.EmployeeCode)" icon>
-                                   
+                              <v-btn v-if="userRights == 3 || userRights == 1 || userInfo.UserLevel == 5" @click="viewRecord(item.EmployeeCode)" icon>
                                    <v-icon>mdi-eye</v-icon>
                               </v-btn>
                               <v-btn  v-if="(userInfo.UserLevel != 5 || userRights > 1)" @click="editRecord(item.EmployeeCode)" icon>
@@ -225,8 +224,7 @@ export default {
                     return (
                          rec.DepartmentName.includes(this.department || '') &&
                          rec.SectionName.includes(this.section || '') &&
-                         rec.TeamName.includes(this.team || '') &&
-                         rec.EmployeeCode != this.userInfo.EmployeeCode                
+                         rec.TeamName.includes(this.team || '')            
                     )
                })
           },
@@ -296,7 +294,8 @@ export default {
                }
           },
           loadRights() {
-               if(this.userInfo.UserLevel != 9) {
+               let level = this.userInfo.UserLevel
+               if(level != 9 && level != 5 ) {
                     this.axios.get(`${this.api}/processrights/${this.userInfo.EmployeeCode}/EM01/${this.$route.query.id}`).then(res => {
                          this.userRights = res.data[0].Rights
                          this.loadEmpinfo()

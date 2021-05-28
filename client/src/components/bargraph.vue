@@ -46,10 +46,7 @@ export default {
           loadStatusSection() {
                let body = {
                     procedureName: 'ProcStatusSectionSummary',
-                    values: [
-                         this.userInfo.CompanyCode,
-                         this.userInfo.DepartmentCode
-                    ]
+                    values: this.parameterRights()
                }
                this.axios.post(`${this.api}/executeselect`, {data: JSON.stringify(body)}).then(res => {
                     this.summaryRecords = res.data
@@ -78,6 +75,25 @@ export default {
                     // Convert chart to image base 64 for report
                     this.renderChart(this.chartData, this.options)
                })
+          },
+          parameterRights() {
+               let valueParams = []
+               let level = this.userInfo.UserLevel
+               switch(level) {
+                    case 5:
+                         valueParams = [
+                              this.userInfo.Comp_Name,
+                              this.userInfo.LocalDepartments
+                         ]
+                         break;
+                    default:
+                         valueParams = [
+                              this.userInfo.ShortName,
+                              this.userInfo.DepartmentName
+                         ]
+                         break;
+               }
+               return valueParams
           },
           getImageBase(val) {
                this.$emit('update:imageChartBase64', val)
