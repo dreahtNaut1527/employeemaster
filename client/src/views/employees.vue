@@ -41,6 +41,17 @@
                                         dense
                                    ></v-autocomplete>
                               </v-col>
+                              <v-col cols="12" md="4">
+                                   <v-radio-group class="text-center" v-model="selectedStatus" hide-details row>
+                                        <v-radio
+                                             class="mt-n3"
+                                             v-for="(item, i) in status" :key="i"
+                                             :color="themeColor == '' ? 'primary' : themeColor"
+                                             :label="item.text"
+                                             :value="item.value"
+                                        ></v-radio>
+                                   </v-radio-group>
+                              </v-col>
                               <v-col cols="12" md="12">
                                    <v-card-actions class="pa-0">
                                         <v-text-field
@@ -181,7 +192,13 @@ export default {
                searchTable: '',
                pageCount: 0,
                userRights: 0,
+               selectedStatus: 0,
                page: 1,
+               status: [
+                    {text: 'All', value: 0},
+                    {text: 'Active', value: 1},
+                    {text: 'Inactive', value: 2}
+               ],
                fileExtension: [
                     {text: 'Excel', value: 'xls'},
                     {text: 'CSV', value: 'csv'},
@@ -221,36 +238,46 @@ export default {
      computed:{
           filterData() {
                return this.getempInfos.filter(rec => {
-                    return (
-                         rec.DepartmentName.includes(this.department || '') &&
-                         rec.SectionName.includes(this.section || '') &&
-                         rec.TeamName.includes(this.team || '')            
-                    )
+                    if (this.selectedStatus == 1) {
+                         return (
+                              rec.DepartmentName.includes(this.department || '') &&
+                              rec.SectionName.includes(this.section || '') &&
+                              rec.TeamName.includes(this.team || '') &&
+                              (rec.SeparationDate == null || this.moment(rec.SeparationDate).format('YYYY-MM-DD') >= this.moment(this.serverDateTime).format('YYYY-MM-DD'))
+                              
+                         )
+                    } else if(this.selectedStatus == 2) {
+                         return (
+                              rec.DepartmentName.includes(this.department || '') &&
+                              rec.SectionName.includes(this.section || '') &&
+                              rec.TeamName.includes(this.team || '')  &&
+                              (rec.SeparationDate != null || this.moment(rec.SeparationDate).format('YYYY-MM-DD') < this.moment(this.serverDateTime).format('YYYY-MM-DD'))
+                               
+                         )
+                    } else {
+                         return (
+                              rec.DepartmentName.includes(this.department || '') &&
+                              rec.SectionName.includes(this.section || '') &&
+                              rec.TeamName.includes(this.team || '')            
+                         )
+                    }
                })
           },
           departmentList() {
                if(this.userInfo.UserLevel == 5) {
                     return this.userInfo.AssignDepartments.map(rec => {
-                          return rec
+                         return rec
                     }).sort()
                 }else {
                     return this.getempInfos.map(rec => {
                          return rec.DepartmentName
-                    
                     }).sort()
                 }
           },
           sectionList() { 
-                if(this.userInfo.UserLevel == 5) {
-                    return this.filterData.map(rec => {
-                         return rec.SectionName   
-                    }).sort()
-                }else {
-                     return this.getempInfos.map(rec => {
-                         return rec.SectionName   
-                    }).sort()     
-                }
-       
+               return this.filterData.map(rec => {
+                    return rec.SectionName   
+               }).sort()
           },
           teamList() {
                return this.filterData.map(rec => {

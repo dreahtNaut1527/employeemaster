@@ -1,6 +1,17 @@
 <template>
     <v-main>
         <v-breadcrumbs :items="breadCrumbsItems" divider="/"></v-breadcrumbs>
+        <v-snackbar 
+            v-model="alert" 
+            color="success" 
+            transition="scroll-y-transition" 
+            :timeout="3000"
+            outlined
+            text
+            top
+        >
+            <v-icon color="success" left>mdi-check-circle</v-icon>Record has been saved
+        </v-snackbar>
         <v-lazy transition="scroll-y-transition" :options="{ threshold: 0.2 }">
             <v-container>
                 <v-card>
@@ -113,6 +124,7 @@ export default {
     data() {
         return {
             code: null,
+            alert: false,
             loading: true,
             pageCount: 0,
             page: 1,
@@ -214,6 +226,7 @@ export default {
                     body.values.push(data)
                 })
                 this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
+                this.alert = !this.alert
                 this.selectedProcess = []
                 this.loadSystemProcess(this.selectedSystem)
                 this.setNotifications(

@@ -225,15 +225,9 @@ export default {
                }
           },
           sectionList() {
-               if(this.userInfo.UserLevel == 5) {
-                    return this.filterData.map(rec => {
-                         return rec.SectionName
-                    }).sort()
-               } else {
-                    return this.employeeLists.map(rec => {
-                         return rec.SectionName
-                    }).sort()
-               }
+               return this.filterData.map(rec => {
+                    return rec.SectionName
+               }).sort()
           },
           teamList() {
                return this.filterData.map(rec => {

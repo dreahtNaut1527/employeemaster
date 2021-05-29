@@ -1,6 +1,17 @@
 <template>
      <v-main>
           <v-breadcrumbs :items="breadCrumbsItems" divider="/"></v-breadcrumbs>
+          <v-snackbar 
+               v-model="alert" 
+               color="success" 
+               transition="scroll-y-transition" 
+               :timeout="3000"
+               outlined
+               text
+               top
+          >
+               <v-icon color="success" left>mdi-check-circle</v-icon>Record has been saved
+          </v-snackbar>
           <v-lazy transition="scroll-y-transition" :options="{ threshold: 0.8 }">
                <v-container>
                     <v-card>
@@ -181,6 +192,7 @@ export default {
                pageCount: 0,
                userRights: 0,
                page: 1,
+               alert: false,
                dateDialog: false,
                loading: true,
                singleSelect: false,
@@ -322,7 +334,7 @@ export default {
                })
                console.log(body);
                this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
-               this.swal.fire('Saved','', 'success')
+               this.alert = !this.alert
                // this.$router.push('/transfer')
                this.selected = [],
                this.dialog = false

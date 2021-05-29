@@ -1,6 +1,17 @@
 <template>
      <v-main>
           <v-breadcrumbs :items="breadCrumbsItems" divider="/"></v-breadcrumbs>
+          <v-snackbar 
+               v-model="alert" 
+               color="success" 
+               transition="scroll-y-transition" 
+               :timeout="3000"
+               outlined
+               text
+               top
+          >
+               <v-icon color="success" left>mdi-check-circle</v-icon>Record has been saved
+          </v-snackbar>
           <v-lazy transition="scroll-y-transition" :options="{ threshold: 0.8 }">
                <v-container>
                     <v-card>
@@ -118,6 +129,7 @@ export default {
                valid: true,
                loading:true,
                dialog: false,
+               alert: false,
                teams: [],
                userRights: 0,
                pageCount: 0,
@@ -148,10 +160,8 @@ export default {
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
                     icon: 'warning',
-                    showDenyButton: true,
                     showCancelButton: true,
                     confirmButtonText: 'Save',
-                    denyButtonText: `Don't Save`
                },
           }
      },
@@ -220,7 +230,7 @@ export default {
                                    ]
                               }
                               this.axios.post(`${this.api}/execute`,{data:JSON.stringify(body)})
-                                   this.swal.fire('Hooray!','Changes has been saved', 'success')
+                                   this.alert = !this.alert
                                    this.setNotifications(
                                         this.userInfo.EmployeeCode, 
                                         this.editMode == 0 ? 'added a new team' : 'updated a team'
@@ -244,19 +254,19 @@ export default {
                }).then(result=>{
                     if (result.isConfirmed){
                          let body = {
-                                   procedureName:"ProcTeam",
-                                   values:[
-                                        val.CompanyCode,
-                                        val.TeamCode,
-                                        val.TeamName,
-                                        val.CreatedDate,
-                                        val.UpdatedDate,                                      
-                                        this.userInfo.EmployeeCode,
-                                        0
-                                   ]
+                              procedureName:"ProcTeam",
+                              values:[
+                                   val.CompanyCode,
+                                   val.TeamCode,
+                                   val.TeamName,
+                                   val.CreatedDate,
+                                   val.UpdatedDate,                                      
+                                   this.userInfo.EmployeeCode,
+                                   0
+                              ]
                          }
                          this.axios.post(`${this.api}/execute`,{data:JSON.stringify(body)})
-                         this.swal.fire('Confirmed!','Changes has been saved', 'success')
+                         this.alert = !this.alert
                          this.setNotifications('Deleted a record', `User: ${this.userInfo.EmployeeName} deleted a record`)
                          this.clearVariables()
                     }
