@@ -123,9 +123,9 @@ export default {
                headers: [
                     {text:'Code',value:'EmployeeCode'},
                     {text:'Name',value:'EmployeeName'},
-                    {text:'Department',value:'DepartmentName'},
-                    {text:'Section',value:'SectionName'},
-                    {text:'Team',value:'TeamName'}
+                    {text:'Old Department',value:'DepartmentName'},
+                    {text:'Old Section',value:'SectionName'},
+                    {text:'Old Team',value:'TeamName'}
                ]
 
           }
