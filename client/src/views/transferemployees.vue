@@ -35,7 +35,7 @@
                          <v-divider></v-divider>
                          <v-card-title>
                               <v-row class="mb-n6" dense>
-                                   <v-col cols="12" md="3">
+                                   <v-col v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 5 || userInfo.UserLevel == 9" cols="12" md="3">
                                         <v-autocomplete
                                              v-model="departmentFilter"
                                              :items="loadDepartmentFilter"
@@ -300,8 +300,27 @@ export default {
                }
           },
           loadEmployees(){
+               let url = ''
                this.loading = true
-               this.axios.get(`${this.api}/employees/${this.userInfo.ShortName}`).then(res => {
+               switch (this.userInfo.UserLevel) {
+                    case 1: // DH
+                         url = `${this.api}/employees/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}`
+                         break;
+                    case 5: //JA
+                         // url = `${this.api}/employees/${this.userInfo.Comp_Name}`
+                         url = `${this.api}/employees/${this.userInfo.Comp_Name}/${this.userInfo.LocalDepartments}?array=${this.userInfo.AssignDepartments}`
+                         break;
+                    case 2: // Section Head
+                         url = `${this.api}/employees/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}/${this.userInfo.SectionName}`
+                         break;
+                    case 3: // Team Leader
+                         url = `${this.api}/employees/${this.userInfo.ShortName}/${this.userInfo.DepartmentName}/${this.userInfo.SectionName}/${this.userInfo.TeamName}`
+                         break;
+                    default: // Developer
+                         url = `${this.api}/employees/${this.userInfo.ShortName}`
+                         break;
+               }
+               this.axios.get(url).then(res => {
                     this.history = res.data
                     this.loading = false
                })

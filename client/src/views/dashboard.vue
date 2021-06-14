@@ -196,7 +196,7 @@ export default {
                          rec.SectionName.includes(this.section || '') &&
                          rec.TeamName.includes(this.team || '')  &&
                          (this.moment(rec.SeparationDate).format('YYYY-MM-DD') >= this.moment().format('YYYY-MM-DD') ||
-                         rec.SeparationDate == null) &&
+                         rec.SeparationDate == null) && rec.ContactStatus != 'S' &&
                          rec.EmployeeStatus == 'Regular'
                     ) 
                })
@@ -206,9 +206,9 @@ export default {
                     return (
                          rec.DepartmentName.includes(this.department || '') &&
                          rec.SectionName.includes(this.section || '') &&
-                         rec.TeamName.includes(this.team || '')&&
+                         rec.TeamName.includes(this.team || '') &&
                          (this.moment(rec.SeparationDate).format('YYYY-MM-DD') >= this.moment().format('YYYY-MM-DD') ||
-                         rec.SeparationDate == null) &&
+                         rec.SeparationDate == null) && rec.ContactStatus != 'S' &&
                          rec.EmployeeStatus == 'Casual'
                     )
                })

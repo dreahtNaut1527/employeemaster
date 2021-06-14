@@ -126,7 +126,7 @@
                                    <v-col cols="12" md="12">                                 
                                         <v-autocomplete
                                              v-model="editdivsecteam.DepartmentCode"
-                                             :items="departmentlist"
+                                             :items="departmentList"
                                              :color="themeColor == '' ? 'primary' : themeColor"
                                              item-value="DepartmentCode"
                                              item-text="DepartmentName"
@@ -141,7 +141,7 @@
                                    <v-col cols="12" md="12">      
                                         <v-autocomplete 
                                              v-model="editdivsecteam.SectionCode"
-                                             :items="sectionlist"
+                                             :items="sectionList"
                                              :color="themeColor == '' ? 'primary' : themeColor"
                                              item-value="SectionCode"
                                              item-text="SectionName"
@@ -156,7 +156,7 @@
                                    <v-col cols="12" md="12">                       
                                         <v-autocomplete 
                                              v-model="editdivsecteam.TeamCode"
-                                             :items="teamlist"
+                                             :items="teamList"
                                              :color="themeColor == '' ? 'primary' : themeColor"
                                              item-value="TeamCode"
                                              item-text="TeamName"
@@ -190,6 +190,9 @@ export default {
                sectionfilter:'',
                teamfilter:'',
                searchTable: '',
+               departmentList: [],
+               sectionList: [],
+               teamList: [],
                divsecteam:[],
                department:[],
                pageCount: 0,
@@ -257,22 +260,22 @@ export default {
                     return rec.TeamName
                }).sort()               
           }, 
-          departmentlist(){
-               return this.divsecteam.filter((rec)=>{
-                    return rec.DepartmentName
-               }).sort()
-          },
+          // departmentlist(){
+          //      return this.divsecteam.filter((rec)=>{
+          //           return rec.DepartmentName
+          //      }).sort()
+          // },
 
-          sectionlist(){
-               return this.divsecteam.filter((rec)=>{
-                    return rec.SectionName 
-               }).sort()                
-          },
-          teamlist(){
-               return this.divsecteam.filter((rec)=>{
-                    return rec.TeamName
-               }).sort()             
-          },         
+          // sectionlist(){
+          //      return this.divsecteam.filter((rec)=>{
+          //           return rec.SectionName 
+          //      }).sort()                
+          // },
+          // teamlist(){
+          //      return this.divsecteam.filter((rec)=>{
+          //           return rec.TeamName
+          //      }).sort()             
+          // },         
      },
      created(){
           this.loadRights()
@@ -298,7 +301,6 @@ export default {
           },
           loaddivsectionteam(){
                this.loading= true
-               // let url='yves pogi'
                let url = ''
                if (this.userInfo.UserLevel==5){
                     url=`${this.api}/company/department/section/team/${this.userInfo.Comp_Name}`
@@ -307,7 +309,43 @@ export default {
                }
                this.axios.get(url).then(res=>{
                     this.divsecteam = res.data
+                    this.loadDepartment()
                     this.loading=false
+               })
+          },
+          loadDepartment() {
+               let url = ''
+               if (this.userInfo.UserLevel==5){
+                    url=`${this.api}/company/department/${this.userInfo.Comp_Name}`
+               }else {
+                    url=`${this.api}/company/department/${this.userInfo.ShortName}`
+               }
+               this.axios.get(url).then(res=>{
+                    this.departmentList = res.data
+                    this.loadSection()
+               })
+          },
+          loadSection() {
+               let url = ''
+               if (this.userInfo.UserLevel==5){
+                    url=`${this.api}/company/section/${this.userInfo.Comp_Name}`
+               }else {
+                    url=`${this.api}/company/section/${this.userInfo.ShortName}`
+               }
+               this.axios.get(url).then(res=>{
+                    this.sectionList = res.data
+                    this.loadTeam()
+               })
+          },
+          loadTeam() {
+               let url = ''
+               if (this.userInfo.UserLevel==5){
+                    url=`${this.api}/company/team/${this.userInfo.Comp_Name}`
+               }else {
+                    url=`${this.api}/company/team/${this.userInfo.ShortName}`
+               }
+               this.axios.get(url).then(res=>{
+                    this.teamList = res.data
                })
           },
           newRecord(){

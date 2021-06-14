@@ -243,7 +243,8 @@ export default {
                               rec.DepartmentName.includes(this.department || '') &&
                               rec.SectionName.includes(this.section || '') &&
                               rec.TeamName.includes(this.team || '') &&
-                              (rec.SeparationDate == null || this.moment(rec.SeparationDate).format('YYYY-MM-DD') >= this.moment(this.serverDateTime).format('YYYY-MM-DD'))
+                              (rec.SeparationDate == null || this.moment(rec.SeparationDate).format('YYYY-MM-DD') >= this.moment(this.serverDateTime).format('YYYY-MM-DD')) ||
+                              rec.ContactStatus != 'S'
                               
                          )
                     } else if(this.selectedStatus == 2) {
@@ -251,7 +252,8 @@ export default {
                               rec.DepartmentName.includes(this.department || '') &&
                               rec.SectionName.includes(this.section || '') &&
                               rec.TeamName.includes(this.team || '')  &&
-                              (rec.SeparationDate != null || this.moment(rec.SeparationDate).format('YYYY-MM-DD') < this.moment(this.serverDateTime).format('YYYY-MM-DD'))
+                              ((rec.SeparationDate != null || this.moment(rec.SeparationDate).format('YYYY-MM-DD') < this.moment(this.serverDateTime).format('YYYY-MM-DD')) ||
+                              rec.ContactStatus == 'S')
                                
                          )
                     } else {
