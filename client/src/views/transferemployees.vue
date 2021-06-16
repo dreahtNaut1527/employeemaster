@@ -184,6 +184,7 @@ export default {
           return {
                history: [],
                selected: [],
+               dialogDivSecTeam: [],
                departmentFilter: '',
                sectionFilter: '',
                teamFilter: '',
@@ -257,6 +258,11 @@ export default {
                     )
                })
           },
+          filterDivSecTeam() {
+               return this.dialogDivSecTeam.filter(rec => {
+                    return rec
+               })
+          },
           loadDepartmentFilter(){
                return this.history.map(rec =>{
                    return rec.DepartmentName
@@ -273,7 +279,7 @@ export default {
                }).sort()
           },
           departmentList(){
-               return this.divsecteam.filter(rec =>{
+               return this.filterDivSecTeam.filter(rec =>{
                    return rec.DepartmentName
                }).sort()
           },
@@ -322,7 +328,19 @@ export default {
                }
                this.axios.get(url).then(res => {
                     this.history = res.data
+                    this.loaddivsectionteam()
                     this.loading = false
+               })
+          },
+          loaddivsectionteam(){
+               let url = ''
+               if (this.userInfo.UserLevel==5){
+                    url=`${this.api}/company/department/section/team/${this.userInfo.Comp_Name}`
+               }else {
+                    url=`${this.api}/company/department/section/team/${this.userInfo.ShortName}`
+               }
+               this.axios.get(url).then(res=>{
+                    this.dialogDivSecTeam = res.data
                })
           },
           transferEmployees(){

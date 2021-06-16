@@ -369,7 +369,7 @@ export default {
                                        1
                                   ]
                              }
-                             console.log(body)
+                         //     console.log(body)
                              this.axios.post(`${this.api}/execute`,{data:JSON.stringify(body)})
                              this.alert = !this.alert
                               this.setNotifications(
