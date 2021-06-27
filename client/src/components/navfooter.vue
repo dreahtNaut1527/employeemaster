@@ -2,6 +2,7 @@
      <v-footer
           class="font-weight-medium"
           padless
+          inset
           dense
           app
      >

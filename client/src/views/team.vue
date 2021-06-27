@@ -35,7 +35,7 @@
                               </v-row>
                               <v-btn  
                                    class="ml-3" 
-                                   v-if="userInfo.UserLevel == 4 || userInfo.UserLevel == 9 || userRights == 3" 
+                                   v-if="(userInfo.UserLevel == 4 || userInfo.UserLevel == 9) || userRights == 3" 
                                    @click="newRecord()" :color="themeColor == '' ? 'primary' : themeColor" 
                                    dark
                               >
@@ -104,7 +104,7 @@
                                              outlined
                                              dense
                                              :rules="[v => !!v || 'SectionName is required']"
-                                             :readonly="userInfo.UserLevel!=4 && userInfo.UserLevel!=9 || userRights == 1"
+                                             :readonly="userRights == 1"
                                              :color="themeColor == '' ? 'primary' : themeColor"
                                              hide-details
                                         ></v-text-field>
