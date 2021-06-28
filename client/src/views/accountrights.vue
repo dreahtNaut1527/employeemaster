@@ -13,7 +13,7 @@
             <v-icon color="success" left>mdi-check-circle</v-icon>Record has been saved
         </v-snackbar>
         <v-lazy transition="scroll-y-transition" :options="{ threshold: 0.2 }">
-            <v-container>
+            <v-container fluid>
                 <v-card>
                     <v-toolbar :color="themeColor == '' ? 'primary' : themeColor" dark>
                         <v-toolbar-title>Account Rights</v-toolbar-title>
@@ -31,7 +31,7 @@
                         </v-list-item>
                     </v-list>
                     <v-divider class="mx-3"></v-divider>
-                    <v-container>
+                    <v-container fluid>
                         <v-row dense>   
                             <v-col cols="12" md="4">
                                 <v-autocomplete

@@ -2,7 +2,7 @@
     <v-main>
         <v-breadcrumbs :items="breadCrumbsItems" divider="/"></v-breadcrumbs>
         <v-lazy transition="scroll-y-transition" :options="{ threshold: 0.8 }">
-            <v-container class="mt-n3">
+            <v-container class="mt-n3" fluid>
                 <v-card>
                     <v-toolbar :color="themeColor == '' ? 'primary' : themeColor" dark>
                         <v-toolbar-title>Query Builder</v-toolbar-title>
@@ -66,7 +66,7 @@
                         <v-row>
                             <v-col cols="12" md="6">
                                 <v-card outlined>
-                                    <v-container>
+                                    <v-container fluid>
                                         <v-toolbar flat>
                                             <v-toolbar-title>Fields to Show</v-toolbar-title>
                                             <!-- <v-spacer></v-spacer>
@@ -99,7 +99,7 @@
                             </v-col>
                             <v-col cols="12" md="6">
                                 <v-card outlined>
-                                    <v-container>
+                                    <v-container fluid>
                                         <v-toolbar flat>
                                             <v-toolbar-title>Arrange Fields</v-toolbar-title>
                                         </v-toolbar>
@@ -156,7 +156,7 @@
                 <v-tabs-items v-model="tab">
                     <!-- Begin Tab 1 -->
                     <v-tab-item value="tab-1">
-                        <v-container>
+                        <v-container fluid>
                             <v-row dense>
                                 <v-col v-if="userInfo.UserLevel == 9" cols="12" md="3">
                                     <v-autocomplete

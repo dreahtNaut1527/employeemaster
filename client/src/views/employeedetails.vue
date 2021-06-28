@@ -13,7 +13,7 @@
                <v-icon color="success" left>mdi-check-circle</v-icon>Record has been saved
           </v-snackbar>
           <v-lazy transition="scroll-y-transition" :options="{ threshold: 0.8 }">
-               <v-container>
+               <v-container fluid>
                     <v-card class="mx-auto" tile>
                          <v-col cols="12">
                               <v-avatar size="70">

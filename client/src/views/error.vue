@@ -1,6 +1,6 @@
 <template>
      <v-main>
-          <v-container class="fill-height">
+          <v-container class="fill-height" fluid>
                <v-row align="center" justify="center">
                     <v-col cols="12" md="6">
                          <v-card flat>

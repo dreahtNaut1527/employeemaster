@@ -2,7 +2,7 @@
      <v-main>
           <v-breadcrumbs :items="breadCrumbsItems" divider="/"></v-breadcrumbs>
           <v-lazy transition="scroll-y-transition" :options="{ threshold: 0.8 }">
-               <v-container>
+               <v-container fluid>
                     <v-card>
                          <v-row class="pa-2" dense>
                               <v-col v-if="userInfo.UserLevel == 9 || userInfo.UserLevel == 5" cols="12" md="4">           
@@ -243,7 +243,7 @@ export default {
                               rec.DepartmentName.includes(this.department || '') &&
                               rec.SectionName.includes(this.section || '') &&
                               rec.TeamName.includes(this.team || '') &&
-                              (rec.SeparationDate == null || this.moment(rec.SeparationDate).format('YYYY-MM-DD') >= this.moment(this.serverDateTime).format('YYYY-MM-DD')) ||
+                              (rec.SeparationDate == null || this.moment(rec.SeparationDate).format('YYYY-MM-DD') >= this.moment(this.serverDateTime).format('YYYY-MM-DD')) &&
                               rec.ContactStatus != 'S'
                               
                          )

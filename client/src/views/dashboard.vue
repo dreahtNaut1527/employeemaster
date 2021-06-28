@@ -1,7 +1,7 @@
 <template>
      <v-main>
           <v-subheader>Dashboard</v-subheader>
-          <v-container>
+          <v-container fluid>
                <v-row align="center" justify="center" dense>
                     <v-col v-for="(item, i) in summaries" :key="i" cols="12" md="4">
                          <v-lazy transition="scroll-y-transition" :options="{ threshold: 0.8 }">

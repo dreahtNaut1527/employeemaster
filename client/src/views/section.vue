@@ -13,7 +13,7 @@
                <v-icon color="success" left>mdi-check-circle</v-icon>Record has been saved
           </v-snackbar>
           <v-lazy transition="scroll-y-transition" :options="{ threshold: 0.8 }">
-               <v-container>
+               <v-container fluid>
                     <v-card>
                          <v-toolbar flat>
                               <v-spacer></v-spacer>                                   
@@ -100,7 +100,7 @@
                                              v-model="editSection.SectionName"
                                              label="Section Name"
                                              :rules="[v => !!v || 'SectionName is required']"
-                                             :readonly="userInfo.UserLevel!=4 && userInfo.UserLevel!=9"
+                                             :readonly="userRights == 1"
                                              :color="themeColor == '' ? 'primary' : themeColor"
                                              hide-details
                                              outlined

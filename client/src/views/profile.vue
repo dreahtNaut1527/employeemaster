@@ -2,7 +2,7 @@
      <v-main>
           <v-breadcrumbs :items="breadCrumbsItems" divider="/"></v-breadcrumbs>
           <v-lazy transition="scroll-y-transition" :options="{ threshold: 0.8 }">
-               <v-container>
+               <v-container fluid>
                     <v-card class="mx-auto" tile>
                          <transition name="fade" mode="in-out">
                               <v-img height="12.5rem" :src="profileBackground == null ? require('../assets/16251.jpg') : profileBackground"></v-img>

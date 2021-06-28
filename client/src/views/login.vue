@@ -1,6 +1,6 @@
 <template>
      <v-main>
-          <v-container class="fill-height">
+          <v-container class="fill-height" fluid>
                <v-row align="center" justify="center">
                     <v-col cols="12" md="4">
                          <v-card elevation="7">
@@ -25,49 +25,51 @@
                                         <v-subheader class="pa-0 caption">{{alertText}}</v-subheader>
                                    </v-alert>
                                    <v-form>
-                                        <v-text-field
-                                             v-model="username"
-                                             placeholder="Username"
-                                             append-icon="mdi-account"
-                                             outlined
-                                             rounded
-                                             :color="themeColor == '' ? 'primary' : themeColor"
-                                        ></v-text-field>
-                                        <v-text-field
-                                             v-model="password"
-                                             placeholder="Password"
-                                             append-icon="mdi-lock"
-                                             type="password"
-                                             outlined
-                                             rounded
-                                             @keydown.enter="getUserInfo()"
-                                             :color="themeColor == '' ? 'primary' : themeColor"
-                                        ></v-text-field>
-                                        <v-card-actions>
-                                             <v-btn @click="getUserInfo()" :color="themeColor == '' ? 'primary' : themeColor" block dark>Login</v-btn>
-                                        </v-card-actions>
-                                        <v-card-text class="text-center">
-                                             Don't have any account? 
-                                             <v-btn 
-                                                  @click="signUpDialog = !signUpDialog" 
+                                        <v-container fluid>
+                                             <v-text-field
+                                                  v-model="username"
+                                                  placeholder="Username"
+                                                  append-icon="mdi-account"
+                                                  outlined
+                                                  rounded
                                                   :color="themeColor == '' ? 'primary' : themeColor"
-                                                  x-small 
-                                                  text
-                                             >
-                                                  Sign Up
-                                             </v-btn>
-                                        </v-card-text>
-                                        <v-card-actions class="ma-0 pa-0">
-                                             <v-spacer></v-spacer>
-                                             <v-tooltip bottom>
-                                                  <template v-slot:activator="{ on, attrs }">
-                                                       <v-btn @click="gotoHelp()" v-bind="attrs" v-on="on" small icon>
-                                                            <v-icon>mdi-help-circle-outline</v-icon>
-                                                       </v-btn>
-                                                  </template>
-                                                  <span>Help</span>
-                                             </v-tooltip>
-                                        </v-card-actions>
+                                             ></v-text-field>
+                                             <v-text-field
+                                                  v-model="password"
+                                                  placeholder="Password"
+                                                  append-icon="mdi-lock"
+                                                  type="password"
+                                                  outlined
+                                                  rounded
+                                                  @keydown.enter="getUserInfo()"
+                                                  :color="themeColor == '' ? 'primary' : themeColor"
+                                             ></v-text-field>
+                                             <v-card-actions>
+                                                  <v-btn @click="getUserInfo()" :color="themeColor == '' ? 'primary' : themeColor" block dark>Login</v-btn>
+                                             </v-card-actions>
+                                             <v-card-text class="text-center">
+                                                  Don't have any account? 
+                                                  <v-btn 
+                                                       @click="signUpDialog = !signUpDialog" 
+                                                       :color="themeColor == '' ? 'primary' : themeColor"
+                                                       x-small 
+                                                       text
+                                                  >
+                                                       Sign Up
+                                                  </v-btn>
+                                             </v-card-text>
+                                             <v-card-actions class="ma-0 pa-0">
+                                                  <v-spacer></v-spacer>
+                                                  <v-tooltip bottom>
+                                                       <template v-slot:activator="{ on, attrs }">
+                                                            <v-btn @click="gotoHelp()" v-bind="attrs" v-on="on" small icon>
+                                                                 <v-icon>mdi-help-circle-outline</v-icon>
+                                                            </v-btn>
+                                                       </template>
+                                                       <span>Help</span>
+                                                  </v-tooltip>
+                                             </v-card-actions>
+                                        </v-container>
                                    </v-form>
                               </v-card-text>
                          </v-card>

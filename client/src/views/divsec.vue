@@ -13,8 +13,8 @@
                <v-icon color="success" left>mdi-check-circle</v-icon>Record has been saved
           </v-snackbar>
           <v-lazy transition="scroll-y-transition" :options="{ threshold: 0.8 }">
-               <v-container>
-               <v-card>
+               <v-container fluid>
+                    <v-card>
                          <v-toolbar flat>          
                               <v-spacer></v-spacer>                         
                               <v-row dense>
@@ -120,7 +120,7 @@
                     <v-toolbar :color="themeColor == '' ? 'primary' : themeColor" flat dark>
                          <v-toolbar-title>New Record</v-toolbar-title>
                     </v-toolbar>
-                    <v-container>
+                    <v-container fluid>
                          <v-form ref="form"  lazy-validation>
                               <v-row align="center" justify="center" dense>
                                    <v-col cols="12" md="12">                                 

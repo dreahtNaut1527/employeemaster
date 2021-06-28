@@ -13,7 +13,7 @@
             <v-icon color="success" left>mdi-check-circle</v-icon>Record has been saved
           </v-snackbar>
           <v-lazy transition="scroll-y-transition" :options="{ threshold: 0.8 }">
-               <v-container>
+               <v-container fluid>
                     <v-card>
                          <v-toolbar flat>
                               <!-- <v-toolbar-title class="headline hidden-sm-and-down">Departments</v-toolbar-title> -->
@@ -109,7 +109,7 @@
                          <v-toolbar-title v-if="userRights > 1">{{editMode == 1 ? 'Edit Record' : 'New Record'}}</v-toolbar-title>
                          <v-toolbar-title v-else>View Record</v-toolbar-title>
                     </v-toolbar>
-                    <v-container>
+                    <v-container fluid>
                          <v-form ref="form" v-model="valid" lazy-validation>
                               <v-row align="center" justify="center" dense>
                                    <v-col cols="12" md="12">

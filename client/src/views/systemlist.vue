@@ -13,7 +13,7 @@
             <v-icon color="success" left>mdi-check-circle</v-icon>Record has been saved
         </v-snackbar>
         <v-lazy transition="scroll-y-transition" :options="{ threshold: 0.8 }">
-            <v-container>
+            <v-container fluid>
                 <v-card>
                     <v-toolbar flat>
                         <!-- <v-toolbar-title>System Lists</v-toolbar-title> -->
@@ -94,7 +94,7 @@
                 <v-toolbar :color="themeColor == '' ? 'primary' : themeColor" dark>
                     <v-toolbar-title>{{editMode == 0 ? "New Record" : "Edit Record"}}</v-toolbar-title>
                 </v-toolbar>
-                <v-container>
+                <v-container fluid>
                     <v-form v-model="valid" ref="form" lazy-validation>
                         <v-row dense>
                             <v-col cols="12" md="3">
@@ -167,7 +167,7 @@
                         </v-col>
                         <v-col cols="12" md="4">
                             <v-card outlined>
-                                <v-container>
+                                <v-container fluid>
                                     <v-form v-model="valid" ref="form" lazy-validation>
                                         <v-text-field
                                             v-model="editSystemProcess.ProcessId"
