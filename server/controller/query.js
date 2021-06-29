@@ -6,6 +6,17 @@ const router = express.Router()
 // =====================================================================
 // ======================= Select Query (MSSQL)=========================
 // =====================================================================
+router.get('/holidays', (req, res) => {
+     let sqlQuery = 'SELECT convert(VARCHAR(10), Holdate, 23) AS HolDate, Description, Type FROM Holidays'
+     config.connect(err => {
+          if(err) res.send(err)
+          const request = new mssql.Request(config)
+          request.query(sqlQuery, (err, results) => {
+               if(err) res.send(err)
+               res.send(results.recordset)
+          })
+     })
+})
 
 router.get('/separatedreasons', (req, res) => {
      let sqlQuery = `SELECT * FROM SeparatedReasons`

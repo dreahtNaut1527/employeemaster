@@ -17,8 +17,6 @@ export default {
      },
      mounted() {
           setInterval(() => {
-               let datenow = this.moment.utc(this.datenow).add(1, 'seconds')
-               this.$store.commit('CHANGE_SERVERDATETTIME', datenow)
                this.checkAppVersion()
           }, 1000);
      },

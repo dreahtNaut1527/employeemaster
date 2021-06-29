@@ -128,7 +128,6 @@ export default {
           }
      },
      created() {
-          this.getServerDateTime()
           this.clearHeaders(0)
           store.commit('CHANGE_CONNECTION', true)
           store.commit('CHANGE_USER_INFO', {})

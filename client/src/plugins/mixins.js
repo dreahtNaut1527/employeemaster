@@ -25,8 +25,7 @@ const plugins = {
                          'isConnect',
                          'themeColor',
                          'appVersion',
-                         'profileBackground',
-                         'serverDateTime'
+                         'profileBackground'
                     ])
                },
                methods: {
@@ -38,8 +37,7 @@ const plugins = {
                          'CHANGE_CONNECTION',
                          'CHANGE_THEMECOLOR',
                          'CHANGE_PROFILE_BACKGROUND',
-                         'CHANGE_APP_VERSION',
-                         'CHANGE_SERVERDATETTIME'
+                         'CHANGE_APP_VERSION'
                     ]),
                     setNotifications(code, message) {
                          let body = {
@@ -82,13 +80,6 @@ const plugins = {
                          } else {
                               this.axios.defaults.headers.common['master-api'] = process.env.VUE_APP_URL_KEY
                          }
-                    },
-                    getServerDateTime() {
-                        this.axios.get(`${this.asd_sql}/getclientip.php`).then(res => {
-                            //Get Server Date Time
-                            let serverData = res.data
-                            store.commit('CHANGE_SERVERDATETTIME', serverData.SERVERDATETIME)
-                        })
                     },
                     checkAppVersion() {
                          let version = null
