@@ -167,7 +167,6 @@ export default {
                          if(this.employeeDetails == '') {
                               this.clearHeaders(1)
                               this.axios.post(`${this.api}/executeselect`, {data: JSON.stringify(body)}).then(res => {
-                                   // console.log(res.data);
                                    this.employeeDetails = res.data[0]
                                    if (!this.employeeDetails) { 
                                         this.alert = !this.alert
