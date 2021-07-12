@@ -352,6 +352,16 @@ export default {
           }
      },
      methods: {
+          checkSpecialCharacters(str) {
+               let specialKey = "[`~!#$^&*()=|{}':;',\\[\\].<>/?~！#￥……&*（）——|{}【】‘；：”“'。，、？]‘'"; 
+               let value = str
+               for (var i = 0; i < value.length; i++) {
+                    if (specialKey.indexOf(value.substr(i, 1)) != -1) {
+                         return true
+                    }
+               }
+               
+          },
           gotoProcessRights(code) {
                this.$router.push({name: 'accountrights', query: {code: code}})
           },
@@ -442,32 +452,36 @@ export default {
           },
           saveRecord() {
                if(this.$refs.form.validate()) {
-                    this.swal.fire(this.saveOptions).then(result => {
-                         if(result.isConfirmed) {
-                              let body = {
-                                   procedureName: 'ProcUserControl',
-                                   values: [
-                                        this.editedAccount.EmployeeCode,
-                                        this.editedAccount.Username,
-                                        this.editedAccount.Fullname,
-                                        this.md5(this.newPassword),
-                                        this.editedAccount.IPAddr,
-                                        this.editedAccount.UserLevel,
-                                        this.moment().format('YYYY-MM-DD'),
-                                        this.moment().format('YYYY-MM-DD'),
-                                        this.userInfo.EmployeeCode,
-                                        1
-                                   ]
+                    if(this.checkSpecialCharacters(this.editedAccount.Username)) {
+                         this.swal.fire('', 'Special characters are not required. Try again', 'error')
+                    } else {
+                         this.swal.fire(this.saveOptions).then(result => {
+                              if(result.isConfirmed) {
+                                   let body = {
+                                        procedureName: 'ProcUserControl',
+                                        values: [
+                                             this.editedAccount.EmployeeCode,
+                                             this.editedAccount.Username,
+                                             this.editedAccount.Fullname,
+                                             this.md5(this.newPassword),
+                                             this.editedAccount.IPAddr,
+                                             this.editedAccount.UserLevel,
+                                             this.moment().format('YYYY-MM-DD'),
+                                             this.moment().format('YYYY-MM-DD'),
+                                             this.userInfo.EmployeeCode,
+                                             1
+                                        ]
+                                   }
+                                   this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
+                                   this.alert = !this.alert
+                                   this.setNotifications(
+                                        this.userInfo.EmployeeCode, 
+                                        this.editMode == 0 ? 'added a new account' : 'updated an account'
+                                   )
+                                   this.clearVariables()
                               }
-                              this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
-                              this.alert = !this.alert
-                              this.setNotifications(
-                                   this.userInfo.EmployeeCode, 
-                                   this.editMode == 0 ? 'added a new account' : 'updated an account'
-                              )
-                              this.clearVariables()
-                         }
-                    })
+                         })
+                    }
                }
           },
           editRecord(val) {

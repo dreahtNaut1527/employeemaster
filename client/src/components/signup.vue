@@ -26,7 +26,7 @@
                                                   <v-col cols="12" md="3">
                                                        <v-text-field
                                                             v-model="editedAccount.EmployeeCode"
-                                                            label="Code"
+                                                            label="Employee COde"
                                                             :rules="[v => !!v || 'Code is required']"
                                                             :color="themeColor == '' ? 'primary' : themeColor"
                                                             outlined
@@ -139,39 +139,49 @@ export default {
                     text: "You won't be able to revert this!",
                     icon: 'warning',
                     showDenyButton: true,
-                    showCancelButton: true,
-                    confirmButtonText: 'Save',
-                    denyButtonText: `Don't Save`
+                    confirmButtonText: 'Save'
                },
           }
      },
      methods: {
+          checkSpecialCharacters(str) {
+               let specialKey = "[`~!#$^&*()=|{}':;',\\[\\].<>/?~！#￥……&*（）——|{}【】‘；：”“'。，、？]‘'"; 
+               let value = str
+               for (var i = 0; i < value.length; i++) {
+                    if (specialKey.indexOf(value.substr(i, 1)) != -1) {
+                         return true
+                    }
+               }
+               
+          },
           saveRecord() {
                if(this.$refs.form.validate()) {
-                    this.swal.fire(this.saveOptions).then(result => {
-                         if(result.isConfirmed) {
-                              let body = {
-                                   procedureName: 'ProcUserControl',
-                                   values: [
-                                        this.editedAccount.EmployeeCode,
-                                        this.editedAccount.Username,
-                                        this.editedAccount.Fullname,
-                                        this.md5(this.newPassword),
-                                        "",
-                                        0,
-                                        this.moment().format('YYYY-MM-DD'),
-                                        this.moment().format('YYYY-MM-DD'),
-                                        "ASD",
-                                        1
-                                   ]
+                    if(this.checkSpecialCharacters(this.editedAccount.Username)) {
+                         this.swal.fire('', 'Special characters are not required. Try again', 'error')
+                    } else {
+                         this.swal.fire(this.saveOptions).then(result => {
+                              if(result.isConfirmed) {
+                                   let body = {
+                                        procedureName: 'ProcUserControl',
+                                        values: [
+                                             this.editedAccount.EmployeeCode,
+                                             this.editedAccount.Username,
+                                             this.editedAccount.Fullname,
+                                             this.md5(this.newPassword),
+                                             "",
+                                             0,
+                                             this.moment().format('YYYY-MM-DD'),
+                                             this.moment().format('YYYY-MM-DD'),
+                                             "ASD",
+                                             1
+                                        ]
+                                   }
+                                   this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
+                                   this.swal.fire('Hooray!','Changes has been saved', 'success')
+                                   this.clearVariables()
                               }
-                              this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
-                              this.swal.fire('Hooray!','Changes has been saved', 'success')
-                              this.clearVariables()
-                         } else if(result.isDenied) {
-                              this.swal.fire('Oh no!', 'Changes are not saved', 'info')
-                         }
-                    })
+                         })
+                    }
                }
           },
           getEmployeeFullname() {
