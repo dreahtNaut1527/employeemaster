@@ -75,11 +75,12 @@ const plugins = {
                          window.open('http://10.169.141.8:5050/JaeAnn/employeemaster/-/wikis/Manual', '_blank')
                     },
                     setHeaders() {
-                         if(store.state.userInfo.EmployeeCode == undefined) {
-                              this.axios.defaults.headers.common['x-api-key'] = process.env.VUE_APP_AWS_KEY
-                         } else {
-                              this.axios.defaults.headers.common['master-api'] = process.env.VUE_APP_URL_KEY
-                         }
+                         this.axios.defaults.headers.common['master-api'] = process.env.VUE_APP_URL_KEY
+                         // if(store.state.userInfo.EmployeeCode == undefined) {
+                         //      this.axios.defaults.headers.common['x-api-key'] = process.env.VUE_APP_AWS_KEY
+                         // } else {
+                         //      this.axios.defaults.headers.common['master-api'] = process.env.VUE_APP_URL_KEY
+                         // }
                     },
                     checkAppVersion() {
                          let version = null

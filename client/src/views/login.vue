@@ -128,7 +128,7 @@ export default {
           }
      },
      created() {
-          this.clearHeaders(0)
+          this.clearHeaders(1)
           store.commit('CHANGE_CONNECTION', true)
           store.commit('CHANGE_USER_INFO', {})
           store.commit('CHANGE_USER_LOGGING', false)
@@ -159,39 +159,69 @@ export default {
                }
                // console.log(body);
                if (this.username) {  
-                    // check if Japanese
-                    this.clearHeaders(0)
-                    this.axios.get(`${this.api_jap}/${this.username}`).then(res => {
-                         // console.log(res.data);
-                         this.employeeDetails = JSON.parse(JSON.stringify(res.data))
-                         if(this.employeeDetails == '') {
-                              this.clearHeaders(1)
-                              this.axios.post(`${this.api}/executeselect`, {data: JSON.stringify(body)}).then(res => {
-                                   this.employeeDetails = res.data[0]
-                                   if (!this.employeeDetails) { 
+                    // check if NOT Japanese
+                    this.clearHeaders(1)
+                    this.axios.post(`${this.api}/executeselect`, {data: JSON.stringify(body)}).then(res => {
+                         this.employeeDetails = res.data[0]
+                         if (!this.employeeDetails) { 
+                              this.clearHeaders(0)
+                              this.axios.get(`${this.api_jap}/${this.username}`).then(res => {
+                                   this.employeeDetails = JSON.parse(JSON.stringify(res.data))
+                                   if(this.employeeDetails == '') {
                                         this.alert = !this.alert
                                         this.alertText = 'User not found.'
                                         this.loading = false 
                                    } else {
+                                        // Config Japanese data
+                                        delete this.employeeDetails.userLevel   
+                                        Object.assign(this.employeeDetails, {
+                                             UserLevel: 5,
+                                        })
+                                        this.employeeDetails.AssignDepartments.push(this.employeeDetails.LocalDepartments)
+                                        console.log(this.employeeDetails);
+                                        if(this.employeeDetails.Comp_Name == 'SCAD') {
+                                             this.employeeDetails.Comp_Name = 'SCD'
+                                        } else if(this.employeeDetails.Comp_Name == 'WUKONG') {
+                                             this.employeeDetails.Comp_Name = 'WKN'
+                                        }
                                         this.userLoggedIn()
                                    }
                               })
                          } else {
-                              // Config Japanese data
-                              delete this.employeeDetails.userLevel   
-                              Object.assign(this.employeeDetails, {
-                                   UserLevel: 5,
-                              })
-                              this.employeeDetails.AssignDepartments.push(this.employeeDetails.LocalDepartments)
-                              console.log(this.employeeDetails);
-                              if(this.employeeDetails.Comp_Name == 'SCAD') {
-                                   this.employeeDetails.Comp_Name = 'SCD'
-                              } else if(this.employeeDetails.Comp_Name == 'WUKONG') {
-                                   this.employeeDetails.Comp_Name = 'WKN'
-                              }
                               this.userLoggedIn()
                          }
-                    }) 
+                    })
+                    // this.axios.get(`${this.api_jap}/${this.username}`).then(res => {
+                    //      // console.log(res.data);
+                    //      this.employeeDetails = JSON.parse(JSON.stringify(res.data))
+                    //      if(this.employeeDetails == '') {
+                    //           this.clearHeaders(1)
+                    //           this.axios.post(`${this.api}/executeselect`, {data: JSON.stringify(body)}).then(res => {
+                    //                this.employeeDetails = res.data[0]
+                    //                if (!this.employeeDetails) { 
+                    //                     this.alert = !this.alert
+                    //                     this.alertText = 'User not found.'
+                    //                     this.loading = false 
+                    //                } else {
+                    //                     this.userLoggedIn()
+                    //                }
+                    //           })
+                    //      } else {
+                    //           // Config Japanese data
+                    //           delete this.employeeDetails.userLevel   
+                    //           Object.assign(this.employeeDetails, {
+                    //                UserLevel: 5,
+                    //           })
+                    //           this.employeeDetails.AssignDepartments.push(this.employeeDetails.LocalDepartments)
+                    //           console.log(this.employeeDetails);
+                    //           if(this.employeeDetails.Comp_Name == 'SCAD') {
+                    //                this.employeeDetails.Comp_Name = 'SCD'
+                    //           } else if(this.employeeDetails.Comp_Name == 'WUKONG') {
+                    //                this.employeeDetails.Comp_Name = 'WKN'
+                    //           }
+                    //           this.userLoggedIn()
+                    //      }
+                    // }) 
                } else {
                     this.alert = !this.alert
                     this.alertText = 'Please input username'
@@ -199,6 +229,7 @@ export default {
                }
           },
           userLoggedIn() { 
+               console.log(this.employeeDetails);
                // Japanese Account
                if(this.employeeDetails.UserLevel == 5) {
                     if(this.employeeDetails.Password == this.md5(this.password)) {

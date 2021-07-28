@@ -239,7 +239,8 @@ export default {
                          rec.DepartmentName.includes(this.departmentFilter || '') &&
                          rec.SectionName.includes(this.sectionFilter || '') &&
                          rec.TeamName.includes(this.teamFilter || '') && 
-                         (rec.SeparationDate == null || this.moment(rec.SeparationDate).format('YYYY-MM-DD') >= this.moment(this.serverDateTime).format('YYYY-MM-DD'))
+                         (this.moment(rec.SeparationDate).format('YYYY-MM-DD') >= this.moment().format('YYYY-MM-DD') ||
+                         rec.SeparationDate == null)                
                     )
                })
           },

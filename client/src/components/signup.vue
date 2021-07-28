@@ -11,10 +11,6 @@
                          <v-toolbar-title class="text-center headline">
                               Create account
                          </v-toolbar-title>
-                         <v-spacer></v-spacer>
-                         <v-btn @click="clearVariables()" icon>
-                              <v-icon>mdi-close</v-icon>
-                         </v-btn>
                     </v-toolbar>
                     <v-row align="center" justify="center">
                          <v-col cols="12">
@@ -196,7 +192,6 @@ export default {
                               if(data.IsAccountExists == 0) {
                                    this.disableButton = false
                               } else {
-                                   this.swal.fire('','Account exists. Please login', 'info')
                                    this.disableButton = true
                               }
                          } else {
