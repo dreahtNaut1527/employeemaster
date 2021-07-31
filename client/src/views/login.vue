@@ -229,7 +229,7 @@ export default {
                }
           },
           userLoggedIn() { 
-               console.log(this.employeeDetails);
+               // console.log(this.employeeDetails);
                // Japanese Account
                if(this.employeeDetails.UserLevel == 5) {
                     if(this.employeeDetails.Password == this.md5(this.password)) {

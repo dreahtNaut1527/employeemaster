@@ -805,7 +805,7 @@ export default {
                               ]
                          }
                        
-
+                         console.log(body);
                          this.axios.post(`${this.api}/execute`, {data: JSON.stringify(body)})
                          this.alert = !this.alert
                          setTimeout(() => {
